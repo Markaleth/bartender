@@ -1,4 +1,4 @@
-import 'package:bar/theme/bartender_layout.dart';
+import 'package:bartender/theme/bartender_layout.dart';
 import 'package:flutter/material.dart';
 
 class BartenderTheme {
@@ -7,6 +7,7 @@ class BartenderTheme {
       brightness: Brightness.dark,
       primaryColor: BartenderColors.primary,
       scaffoldBackgroundColor: BartenderColors.background,
+      
       colorScheme: const ColorScheme.dark(
         primary: BartenderColors.primary,
         secondary: BartenderColors.secondary,

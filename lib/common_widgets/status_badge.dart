@@ -1,5 +1,5 @@
 
-import 'package:bar/theme/bartender_layout.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class StatusBadge extends StatelessWidget {
@@ -13,19 +13,15 @@ class StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: isActive ? BartenderColors.secondary.withValues(alpha: 0.2) : Colors.grey.withValues(alpha: 0.2),
+        color: isActive ? context.secondary.withValues(alpha:0.2) : Colors.grey.withValues(alpha:0.2),
         borderRadius: BorderRadius.circular(4),
         border: Border.all(
-          color: isActive ? BartenderColors.secondary : Colors.grey,
+          color: isActive ? context.secondary : Colors.grey,
         ),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: isActive ? BartenderColors.secondary : Colors.grey,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-        ),
+        style: context.bodyM?.copyWith(color: isActive ? context.secondary : Colors.grey,)
       ),
     );
   }
