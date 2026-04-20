@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'formula_listing_model.freezed.dart';
-part 'formula_listing_model.g.dart';
+part 'formula_model.freezed.dart';
+part 'formula_model.g.dart';
 
 @freezed
-abstract class FormulaListingModel with _$FormulaListingModel {
-  const factory FormulaListingModel({
+abstract class FormulaModel with _$FormulaModel {
+  const factory FormulaModel({
     required String name,
     @JsonKey(name: 'full_name') required String fullName,
     required String tap,
@@ -18,10 +18,12 @@ abstract class FormulaListingModel with _$FormulaListingModel {
     @Default(false) bool outdated,
     @Default(false) bool deprecated,
     @Default(false) bool disabled,
-  }) = _FormulaListingModel;
+    Map<String, dynamic>? analytics,
+    @JsonKey(name: 'generated_date') String? generatedDate,
+  }) = _FormulaModel;
 
-  factory FormulaListingModel.fromJson(Map<String, dynamic> json) =>
-      _$FormulaListingModelFromJson(json);
+  factory FormulaModel.fromJson(Map<String, dynamic> json) =>
+      _$FormulaModelFromJson(json);
 }
 
 @freezed

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'formula_listing_model.dart';
+part of 'formula_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,42 +13,42 @@ part of 'formula_listing_model.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$FormulaListingModel {
+mixin _$FormulaModel {
 
- String get name;@JsonKey(name: 'full_name') String get fullName; String get tap; String get desc; String? get license; String? get homepage; FormulaVersions get versions; List<String> get dependencies;@JsonKey(name: 'build_dependencies') List<String> get buildDependencies; bool get outdated; bool get deprecated; bool get disabled;
-/// Create a copy of FormulaListingModel
+ String get name;@JsonKey(name: 'full_name') String get fullName; String get tap; String get desc; String? get license; String? get homepage; FormulaVersions get versions; List<String> get dependencies;@JsonKey(name: 'build_dependencies') List<String> get buildDependencies; bool get outdated; bool get deprecated; bool get disabled; Map<String, dynamic>? get analytics;@JsonKey(name: 'generated_date') String? get generatedDate;
+/// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$FormulaListingModelCopyWith<FormulaListingModel> get copyWith => _$FormulaListingModelCopyWithImpl<FormulaListingModel>(this as FormulaListingModel, _$identity);
+$FormulaModelCopyWith<FormulaModel> get copyWith => _$FormulaModelCopyWithImpl<FormulaModel>(this as FormulaModel, _$identity);
 
-  /// Serializes this FormulaListingModel to a JSON map.
+  /// Serializes this FormulaModel to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FormulaListingModel&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.tap, tap) || other.tap == tap)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.license, license) || other.license == license)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.versions, versions) || other.versions == versions)&&const DeepCollectionEquality().equals(other.dependencies, dependencies)&&const DeepCollectionEquality().equals(other.buildDependencies, buildDependencies)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FormulaModel&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.tap, tap) || other.tap == tap)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.license, license) || other.license == license)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.versions, versions) || other.versions == versions)&&const DeepCollectionEquality().equals(other.dependencies, dependencies)&&const DeepCollectionEquality().equals(other.buildDependencies, buildDependencies)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&const DeepCollectionEquality().equals(other.analytics, analytics)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,fullName,tap,desc,license,homepage,versions,const DeepCollectionEquality().hash(dependencies),const DeepCollectionEquality().hash(buildDependencies),outdated,deprecated,disabled);
+int get hashCode => Object.hash(runtimeType,name,fullName,tap,desc,license,homepage,versions,const DeepCollectionEquality().hash(dependencies),const DeepCollectionEquality().hash(buildDependencies),outdated,deprecated,disabled,const DeepCollectionEquality().hash(analytics),generatedDate);
 
 @override
 String toString() {
-  return 'FormulaListingModel(name: $name, fullName: $fullName, tap: $tap, desc: $desc, license: $license, homepage: $homepage, versions: $versions, dependencies: $dependencies, buildDependencies: $buildDependencies, outdated: $outdated, deprecated: $deprecated, disabled: $disabled)';
+  return 'FormulaModel(name: $name, fullName: $fullName, tap: $tap, desc: $desc, license: $license, homepage: $homepage, versions: $versions, dependencies: $dependencies, buildDependencies: $buildDependencies, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, analytics: $analytics, generatedDate: $generatedDate)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $FormulaListingModelCopyWith<$Res>  {
-  factory $FormulaListingModelCopyWith(FormulaListingModel value, $Res Function(FormulaListingModel) _then) = _$FormulaListingModelCopyWithImpl;
+abstract mixin class $FormulaModelCopyWith<$Res>  {
+  factory $FormulaModelCopyWith(FormulaModel value, $Res Function(FormulaModel) _then) = _$FormulaModelCopyWithImpl;
 @useResult
 $Res call({
- String name,@JsonKey(name: 'full_name') String fullName, String tap, String desc, String? license, String? homepage, FormulaVersions versions, List<String> dependencies,@JsonKey(name: 'build_dependencies') List<String> buildDependencies, bool outdated, bool deprecated, bool disabled
+ String name,@JsonKey(name: 'full_name') String fullName, String tap, String desc, String? license, String? homepage, FormulaVersions versions, List<String> dependencies,@JsonKey(name: 'build_dependencies') List<String> buildDependencies, bool outdated, bool deprecated, bool disabled, Map<String, dynamic>? analytics,@JsonKey(name: 'generated_date') String? generatedDate
 });
 
 
@@ -56,16 +56,16 @@ $FormulaVersionsCopyWith<$Res> get versions;
 
 }
 /// @nodoc
-class _$FormulaListingModelCopyWithImpl<$Res>
-    implements $FormulaListingModelCopyWith<$Res> {
-  _$FormulaListingModelCopyWithImpl(this._self, this._then);
+class _$FormulaModelCopyWithImpl<$Res>
+    implements $FormulaModelCopyWith<$Res> {
+  _$FormulaModelCopyWithImpl(this._self, this._then);
 
-  final FormulaListingModel _self;
-  final $Res Function(FormulaListingModel) _then;
+  final FormulaModel _self;
+  final $Res Function(FormulaModel) _then;
 
-/// Create a copy of FormulaListingModel
+/// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? fullName = null,Object? tap = null,Object? desc = null,Object? license = freezed,Object? homepage = freezed,Object? versions = null,Object? dependencies = null,Object? buildDependencies = null,Object? outdated = null,Object? deprecated = null,Object? disabled = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? fullName = null,Object? tap = null,Object? desc = null,Object? license = freezed,Object? homepage = freezed,Object? versions = null,Object? dependencies = null,Object? buildDependencies = null,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? analytics = freezed,Object? generatedDate = freezed,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
@@ -79,10 +79,12 @@ as List<String>,buildDependencies: null == buildDependencies ? _self.buildDepend
 as List<String>,outdated: null == outdated ? _self.outdated : outdated // ignore: cast_nullable_to_non_nullable
 as bool,deprecated: null == deprecated ? _self.deprecated : deprecated // ignore: cast_nullable_to_non_nullable
 as bool,disabled: null == disabled ? _self.disabled : disabled // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,analytics: freezed == analytics ? _self.analytics : analytics // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,generatedDate: freezed == generatedDate ? _self.generatedDate : generatedDate // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
-/// Create a copy of FormulaListingModel
+/// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -95,8 +97,8 @@ $FormulaVersionsCopyWith<$Res> get versions {
 }
 
 
-/// Adds pattern-matching-related methods to [FormulaListingModel].
-extension FormulaListingModelPatterns on FormulaListingModel {
+/// Adds pattern-matching-related methods to [FormulaModel].
+extension FormulaModelPatterns on FormulaModel {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -109,10 +111,10 @@ extension FormulaListingModelPatterns on FormulaListingModel {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FormulaListingModel value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FormulaModel value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _FormulaListingModel() when $default != null:
+case _FormulaModel() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -131,10 +133,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FormulaListingModel value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FormulaModel value)  $default,){
 final _that = this;
 switch (_that) {
-case _FormulaListingModel():
+case _FormulaModel():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FormulaListingModel value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FormulaModel value)?  $default,){
 final _that = this;
 switch (_that) {
-case _FormulaListingModel() when $default != null:
+case _FormulaModel() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -173,10 +175,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _FormulaListingModel() when $default != null:
-return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled);case _:
+case _FormulaModel() when $default != null:
+return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.analytics,_that.generatedDate);case _:
   return orElse();
 
 }
@@ -194,10 +196,10 @@ return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)  $default,) {final _that = this;
 switch (_that) {
-case _FormulaListingModel():
-return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled);case _:
+case _FormulaModel():
+return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.analytics,_that.generatedDate);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -214,10 +216,10 @@ return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,) {final _that = this;
 switch (_that) {
-case _FormulaListingModel() when $default != null:
-return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled);case _:
+case _FormulaModel() when $default != null:
+return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.analytics,_that.generatedDate);case _:
   return null;
 
 }
@@ -228,9 +230,9 @@ return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_th
 /// @nodoc
 @JsonSerializable()
 
-class _FormulaListingModel implements FormulaListingModel {
-  const _FormulaListingModel({required this.name, @JsonKey(name: 'full_name') required this.fullName, required this.tap, required this.desc, this.license, this.homepage, required this.versions, required final  List<String> dependencies, @JsonKey(name: 'build_dependencies') required final  List<String> buildDependencies, this.outdated = false, this.deprecated = false, this.disabled = false}): _dependencies = dependencies,_buildDependencies = buildDependencies;
-  factory _FormulaListingModel.fromJson(Map<String, dynamic> json) => _$FormulaListingModelFromJson(json);
+class _FormulaModel implements FormulaModel {
+  const _FormulaModel({required this.name, @JsonKey(name: 'full_name') required this.fullName, required this.tap, required this.desc, this.license, this.homepage, required this.versions, required final  List<String> dependencies, @JsonKey(name: 'build_dependencies') required final  List<String> buildDependencies, this.outdated = false, this.deprecated = false, this.disabled = false, final  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date') this.generatedDate}): _dependencies = dependencies,_buildDependencies = buildDependencies,_analytics = analytics;
+  factory _FormulaModel.fromJson(Map<String, dynamic> json) => _$FormulaModelFromJson(json);
 
 @override final  String name;
 @override@JsonKey(name: 'full_name') final  String fullName;
@@ -256,41 +258,51 @@ class _FormulaListingModel implements FormulaListingModel {
 @override@JsonKey() final  bool outdated;
 @override@JsonKey() final  bool deprecated;
 @override@JsonKey() final  bool disabled;
+ final  Map<String, dynamic>? _analytics;
+@override Map<String, dynamic>? get analytics {
+  final value = _analytics;
+  if (value == null) return null;
+  if (_analytics is EqualUnmodifiableMapView) return _analytics;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
 
-/// Create a copy of FormulaListingModel
+@override@JsonKey(name: 'generated_date') final  String? generatedDate;
+
+/// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FormulaListingModelCopyWith<_FormulaListingModel> get copyWith => __$FormulaListingModelCopyWithImpl<_FormulaListingModel>(this, _$identity);
+_$FormulaModelCopyWith<_FormulaModel> get copyWith => __$FormulaModelCopyWithImpl<_FormulaModel>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$FormulaListingModelToJson(this, );
+  return _$FormulaModelToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FormulaListingModel&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.tap, tap) || other.tap == tap)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.license, license) || other.license == license)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.versions, versions) || other.versions == versions)&&const DeepCollectionEquality().equals(other._dependencies, _dependencies)&&const DeepCollectionEquality().equals(other._buildDependencies, _buildDependencies)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FormulaModel&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.tap, tap) || other.tap == tap)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.license, license) || other.license == license)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.versions, versions) || other.versions == versions)&&const DeepCollectionEquality().equals(other._dependencies, _dependencies)&&const DeepCollectionEquality().equals(other._buildDependencies, _buildDependencies)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&const DeepCollectionEquality().equals(other._analytics, _analytics)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,fullName,tap,desc,license,homepage,versions,const DeepCollectionEquality().hash(_dependencies),const DeepCollectionEquality().hash(_buildDependencies),outdated,deprecated,disabled);
+int get hashCode => Object.hash(runtimeType,name,fullName,tap,desc,license,homepage,versions,const DeepCollectionEquality().hash(_dependencies),const DeepCollectionEquality().hash(_buildDependencies),outdated,deprecated,disabled,const DeepCollectionEquality().hash(_analytics),generatedDate);
 
 @override
 String toString() {
-  return 'FormulaListingModel(name: $name, fullName: $fullName, tap: $tap, desc: $desc, license: $license, homepage: $homepage, versions: $versions, dependencies: $dependencies, buildDependencies: $buildDependencies, outdated: $outdated, deprecated: $deprecated, disabled: $disabled)';
+  return 'FormulaModel(name: $name, fullName: $fullName, tap: $tap, desc: $desc, license: $license, homepage: $homepage, versions: $versions, dependencies: $dependencies, buildDependencies: $buildDependencies, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, analytics: $analytics, generatedDate: $generatedDate)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$FormulaListingModelCopyWith<$Res> implements $FormulaListingModelCopyWith<$Res> {
-  factory _$FormulaListingModelCopyWith(_FormulaListingModel value, $Res Function(_FormulaListingModel) _then) = __$FormulaListingModelCopyWithImpl;
+abstract mixin class _$FormulaModelCopyWith<$Res> implements $FormulaModelCopyWith<$Res> {
+  factory _$FormulaModelCopyWith(_FormulaModel value, $Res Function(_FormulaModel) _then) = __$FormulaModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name,@JsonKey(name: 'full_name') String fullName, String tap, String desc, String? license, String? homepage, FormulaVersions versions, List<String> dependencies,@JsonKey(name: 'build_dependencies') List<String> buildDependencies, bool outdated, bool deprecated, bool disabled
+ String name,@JsonKey(name: 'full_name') String fullName, String tap, String desc, String? license, String? homepage, FormulaVersions versions, List<String> dependencies,@JsonKey(name: 'build_dependencies') List<String> buildDependencies, bool outdated, bool deprecated, bool disabled, Map<String, dynamic>? analytics,@JsonKey(name: 'generated_date') String? generatedDate
 });
 
 
@@ -298,17 +310,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$FormulaListingModelCopyWithImpl<$Res>
-    implements _$FormulaListingModelCopyWith<$Res> {
-  __$FormulaListingModelCopyWithImpl(this._self, this._then);
+class __$FormulaModelCopyWithImpl<$Res>
+    implements _$FormulaModelCopyWith<$Res> {
+  __$FormulaModelCopyWithImpl(this._self, this._then);
 
-  final _FormulaListingModel _self;
-  final $Res Function(_FormulaListingModel) _then;
+  final _FormulaModel _self;
+  final $Res Function(_FormulaModel) _then;
 
-/// Create a copy of FormulaListingModel
+/// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? fullName = null,Object? tap = null,Object? desc = null,Object? license = freezed,Object? homepage = freezed,Object? versions = null,Object? dependencies = null,Object? buildDependencies = null,Object? outdated = null,Object? deprecated = null,Object? disabled = null,}) {
-  return _then(_FormulaListingModel(
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? fullName = null,Object? tap = null,Object? desc = null,Object? license = freezed,Object? homepage = freezed,Object? versions = null,Object? dependencies = null,Object? buildDependencies = null,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? analytics = freezed,Object? generatedDate = freezed,}) {
+  return _then(_FormulaModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String,tap: null == tap ? _self.tap : tap // ignore: cast_nullable_to_non_nullable
@@ -321,11 +333,13 @@ as List<String>,buildDependencies: null == buildDependencies ? _self._buildDepen
 as List<String>,outdated: null == outdated ? _self.outdated : outdated // ignore: cast_nullable_to_non_nullable
 as bool,deprecated: null == deprecated ? _self.deprecated : deprecated // ignore: cast_nullable_to_non_nullable
 as bool,disabled: null == disabled ? _self.disabled : disabled // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,analytics: freezed == analytics ? _self._analytics : analytics // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,generatedDate: freezed == generatedDate ? _self.generatedDate : generatedDate // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
-/// Create a copy of FormulaListingModel
+/// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

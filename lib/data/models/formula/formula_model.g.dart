@@ -1,20 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'formula_detail_model.dart';
+part of 'formula_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_FormulaDetailModel _$FormulaDetailModelFromJson(Map<String, dynamic> json) =>
-    _FormulaDetailModel(
+_FormulaModel _$FormulaModelFromJson(Map<String, dynamic> json) =>
+    _FormulaModel(
       name: json['name'] as String,
       fullName: json['full_name'] as String,
       tap: json['tap'] as String,
       desc: json['desc'] as String,
       license: json['license'] as String?,
       homepage: json['homepage'] as String?,
-      versions: FormulaDetailVersions.fromJson(
+      versions: FormulaVersions.fromJson(
         json['versions'] as Map<String, dynamic>,
       ),
       dependencies: (json['dependencies'] as List<dynamic>)
@@ -26,9 +26,11 @@ _FormulaDetailModel _$FormulaDetailModelFromJson(Map<String, dynamic> json) =>
       outdated: json['outdated'] as bool? ?? false,
       deprecated: json['deprecated'] as bool? ?? false,
       disabled: json['disabled'] as bool? ?? false,
+      analytics: json['analytics'] as Map<String, dynamic>?,
+      generatedDate: json['generated_date'] as String?,
     );
 
-Map<String, dynamic> _$FormulaDetailModelToJson(_FormulaDetailModel instance) =>
+Map<String, dynamic> _$FormulaModelToJson(_FormulaModel instance) =>
     <String, dynamic>{
       'name': instance.name,
       'full_name': instance.fullName,
@@ -42,20 +44,20 @@ Map<String, dynamic> _$FormulaDetailModelToJson(_FormulaDetailModel instance) =>
       'outdated': instance.outdated,
       'deprecated': instance.deprecated,
       'disabled': instance.disabled,
+      'analytics': instance.analytics,
+      'generated_date': instance.generatedDate,
     };
 
-_FormulaDetailVersions _$FormulaDetailVersionsFromJson(
-  Map<String, dynamic> json,
-) => _FormulaDetailVersions(
-  stable: json['stable'] as String,
-  head: json['head'] as String?,
-  bottle: json['bottle'] as bool,
-);
+_FormulaVersions _$FormulaVersionsFromJson(Map<String, dynamic> json) =>
+    _FormulaVersions(
+      stable: json['stable'] as String,
+      head: json['head'] as String?,
+      bottle: json['bottle'] as bool,
+    );
 
-Map<String, dynamic> _$FormulaDetailVersionsToJson(
-  _FormulaDetailVersions instance,
-) => <String, dynamic>{
-  'stable': instance.stable,
-  'head': instance.head,
-  'bottle': instance.bottle,
-};
+Map<String, dynamic> _$FormulaVersionsToJson(_FormulaVersions instance) =>
+    <String, dynamic>{
+      'stable': instance.stable,
+      'head': instance.head,
+      'bottle': instance.bottle,
+    };

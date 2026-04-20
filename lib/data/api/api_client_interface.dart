@@ -1,12 +1,15 @@
 
 
+import '../models/formula/formula_model.dart';
+import '../models/cask/cask_model.dart';
+
 abstract interface class ApiClientInterface {
 
   // Listing and details functions:  
-  Future<dynamic> getFormulaeListing(); // https://formulae.brew.sh/api/formula.json
-  Future<dynamic> getCasksListing();  // https://formulae.brew.sh/api/cask.json
-  Future<dynamic> getFormulaDetails(); // https://formulae.brew.sh/api/formula/${FORMULA}.json
-  Future<dynamic> getCaskDetails();  // https://formulae.brew.sh/api/cask/${CASK}.json
+  Future<List<FormulaModel>> getFormulaeListing(); // https://formulae.brew.sh/api/formula.json
+  Future<List<CaskModel>> getCasksListing();  // https://formulae.brew.sh/api/cask.json
+  Future<FormulaModel> getFormulaDetails(String formula); // https://formulae.brew.sh/api/formula/${FORMULA}.json
+  Future<CaskModel> getCaskDetails(String cask);  // https://formulae.brew.sh/api/cask/${CASK}.json
 
 //analytics functions:
 
