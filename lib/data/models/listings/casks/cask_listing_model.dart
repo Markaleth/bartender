@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'cask_model.freezed.dart';
-part 'cask_model.g.dart';
+part 'cask_listing_model.freezed.dart';
+part 'cask_listing_model.g.dart';
 
 @freezed
-abstract class Cask with _$Cask {
-  const factory Cask({
+abstract class CaskListingModel with _$CaskListingModel {
+  const factory CaskListingModel({
     required String token,
     required List<String> name,
     String? desc,
@@ -17,7 +17,8 @@ abstract class Cask with _$Cask {
     @Default(false) bool outdated,
     @Default(false) bool deprecated,
     @Default(false) bool disabled,
-  }) = _Cask;
+  }) = _CaskListingModel;
 
-  factory Cask.fromJson(Map<String, dynamic> json) => _$CaskFromJson(json);
+  factory CaskListingModel.fromJson(Map<String, dynamic> json) =>
+      _$CaskListingModelFromJson(json);
 }
