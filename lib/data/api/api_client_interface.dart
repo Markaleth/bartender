@@ -2,7 +2,9 @@
 
 import '../models/formula/formula_model.dart';
 import '../models/cask/cask_model.dart';
-import '../models/analytics/analytics_model.dart';
+import '../models/analytics/category/category_analytics_model.dart';
+import '../models/analytics/formulae/formulae_analytics_model.dart';
+import '../models/analytics/casks/casks_analytics_model.dart';
 import '../network_resource.dart';
 
 abstract interface class ApiClientInterface {
@@ -24,7 +26,7 @@ abstract interface class ApiClientInterface {
 /// 30d: 30 days
 /// 90d: 90 days
 /// 365d: 365 days
-  Future<NetworkResource<AnalyticsResponse>> getCategoryAnalytics(String category, String days); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/${DAYS}.json
-  Future<NetworkResource<AnalyticsResponse>> getFormulaeAnalytics(String category, String days); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/homebrew-core/${DAYS}.json
-  Future<NetworkResource<AnalyticsResponse>> getCasksAnalytics(String days); // curl https://formulae.brew.sh/api/analytics/cask-install/homebrew-cask/${DAYS}.json
+  Future<NetworkResource<CategoryAnalyticsResponse>> getCategoryAnalytics(String category, String days); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/${DAYS}.json
+  Future<NetworkResource<FormulaeAnalyticsResponse>> getFormulaeAnalytics(String category, String days); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/homebrew-core/${DAYS}.json
+  Future<NetworkResource<CasksAnalyticsResponse>> getCasksAnalytics(String days); // curl https://formulae.brew.sh/api/analytics/cask-install/homebrew-cask/${DAYS}.json
 }

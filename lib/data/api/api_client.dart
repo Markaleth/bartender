@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 import 'api_client_interface.dart';
 import '../models/formula/formula_model.dart';
 import '../models/cask/cask_model.dart';
-import '../models/analytics/analytics_model.dart';
+import '../models/analytics/category/category_analytics_model.dart';
+import '../models/analytics/formulae/formulae_analytics_model.dart';
+import '../models/analytics/casks/casks_analytics_model.dart';
 import '../network_resource.dart';
 
 class ApiClient implements ApiClientInterface {
@@ -102,7 +104,7 @@ class ApiClient implements ApiClientInterface {
   }
 
   @override
-  Future<NetworkResource<AnalyticsResponse>> getCategoryAnalytics(
+  Future<NetworkResource<CategoryAnalyticsResponse>> getCategoryAnalytics(
     String category,
     String days,
   ) async {
@@ -112,7 +114,9 @@ class ApiClient implements ApiClientInterface {
         options: _defaultOptions,
       );
       return NetworkResource.success(
-        AnalyticsResponse.fromJson(response.data as Map<String, dynamic>),
+        CategoryAnalyticsResponse.fromJson(
+          response.data as Map<String, dynamic>,
+        ),
         response.statusCode,
       );
     } on DioException catch (error) {
@@ -123,7 +127,7 @@ class ApiClient implements ApiClientInterface {
   }
 
   @override
-  Future<NetworkResource<AnalyticsResponse>> getFormulaeAnalytics(
+  Future<NetworkResource<FormulaeAnalyticsResponse>> getFormulaeAnalytics(
     String category,
     String days,
   ) async {
@@ -133,7 +137,9 @@ class ApiClient implements ApiClientInterface {
         options: _defaultOptions,
       );
       return NetworkResource.success(
-        AnalyticsResponse.fromJson(response.data as Map<String, dynamic>),
+        FormulaeAnalyticsResponse.fromJson(
+          response.data as Map<String, dynamic>,
+        ),
         response.statusCode,
       );
     } on DioException catch (error) {
@@ -144,7 +150,7 @@ class ApiClient implements ApiClientInterface {
   }
 
   @override
-  Future<NetworkResource<AnalyticsResponse>> getCasksAnalytics(
+  Future<NetworkResource<CasksAnalyticsResponse>> getCasksAnalytics(
     String days,
   ) async {
     try {
@@ -153,7 +159,7 @@ class ApiClient implements ApiClientInterface {
         options: _defaultOptions,
       );
       return NetworkResource.success(
-        AnalyticsResponse.fromJson(response.data as Map<String, dynamic>),
+        CasksAnalyticsResponse.fromJson(response.data as Map<String, dynamic>),
         response.statusCode,
       );
     } on DioException catch (error) {

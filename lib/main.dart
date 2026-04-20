@@ -1,5 +1,6 @@
 import 'package:bartender/theme/bartender_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:bartender/debug/api_tester.dart';
 
 void main() {
   runApp(const MainApp());
@@ -13,9 +14,8 @@ class MainApp extends StatelessWidget {
     return  MaterialApp(
       theme: BartenderTheme.darkTheme,
       home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+        appBar: AppBar(title: const Text('API Tester')),
+        body: const ApiTesterWidget(),
       ),
     );
   }
