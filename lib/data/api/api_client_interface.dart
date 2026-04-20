@@ -2,14 +2,16 @@
 
 import '../models/formula/formula_model.dart';
 import '../models/cask/cask_model.dart';
+import '../models/analytics/analytics_model.dart';
+import '../network_resource.dart';
 
 abstract interface class ApiClientInterface {
 
   // Listing and details functions:  
-  Future<List<FormulaModel>> getFormulaeListing(); // https://formulae.brew.sh/api/formula.json
-  Future<List<CaskModel>> getCasksListing();  // https://formulae.brew.sh/api/cask.json
-  Future<FormulaModel> getFormulaDetails(String formula); // https://formulae.brew.sh/api/formula/${FORMULA}.json
-  Future<CaskModel> getCaskDetails(String cask);  // https://formulae.brew.sh/api/cask/${CASK}.json
+  Future<NetworkResource<List<FormulaModel>>> getFormulaeListing(); // https://formulae.brew.sh/api/formula.json
+  Future<NetworkResource<List<CaskModel>>> getCasksListing();  // https://formulae.brew.sh/api/cask.json
+  Future<NetworkResource<FormulaModel>> getFormulaDetails(String formula); // https://formulae.brew.sh/api/formula/${FORMULA}.json
+  Future<NetworkResource<CaskModel>> getCaskDetails(String cask);  // https://formulae.brew.sh/api/cask/${CASK}.json
 
 //analytics functions:
 
@@ -22,7 +24,7 @@ abstract interface class ApiClientInterface {
 /// 30d: 30 days
 /// 90d: 90 days
 /// 365d: 365 days
-  Future<dynamic> getCategoryAnalytics(); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/${DAYS}.json
-  Future<dynamic> getFormulaeAnalytics(); // curl https://formulae.brew.sh/api/analytics/formulae/${DAYS}.json
-  Future<dynamic> getCasksAnalytics(); // curl https://formulae.brew.sh/api/analytics/casks/${DAYS}.json
+  Future<NetworkResource<AnalyticsResponse>> getCategoryAnalytics(String category, String days); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/${DAYS}.json
+  Future<NetworkResource<AnalyticsResponse>> getFormulaeAnalytics(String category, String days); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/homebrew-core/${DAYS}.json
+  Future<NetworkResource<AnalyticsResponse>> getCasksAnalytics(String days); // curl https://formulae.brew.sh/api/analytics/cask-install/homebrew-cask/${DAYS}.json
 }
