@@ -31,4 +31,7 @@ abstract class DatabaseInterface {
 
   Future<List<FormulaModel>> getMostDownloadedFormulae(String period);
   Future<List<CaskModel>> getMostDownloadedCasks(String period);
+
+  Future<String?> getETag(String endpoint);
+  Future<void> saveETag(String endpoint, String etag);
 }

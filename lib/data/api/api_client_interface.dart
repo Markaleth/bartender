@@ -10,8 +10,8 @@ import '../network_resource.dart';
 abstract interface class ApiClientInterface {
 
   // Listing and details functions:  
-  Future<NetworkResource<List<FormulaModel>>> getFormulaeListing(); // https://formulae.brew.sh/api/formula.json
-  Future<NetworkResource<List<CaskModel>>> getCasksListing();  // https://formulae.brew.sh/api/cask.json
+  Future<NetworkResource<List<FormulaModel>>> getFormulaeListing({String? eTag}); // https://formulae.brew.sh/api/formula.json
+  Future<NetworkResource<List<CaskModel>>> getCasksListing({String? eTag});  // https://formulae.brew.sh/api/cask.json
   Future<NetworkResource<FormulaModel>> getFormulaDetails(String formula); // https://formulae.brew.sh/api/formula/${FORMULA}.json
   Future<NetworkResource<CaskModel>> getCaskDetails(String cask);  // https://formulae.brew.sh/api/cask/${CASK}.json
 
@@ -26,7 +26,7 @@ abstract interface class ApiClientInterface {
 /// 30d: 30 days
 /// 90d: 90 days
 /// 365d: 365 days
-  Future<NetworkResource<CategoryAnalyticsResponse>> getCategoryAnalytics(String category, String days); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/${DAYS}.json
-  Future<NetworkResource<FormulaeAnalyticsResponse>> getFormulaeAnalytics(String category, String days); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/homebrew-core/${DAYS}.json
-  Future<NetworkResource<CasksAnalyticsResponse>> getCasksAnalytics(String days); // curl https://formulae.brew.sh/api/analytics/cask-install/homebrew-cask/${DAYS}.json
+  Future<NetworkResource<CategoryAnalyticsResponse>> getCategoryAnalytics(String category, String days, {String? eTag}); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/${DAYS}.json
+  Future<NetworkResource<FormulaeAnalyticsResponse>> getFormulaeAnalytics(String category, String days, {String? eTag}); // curl https://formulae.brew.sh/api/analytics/${CATEGORY}/homebrew-core/${DAYS}.json
+  Future<NetworkResource<CasksAnalyticsResponse>> getCasksAnalytics(String days, {String? eTag}); // curl https://formulae.brew.sh/api/analytics/cask-install/homebrew-cask/${DAYS}.json
 }

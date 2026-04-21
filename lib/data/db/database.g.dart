@@ -1830,6 +1830,279 @@ class FormulaeAnalyticsTableCompanion
   }
 }
 
+class $SyncMetadataTableTable extends SyncMetadataTable
+    with TableInfo<$SyncMetadataTableTable, SyncMetadataTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncMetadataTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _endpointMeta = const VerificationMeta(
+    'endpoint',
+  );
+  @override
+  late final GeneratedColumn<String> endpoint = GeneratedColumn<String>(
+    'endpoint',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _etagMeta = const VerificationMeta('etag');
+  @override
+  late final GeneratedColumn<String> etag = GeneratedColumn<String>(
+    'etag',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastSyncDateMeta = const VerificationMeta(
+    'lastSyncDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastSyncDate = GeneratedColumn<DateTime>(
+    'last_sync_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [endpoint, etag, lastSyncDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_metadata_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SyncMetadataTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('endpoint')) {
+      context.handle(
+        _endpointMeta,
+        endpoint.isAcceptableOrUnknown(data['endpoint']!, _endpointMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endpointMeta);
+    }
+    if (data.containsKey('etag')) {
+      context.handle(
+        _etagMeta,
+        etag.isAcceptableOrUnknown(data['etag']!, _etagMeta),
+      );
+    }
+    if (data.containsKey('last_sync_date')) {
+      context.handle(
+        _lastSyncDateMeta,
+        lastSyncDate.isAcceptableOrUnknown(
+          data['last_sync_date']!,
+          _lastSyncDateMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_lastSyncDateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {endpoint};
+  @override
+  SyncMetadataTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncMetadataTableData(
+      endpoint: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}endpoint'],
+      )!,
+      etag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}etag'],
+      ),
+      lastSyncDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_sync_date'],
+      )!,
+    );
+  }
+
+  @override
+  $SyncMetadataTableTable createAlias(String alias) {
+    return $SyncMetadataTableTable(attachedDatabase, alias);
+  }
+}
+
+class SyncMetadataTableData extends DataClass
+    implements Insertable<SyncMetadataTableData> {
+  final String endpoint;
+  final String? etag;
+  final DateTime lastSyncDate;
+  const SyncMetadataTableData({
+    required this.endpoint,
+    this.etag,
+    required this.lastSyncDate,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['endpoint'] = Variable<String>(endpoint);
+    if (!nullToAbsent || etag != null) {
+      map['etag'] = Variable<String>(etag);
+    }
+    map['last_sync_date'] = Variable<DateTime>(lastSyncDate);
+    return map;
+  }
+
+  SyncMetadataTableCompanion toCompanion(bool nullToAbsent) {
+    return SyncMetadataTableCompanion(
+      endpoint: Value(endpoint),
+      etag: etag == null && nullToAbsent ? const Value.absent() : Value(etag),
+      lastSyncDate: Value(lastSyncDate),
+    );
+  }
+
+  factory SyncMetadataTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncMetadataTableData(
+      endpoint: serializer.fromJson<String>(json['endpoint']),
+      etag: serializer.fromJson<String?>(json['etag']),
+      lastSyncDate: serializer.fromJson<DateTime>(json['lastSyncDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'endpoint': serializer.toJson<String>(endpoint),
+      'etag': serializer.toJson<String?>(etag),
+      'lastSyncDate': serializer.toJson<DateTime>(lastSyncDate),
+    };
+  }
+
+  SyncMetadataTableData copyWith({
+    String? endpoint,
+    Value<String?> etag = const Value.absent(),
+    DateTime? lastSyncDate,
+  }) => SyncMetadataTableData(
+    endpoint: endpoint ?? this.endpoint,
+    etag: etag.present ? etag.value : this.etag,
+    lastSyncDate: lastSyncDate ?? this.lastSyncDate,
+  );
+  SyncMetadataTableData copyWithCompanion(SyncMetadataTableCompanion data) {
+    return SyncMetadataTableData(
+      endpoint: data.endpoint.present ? data.endpoint.value : this.endpoint,
+      etag: data.etag.present ? data.etag.value : this.etag,
+      lastSyncDate: data.lastSyncDate.present
+          ? data.lastSyncDate.value
+          : this.lastSyncDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncMetadataTableData(')
+          ..write('endpoint: $endpoint, ')
+          ..write('etag: $etag, ')
+          ..write('lastSyncDate: $lastSyncDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(endpoint, etag, lastSyncDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncMetadataTableData &&
+          other.endpoint == this.endpoint &&
+          other.etag == this.etag &&
+          other.lastSyncDate == this.lastSyncDate);
+}
+
+class SyncMetadataTableCompanion
+    extends UpdateCompanion<SyncMetadataTableData> {
+  final Value<String> endpoint;
+  final Value<String?> etag;
+  final Value<DateTime> lastSyncDate;
+  final Value<int> rowid;
+  const SyncMetadataTableCompanion({
+    this.endpoint = const Value.absent(),
+    this.etag = const Value.absent(),
+    this.lastSyncDate = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SyncMetadataTableCompanion.insert({
+    required String endpoint,
+    this.etag = const Value.absent(),
+    required DateTime lastSyncDate,
+    this.rowid = const Value.absent(),
+  }) : endpoint = Value(endpoint),
+       lastSyncDate = Value(lastSyncDate);
+  static Insertable<SyncMetadataTableData> custom({
+    Expression<String>? endpoint,
+    Expression<String>? etag,
+    Expression<DateTime>? lastSyncDate,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (endpoint != null) 'endpoint': endpoint,
+      if (etag != null) 'etag': etag,
+      if (lastSyncDate != null) 'last_sync_date': lastSyncDate,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SyncMetadataTableCompanion copyWith({
+    Value<String>? endpoint,
+    Value<String?>? etag,
+    Value<DateTime>? lastSyncDate,
+    Value<int>? rowid,
+  }) {
+    return SyncMetadataTableCompanion(
+      endpoint: endpoint ?? this.endpoint,
+      etag: etag ?? this.etag,
+      lastSyncDate: lastSyncDate ?? this.lastSyncDate,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (endpoint.present) {
+      map['endpoint'] = Variable<String>(endpoint.value);
+    }
+    if (etag.present) {
+      map['etag'] = Variable<String>(etag.value);
+    }
+    if (lastSyncDate.present) {
+      map['last_sync_date'] = Variable<DateTime>(lastSyncDate.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncMetadataTableCompanion(')
+          ..write('endpoint: $endpoint, ')
+          ..write('etag: $etag, ')
+          ..write('lastSyncDate: $lastSyncDate, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1839,6 +2112,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $CasksAnalyticsTableTable(this);
   late final $FormulaeAnalyticsTableTable formulaeAnalyticsTable =
       $FormulaeAnalyticsTableTable(this);
+  late final $SyncMetadataTableTable syncMetadataTable =
+      $SyncMetadataTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1848,6 +2123,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     formulaeTable,
     casksAnalyticsTable,
     formulaeAnalyticsTable,
+    syncMetadataTable,
   ];
 }
 
@@ -3025,6 +3301,183 @@ typedef $$FormulaeAnalyticsTableTableProcessedTableManager =
       FormulaeAnalyticsTableData,
       PrefetchHooks Function()
     >;
+typedef $$SyncMetadataTableTableCreateCompanionBuilder =
+    SyncMetadataTableCompanion Function({
+      required String endpoint,
+      Value<String?> etag,
+      required DateTime lastSyncDate,
+      Value<int> rowid,
+    });
+typedef $$SyncMetadataTableTableUpdateCompanionBuilder =
+    SyncMetadataTableCompanion Function({
+      Value<String> endpoint,
+      Value<String?> etag,
+      Value<DateTime> lastSyncDate,
+      Value<int> rowid,
+    });
+
+class $$SyncMetadataTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SyncMetadataTableTable> {
+  $$SyncMetadataTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get endpoint => $composableBuilder(
+    column: $table.endpoint,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get etag => $composableBuilder(
+    column: $table.etag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastSyncDate => $composableBuilder(
+    column: $table.lastSyncDate,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SyncMetadataTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SyncMetadataTableTable> {
+  $$SyncMetadataTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get endpoint => $composableBuilder(
+    column: $table.endpoint,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get etag => $composableBuilder(
+    column: $table.etag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastSyncDate => $composableBuilder(
+    column: $table.lastSyncDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SyncMetadataTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SyncMetadataTableTable> {
+  $$SyncMetadataTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get endpoint =>
+      $composableBuilder(column: $table.endpoint, builder: (column) => column);
+
+  GeneratedColumn<String> get etag =>
+      $composableBuilder(column: $table.etag, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastSyncDate => $composableBuilder(
+    column: $table.lastSyncDate,
+    builder: (column) => column,
+  );
+}
+
+class $$SyncMetadataTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SyncMetadataTableTable,
+          SyncMetadataTableData,
+          $$SyncMetadataTableTableFilterComposer,
+          $$SyncMetadataTableTableOrderingComposer,
+          $$SyncMetadataTableTableAnnotationComposer,
+          $$SyncMetadataTableTableCreateCompanionBuilder,
+          $$SyncMetadataTableTableUpdateCompanionBuilder,
+          (
+            SyncMetadataTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $SyncMetadataTableTable,
+              SyncMetadataTableData
+            >,
+          ),
+          SyncMetadataTableData,
+          PrefetchHooks Function()
+        > {
+  $$SyncMetadataTableTableTableManager(
+    _$AppDatabase db,
+    $SyncMetadataTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncMetadataTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncMetadataTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncMetadataTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> endpoint = const Value.absent(),
+                Value<String?> etag = const Value.absent(),
+                Value<DateTime> lastSyncDate = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SyncMetadataTableCompanion(
+                endpoint: endpoint,
+                etag: etag,
+                lastSyncDate: lastSyncDate,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String endpoint,
+                Value<String?> etag = const Value.absent(),
+                required DateTime lastSyncDate,
+                Value<int> rowid = const Value.absent(),
+              }) => SyncMetadataTableCompanion.insert(
+                endpoint: endpoint,
+                etag: etag,
+                lastSyncDate: lastSyncDate,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SyncMetadataTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SyncMetadataTableTable,
+      SyncMetadataTableData,
+      $$SyncMetadataTableTableFilterComposer,
+      $$SyncMetadataTableTableOrderingComposer,
+      $$SyncMetadataTableTableAnnotationComposer,
+      $$SyncMetadataTableTableCreateCompanionBuilder,
+      $$SyncMetadataTableTableUpdateCompanionBuilder,
+      (
+        SyncMetadataTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $SyncMetadataTableTable,
+          SyncMetadataTableData
+        >,
+      ),
+      SyncMetadataTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3040,4 +3493,6 @@ class $AppDatabaseManager {
         _db,
         _db.formulaeAnalyticsTable,
       );
+  $$SyncMetadataTableTableTableManager get syncMetadataTable =>
+      $$SyncMetadataTableTableTableManager(_db, _db.syncMetadataTable);
 }

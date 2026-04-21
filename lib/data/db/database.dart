@@ -9,6 +9,7 @@ import 'tables/casks_table.dart';
 import 'tables/formulae_table.dart';
 import 'tables/casks_analytics_table.dart';
 import 'tables/formulae_analytics_table.dart';
+import 'tables/sync_metadata_table.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
 import '../models/analytics/casks/casks_analytics_model.dart';
@@ -24,6 +25,7 @@ part 'database.g.dart';
     FormulaeTable,
     CasksAnalyticsTable,
     FormulaeAnalyticsTable,
+    SyncMetadataTable,
   ],
 )
 class AppDatabase extends _$AppDatabase implements DatabaseInterface {
@@ -234,6 +236,26 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
 
     final rows = await query.get();
     return rows.map((row) => row.readTable(casksTable)).toList();
+  }
+
+  @override
+  Future<String?> getETag(String endpoint) async {
+    final row = await (select(syncMetadataTable)
+          ..where((t) => t.endpoint.equals(endpoint)))
+        .getSingleOrNull();
+    return row?.etag;
+  }
+
+  @override
+  Future<void> saveETag(String endpoint, String etag) async {
+    await into(syncMetadataTable).insert(
+      SyncMetadataTableCompanion(
+        endpoint: Value(endpoint),
+        etag: Value(etag),
+        lastSyncDate: Value(DateTime.now()),
+      ),
+      mode: InsertMode.insertOrReplace,
+    );
   }
 }
 

@@ -7,15 +7,16 @@ class NetworkResource<T> {
   final int? statusCode;
   final T? data;
   final String? errorMessage;
+  final String? eTag;
 
-  NetworkResource(this.status, this.statusCode, this.data, this.errorMessage);
+  NetworkResource(this.status, this.statusCode, this.data, this.errorMessage, [this.eTag]);
 
-  factory NetworkResource.success(T data, int? statusCode) {
-    return NetworkResource(NetworkStatus.success, statusCode, data, null);
+  factory NetworkResource.success(T? data, int? statusCode, [String? eTag]) {
+    return NetworkResource(NetworkStatus.success, statusCode, data, null, eTag);
   }
 
   factory NetworkResource.error(String? errorMessage, int? statusCode) {
-    return NetworkResource(NetworkStatus.error, statusCode, null, errorMessage);
+    return NetworkResource(NetworkStatus.error, statusCode, null, errorMessage, null);
   }
 
   factory NetworkResource.errorFrom(DioException error) {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import '../data/api/api_client.dart';
-import '../data/network_resource.dart';
+import '../data/db/database.dart';
+import '../data/repository/homebrew_repository.dart';
 
 class ApiTesterWidget extends StatefulWidget {
   const ApiTesterWidget({super.key});
@@ -11,35 +12,22 @@ class ApiTesterWidget extends StatefulWidget {
 }
 
 class _ApiTesterWidgetState extends State<ApiTesterWidget> {
-  late final ApiClient _apiClient;
+  late final HomebrewRepository _repository;
   String _result = 'No result yet.';
 
   @override
   void initState() {
     super.initState();
     final dio = Dio();
-    _apiClient = ApiClient(dio);
+    final apiClient = ApiClient(dio);
+    final database = AppDatabase();
+    _repository = HomebrewRepository(apiClient, database);
   }
 
   void _updateResult(String message) {
     setState(() {
       _result = message;
     });
-  }
-
-  void _handleResponse<T>(
-    NetworkResource<T> response,
-    String Function(T) successMessage,
-  ) {
-    if (response.status == NetworkStatus.success && response.data != null) {
-      _updateResult(
-        'Success (${response.statusCode}):\n\n${successMessage(response.data as T)}',
-      );
-    } else {
-      _updateResult(
-        'Error (${response.statusCode}):\n\n${response.errorMessage}',
-      );
-    }
   }
 
   @override
@@ -53,93 +41,90 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  _updateResult('Loading Formulae Listing...');
-                  final res = await _apiClient.getFormulaeListing();
-                  _handleResponse(
-                    res,
-                    (data) =>
-                        'Fetched ${data.length} formulae. First item: ${data.isNotEmpty ? data.first.name : "None"}',
-                  );
+                  _updateResult('Syncing Formulae Listing...');
+                  try {
+                    await _repository.syncFormulae();
+                    final data = await _repository.getAllFormulae();
+                    _updateResult(
+                      'Success: Fetched and cached ${data.length} formulae. First item: ${data.isNotEmpty ? data.first.name : "None"}',
+                    );
+                  } catch (e) {
+                    _updateResult('Error: $e');
+                  }
                 },
-                child: const Text('getFormulaeListing()'),
+                child: const Text('syncFormulae()'),
               ),
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () async {
-                  _updateResult('Loading Casks Listing...');
-                  final res = await _apiClient.getCasksListing();
-                  _handleResponse(
-                    res,
-                    (data) =>
-                        'Fetched ${data.length} casks. First item: ${data.isNotEmpty ? data.first.token : "None"}',
-                  );
+                  _updateResult('Syncing Casks Listing...');
+                  try {
+                    await _repository.syncCasks();
+                    final data = await _repository.getAllCasks();
+                    _updateResult(
+                      'Success: Fetched and cached ${data.length} casks. First item: ${data.isNotEmpty ? data.first.token : "None"}',
+                    );
+                  } catch (e) {
+                    _updateResult('Error: $e');
+                  }
                 },
-                child: const Text('getCasksListing()'),
+                child: const Text('syncCasks()'),
               ),
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () async {
                   _updateResult('Loading Formula Details (wget)...');
-                  final res = await _apiClient.getFormulaDetails('wget');
-                  _handleResponse(
-                    res,
-                    (data) =>
-                        'Name: ${data.name}\nDesc: ${data.desc}\nVersions: ${data.versions.stable}',
-                  );
+                  final formula = await _repository.getFormula('wget');
+                  if (formula != null) {
+                    _updateResult(
+                      'Name: ${formula.name}\nDesc: ${formula.desc}\nVersions: ${formula.versions.stable}',
+                    );
+                  } else {
+                    _updateResult('Error: Formula not found');
+                  }
                 },
-                child: const Text("getFormulaDetails('wget')"),
+                child: const Text("getFormula('wget')"),
               ),
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () async {
                   _updateResult('Loading Cask Details (google-chrome)...');
-                  final res = await _apiClient.getCaskDetails('google-chrome');
-                  _handleResponse(
-                    res,
-                    (data) =>
-                        'Token: ${data.token}\nName: ${data.name.first}\nVersion: ${data.version}',
-                  );
+                  final cask = await _repository.getCask('google-chrome');
+                  if (cask != null) {
+                    _updateResult(
+                      'Token: ${cask.token}\nName: ${cask.name.first}\nVersion: ${cask.version}',
+                    );
+                  } else {
+                    _updateResult('Error: Cask not found');
+                  }
                 },
-                child: const Text("getCaskDetails('google-chrome')"),
+                child: const Text("getCask('google-chrome')"),
               ),
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () async {
-                  _updateResult('Loading Category Analytics (install, 30d)...');
-                  final res = await _apiClient.getCategoryAnalytics(
-                    'install',
-                    '30d',
-                  );
-                  _updateResult(
-                    'Fetched ${res.data?.items.length ?? 0} category analytics items.',
-                  );
+                  _updateResult('Syncing Formulae Analytics (install, 30d)...');
+                  try {
+                    await _repository.syncFormulaeAnalytics('install', '30d');
+                    _updateResult('Success: Synced formulae analytics.');
+                  } catch (e) {
+                    _updateResult('Error: $e');
+                  }
                 },
-                child: const Text("getCategoryAnalytics('install', '30d')"),
+                child: const Text("syncFormulaeAnalytics('install', '30d')"),
               ),
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () async {
-                  _updateResult('Loading Formulae Analytics (install, 30d)...');
-                  final res = await _apiClient.getFormulaeAnalytics(
-                    'install',
-                    '30d',
-                  );
-                  _updateResult(
-                    'Fetched ${res.data?.formulae.length ?? 0} formulae analytics items.',
-                  );
+                  _updateResult('Syncing Casks Analytics (30d)...');
+                  try {
+                    await _repository.syncCasksAnalytics('30d');
+                    _updateResult('Success: Synced casks analytics.');
+                  } catch (e) {
+                    _updateResult('Error: $e');
+                  }
                 },
-                child: const Text("getFormulaeAnalytics('install', '30d')"),
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () async {
-                  _updateResult('Loading Casks Analytics (30d)...');
-                  final res = await _apiClient.getCasksAnalytics('30d');
-                  _updateResult(
-                    'Fetched ${res.data?.casks.length ?? 0} cask analytics items.',
-                  );
-                },
-                child: const Text("getCasksAnalytics('30d')"),
+                child: const Text("syncCasksAnalytics('30d')"),
               ),
             ],
           ),
