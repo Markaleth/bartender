@@ -11,13 +11,8 @@ class ApiClient implements ApiClientInterface {
   final Dio _dio;
 
   static const String _baseUrl = 'https://formulae.brew.sh/api';
-
-  static const _listingTimeoutDuration = Duration(seconds: 30);
   static const _defaultTimeoutDuration = Duration(seconds: 10);
 
-  final Options _listingOptions = Options(
-    receiveTimeout: _listingTimeoutDuration,
-  );
   final Options _defaultOptions = Options(
     receiveTimeout: _defaultTimeoutDuration,
   );
@@ -31,7 +26,7 @@ class ApiClient implements ApiClientInterface {
     try {
       final response = await _dio.get(
         '/formula.json',
-        options: _listingOptions,
+        options: _defaultOptions,
       );
       final List<dynamic> data = response.data;
       return NetworkResource.success(
@@ -50,7 +45,7 @@ class ApiClient implements ApiClientInterface {
   @override
   Future<NetworkResource<List<CaskModel>>> getCasksListing() async {
     try {
-      final response = await _dio.get('/cask.json', options: _listingOptions);
+      final response = await _dio.get('/cask.json', options: _defaultOptions);
       final List<dynamic> data = response.data;
       return NetworkResource.success(
         data
