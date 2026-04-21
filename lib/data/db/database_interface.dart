@@ -1,0 +1,26 @@
+import '../models/cask/cask_model.dart';
+import '../models/formula/formula_model.dart';
+
+abstract class DatabaseInterface {
+  Future<void> cacheFormulae(List<FormulaModel> formulae);
+  Future<void> cacheCasks(List<CaskModel> casks);
+
+  Future<void> cacheFormula(FormulaModel formula);
+  Future<void> cacheCask(CaskModel cask);
+
+  Future<List<FormulaModel>> getAllFormulae();
+  Future<List<CaskModel>> getAllCasks();
+
+  Future<FormulaModel?> getFormula(String name);
+  Future<CaskModel?> getCask(String token);
+
+  Future<List<FormulaModel>> searchFormulae(String query);
+  Future<List<CaskModel>> searchCasks(String query);
+
+  Future<List<FormulaModel>> getFormulaeSortedAlphabetically();
+  Future<List<CaskModel>> getCasksSortedAlphabetically();
+
+  // Assuming generatedDate or another field could be used for 'created' date
+  Future<List<FormulaModel>> getFormulaeSortedByDate();
+  Future<List<CaskModel>> getCasksSortedByDate();
+}
