@@ -1196,11 +1196,649 @@ extension FormulaModelToInsertable on FormulaModel {
   }
 }
 
+class $CasksAnalyticsTableTable extends CasksAnalyticsTable
+    with TableInfo<$CasksAnalyticsTableTable, CasksAnalyticsTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CasksAnalyticsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _caskMeta = const VerificationMeta('cask');
+  @override
+  late final GeneratedColumn<String> cask = GeneratedColumn<String>(
+    'cask',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _countMeta = const VerificationMeta('count');
+  @override
+  late final GeneratedColumn<String> count = GeneratedColumn<String>(
+    'count',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _percentMeta = const VerificationMeta(
+    'percent',
+  );
+  @override
+  late final GeneratedColumn<String> percent = GeneratedColumn<String>(
+    'percent',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _periodMeta = const VerificationMeta('period');
+  @override
+  late final GeneratedColumn<String> period = GeneratedColumn<String>(
+    'period',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [cask, count, percent, period];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'casks_analytics_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CasksAnalyticsTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('cask')) {
+      context.handle(
+        _caskMeta,
+        cask.isAcceptableOrUnknown(data['cask']!, _caskMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_caskMeta);
+    }
+    if (data.containsKey('count')) {
+      context.handle(
+        _countMeta,
+        count.isAcceptableOrUnknown(data['count']!, _countMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_countMeta);
+    }
+    if (data.containsKey('percent')) {
+      context.handle(
+        _percentMeta,
+        percent.isAcceptableOrUnknown(data['percent']!, _percentMeta),
+      );
+    }
+    if (data.containsKey('period')) {
+      context.handle(
+        _periodMeta,
+        period.isAcceptableOrUnknown(data['period']!, _periodMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_periodMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {cask, period};
+  @override
+  CasksAnalyticsTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CasksAnalyticsTableData(
+      cask: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cask'],
+      )!,
+      count: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}count'],
+      )!,
+      percent: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}percent'],
+      ),
+      period: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}period'],
+      )!,
+    );
+  }
+
+  @override
+  $CasksAnalyticsTableTable createAlias(String alias) {
+    return $CasksAnalyticsTableTable(attachedDatabase, alias);
+  }
+}
+
+class CasksAnalyticsTableData extends DataClass
+    implements Insertable<CasksAnalyticsTableData> {
+  final String cask;
+  final String count;
+  final String? percent;
+  final String period;
+  const CasksAnalyticsTableData({
+    required this.cask,
+    required this.count,
+    this.percent,
+    required this.period,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['cask'] = Variable<String>(cask);
+    map['count'] = Variable<String>(count);
+    if (!nullToAbsent || percent != null) {
+      map['percent'] = Variable<String>(percent);
+    }
+    map['period'] = Variable<String>(period);
+    return map;
+  }
+
+  CasksAnalyticsTableCompanion toCompanion(bool nullToAbsent) {
+    return CasksAnalyticsTableCompanion(
+      cask: Value(cask),
+      count: Value(count),
+      percent: percent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(percent),
+      period: Value(period),
+    );
+  }
+
+  factory CasksAnalyticsTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CasksAnalyticsTableData(
+      cask: serializer.fromJson<String>(json['cask']),
+      count: serializer.fromJson<String>(json['count']),
+      percent: serializer.fromJson<String?>(json['percent']),
+      period: serializer.fromJson<String>(json['period']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'cask': serializer.toJson<String>(cask),
+      'count': serializer.toJson<String>(count),
+      'percent': serializer.toJson<String?>(percent),
+      'period': serializer.toJson<String>(period),
+    };
+  }
+
+  CasksAnalyticsTableData copyWith({
+    String? cask,
+    String? count,
+    Value<String?> percent = const Value.absent(),
+    String? period,
+  }) => CasksAnalyticsTableData(
+    cask: cask ?? this.cask,
+    count: count ?? this.count,
+    percent: percent.present ? percent.value : this.percent,
+    period: period ?? this.period,
+  );
+  CasksAnalyticsTableData copyWithCompanion(CasksAnalyticsTableCompanion data) {
+    return CasksAnalyticsTableData(
+      cask: data.cask.present ? data.cask.value : this.cask,
+      count: data.count.present ? data.count.value : this.count,
+      percent: data.percent.present ? data.percent.value : this.percent,
+      period: data.period.present ? data.period.value : this.period,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CasksAnalyticsTableData(')
+          ..write('cask: $cask, ')
+          ..write('count: $count, ')
+          ..write('percent: $percent, ')
+          ..write('period: $period')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(cask, count, percent, period);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CasksAnalyticsTableData &&
+          other.cask == this.cask &&
+          other.count == this.count &&
+          other.percent == this.percent &&
+          other.period == this.period);
+}
+
+class CasksAnalyticsTableCompanion
+    extends UpdateCompanion<CasksAnalyticsTableData> {
+  final Value<String> cask;
+  final Value<String> count;
+  final Value<String?> percent;
+  final Value<String> period;
+  final Value<int> rowid;
+  const CasksAnalyticsTableCompanion({
+    this.cask = const Value.absent(),
+    this.count = const Value.absent(),
+    this.percent = const Value.absent(),
+    this.period = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CasksAnalyticsTableCompanion.insert({
+    required String cask,
+    required String count,
+    this.percent = const Value.absent(),
+    required String period,
+    this.rowid = const Value.absent(),
+  }) : cask = Value(cask),
+       count = Value(count),
+       period = Value(period);
+  static Insertable<CasksAnalyticsTableData> custom({
+    Expression<String>? cask,
+    Expression<String>? count,
+    Expression<String>? percent,
+    Expression<String>? period,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (cask != null) 'cask': cask,
+      if (count != null) 'count': count,
+      if (percent != null) 'percent': percent,
+      if (period != null) 'period': period,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CasksAnalyticsTableCompanion copyWith({
+    Value<String>? cask,
+    Value<String>? count,
+    Value<String?>? percent,
+    Value<String>? period,
+    Value<int>? rowid,
+  }) {
+    return CasksAnalyticsTableCompanion(
+      cask: cask ?? this.cask,
+      count: count ?? this.count,
+      percent: percent ?? this.percent,
+      period: period ?? this.period,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (cask.present) {
+      map['cask'] = Variable<String>(cask.value);
+    }
+    if (count.present) {
+      map['count'] = Variable<String>(count.value);
+    }
+    if (percent.present) {
+      map['percent'] = Variable<String>(percent.value);
+    }
+    if (period.present) {
+      map['period'] = Variable<String>(period.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CasksAnalyticsTableCompanion(')
+          ..write('cask: $cask, ')
+          ..write('count: $count, ')
+          ..write('percent: $percent, ')
+          ..write('period: $period, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FormulaeAnalyticsTableTable extends FormulaeAnalyticsTable
+    with TableInfo<$FormulaeAnalyticsTableTable, FormulaeAnalyticsTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FormulaeAnalyticsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _formulaMeta = const VerificationMeta(
+    'formula',
+  );
+  @override
+  late final GeneratedColumn<String> formula = GeneratedColumn<String>(
+    'formula',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _countMeta = const VerificationMeta('count');
+  @override
+  late final GeneratedColumn<String> count = GeneratedColumn<String>(
+    'count',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _percentMeta = const VerificationMeta(
+    'percent',
+  );
+  @override
+  late final GeneratedColumn<String> percent = GeneratedColumn<String>(
+    'percent',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _periodMeta = const VerificationMeta('period');
+  @override
+  late final GeneratedColumn<String> period = GeneratedColumn<String>(
+    'period',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [formula, count, percent, period];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'formulae_analytics_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FormulaeAnalyticsTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('formula')) {
+      context.handle(
+        _formulaMeta,
+        formula.isAcceptableOrUnknown(data['formula']!, _formulaMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_formulaMeta);
+    }
+    if (data.containsKey('count')) {
+      context.handle(
+        _countMeta,
+        count.isAcceptableOrUnknown(data['count']!, _countMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_countMeta);
+    }
+    if (data.containsKey('percent')) {
+      context.handle(
+        _percentMeta,
+        percent.isAcceptableOrUnknown(data['percent']!, _percentMeta),
+      );
+    }
+    if (data.containsKey('period')) {
+      context.handle(
+        _periodMeta,
+        period.isAcceptableOrUnknown(data['period']!, _periodMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_periodMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {formula, period};
+  @override
+  FormulaeAnalyticsTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FormulaeAnalyticsTableData(
+      formula: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}formula'],
+      )!,
+      count: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}count'],
+      )!,
+      percent: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}percent'],
+      ),
+      period: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}period'],
+      )!,
+    );
+  }
+
+  @override
+  $FormulaeAnalyticsTableTable createAlias(String alias) {
+    return $FormulaeAnalyticsTableTable(attachedDatabase, alias);
+  }
+}
+
+class FormulaeAnalyticsTableData extends DataClass
+    implements Insertable<FormulaeAnalyticsTableData> {
+  final String formula;
+  final String count;
+  final String? percent;
+  final String period;
+  const FormulaeAnalyticsTableData({
+    required this.formula,
+    required this.count,
+    this.percent,
+    required this.period,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['formula'] = Variable<String>(formula);
+    map['count'] = Variable<String>(count);
+    if (!nullToAbsent || percent != null) {
+      map['percent'] = Variable<String>(percent);
+    }
+    map['period'] = Variable<String>(period);
+    return map;
+  }
+
+  FormulaeAnalyticsTableCompanion toCompanion(bool nullToAbsent) {
+    return FormulaeAnalyticsTableCompanion(
+      formula: Value(formula),
+      count: Value(count),
+      percent: percent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(percent),
+      period: Value(period),
+    );
+  }
+
+  factory FormulaeAnalyticsTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FormulaeAnalyticsTableData(
+      formula: serializer.fromJson<String>(json['formula']),
+      count: serializer.fromJson<String>(json['count']),
+      percent: serializer.fromJson<String?>(json['percent']),
+      period: serializer.fromJson<String>(json['period']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'formula': serializer.toJson<String>(formula),
+      'count': serializer.toJson<String>(count),
+      'percent': serializer.toJson<String?>(percent),
+      'period': serializer.toJson<String>(period),
+    };
+  }
+
+  FormulaeAnalyticsTableData copyWith({
+    String? formula,
+    String? count,
+    Value<String?> percent = const Value.absent(),
+    String? period,
+  }) => FormulaeAnalyticsTableData(
+    formula: formula ?? this.formula,
+    count: count ?? this.count,
+    percent: percent.present ? percent.value : this.percent,
+    period: period ?? this.period,
+  );
+  FormulaeAnalyticsTableData copyWithCompanion(
+    FormulaeAnalyticsTableCompanion data,
+  ) {
+    return FormulaeAnalyticsTableData(
+      formula: data.formula.present ? data.formula.value : this.formula,
+      count: data.count.present ? data.count.value : this.count,
+      percent: data.percent.present ? data.percent.value : this.percent,
+      period: data.period.present ? data.period.value : this.period,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FormulaeAnalyticsTableData(')
+          ..write('formula: $formula, ')
+          ..write('count: $count, ')
+          ..write('percent: $percent, ')
+          ..write('period: $period')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(formula, count, percent, period);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FormulaeAnalyticsTableData &&
+          other.formula == this.formula &&
+          other.count == this.count &&
+          other.percent == this.percent &&
+          other.period == this.period);
+}
+
+class FormulaeAnalyticsTableCompanion
+    extends UpdateCompanion<FormulaeAnalyticsTableData> {
+  final Value<String> formula;
+  final Value<String> count;
+  final Value<String?> percent;
+  final Value<String> period;
+  final Value<int> rowid;
+  const FormulaeAnalyticsTableCompanion({
+    this.formula = const Value.absent(),
+    this.count = const Value.absent(),
+    this.percent = const Value.absent(),
+    this.period = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FormulaeAnalyticsTableCompanion.insert({
+    required String formula,
+    required String count,
+    this.percent = const Value.absent(),
+    required String period,
+    this.rowid = const Value.absent(),
+  }) : formula = Value(formula),
+       count = Value(count),
+       period = Value(period);
+  static Insertable<FormulaeAnalyticsTableData> custom({
+    Expression<String>? formula,
+    Expression<String>? count,
+    Expression<String>? percent,
+    Expression<String>? period,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (formula != null) 'formula': formula,
+      if (count != null) 'count': count,
+      if (percent != null) 'percent': percent,
+      if (period != null) 'period': period,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FormulaeAnalyticsTableCompanion copyWith({
+    Value<String>? formula,
+    Value<String>? count,
+    Value<String?>? percent,
+    Value<String>? period,
+    Value<int>? rowid,
+  }) {
+    return FormulaeAnalyticsTableCompanion(
+      formula: formula ?? this.formula,
+      count: count ?? this.count,
+      percent: percent ?? this.percent,
+      period: period ?? this.period,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (formula.present) {
+      map['formula'] = Variable<String>(formula.value);
+    }
+    if (count.present) {
+      map['count'] = Variable<String>(count.value);
+    }
+    if (percent.present) {
+      map['percent'] = Variable<String>(percent.value);
+    }
+    if (period.present) {
+      map['period'] = Variable<String>(period.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FormulaeAnalyticsTableCompanion(')
+          ..write('formula: $formula, ')
+          ..write('count: $count, ')
+          ..write('percent: $percent, ')
+          ..write('period: $period, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CasksTableTable casksTable = $CasksTableTable(this);
   late final $FormulaeTableTable formulaeTable = $FormulaeTableTable(this);
+  late final $CasksAnalyticsTableTable casksAnalyticsTable =
+      $CasksAnalyticsTableTable(this);
+  late final $FormulaeAnalyticsTableTable formulaeAnalyticsTable =
+      $FormulaeAnalyticsTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1208,6 +1846,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     casksTable,
     formulaeTable,
+    casksAnalyticsTable,
+    formulaeAnalyticsTable,
   ];
 }
 
@@ -1988,6 +2628,403 @@ typedef $$FormulaeTableTableProcessedTableManager =
       FormulaModel,
       PrefetchHooks Function()
     >;
+typedef $$CasksAnalyticsTableTableCreateCompanionBuilder =
+    CasksAnalyticsTableCompanion Function({
+      required String cask,
+      required String count,
+      Value<String?> percent,
+      required String period,
+      Value<int> rowid,
+    });
+typedef $$CasksAnalyticsTableTableUpdateCompanionBuilder =
+    CasksAnalyticsTableCompanion Function({
+      Value<String> cask,
+      Value<String> count,
+      Value<String?> percent,
+      Value<String> period,
+      Value<int> rowid,
+    });
+
+class $$CasksAnalyticsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CasksAnalyticsTableTable> {
+  $$CasksAnalyticsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get cask => $composableBuilder(
+    column: $table.cask,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get count => $composableBuilder(
+    column: $table.count,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get percent => $composableBuilder(
+    column: $table.percent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get period => $composableBuilder(
+    column: $table.period,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CasksAnalyticsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CasksAnalyticsTableTable> {
+  $$CasksAnalyticsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get cask => $composableBuilder(
+    column: $table.cask,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get count => $composableBuilder(
+    column: $table.count,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get percent => $composableBuilder(
+    column: $table.percent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get period => $composableBuilder(
+    column: $table.period,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CasksAnalyticsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CasksAnalyticsTableTable> {
+  $$CasksAnalyticsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get cask =>
+      $composableBuilder(column: $table.cask, builder: (column) => column);
+
+  GeneratedColumn<String> get count =>
+      $composableBuilder(column: $table.count, builder: (column) => column);
+
+  GeneratedColumn<String> get percent =>
+      $composableBuilder(column: $table.percent, builder: (column) => column);
+
+  GeneratedColumn<String> get period =>
+      $composableBuilder(column: $table.period, builder: (column) => column);
+}
+
+class $$CasksAnalyticsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CasksAnalyticsTableTable,
+          CasksAnalyticsTableData,
+          $$CasksAnalyticsTableTableFilterComposer,
+          $$CasksAnalyticsTableTableOrderingComposer,
+          $$CasksAnalyticsTableTableAnnotationComposer,
+          $$CasksAnalyticsTableTableCreateCompanionBuilder,
+          $$CasksAnalyticsTableTableUpdateCompanionBuilder,
+          (
+            CasksAnalyticsTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $CasksAnalyticsTableTable,
+              CasksAnalyticsTableData
+            >,
+          ),
+          CasksAnalyticsTableData,
+          PrefetchHooks Function()
+        > {
+  $$CasksAnalyticsTableTableTableManager(
+    _$AppDatabase db,
+    $CasksAnalyticsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CasksAnalyticsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CasksAnalyticsTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$CasksAnalyticsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> cask = const Value.absent(),
+                Value<String> count = const Value.absent(),
+                Value<String?> percent = const Value.absent(),
+                Value<String> period = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CasksAnalyticsTableCompanion(
+                cask: cask,
+                count: count,
+                percent: percent,
+                period: period,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String cask,
+                required String count,
+                Value<String?> percent = const Value.absent(),
+                required String period,
+                Value<int> rowid = const Value.absent(),
+              }) => CasksAnalyticsTableCompanion.insert(
+                cask: cask,
+                count: count,
+                percent: percent,
+                period: period,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CasksAnalyticsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CasksAnalyticsTableTable,
+      CasksAnalyticsTableData,
+      $$CasksAnalyticsTableTableFilterComposer,
+      $$CasksAnalyticsTableTableOrderingComposer,
+      $$CasksAnalyticsTableTableAnnotationComposer,
+      $$CasksAnalyticsTableTableCreateCompanionBuilder,
+      $$CasksAnalyticsTableTableUpdateCompanionBuilder,
+      (
+        CasksAnalyticsTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $CasksAnalyticsTableTable,
+          CasksAnalyticsTableData
+        >,
+      ),
+      CasksAnalyticsTableData,
+      PrefetchHooks Function()
+    >;
+typedef $$FormulaeAnalyticsTableTableCreateCompanionBuilder =
+    FormulaeAnalyticsTableCompanion Function({
+      required String formula,
+      required String count,
+      Value<String?> percent,
+      required String period,
+      Value<int> rowid,
+    });
+typedef $$FormulaeAnalyticsTableTableUpdateCompanionBuilder =
+    FormulaeAnalyticsTableCompanion Function({
+      Value<String> formula,
+      Value<String> count,
+      Value<String?> percent,
+      Value<String> period,
+      Value<int> rowid,
+    });
+
+class $$FormulaeAnalyticsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $FormulaeAnalyticsTableTable> {
+  $$FormulaeAnalyticsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get formula => $composableBuilder(
+    column: $table.formula,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get count => $composableBuilder(
+    column: $table.count,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get percent => $composableBuilder(
+    column: $table.percent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get period => $composableBuilder(
+    column: $table.period,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$FormulaeAnalyticsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $FormulaeAnalyticsTableTable> {
+  $$FormulaeAnalyticsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get formula => $composableBuilder(
+    column: $table.formula,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get count => $composableBuilder(
+    column: $table.count,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get percent => $composableBuilder(
+    column: $table.percent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get period => $composableBuilder(
+    column: $table.period,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$FormulaeAnalyticsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FormulaeAnalyticsTableTable> {
+  $$FormulaeAnalyticsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get formula =>
+      $composableBuilder(column: $table.formula, builder: (column) => column);
+
+  GeneratedColumn<String> get count =>
+      $composableBuilder(column: $table.count, builder: (column) => column);
+
+  GeneratedColumn<String> get percent =>
+      $composableBuilder(column: $table.percent, builder: (column) => column);
+
+  GeneratedColumn<String> get period =>
+      $composableBuilder(column: $table.period, builder: (column) => column);
+}
+
+class $$FormulaeAnalyticsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FormulaeAnalyticsTableTable,
+          FormulaeAnalyticsTableData,
+          $$FormulaeAnalyticsTableTableFilterComposer,
+          $$FormulaeAnalyticsTableTableOrderingComposer,
+          $$FormulaeAnalyticsTableTableAnnotationComposer,
+          $$FormulaeAnalyticsTableTableCreateCompanionBuilder,
+          $$FormulaeAnalyticsTableTableUpdateCompanionBuilder,
+          (
+            FormulaeAnalyticsTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $FormulaeAnalyticsTableTable,
+              FormulaeAnalyticsTableData
+            >,
+          ),
+          FormulaeAnalyticsTableData,
+          PrefetchHooks Function()
+        > {
+  $$FormulaeAnalyticsTableTableTableManager(
+    _$AppDatabase db,
+    $FormulaeAnalyticsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FormulaeAnalyticsTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$FormulaeAnalyticsTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$FormulaeAnalyticsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> formula = const Value.absent(),
+                Value<String> count = const Value.absent(),
+                Value<String?> percent = const Value.absent(),
+                Value<String> period = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FormulaeAnalyticsTableCompanion(
+                formula: formula,
+                count: count,
+                percent: percent,
+                period: period,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String formula,
+                required String count,
+                Value<String?> percent = const Value.absent(),
+                required String period,
+                Value<int> rowid = const Value.absent(),
+              }) => FormulaeAnalyticsTableCompanion.insert(
+                formula: formula,
+                count: count,
+                percent: percent,
+                period: period,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FormulaeAnalyticsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FormulaeAnalyticsTableTable,
+      FormulaeAnalyticsTableData,
+      $$FormulaeAnalyticsTableTableFilterComposer,
+      $$FormulaeAnalyticsTableTableOrderingComposer,
+      $$FormulaeAnalyticsTableTableAnnotationComposer,
+      $$FormulaeAnalyticsTableTableCreateCompanionBuilder,
+      $$FormulaeAnalyticsTableTableUpdateCompanionBuilder,
+      (
+        FormulaeAnalyticsTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $FormulaeAnalyticsTableTable,
+          FormulaeAnalyticsTableData
+        >,
+      ),
+      FormulaeAnalyticsTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1996,4 +3033,11 @@ class $AppDatabaseManager {
       $$CasksTableTableTableManager(_db, _db.casksTable);
   $$FormulaeTableTableTableManager get formulaeTable =>
       $$FormulaeTableTableTableManager(_db, _db.formulaeTable);
+  $$CasksAnalyticsTableTableTableManager get casksAnalyticsTable =>
+      $$CasksAnalyticsTableTableTableManager(_db, _db.casksAnalyticsTable);
+  $$FormulaeAnalyticsTableTableTableManager get formulaeAnalyticsTable =>
+      $$FormulaeAnalyticsTableTableTableManager(
+        _db,
+        _db.formulaeAnalyticsTable,
+      );
 }

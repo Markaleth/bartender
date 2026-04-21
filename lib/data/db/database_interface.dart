@@ -1,3 +1,5 @@
+import '../models/analytics/casks/casks_analytics_model.dart';
+import '../models/analytics/formulae/formulae_analytics_model.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
 
@@ -23,4 +25,10 @@ abstract class DatabaseInterface {
   // Assuming generatedDate or another field could be used for 'created' date
   Future<List<FormulaModel>> getFormulaeSortedByDate();
   Future<List<CaskModel>> getCasksSortedByDate();
+
+  Future<void> cacheFormulaeAnalytics(String period, List<FormulaAnalyticsItem> items);
+  Future<void> cacheCasksAnalytics(String period, List<CaskAnalyticsItem> items);
+
+  Future<List<FormulaModel>> getMostDownloadedFormulae(String period);
+  Future<List<CaskModel>> getMostDownloadedCasks(String period);
 }
