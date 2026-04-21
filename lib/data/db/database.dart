@@ -257,11 +257,29 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
       mode: InsertMode.insertOrReplace,
     );
   }
+
+  @override
+  Future<void> purgeAllData() async {
+    await transaction(() async {
+      await delete(casksTable).go();
+      await delete(formulaeTable).go();
+      await delete(casksAnalyticsTable).go();
+      await delete(formulaeAnalyticsTable).go();
+      await delete(syncMetadataTable).go();
+    });
+  }
+
+  @override
+  Future<bool> isDatabaseEmpty() async {
+    final formulae = await (select(formulaeTable)..limit(1)).get();
+    final casks = await (select(casksTable)..limit(1)).get();
+    return formulae.isEmpty && casks.isEmpty;
+  }
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbFolder = await getApplicationSupportDirectory();
     final file = File(p.join(dbFolder.path, 'bartender.sqlite'));
     return NativeDatabase.createInBackground(file);
   });

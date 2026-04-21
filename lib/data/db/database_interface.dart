@@ -34,4 +34,7 @@ abstract class DatabaseInterface {
 
   Future<String?> getETag(String endpoint);
   Future<void> saveETag(String endpoint, String etag);
+
+  Future<void> purgeAllData();
+  Future<bool> isDatabaseEmpty();
 }
