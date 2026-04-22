@@ -15,11 +15,6 @@ void main() {
   final brewService = BrewService();
   final packageRepository = PackageRepository(brewService, database);
 
-  // Trigger background sync on startup
-  packageRepository.syncInstalledPackages().catchError((e) {
-    debugPrint('Failed to sync installed packages on startup: $e');
-  });
-
   runApp(
     MultiProvider(
       providers: [
