@@ -66,6 +66,18 @@ class ApiClient implements ApiClientInterface {
 
   ApiClient(this._dio) {
     _dio.options.baseUrl = _baseUrl;
+    if (kDebugMode) {
+      _dio.interceptors.add(
+        LogInterceptor(
+          request: true,
+          requestHeader: true,
+          requestBody: false,
+          responseHeader: true,
+          responseBody: false,
+          error: true,
+        ),
+      );
+    }
   }
 
   /// Helper for heavy bulk endpoints using compute() isolates
