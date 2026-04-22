@@ -42,13 +42,33 @@ CasksAnalyticsResponse _parseCasksAnalytics(String jsonString) {
 }
 
 class ApiClient implements ApiClientInterface {
-  final Dio _dio;
+  late Dio _dio;
+
+  static ApiClient initialize() {
+    ApiClient client = ApiClient();
+    client._dio = Dio(_defaultOptions);
+    if (kDebugMode) {
+      client._dio.interceptors.add(
+        LogInterceptor(
+          request: true,
+          requestHeader: true,
+          requestBody: false,
+          responseHeader: true,
+          responseBody: false,
+          error: true,
+        ),
+      );
+    }
+
+    return client;
+  }
 
   static const String _baseUrl = 'https://formulae.brew.sh/api';
   static const _defaultTimeoutDuration = Duration(seconds: 10);
 
-  final Options _defaultOptions = Options(
+  static final BaseOptions _defaultOptions = BaseOptions(
     receiveTimeout: _defaultTimeoutDuration,
+    baseUrl: _baseUrl,
   );
 
   Options _getOptionsWithETag(String? eTag) {
@@ -62,22 +82,6 @@ class ApiClient implements ApiClientInterface {
       // raw string to a background isolate via compute().
       responseType: ResponseType.plain,
     );
-  }
-
-  ApiClient(this._dio) {
-    _dio.options.baseUrl = _baseUrl;
-    if (kDebugMode) {
-      _dio.interceptors.add(
-        LogInterceptor(
-          request: true,
-          requestHeader: true,
-          requestBody: false,
-          responseHeader: true,
-          responseBody: false,
-          error: true,
-        ),
-      );
-    }
   }
 
   /// Helper for heavy bulk endpoints using compute() isolates
@@ -111,7 +115,7 @@ class ApiClient implements ApiClientInterface {
     T Function(Map<String, dynamic>) fromJson,
   ) async {
     try {
-      final response = await _dio.get(path, options: _defaultOptions);
+      final response = await _dio.get(path);
       return NetworkResource.success(
         fromJson(response.data as Map<String, dynamic>),
         response.statusCode,

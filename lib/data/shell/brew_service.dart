@@ -5,9 +5,8 @@ import 'package:bartender/data/shell/streaming_shell_command.dart';
 import 'package:flutter/foundation.dart';
 
 class BrewService {
-  BrewService();
-
-  bool get _isInContainer => Platform.isLinux && File('/run/.containerenv').existsSync();
+  bool get _isInContainer =>
+      Platform.isLinux && File('/run/.containerenv').existsSync();
 
   String get _executable {
     if (kDebugMode && _isInContainer) {
@@ -33,11 +32,7 @@ class BrewService {
         stderr: result.stderr as String,
       );
     } catch (e) {
-      return ShellCommandResult(
-        exitCode: -1,
-        stdout: '',
-        stderr: e.toString(),
-      );
+      return ShellCommandResult(exitCode: -1, stdout: '', stderr: e.toString());
     }
   }
 
@@ -56,7 +51,10 @@ class BrewService {
     return runCommand(args);
   }
 
-  Future<StreamingShellCommand> installWithStream(String package, {bool isCask = false}) {
+  Future<StreamingShellCommand> installWithStream(
+    String package, {
+    bool isCask = false,
+  }) {
     final args = ['install'];
     if (isCask) args.add('--cask');
     args.add(package);
@@ -70,7 +68,10 @@ class BrewService {
     return runCommand(args);
   }
 
-  Future<StreamingShellCommand> uninstallWithStream(String package, {bool isCask = false}) {
+  Future<StreamingShellCommand> uninstallWithStream(
+    String package, {
+    bool isCask = false,
+  }) {
     final args = ['uninstall'];
     if (isCask) args.add('--cask');
     args.add(package);
@@ -81,7 +82,10 @@ class BrewService {
     return streamCommand(['update']);
   }
 
-  Future<StreamingShellCommand> upgrade({String? package, bool isCask = false}) {
+  Future<StreamingShellCommand> upgrade({
+    String? package,
+    bool isCask = false,
+  }) {
     final args = ['upgrade'];
     if (package != null) {
       if (isCask) args.add('--cask');

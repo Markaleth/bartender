@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
-import '../data/api/api_client.dart';
+import '../data/api/api_client_interface.dart';
 import '../data/db/database_interface.dart';
 import '../data/repository/homebrew_repository.dart';
 import '../data/repository/package_repository.dart';
@@ -15,7 +14,7 @@ class ApiTesterWidget extends StatefulWidget {
 }
 
 class _ApiTesterWidgetState extends State<ApiTesterWidget> {
-  late final ApiClient _apiClient;
+  late final ApiClientInterface _apiClient;
   late final DatabaseInterface _database;
   late final HomebrewRepository _repository;
   late final PackageRepository _packageRepository;
@@ -25,16 +24,15 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
   @override
   void initState() {
     super.initState();
-    final dio = Dio();
-    _apiClient = ApiClient(dio);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _apiClient = Provider.of<ApiClientInterface>(context, listen: false);
     _database = Provider.of<DatabaseInterface>(context, listen: false);
     _packageRepository = Provider.of<PackageRepository>(context, listen: false);
-    _repository = HomebrewRepository(_apiClient, _database);
+    _repository = Provider.of<HomebrewRepository>(context, listen: false);
     _checkDbState();
   }
 
