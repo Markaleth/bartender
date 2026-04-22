@@ -1,8 +1,9 @@
 import 'package:bartender/dependency_manager.dart';
 import 'package:bartender/theme/bartender_theme.dart';
+import 'package:bartender/core/routing/app_router.dart';
+import 'package:bartender/core/routing/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:bartender/debug/api_tester.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +18,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: BartenderTheme.darkTheme,
-      home: Scaffold(
-        appBar: AppBar(title: const Text('API Tester')),
-        body: const ApiTesterWidget(),
-      ),
+      navigatorKey: context.read<NavigationService>().navigatorKey,
+      onGenerateRoute: AppRouter.generateRoute,
+      initialRoute: AppRoutes.home,
     );
   }
 }

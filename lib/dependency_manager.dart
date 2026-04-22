@@ -5,10 +5,14 @@ import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/data/shell/brew_service.dart';
+import 'package:bartender/core/routing/navigation_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 final List<SingleChildWidget> dependencyList = [
+  // Navigation
+  Provider<NavigationService>(create: (_) => NavigationService()),
+
   // Base Services
   Provider<ApiClientInterface>(create: (_) => ApiClient.initialize()),
   Provider<DatabaseInterface>(
