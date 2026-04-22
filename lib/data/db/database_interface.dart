@@ -22,6 +22,9 @@ abstract class DatabaseInterface {
   Future<List<FormulaModel>> getFormulaeSortedAlphabetically();
   Future<List<CaskModel>> getCasksSortedAlphabetically();
 
+  Future<List<FormulaModel>> getInstalledFormulae();
+  Future<List<CaskModel>> getInstalledCasks();
+
   // Assuming generatedDate or another field could be used for 'created' date
   Future<List<FormulaModel>> getFormulaeSortedByDate();
   Future<List<CaskModel>> getCasksSortedByDate();
@@ -40,5 +43,6 @@ abstract class DatabaseInterface {
   Future<void> saveETag(String endpoint, String etag);
 
   Future<void> purgeAllData();
+  Future<void> deleteDatabaseFile();
   Future<bool> isDatabaseEmpty();
 }

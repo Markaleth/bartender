@@ -4,14 +4,14 @@ import 'package:bartender/data/shell/shell_command_result.dart';
 import 'package:bartender/data/shell/streaming_shell_command.dart';
 
 class BrewService {
-  final String executable;
+  BrewService();
 
-  BrewService({this.executable = 'brew'});
+  static const String _executable = 'brew';
 
   /// Runs a command quickly without streaming output.
   Future<ShellCommandResult> runCommand(List<String> args) async {
     try {
-      final result = await Process.run(executable, args);
+      final result = await Process.run(_executable, args);
       return ShellCommandResult(
         exitCode: result.exitCode,
         stdout: result.stdout as String,
@@ -28,7 +28,7 @@ class BrewService {
 
   /// Starts a command and streams its output.
   Future<StreamingShellCommand> streamCommand(List<String> args) async {
-    final process = await Process.start(executable, args);
+    final process = await Process.start(_executable, args);
     return StreamingShellCommand(process);
   }
 

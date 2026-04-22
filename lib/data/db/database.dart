@@ -32,7 +32,22 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          await m.addColumn(formulaeTable, formulaeTable.isInstalled);
+          await m.addColumn(casksTable, casksTable.isInstalled);
+        }
+      },
+    );
+  }
 
   @override
   Future<void> cacheFormulae(List<FormulaModel> formulae) async {
@@ -101,6 +116,16 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
 
   @override
   Future<List<CaskModel>> getAllCasks() => select(casksTable).get();
+
+  @override
+  Future<List<FormulaModel>> getInstalledFormulae() {
+    return (select(formulaeTable)..where((table) => table.isInstalled.equals(true))).get();
+  }
+
+  @override
+  Future<List<CaskModel>> getInstalledCasks() {
+    return (select(casksTable)..where((table) => table.isInstalled.equals(true))).get();
+  }
 
   @override
   Future<FormulaModel?> getFormula(String name) {
@@ -293,6 +318,16 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
       await delete(formulaeAnalyticsTable).go();
       await delete(syncMetadataTable).go();
     });
+  }
+
+  @override
+  Future<void> deleteDatabaseFile() async {
+    await close();
+    final dbFolder = await getApplicationSupportDirectory();
+    final file = File(p.join(dbFolder.path, 'bartender.sqlite'));
+    if (await file.exists()) {
+      await file.delete();
+    }
   }
 
   @override

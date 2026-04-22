@@ -253,13 +253,51 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                             child: const Text('getAllCasks()'),
                           ),
                           const SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed:
-                                _isDbEmpty
-                                    ? null
-                                    : () async {
-                                      _updateResult(
-                                        'DB: getFormula("wget")...',
+                            ElevatedButton(
+                              onPressed:
+                                  _isDbEmpty
+                                      ? null
+                                      : () async {
+                                          _updateResult('DB: getInstalledFormulae()...');
+                                          try {
+                                            final res = await _database.getInstalledFormulae();
+                                            final names = res.map((f) => f.name).take(10).join(', ');
+                                            _updateResult(
+                                              'Success: ${res.length} installed formulae.\n\nSample: $names${res.length > 10 ? '...' : ''}',
+                                            );
+                                          } catch (e) {
+                                            _updateResult('Error: $e');
+                                          }
+                                        },
+                              child: const Text('getInstalledFormulae()'),
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed:
+                                  _isDbEmpty
+                                      ? null
+                                      : () async {
+                                          _updateResult('DB: getInstalledCasks()...');
+                                          try {
+                                            final res = await _database.getInstalledCasks();
+                                            final tokens = res.map((c) => c.token).take(10).join(', ');
+                                            _updateResult(
+                                              'Success: ${res.length} installed casks.\n\nSample: $tokens${res.length > 10 ? '...' : ''}',
+                                            );
+                                          } catch (e) {
+                                            _updateResult('Error: $e');
+                                          }
+                                        },
+                              child: const Text('getInstalledCasks()'),
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed:
+                                  _isDbEmpty
+                                      ? null
+                                      : () async {
+                                        _updateResult(
+                                          'DB: getFormula("wget")...',
                                       );
                                       try {
                                         final res = await _database.getFormula(
@@ -485,6 +523,24 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               },
                               child: const Text(
                                 'Purge Database',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red.withValues(alpha: 0.1),
+                              ),
+                              onPressed: () async {
+                                _updateResult('Deleting Database File...');
+                                try {
+                                  await _database.deleteDatabaseFile();
+                                  _updateResult('Success: database file deleted. Please restart the app.');
+                                } catch (e) {
+                                  _updateResult('Error: $e');
+                                }
+                              },
+                              child: const Text(
+                                'Delete DB File',
                                 style: TextStyle(color: Colors.red),
                               ),
                             ),
