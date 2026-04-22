@@ -16,6 +16,7 @@ class FormulaeTable extends Table {
   BoolColumn get outdated => boolean().withDefault(const Constant(false))();
   BoolColumn get deprecated => boolean().withDefault(const Constant(false))();
   BoolColumn get disabled => boolean().withDefault(const Constant(false))();
+  BoolColumn get isInstalled => boolean().withDefault(const Constant(false))();
   TextColumn get analytics => text().map(const MapConverter()).nullable()();
   TextColumn get generatedDate => text().nullable()();
 

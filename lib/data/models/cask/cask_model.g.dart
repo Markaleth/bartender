@@ -19,6 +19,7 @@ _CaskModel _$CaskModelFromJson(Map<String, dynamic> json) => _CaskModel(
   outdated: json['outdated'] as bool? ?? false,
   deprecated: json['deprecated'] as bool? ?? false,
   disabled: json['disabled'] as bool? ?? false,
+  isInstalled: json['is_installed'] as bool? ?? false,
   analytics: json['analytics'] as Map<String, dynamic>?,
   generatedDate: json['generated_date'] as String?,
 );
@@ -37,6 +38,7 @@ Map<String, dynamic> _$CaskModelToJson(_CaskModel instance) =>
       'outdated': instance.outdated,
       'deprecated': instance.deprecated,
       'disabled': instance.disabled,
+      'is_installed': instance.isInstalled,
       'analytics': instance.analytics,
       'generated_date': instance.generatedDate,
     };

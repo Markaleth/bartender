@@ -18,6 +18,7 @@ abstract class CaskModel with _$CaskModel {
     @Default(false) bool outdated,
     @Default(false) bool deprecated,
     @Default(false) bool disabled,
+    @Default(false) @JsonKey(name: 'is_installed') bool isInstalled,
     Map<String, dynamic>? analytics,
     @JsonKey(name: 'generated_date') String? generatedDate,
   }) = _CaskModel;

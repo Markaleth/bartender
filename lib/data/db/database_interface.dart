@@ -29,6 +29,10 @@ abstract class DatabaseInterface {
   Future<void> cacheFormulaeAnalytics(String period, List<FormulaAnalyticsItem> items);
   Future<void> cacheCasksAnalytics(String period, List<CaskAnalyticsItem> items);
 
+  Future<void> updateFormulaInstallationStatus(String name, bool isInstalled);
+  Future<void> updateCaskInstallationStatus(String token, bool isInstalled);
+  Future<void> resetAllInstallationStatuses();
+
   Future<List<FormulaModel>> getMostDownloadedFormulae(String period);
   Future<List<CaskModel>> getMostDownloadedCasks(String period);
 

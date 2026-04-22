@@ -146,6 +146,21 @@ class $CasksTableTable extends CasksTable
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _isInstalledMeta = const VerificationMeta(
+    'isInstalled',
+  );
+  @override
+  late final GeneratedColumn<bool> isInstalled = GeneratedColumn<bool>(
+    'is_installed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_installed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   late final GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
   analytics = GeneratedColumn<String>(
@@ -180,6 +195,7 @@ class $CasksTableTable extends CasksTable
     outdated,
     deprecated,
     disabled,
+    isInstalled,
     analytics,
     generatedDate,
   ];
@@ -262,6 +278,15 @@ class $CasksTableTable extends CasksTable
         disabled.isAcceptableOrUnknown(data['disabled']!, _disabledMeta),
       );
     }
+    if (data.containsKey('is_installed')) {
+      context.handle(
+        _isInstalledMeta,
+        isInstalled.isAcceptableOrUnknown(
+          data['is_installed']!,
+          _isInstalledMeta,
+        ),
+      );
+    }
     if (data.containsKey('generated_date')) {
       context.handle(
         _generatedDateMeta,
@@ -332,6 +357,10 @@ class $CasksTableTable extends CasksTable
         DriftSqlType.bool,
         data['${effectivePrefix}disabled'],
       )!,
+      isInstalled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_installed'],
+      )!,
       analytics: $CasksTableTable.$converteranalyticsn.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -375,6 +404,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   final Value<bool> outdated;
   final Value<bool> deprecated;
   final Value<bool> disabled;
+  final Value<bool> isInstalled;
   final Value<Map<String, dynamic>?> analytics;
   final Value<String?> generatedDate;
   final Value<int> rowid;
@@ -391,6 +421,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.outdated = const Value.absent(),
     this.deprecated = const Value.absent(),
     this.disabled = const Value.absent(),
+    this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
     this.generatedDate = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -408,6 +439,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.outdated = const Value.absent(),
     this.deprecated = const Value.absent(),
     this.disabled = const Value.absent(),
+    this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
     this.generatedDate = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -427,6 +459,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     Expression<bool>? outdated,
     Expression<bool>? deprecated,
     Expression<bool>? disabled,
+    Expression<bool>? isInstalled,
     Expression<String>? analytics,
     Expression<String>? generatedDate,
     Expression<int>? rowid,
@@ -444,6 +477,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
       if (outdated != null) 'outdated': outdated,
       if (deprecated != null) 'deprecated': deprecated,
       if (disabled != null) 'disabled': disabled,
+      if (isInstalled != null) 'is_installed': isInstalled,
       if (analytics != null) 'analytics': analytics,
       if (generatedDate != null) 'generated_date': generatedDate,
       if (rowid != null) 'rowid': rowid,
@@ -463,6 +497,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     Value<bool>? outdated,
     Value<bool>? deprecated,
     Value<bool>? disabled,
+    Value<bool>? isInstalled,
     Value<Map<String, dynamic>?>? analytics,
     Value<String?>? generatedDate,
     Value<int>? rowid,
@@ -480,6 +515,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
       outdated: outdated ?? this.outdated,
       deprecated: deprecated ?? this.deprecated,
       disabled: disabled ?? this.disabled,
+      isInstalled: isInstalled ?? this.isInstalled,
       analytics: analytics ?? this.analytics,
       generatedDate: generatedDate ?? this.generatedDate,
       rowid: rowid ?? this.rowid,
@@ -529,6 +565,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     if (disabled.present) {
       map['disabled'] = Variable<bool>(disabled.value);
     }
+    if (isInstalled.present) {
+      map['is_installed'] = Variable<bool>(isInstalled.value);
+    }
     if (analytics.present) {
       map['analytics'] = Variable<String>(
         $CasksTableTable.$converteranalyticsn.toSql(analytics.value),
@@ -558,6 +597,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
           ..write('outdated: $outdated, ')
           ..write('deprecated: $deprecated, ')
           ..write('disabled: $disabled, ')
+          ..write('isInstalled: $isInstalled, ')
           ..write('analytics: $analytics, ')
           ..write('generatedDate: $generatedDate, ')
           ..write('rowid: $rowid')
@@ -584,6 +624,7 @@ class _$CaskModelInsertable implements Insertable<CaskModel> {
       outdated: Value(_object.outdated),
       deprecated: Value(_object.deprecated),
       disabled: Value(_object.disabled),
+      isInstalled: Value(_object.isInstalled),
       analytics: Value(_object.analytics),
       generatedDate: Value(_object.generatedDate),
     ).toColumns(false);
@@ -737,6 +778,21 @@ class $FormulaeTableTable extends FormulaeTable
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _isInstalledMeta = const VerificationMeta(
+    'isInstalled',
+  );
+  @override
+  late final GeneratedColumn<bool> isInstalled = GeneratedColumn<bool>(
+    'is_installed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_installed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   late final GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
   analytics =
@@ -774,6 +830,7 @@ class $FormulaeTableTable extends FormulaeTable
     outdated,
     deprecated,
     disabled,
+    isInstalled,
     analytics,
     generatedDate,
   ];
@@ -851,6 +908,15 @@ class $FormulaeTableTable extends FormulaeTable
         disabled.isAcceptableOrUnknown(data['disabled']!, _disabledMeta),
       );
     }
+    if (data.containsKey('is_installed')) {
+      context.handle(
+        _isInstalledMeta,
+        isInstalled.isAcceptableOrUnknown(
+          data['is_installed']!,
+          _isInstalledMeta,
+        ),
+      );
+    }
     if (data.containsKey('generated_date')) {
       context.handle(
         _generatedDateMeta,
@@ -924,6 +990,10 @@ class $FormulaeTableTable extends FormulaeTable
         DriftSqlType.bool,
         data['${effectivePrefix}disabled'],
       )!,
+      isInstalled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_installed'],
+      )!,
       analytics: $FormulaeTableTable.$converteranalyticsn.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -967,6 +1037,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
   final Value<bool> outdated;
   final Value<bool> deprecated;
   final Value<bool> disabled;
+  final Value<bool> isInstalled;
   final Value<Map<String, dynamic>?> analytics;
   final Value<String?> generatedDate;
   final Value<int> rowid;
@@ -983,6 +1054,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.outdated = const Value.absent(),
     this.deprecated = const Value.absent(),
     this.disabled = const Value.absent(),
+    this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
     this.generatedDate = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -1000,6 +1072,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.outdated = const Value.absent(),
     this.deprecated = const Value.absent(),
     this.disabled = const Value.absent(),
+    this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
     this.generatedDate = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -1023,6 +1096,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Expression<bool>? outdated,
     Expression<bool>? deprecated,
     Expression<bool>? disabled,
+    Expression<bool>? isInstalled,
     Expression<String>? analytics,
     Expression<String>? generatedDate,
     Expression<int>? rowid,
@@ -1040,6 +1114,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       if (outdated != null) 'outdated': outdated,
       if (deprecated != null) 'deprecated': deprecated,
       if (disabled != null) 'disabled': disabled,
+      if (isInstalled != null) 'is_installed': isInstalled,
       if (analytics != null) 'analytics': analytics,
       if (generatedDate != null) 'generated_date': generatedDate,
       if (rowid != null) 'rowid': rowid,
@@ -1059,6 +1134,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Value<bool>? outdated,
     Value<bool>? deprecated,
     Value<bool>? disabled,
+    Value<bool>? isInstalled,
     Value<Map<String, dynamic>?>? analytics,
     Value<String?>? generatedDate,
     Value<int>? rowid,
@@ -1076,6 +1152,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       outdated: outdated ?? this.outdated,
       deprecated: deprecated ?? this.deprecated,
       disabled: disabled ?? this.disabled,
+      isInstalled: isInstalled ?? this.isInstalled,
       analytics: analytics ?? this.analytics,
       generatedDate: generatedDate ?? this.generatedDate,
       rowid: rowid ?? this.rowid,
@@ -1129,6 +1206,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     if (disabled.present) {
       map['disabled'] = Variable<bool>(disabled.value);
     }
+    if (isInstalled.present) {
+      map['is_installed'] = Variable<bool>(isInstalled.value);
+    }
     if (analytics.present) {
       map['analytics'] = Variable<String>(
         $FormulaeTableTable.$converteranalyticsn.toSql(analytics.value),
@@ -1158,6 +1238,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
           ..write('outdated: $outdated, ')
           ..write('deprecated: $deprecated, ')
           ..write('disabled: $disabled, ')
+          ..write('isInstalled: $isInstalled, ')
           ..write('analytics: $analytics, ')
           ..write('generatedDate: $generatedDate, ')
           ..write('rowid: $rowid')
@@ -1184,6 +1265,7 @@ class _$FormulaModelInsertable implements Insertable<FormulaModel> {
       outdated: Value(_object.outdated),
       deprecated: Value(_object.deprecated),
       disabled: Value(_object.disabled),
+      isInstalled: Value(_object.isInstalled),
       analytics: Value(_object.analytics),
       generatedDate: Value(_object.generatedDate),
     ).toColumns(false);
@@ -2141,6 +2223,7 @@ typedef $$CasksTableTableCreateCompanionBuilder =
       Value<bool> outdated,
       Value<bool> deprecated,
       Value<bool> disabled,
+      Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
       Value<String?> generatedDate,
       Value<int> rowid,
@@ -2159,6 +2242,7 @@ typedef $$CasksTableTableUpdateCompanionBuilder =
       Value<bool> outdated,
       Value<bool> deprecated,
       Value<bool> disabled,
+      Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
       Value<String?> generatedDate,
       Value<int> rowid,
@@ -2236,6 +2320,11 @@ class $$CasksTableTableFilterComposer
 
   ColumnFilters<bool> get disabled => $composableBuilder(
     column: $table.disabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isInstalled => $composableBuilder(
+    column: $table.isInstalled,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2324,6 +2413,11 @@ class $$CasksTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get isInstalled => $composableBuilder(
+    column: $table.isInstalled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get analytics => $composableBuilder(
     column: $table.analytics,
     builder: (column) => ColumnOrderings(column),
@@ -2385,6 +2479,11 @@ class $$CasksTableTableAnnotationComposer
   GeneratedColumn<bool> get disabled =>
       $composableBuilder(column: $table.disabled, builder: (column) => column);
 
+  GeneratedColumn<bool> get isInstalled => $composableBuilder(
+    column: $table.isInstalled,
+    builder: (column) => column,
+  );
+
   GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
   get analytics =>
       $composableBuilder(column: $table.analytics, builder: (column) => column);
@@ -2438,6 +2537,7 @@ class $$CasksTableTableTableManager
                 Value<bool> outdated = const Value.absent(),
                 Value<bool> deprecated = const Value.absent(),
                 Value<bool> disabled = const Value.absent(),
+                Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
                 Value<String?> generatedDate = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -2454,6 +2554,7 @@ class $$CasksTableTableTableManager
                 outdated: outdated,
                 deprecated: deprecated,
                 disabled: disabled,
+                isInstalled: isInstalled,
                 analytics: analytics,
                 generatedDate: generatedDate,
                 rowid: rowid,
@@ -2472,6 +2573,7 @@ class $$CasksTableTableTableManager
                 Value<bool> outdated = const Value.absent(),
                 Value<bool> deprecated = const Value.absent(),
                 Value<bool> disabled = const Value.absent(),
+                Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
                 Value<String?> generatedDate = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -2488,6 +2590,7 @@ class $$CasksTableTableTableManager
                 outdated: outdated,
                 deprecated: deprecated,
                 disabled: disabled,
+                isInstalled: isInstalled,
                 analytics: analytics,
                 generatedDate: generatedDate,
                 rowid: rowid,
@@ -2528,6 +2631,7 @@ typedef $$FormulaeTableTableCreateCompanionBuilder =
       Value<bool> outdated,
       Value<bool> deprecated,
       Value<bool> disabled,
+      Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
       Value<String?> generatedDate,
       Value<int> rowid,
@@ -2546,6 +2650,7 @@ typedef $$FormulaeTableTableUpdateCompanionBuilder =
       Value<bool> outdated,
       Value<bool> deprecated,
       Value<bool> disabled,
+      Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
       Value<String?> generatedDate,
       Value<int> rowid,
@@ -2620,6 +2725,11 @@ class $$FormulaeTableTableFilterComposer
 
   ColumnFilters<bool> get disabled => $composableBuilder(
     column: $table.disabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isInstalled => $composableBuilder(
+    column: $table.isInstalled,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2708,6 +2818,11 @@ class $$FormulaeTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get isInstalled => $composableBuilder(
+    column: $table.isInstalled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get analytics => $composableBuilder(
     column: $table.analytics,
     builder: (column) => ColumnOrderings(column),
@@ -2772,6 +2887,11 @@ class $$FormulaeTableTableAnnotationComposer
   GeneratedColumn<bool> get disabled =>
       $composableBuilder(column: $table.disabled, builder: (column) => column);
 
+  GeneratedColumn<bool> get isInstalled => $composableBuilder(
+    column: $table.isInstalled,
+    builder: (column) => column,
+  );
+
   GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
   get analytics =>
       $composableBuilder(column: $table.analytics, builder: (column) => column);
@@ -2825,6 +2945,7 @@ class $$FormulaeTableTableTableManager
                 Value<bool> outdated = const Value.absent(),
                 Value<bool> deprecated = const Value.absent(),
                 Value<bool> disabled = const Value.absent(),
+                Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
                 Value<String?> generatedDate = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -2841,6 +2962,7 @@ class $$FormulaeTableTableTableManager
                 outdated: outdated,
                 deprecated: deprecated,
                 disabled: disabled,
+                isInstalled: isInstalled,
                 analytics: analytics,
                 generatedDate: generatedDate,
                 rowid: rowid,
@@ -2859,6 +2981,7 @@ class $$FormulaeTableTableTableManager
                 Value<bool> outdated = const Value.absent(),
                 Value<bool> deprecated = const Value.absent(),
                 Value<bool> disabled = const Value.absent(),
+                Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
                 Value<String?> generatedDate = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -2875,6 +2998,7 @@ class $$FormulaeTableTableTableManager
                 outdated: outdated,
                 deprecated: deprecated,
                 disabled: disabled,
+                isInstalled: isInstalled,
                 analytics: analytics,
                 generatedDate: generatedDate,
                 rowid: rowid,

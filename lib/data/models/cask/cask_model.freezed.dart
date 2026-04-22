@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CaskModel {
 
- String get token;@JsonKey(name: 'full_token') String? get fullToken; List<String> get name; String? get desc; String? get homepage; String? get url; String get version;@JsonKey(name: 'auto_updates') bool? get autoUpdates;@JsonKey(name: 'depends_on') Map<String, dynamic>? get dependsOn; bool get outdated; bool get deprecated; bool get disabled; Map<String, dynamic>? get analytics;@JsonKey(name: 'generated_date') String? get generatedDate;
+ String get token;@JsonKey(name: 'full_token') String? get fullToken; List<String> get name; String? get desc; String? get homepage; String? get url; String get version;@JsonKey(name: 'auto_updates') bool? get autoUpdates;@JsonKey(name: 'depends_on') Map<String, dynamic>? get dependsOn; bool get outdated; bool get deprecated; bool get disabled;@JsonKey(name: 'is_installed') bool get isInstalled; Map<String, dynamic>? get analytics;@JsonKey(name: 'generated_date') String? get generatedDate;
 /// Create a copy of CaskModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CaskModelCopyWith<CaskModel> get copyWith => _$CaskModelCopyWithImpl<CaskModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CaskModel&&(identical(other.token, token) || other.token == token)&&(identical(other.fullToken, fullToken) || other.fullToken == fullToken)&&const DeepCollectionEquality().equals(other.name, name)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.url, url) || other.url == url)&&(identical(other.version, version) || other.version == version)&&(identical(other.autoUpdates, autoUpdates) || other.autoUpdates == autoUpdates)&&const DeepCollectionEquality().equals(other.dependsOn, dependsOn)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&const DeepCollectionEquality().equals(other.analytics, analytics)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CaskModel&&(identical(other.token, token) || other.token == token)&&(identical(other.fullToken, fullToken) || other.fullToken == fullToken)&&const DeepCollectionEquality().equals(other.name, name)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.url, url) || other.url == url)&&(identical(other.version, version) || other.version == version)&&(identical(other.autoUpdates, autoUpdates) || other.autoUpdates == autoUpdates)&&const DeepCollectionEquality().equals(other.dependsOn, dependsOn)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&const DeepCollectionEquality().equals(other.analytics, analytics)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,token,fullToken,const DeepCollectionEquality().hash(name),desc,homepage,url,version,autoUpdates,const DeepCollectionEquality().hash(dependsOn),outdated,deprecated,disabled,const DeepCollectionEquality().hash(analytics),generatedDate);
+int get hashCode => Object.hash(runtimeType,token,fullToken,const DeepCollectionEquality().hash(name),desc,homepage,url,version,autoUpdates,const DeepCollectionEquality().hash(dependsOn),outdated,deprecated,disabled,isInstalled,const DeepCollectionEquality().hash(analytics),generatedDate);
 
 @override
 String toString() {
-  return 'CaskModel(token: $token, fullToken: $fullToken, name: $name, desc: $desc, homepage: $homepage, url: $url, version: $version, autoUpdates: $autoUpdates, dependsOn: $dependsOn, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, analytics: $analytics, generatedDate: $generatedDate)';
+  return 'CaskModel(token: $token, fullToken: $fullToken, name: $name, desc: $desc, homepage: $homepage, url: $url, version: $version, autoUpdates: $autoUpdates, dependsOn: $dependsOn, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, isInstalled: $isInstalled, analytics: $analytics, generatedDate: $generatedDate)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CaskModelCopyWith<$Res>  {
   factory $CaskModelCopyWith(CaskModel value, $Res Function(CaskModel) _then) = _$CaskModelCopyWithImpl;
 @useResult
 $Res call({
- String token,@JsonKey(name: 'full_token') String? fullToken, List<String> name, String? desc, String? homepage, String? url, String version,@JsonKey(name: 'auto_updates') bool? autoUpdates,@JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn, bool outdated, bool deprecated, bool disabled, Map<String, dynamic>? analytics,@JsonKey(name: 'generated_date') String? generatedDate
+ String token,@JsonKey(name: 'full_token') String? fullToken, List<String> name, String? desc, String? homepage, String? url, String version,@JsonKey(name: 'auto_updates') bool? autoUpdates,@JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, Map<String, dynamic>? analytics,@JsonKey(name: 'generated_date') String? generatedDate
 });
 
 
@@ -65,7 +65,7 @@ class _$CaskModelCopyWithImpl<$Res>
 
 /// Create a copy of CaskModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? token = null,Object? fullToken = freezed,Object? name = null,Object? desc = freezed,Object? homepage = freezed,Object? url = freezed,Object? version = null,Object? autoUpdates = freezed,Object? dependsOn = freezed,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? analytics = freezed,Object? generatedDate = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? token = null,Object? fullToken = freezed,Object? name = null,Object? desc = freezed,Object? homepage = freezed,Object? url = freezed,Object? version = null,Object? autoUpdates = freezed,Object? dependsOn = freezed,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? analytics = freezed,Object? generatedDate = freezed,}) {
   return _then(_self.copyWith(
 token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
 as String,fullToken: freezed == fullToken ? _self.fullToken : fullToken // ignore: cast_nullable_to_non_nullable
@@ -79,6 +79,7 @@ as bool?,dependsOn: freezed == dependsOn ? _self.dependsOn : dependsOn // ignore
 as Map<String, dynamic>?,outdated: null == outdated ? _self.outdated : outdated // ignore: cast_nullable_to_non_nullable
 as bool,deprecated: null == deprecated ? _self.deprecated : deprecated // ignore: cast_nullable_to_non_nullable
 as bool,disabled: null == disabled ? _self.disabled : disabled // ignore: cast_nullable_to_non_nullable
+as bool,isInstalled: null == isInstalled ? _self.isInstalled : isInstalled // ignore: cast_nullable_to_non_nullable
 as bool,analytics: freezed == analytics ? _self.analytics : analytics // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,generatedDate: freezed == generatedDate ? _self.generatedDate : generatedDate // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -166,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  List<String> name,  String? desc,  String? homepage,  String? url,  String version, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  List<String> name,  String? desc,  String? homepage,  String? url,  String version, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CaskModel() when $default != null:
-return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.analytics,_that.generatedDate);case _:
+return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.analytics,_that.generatedDate);case _:
   return orElse();
 
 }
@@ -187,10 +188,10 @@ return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  List<String> name,  String? desc,  String? homepage,  String? url,  String version, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  List<String> name,  String? desc,  String? homepage,  String? url,  String version, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)  $default,) {final _that = this;
 switch (_that) {
 case _CaskModel():
-return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.analytics,_that.generatedDate);case _:
+return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.analytics,_that.generatedDate);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +208,10 @@ return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  List<String> name,  String? desc,  String? homepage,  String? url,  String version, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  List<String> name,  String? desc,  String? homepage,  String? url,  String version, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,) {final _that = this;
 switch (_that) {
 case _CaskModel() when $default != null:
-return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.analytics,_that.generatedDate);case _:
+return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.analytics,_that.generatedDate);case _:
   return null;
 
 }
@@ -222,7 +223,7 @@ return $default(_that.token,_that.fullToken,_that.name,_that.desc,_that.homepage
 @JsonSerializable()
 
 class _CaskModel implements CaskModel {
-  const _CaskModel({required this.token, @JsonKey(name: 'full_token') this.fullToken, required final  List<String> name, this.desc, this.homepage, this.url, required this.version, @JsonKey(name: 'auto_updates') this.autoUpdates, @JsonKey(name: 'depends_on') final  Map<String, dynamic>? dependsOn, this.outdated = false, this.deprecated = false, this.disabled = false, final  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date') this.generatedDate}): _name = name,_dependsOn = dependsOn,_analytics = analytics;
+  const _CaskModel({required this.token, @JsonKey(name: 'full_token') this.fullToken, required final  List<String> name, this.desc, this.homepage, this.url, required this.version, @JsonKey(name: 'auto_updates') this.autoUpdates, @JsonKey(name: 'depends_on') final  Map<String, dynamic>? dependsOn, this.outdated = false, this.deprecated = false, this.disabled = false, @JsonKey(name: 'is_installed') this.isInstalled = false, final  Map<String, dynamic>? analytics, @JsonKey(name: 'generated_date') this.generatedDate}): _name = name,_dependsOn = dependsOn,_analytics = analytics;
   factory _CaskModel.fromJson(Map<String, dynamic> json) => _$CaskModelFromJson(json);
 
 @override final  String token;
@@ -251,6 +252,7 @@ class _CaskModel implements CaskModel {
 @override@JsonKey() final  bool outdated;
 @override@JsonKey() final  bool deprecated;
 @override@JsonKey() final  bool disabled;
+@override@JsonKey(name: 'is_installed') final  bool isInstalled;
  final  Map<String, dynamic>? _analytics;
 @override Map<String, dynamic>? get analytics {
   final value = _analytics;
@@ -275,16 +277,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CaskModel&&(identical(other.token, token) || other.token == token)&&(identical(other.fullToken, fullToken) || other.fullToken == fullToken)&&const DeepCollectionEquality().equals(other._name, _name)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.url, url) || other.url == url)&&(identical(other.version, version) || other.version == version)&&(identical(other.autoUpdates, autoUpdates) || other.autoUpdates == autoUpdates)&&const DeepCollectionEquality().equals(other._dependsOn, _dependsOn)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&const DeepCollectionEquality().equals(other._analytics, _analytics)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CaskModel&&(identical(other.token, token) || other.token == token)&&(identical(other.fullToken, fullToken) || other.fullToken == fullToken)&&const DeepCollectionEquality().equals(other._name, _name)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.url, url) || other.url == url)&&(identical(other.version, version) || other.version == version)&&(identical(other.autoUpdates, autoUpdates) || other.autoUpdates == autoUpdates)&&const DeepCollectionEquality().equals(other._dependsOn, _dependsOn)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&const DeepCollectionEquality().equals(other._analytics, _analytics)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,token,fullToken,const DeepCollectionEquality().hash(_name),desc,homepage,url,version,autoUpdates,const DeepCollectionEquality().hash(_dependsOn),outdated,deprecated,disabled,const DeepCollectionEquality().hash(_analytics),generatedDate);
+int get hashCode => Object.hash(runtimeType,token,fullToken,const DeepCollectionEquality().hash(_name),desc,homepage,url,version,autoUpdates,const DeepCollectionEquality().hash(_dependsOn),outdated,deprecated,disabled,isInstalled,const DeepCollectionEquality().hash(_analytics),generatedDate);
 
 @override
 String toString() {
-  return 'CaskModel(token: $token, fullToken: $fullToken, name: $name, desc: $desc, homepage: $homepage, url: $url, version: $version, autoUpdates: $autoUpdates, dependsOn: $dependsOn, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, analytics: $analytics, generatedDate: $generatedDate)';
+  return 'CaskModel(token: $token, fullToken: $fullToken, name: $name, desc: $desc, homepage: $homepage, url: $url, version: $version, autoUpdates: $autoUpdates, dependsOn: $dependsOn, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, isInstalled: $isInstalled, analytics: $analytics, generatedDate: $generatedDate)';
 }
 
 
@@ -295,7 +297,7 @@ abstract mixin class _$CaskModelCopyWith<$Res> implements $CaskModelCopyWith<$Re
   factory _$CaskModelCopyWith(_CaskModel value, $Res Function(_CaskModel) _then) = __$CaskModelCopyWithImpl;
 @override @useResult
 $Res call({
- String token,@JsonKey(name: 'full_token') String? fullToken, List<String> name, String? desc, String? homepage, String? url, String version,@JsonKey(name: 'auto_updates') bool? autoUpdates,@JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn, bool outdated, bool deprecated, bool disabled, Map<String, dynamic>? analytics,@JsonKey(name: 'generated_date') String? generatedDate
+ String token,@JsonKey(name: 'full_token') String? fullToken, List<String> name, String? desc, String? homepage, String? url, String version,@JsonKey(name: 'auto_updates') bool? autoUpdates,@JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, Map<String, dynamic>? analytics,@JsonKey(name: 'generated_date') String? generatedDate
 });
 
 
@@ -312,7 +314,7 @@ class __$CaskModelCopyWithImpl<$Res>
 
 /// Create a copy of CaskModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? token = null,Object? fullToken = freezed,Object? name = null,Object? desc = freezed,Object? homepage = freezed,Object? url = freezed,Object? version = null,Object? autoUpdates = freezed,Object? dependsOn = freezed,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? analytics = freezed,Object? generatedDate = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? token = null,Object? fullToken = freezed,Object? name = null,Object? desc = freezed,Object? homepage = freezed,Object? url = freezed,Object? version = null,Object? autoUpdates = freezed,Object? dependsOn = freezed,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? analytics = freezed,Object? generatedDate = freezed,}) {
   return _then(_CaskModel(
 token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
 as String,fullToken: freezed == fullToken ? _self.fullToken : fullToken // ignore: cast_nullable_to_non_nullable
@@ -326,6 +328,7 @@ as bool?,dependsOn: freezed == dependsOn ? _self._dependsOn : dependsOn // ignor
 as Map<String, dynamic>?,outdated: null == outdated ? _self.outdated : outdated // ignore: cast_nullable_to_non_nullable
 as bool,deprecated: null == deprecated ? _self.deprecated : deprecated // ignore: cast_nullable_to_non_nullable
 as bool,disabled: null == disabled ? _self.disabled : disabled // ignore: cast_nullable_to_non_nullable
+as bool,isInstalled: null == isInstalled ? _self.isInstalled : isInstalled // ignore: cast_nullable_to_non_nullable
 as bool,analytics: freezed == analytics ? _self._analytics : analytics // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,generatedDate: freezed == generatedDate ? _self.generatedDate : generatedDate // ignore: cast_nullable_to_non_nullable
 as String?,

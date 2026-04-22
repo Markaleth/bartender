@@ -87,6 +87,10 @@ class BrewService {
     return runCommand(['info', '--json=v2', package]);
   }
 
+  Future<ShellCommandResult> infoInstalled() {
+    return runCommand(['info', '--installed', '--json=v2']);
+  }
+
   Future<ShellCommandResult> outdated() {
     return runCommand(['outdated', '--json=v2']);
   }

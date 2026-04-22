@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
 import '../data/api/api_client.dart';
-import '../data/db/database.dart';
+import '../data/db/database_interface.dart';
 import '../data/repository/homebrew_repository.dart';
+import '../data/repository/package_repository.dart';
 import '../data/network_resource.dart';
 
 class ApiTesterWidget extends StatefulWidget {
@@ -14,8 +16,9 @@ class ApiTesterWidget extends StatefulWidget {
 
 class _ApiTesterWidgetState extends State<ApiTesterWidget> {
   late final ApiClient _apiClient;
-  late final AppDatabase _database;
+  late final DatabaseInterface _database;
   late final HomebrewRepository _repository;
+  late final PackageRepository _packageRepository;
   String _result = 'No result yet.';
   bool _isDbEmpty = true;
 
@@ -24,7 +27,13 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
     super.initState();
     final dio = Dio();
     _apiClient = ApiClient(dio);
-    _database = AppDatabase();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _database = Provider.of<DatabaseInterface>(context, listen: false);
+    _packageRepository = Provider.of<PackageRepository>(context, listen: false);
     _repository = HomebrewRepository(_apiClient, _database);
     _checkDbState();
   }
@@ -423,14 +432,10 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                             ),
                             ElevatedButton(
                               onPressed: () async {
-                                _updateResult(
-                                  'Repository: syncCasksAnalytics()...',
-                                );
+                                _updateResult('Repository: syncCasksAnalytics()...');
                                 try {
                                   await _repository.syncCasksAnalytics('30d');
-                                  _updateResult(
-                                    'Success: synced casks analytics.',
-                                  );
+                                  _updateResult('Success: synced casks analytics.');
                                   await _checkDbState();
                                 } catch (e) {
                                   _updateResult('Error: $e');
@@ -439,10 +444,34 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               child: const Text('syncCasksAnalytics()'),
                             ),
                             ElevatedButton(
+                              onPressed: () async {
+                                _updateResult('PackageRepo: syncInstalledPackages()...');
+                                try {
+                                  await _packageRepository.syncInstalledPackages();
+                                  _updateResult('Success: synced installed packages.');
+                                  await _checkDbState();
+                                } catch (e) {
+                                  _updateResult('Error: $e');
+                                }
+                              },
+                              child: const Text('syncInstalledPackages()'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                _updateResult('PackageRepo: install("wget")...');
+                                try {
+                                  await _packageRepository.install('wget');
+                                  _updateResult('Success: installed wget.');
+                                  await _checkDbState();
+                                } catch (e) {
+                                  _updateResult('Error: $e');
+                                }
+                              },
+                              child: const Text('install("wget")'),
+                            ),
+                            ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red.withValues(
-                                  alpha: 0.1,
-                                ),
+                                backgroundColor: Colors.red.withValues(alpha: 0.1),
                               ),
                               onPressed: () async {
                                 _updateResult('Purging Database...');

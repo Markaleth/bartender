@@ -71,6 +71,32 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   }
 
   @override
+  Future<void> updateFormulaInstallationStatus(String name, bool isInstalled) async {
+    await (update(formulaeTable)..where((t) => t.name.equals(name)))
+        .write(FormulaeTableCompanion(isInstalled: Value(isInstalled)));
+  }
+
+  @override
+  Future<void> updateCaskInstallationStatus(String token, bool isInstalled) async {
+    await (update(casksTable)..where((t) => t.token.equals(token)))
+        .write(CasksTableCompanion(isInstalled: Value(isInstalled)));
+  }
+
+  @override
+  Future<void> resetAllInstallationStatuses() async {
+    await batch((batch) {
+      batch.update(
+        formulaeTable,
+        const FormulaeTableCompanion(isInstalled: Value(false)),
+      );
+      batch.update(
+        casksTable,
+        const CasksTableCompanion(isInstalled: Value(false)),
+      );
+    });
+  }
+
+  @override
   Future<List<FormulaModel>> getAllFormulae() => select(formulaeTable).get();
 
   @override
