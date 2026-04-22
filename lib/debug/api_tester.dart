@@ -78,10 +78,12 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                             onPressed: () async {
                               _updateResult('API: getFormulaeListing()...');
                               try {
-                                final res =
-                                    await _apiClient.getFormulaeListing();
+                                final res = await _apiClient
+                                    .getFormulaeListing();
                                 if (res.status == NetworkStatus.success) {
-                                  _updateResult('Success: ${res.data?.length} items.');
+                                  _updateResult(
+                                    'Success: ${res.data?.length} items.',
+                                  );
                                 } else {
                                   _updateResult('Error: ${res.errorMessage}');
                                 }
@@ -98,7 +100,9 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               try {
                                 final res = await _apiClient.getCasksListing();
                                 if (res.status == NetworkStatus.success) {
-                                  _updateResult('Success: ${res.data?.length} items.');
+                                  _updateResult(
+                                    'Success: ${res.data?.length} items.',
+                                  );
                                 } else {
                                   _updateResult('Error: ${res.errorMessage}');
                                 }
@@ -181,9 +185,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                           const SizedBox(height: 8),
                           ElevatedButton(
                             onPressed: () async {
-                              _updateResult(
-                                'API: getCasksAnalytics("30d")...',
-                              );
+                              _updateResult('API: getCasksAnalytics("30d")...');
                               try {
                                 final res = await _apiClient.getCasksAnalytics(
                                   '30d',
@@ -216,143 +218,143 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                           ),
                           const Divider(),
                           ElevatedButton(
-                            onPressed:
-                                _isDbEmpty
-                                    ? null
-                                    : () async {
-                                      _updateResult('DB: getAllFormulae()...');
-                                      try {
-                                        final res =
-                                            await _database.getAllFormulae();
-                                        _updateResult(
-                                          'Success: ${res.length} items.',
-                                        );
-                                      } catch (e) {
-                                        _updateResult('Error: $e');
-                                      }
-                                    },
+                            onPressed: _isDbEmpty
+                                ? null
+                                : () async {
+                                    _updateResult('DB: getAllFormulae()...');
+                                    try {
+                                      final res = await _database
+                                          .getAllFormulae();
+                                      _updateResult(
+                                        'Success: ${res.length} items.',
+                                      );
+                                    } catch (e) {
+                                      _updateResult('Error: $e');
+                                    }
+                                  },
                             child: const Text('getAllFormulae()'),
                           ),
                           const SizedBox(height: 8),
                           ElevatedButton(
-                            onPressed:
-                                _isDbEmpty
-                                    ? null
-                                    : () async {
-                                      _updateResult('DB: getAllCasks()...');
-                                      try {
-                                        final res =
-                                            await _database.getAllCasks();
-                                        _updateResult(
-                                          'Success: ${res.length} items.',
-                                        );
-                                      } catch (e) {
-                                        _updateResult('Error: $e');
-                                      }
-                                    },
+                            onPressed: _isDbEmpty
+                                ? null
+                                : () async {
+                                    _updateResult('DB: getAllCasks()...');
+                                    try {
+                                      final res = await _database.getAllCasks();
+                                      _updateResult(
+                                        'Success: ${res.length} items.',
+                                      );
+                                    } catch (e) {
+                                      _updateResult('Error: $e');
+                                    }
+                                  },
                             child: const Text('getAllCasks()'),
                           ),
                           const SizedBox(height: 8),
-                            ElevatedButton(
-                              onPressed:
-                                  _isDbEmpty
-                                      ? null
-                                      : () async {
-                                          _updateResult('DB: getInstalledFormulae()...');
-                                          try {
-                                            final res = await _database.getInstalledFormulae();
-                                            final names = res.map((f) => f.name).take(10).join(', ');
-                                            _updateResult(
-                                              'Success: ${res.length} installed formulae.\n\nSample: $names${res.length > 10 ? '...' : ''}',
-                                            );
-                                          } catch (e) {
-                                            _updateResult('Error: $e');
-                                          }
-                                        },
-                              child: const Text('getInstalledFormulae()'),
-                            ),
-                            const SizedBox(height: 8),
-                            ElevatedButton(
-                              onPressed:
-                                  _isDbEmpty
-                                      ? null
-                                      : () async {
-                                          _updateResult('DB: getInstalledCasks()...');
-                                          try {
-                                            final res = await _database.getInstalledCasks();
-                                            final tokens = res.map((c) => c.token).take(10).join(', ');
-                                            _updateResult(
-                                              'Success: ${res.length} installed casks.\n\nSample: $tokens${res.length > 10 ? '...' : ''}',
-                                            );
-                                          } catch (e) {
-                                            _updateResult('Error: $e');
-                                          }
-                                        },
-                              child: const Text('getInstalledCasks()'),
-                            ),
-                            const SizedBox(height: 8),
-                            ElevatedButton(
-                              onPressed:
-                                  _isDbEmpty
-                                      ? null
-                                      : () async {
-                                        _updateResult(
-                                          'DB: getFormula("wget")...',
+                          ElevatedButton(
+                            onPressed: _isDbEmpty
+                                ? null
+                                : () async {
+                                    _updateResult(
+                                      'DB: getInstalledFormulae()...',
+                                    );
+                                    try {
+                                      final res = await _database
+                                          .getInstalledFormulae();
+                                      final names = res
+                                          .map((f) => f.name)
+                                          .take(10)
+                                          .join(', ');
+                                      _updateResult(
+                                        'Success: ${res.length} installed formulae.\n\nSample: $names${res.length > 10 ? '...' : ''}',
                                       );
-                                      try {
-                                        final res = await _database.getFormula(
-                                          'wget',
-                                        );
-                                        _updateResult(
-                                          'Success: ${res?.name} - ${res?.desc}',
-                                        );
-                                      } catch (e) {
-                                        _updateResult('Error: $e');
-                                      }
-                                    },
+                                    } catch (e) {
+                                      _updateResult('Error: $e');
+                                    }
+                                  },
+                            child: const Text('getInstalledFormulae()'),
+                          ),
+                          const SizedBox(height: 8),
+                          ElevatedButton(
+                            onPressed: _isDbEmpty
+                                ? null
+                                : () async {
+                                    _updateResult('DB: getInstalledCasks()...');
+                                    try {
+                                      final res = await _database
+                                          .getInstalledCasks();
+                                      final tokens = res
+                                          .map((c) => c.token)
+                                          .take(10)
+                                          .join(', ');
+                                      _updateResult(
+                                        'Success: ${res.length} installed casks.\n\nSample: $tokens${res.length > 10 ? '...' : ''}',
+                                      );
+                                    } catch (e) {
+                                      _updateResult('Error: $e');
+                                    }
+                                  },
+                            child: const Text('getInstalledCasks()'),
+                          ),
+                          const SizedBox(height: 8),
+                          ElevatedButton(
+                            onPressed: _isDbEmpty
+                                ? null
+                                : () async {
+                                    _updateResult('DB: getFormula("wget")...');
+                                    try {
+                                      final res = await _database.getFormula(
+                                        'wget',
+                                      );
+                                      _updateResult(
+                                        'Success: ${res?.name} - ${res?.desc}',
+                                      );
+                                    } catch (e) {
+                                      _updateResult('Error: $e');
+                                    }
+                                  },
                             child: const Text('getFormula("wget")'),
                           ),
                           const SizedBox(height: 8),
                           ElevatedButton(
-                            onPressed:
-                                _isDbEmpty
-                                    ? null
-                                    : () async {
-                                      _updateResult(
-                                        'DB: getCask("google-chrome")...',
+                            onPressed: _isDbEmpty
+                                ? null
+                                : () async {
+                                    _updateResult(
+                                      'DB: getCask("google-chrome")...',
+                                    );
+                                    try {
+                                      final res = await _database.getCask(
+                                        'google-chrome',
                                       );
-                                      try {
-                                        final res = await _database.getCask(
-                                          'google-chrome',
-                                        );
-                                        _updateResult(
-                                          'Success: ${res?.token} - ${res?.name.first}',
-                                        );
-                                      } catch (e) {
-                                        _updateResult('Error: $e');
-                                      }
-                                    },
+                                      _updateResult(
+                                        'Success: ${res?.token} - ${res?.name.first}',
+                                      );
+                                    } catch (e) {
+                                      _updateResult('Error: $e');
+                                    }
+                                  },
                             child: const Text('getCask("google-chrome")'),
                           ),
                           const SizedBox(height: 8),
                           ElevatedButton(
-                            onPressed:
-                                _isDbEmpty
-                                    ? null
-                                    : () async {
+                            onPressed: _isDbEmpty
+                                ? null
+                                : () async {
+                                    _updateResult(
+                                      'DB: getMostDownloadedFormulae("30d")...',
+                                    );
+                                    try {
+                                      final res = await _database
+                                          .getMostDownloadedFormulae('30d');
                                       _updateResult(
-                                        'DB: getMostDownloadedFormulae("30d")...',
+                                        'Success: ${res.length} items.',
                                       );
-                                      try {
-                                        final res = await _database
-                                            .getMostDownloadedFormulae('30d');
-                                        _updateResult(
-                                          'Success: ${res.length} items.',
-                                        );
-                                      } catch (e) {
-                                        _updateResult('Error: $e');
-                                      }
-                                    },
+                                    } catch (e) {
+                                      _updateResult('Error: $e');
+                                    }
+                                  },
                             child: const Text('getMostDownloadedFormulae()'),
                           ),
                         ],
@@ -470,10 +472,14 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                             ),
                             ElevatedButton(
                               onPressed: () async {
-                                _updateResult('Repository: syncCasksAnalytics()...');
+                                _updateResult(
+                                  'Repository: syncCasksAnalytics()...',
+                                );
                                 try {
                                   await _repository.syncCasksAnalytics('30d');
-                                  _updateResult('Success: synced casks analytics.');
+                                  _updateResult(
+                                    'Success: synced casks analytics.',
+                                  );
                                   await _checkDbState();
                                 } catch (e) {
                                   _updateResult('Error: $e');
@@ -483,10 +489,15 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                             ),
                             ElevatedButton(
                               onPressed: () async {
-                                _updateResult('PackageRepo: syncInstalledPackages()...');
+                                _updateResult(
+                                  'PackageRepo: syncInstalledPackages()...',
+                                );
                                 try {
-                                  await _packageRepository.syncInstalledPackages();
-                                  _updateResult('Success: synced installed packages.');
+                                  await _packageRepository
+                                      .syncInstalledPackages();
+                                  _updateResult(
+                                    'Success: synced installed packages.',
+                                  );
                                   await _checkDbState();
                                 } catch (e) {
                                   _updateResult('Error: $e');
@@ -496,7 +507,9 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                             ),
                             ElevatedButton(
                               onPressed: () async {
-                                _updateResult('PackageRepo: install("wget")...');
+                                _updateResult(
+                                  'PackageRepo: install("wget")...',
+                                );
                                 try {
                                   await _packageRepository.install('wget');
                                   _updateResult('Success: installed wget.');
@@ -508,8 +521,25 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               child: const Text('install("wget")'),
                             ),
                             ElevatedButton(
+                              onPressed: () async {
+                                _updateResult(
+                                  'PackageRepo: uninstall("wget")...',
+                                );
+                                try {
+                                  await _packageRepository.uninstall('wget');
+                                  _updateResult('Success: uninstalled wget.');
+                                  await _checkDbState();
+                                } catch (e) {
+                                  _updateResult('Error: $e');
+                                }
+                              },
+                              child: const Text('Uninstall("wget")'),
+                            ),
+                            ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red.withValues(alpha: 0.1),
+                                backgroundColor: Colors.red.withValues(
+                                  alpha: 0.1,
+                                ),
                               ),
                               onPressed: () async {
                                 _updateResult('Purging Database...');
@@ -528,13 +558,17 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red.withValues(alpha: 0.1),
+                                backgroundColor: Colors.red.withValues(
+                                  alpha: 0.1,
+                                ),
                               ),
                               onPressed: () async {
                                 _updateResult('Deleting Database File...');
                                 try {
                                   await _database.deleteDatabaseFile();
-                                  _updateResult('Success: database file deleted. Please restart the app.');
+                                  _updateResult(
+                                    'Success: database file deleted. Please restart the app.',
+                                  );
                                 } catch (e) {
                                   _updateResult('Error: $e');
                                 }
