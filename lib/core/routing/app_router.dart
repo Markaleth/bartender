@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bartender/debug/api_tester.dart';
+import 'package:bartender/features/home/views/home_view.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -11,9 +11,7 @@ class AppRouter {
     switch (settings.name) {
       case AppRoutes.home:
         return MaterialPageRoute(
-          builder: (_) => const Scaffold(
-            body: SafeArea(child: ApiTesterWidget()),
-          ),
+          builder: (_) => const HomeView(),
         );
       default:
         return MaterialPageRoute(
