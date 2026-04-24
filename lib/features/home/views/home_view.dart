@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:bartender/core/base_view.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import '../models/home_effect.dart';
 import '../models/home_state.dart';
 import '../view_models/home_view_model.dart';
-import '../widgets/side_nav_bar.dart';
+import '../widgets/side_navigation/side_navigation_bar.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -17,7 +18,7 @@ class HomeView extends StatelessWidget {
           body: SafeArea(
             child: Row(
               children: [
-                SideNavBar(
+                SideNavigationBar(
                   selectedTab: state.selectedTab,
                   onTabSelected: viewModel.setTab,
                 ),
@@ -26,13 +27,13 @@ class HomeView extends StatelessWidget {
                     index: state.selectedTab.index, // Enum index maps perfectly
                     children: const [
                       // Index 0: Browse
-                      Center(child: Text('Browse View Placeholder')),
+                      Center(child: Text(placeholderBrowse)),
                       // Index 1: Library
-                      Center(child: Text('Library View Placeholder')),
+                      Center(child: Text(placeholderLibrary)),
                       // Index 2: Updates
-                      Center(child: Text('Updates View Placeholder')),
+                      Center(child: Text(placeholderUpdates)),
                       // Index 3: Settings
-                      Center(child: Text('Settings View Placeholder')),
+                      Center(child: Text(placeholderSettings)),
                     ],
                   ),
                 ),

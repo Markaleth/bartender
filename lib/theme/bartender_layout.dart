@@ -20,6 +20,8 @@ class BartenderThickness {
   static const double xs = 1.0;
   static const double s = 2.0;
   static const double m = 4.0;
+  static const double l = 6.0;
+  static const double xl = 8.0;
 }
 
 class BartenderColors {

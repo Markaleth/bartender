@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 
 class BrewCard extends StatelessWidget {
   final String title;
@@ -37,7 +38,7 @@ class BrewCard extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: onInstall,
-                child: const Text('Install'),
+                child: const Text(actionInstall),
               ),
             ),
           ],

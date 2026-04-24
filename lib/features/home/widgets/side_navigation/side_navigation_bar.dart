@@ -1,0 +1,76 @@
+import 'package:bartender/theme/bartender_context.dart';
+import 'package:flutter/material.dart';
+import 'package:bartender/theme/bartender_layout.dart';
+import 'package:bartender/core/constants/app_strings.dart';
+import '../../models/home_state.dart';
+import 'side_navigation_header.dart';
+import 'side_navigation_item.dart';
+
+class SideNavigationBar extends StatelessWidget {
+  final HomeTab selectedTab;
+  final ValueChanged<HomeTab> onTabSelected;
+
+  const SideNavigationBar({
+    super.key,
+    required this.selectedTab,
+    required this.onTabSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 250,
+      decoration: BoxDecoration(
+        color: BartenderColors.surface,
+        border: Border(
+          right: BorderSide(
+            color: BartenderColors.borderNeutral,
+            width: BartenderThickness.xs,
+          ),
+        ),
+      ),
+      child: Column(
+        children: [
+          const SideNavigationHeader(),
+          const Divider(color: BartenderColors.borderNeutral, height: 1),
+          context.vSpacingM,
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                SideNavigationItem(
+                  icon: Icons.explore,
+                  label: navBrowse,
+                  isSelected: selectedTab == HomeTab.browse,
+                  onTap: () => onTabSelected(HomeTab.browse),
+                ),
+                SideNavigationItem(
+                  icon: Icons.library_books,
+                  label: navLibrary,
+                  isSelected: selectedTab == HomeTab.library,
+                  onTap: () => onTabSelected(HomeTab.library),
+                ),
+                SideNavigationItem(
+                  icon: Icons.update,
+                  label: navUpdates,
+                  isSelected: selectedTab == HomeTab.updates,
+                  onTap: () => onTabSelected(HomeTab.updates),
+                ),
+              ],
+            ),
+          ),
+          const Divider(color: BartenderColors.borderNeutral, height: 1),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: BartenderLayout.xs),
+            child: SideNavigationItem(
+              icon: Icons.settings,
+              label: navSettings,
+              isSelected: selectedTab == HomeTab.settings,
+              onTap: () => onTabSelected(HomeTab.settings),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
