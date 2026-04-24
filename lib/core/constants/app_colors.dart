@@ -1,30 +1,8 @@
 import 'package:flutter/material.dart';
 
-class BartenderLayout {
-  static const double xs = 4.0;
-  static const double s = 8.0;
-  static const double m = 16.0;
-  static const double l = 24.0;
-  static const double xl = 32.0;
-  static const double xxl = 48.0;
-}
+class AppColors {
+  AppColors._();
 
-class BartenderRadius {
-  static const double s = 4.0;
-  static const double m = 8.0;
-  static const double l = 12.0;
-  static const double xl = 24.0;
-}
-
-class BartenderThickness {
-  static const double xs = 1.0;
-  static const double s = 2.0;
-  static const double m = 4.0;
-  static const double l = 6.0;
-  static const double xl = 8.0;
-}
-
-class BartenderColors {
   static const Color background = Color(0xFF121212);
   static const Color surface = Color(0xFF1E1E1E);
   static const Color primary = Color(0xFFBB86FC); // Vibrant Purple

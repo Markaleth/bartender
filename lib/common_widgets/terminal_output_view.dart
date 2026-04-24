@@ -48,7 +48,7 @@ class _TerminalOutputViewState extends State<TerminalOutputView> {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 100),
+          duration: const Duration(milliseconds: 100), // TODO: extract to duration constants
           curve: Curves.easeOut,
         );
       }

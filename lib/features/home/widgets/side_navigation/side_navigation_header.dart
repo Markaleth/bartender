@@ -1,6 +1,7 @@
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
-import 'package:bartender/theme/bartender_layout.dart';
+import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 
 class SideNavigationHeader extends StatelessWidget {
@@ -9,14 +10,14 @@ class SideNavigationHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(BartenderLayout.m),
+      padding: const EdgeInsets.all(spacingM),
       child: Row(
         children: [
           const CircleAvatar(
-            backgroundColor: BartenderColors.primary,
-            child: Icon(Icons.person, color: BartenderColors.onPrimary),
+            backgroundColor: AppColors.primary,
+            child: Icon(Icons.person, color: AppColors.onPrimary),
           ),
-          const SizedBox(width: BartenderLayout.m),
+          const SizedBox(width: spacingM),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +31,7 @@ class SideNavigationHeader extends StatelessWidget {
                 Text(
                   appVersion,
                   style: context.tt.labelLarge?.copyWith(
-                    color: BartenderColors.textSecondary,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],

@@ -1,6 +1,6 @@
-import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
-import 'package:bartender/theme/bartender_layout.dart';
+import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import '../../models/home_state.dart';
 import 'side_navigation_header.dart';
@@ -21,19 +21,19 @@ class SideNavigationBar extends StatelessWidget {
     return Container(
       width: 250,
       decoration: BoxDecoration(
-        color: BartenderColors.surface,
+        color: AppColors.surface,
         border: Border(
           right: BorderSide(
-            color: BartenderColors.borderNeutral,
-            width: BartenderThickness.xs,
+            color: AppColors.borderNeutral,
+            width: thicknessXs,
           ),
         ),
       ),
       child: Column(
         children: [
           const SideNavigationHeader(),
-          const Divider(color: BartenderColors.borderNeutral, height: 1),
-          context.vSpacingM,
+          const Divider(color: AppColors.borderNeutral, height: 1),
+          SizedBox(height: spacingM),
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
@@ -59,9 +59,9 @@ class SideNavigationBar extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(color: BartenderColors.borderNeutral, height: 1),
+          const Divider(color: AppColors.borderNeutral, height: 1),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: BartenderLayout.xs),
+            padding: const EdgeInsets.symmetric(vertical: spacingXs),
             child: SideNavigationItem(
               icon: Icons.settings,
               label: navSettings,

@@ -1,7 +1,8 @@
 import 'package:bartender/theme/bartender_context.dart';
-import 'package:bartender/theme/bartender_durations.dart';
+import 'package:bartender/core/constants/durations.dart';
 import 'package:flutter/material.dart';
-import 'package:bartender/theme/bartender_layout.dart';
+import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/dimensions.dart';
 
 class SideNavigationItem extends StatelessWidget {
   final IconData icon;
@@ -20,16 +21,16 @@ class SideNavigationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isSelected
-        ? BartenderColors.primary
-        : BartenderColors.textSecondary;
+        ? AppColors.primary
+        : AppColors.textSecondary;
     final bgColor = isSelected
-        ? BartenderColors.primary.withValues(alpha: 0.1)
+        ? AppColors.primary.withValues(alpha: 0.1)
         : Colors.transparent;
 
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: BartenderLayout.xs,
-        horizontal: BartenderLayout.s,
+        vertical: spacingXs,
+        horizontal: spacingS,
       ),
       child: AnimatedContainer(
         duration: defaultAnimationDuration,
@@ -37,7 +38,7 @@ class SideNavigationItem extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(BartenderRadius.m),
+          borderRadius: BorderRadius.circular(radiusM),
         ),
         child: Material(
           type: MaterialType.transparency,
@@ -48,7 +49,7 @@ class SideNavigationItem extends StatelessWidget {
                 children: [
                   _SelectionIndicator(isSelected: isSelected),
                   _AnimatedIcon(icon: icon, color: color),
-                  context.hSpacingM,
+                  SizedBox(height: spacingM),
                   _AnimatedLabel(
                     label: label,
                     color: color,
@@ -72,15 +73,15 @@ class _SelectionIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: BartenderLayout.s,
+      width: spacingS,
       child: Align(
         alignment: Alignment.centerLeft,
         child: AnimatedContainer(
           duration: defaultAnimationDuration,
           curve: Curves.easeOutCubic,
-          width: isSelected ? BartenderThickness.l : 0.0,
+          width: isSelected ? thicknessL : 0.0,
           height: double.infinity,
-          decoration: const BoxDecoration(color: BartenderColors.primary),
+          decoration: const BoxDecoration(color: AppColors.primary),
         ),
       ),
     );
@@ -97,15 +98,15 @@ class _AnimatedIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: BartenderLayout.l,
-        vertical: BartenderLayout.m,
+        horizontal: spacingL,
+        vertical: spacingM,
       ),
       child: TweenAnimationBuilder<Color?>(
         tween: ColorTween(begin: color, end: color),
         duration: defaultAnimationDuration,
         curve: Curves.easeOutCubic,
         builder: (context, animatedColor, child) {
-          return Icon(icon, color: animatedColor, size: BartenderLayout.l);
+          return Icon(icon, color: animatedColor, size: spacingL);
         },
       ),
     );
