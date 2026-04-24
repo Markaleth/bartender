@@ -129,7 +129,7 @@ class _AnimatedLabel extends StatelessWidget {
     return AnimatedDefaultTextStyle(
       duration: defaultAnimationDuration,
       curve: Curves.easeOutCubic,
-      style: context.bodyL!.copyWith(
+      style: context.bodyL.copyWith(
         color: color,
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       ),

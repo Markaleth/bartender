@@ -23,7 +23,7 @@ class StatusBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: context.bodyM?.copyWith(
+        style: context.bodyM.copyWith(
           color: isActive ? AppColors.secondary : Colors.grey,
         ),
       ),

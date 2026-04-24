@@ -24,13 +24,13 @@ class SideNavigationHeader extends StatelessWidget {
               children: [
                 Text(
                   appName,
-                  style: context.tt.titleMedium,
+                  style: context.titleM,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   appVersion,
-                  style: context.tt.labelLarge?.copyWith(
+                  style: context.labelL.copyWith(
                     color: AppColors.textSecondary,
                   ),
                 ),
