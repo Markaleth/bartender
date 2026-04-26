@@ -6,7 +6,6 @@ import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/core/routing/navigation_service.dart';
-import 'package:bartender/features/packages/view_models/packages_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -28,10 +27,5 @@ final List<SingleChildWidget> dependencyList = [
   ),
   ProxyProvider2<BrewService, DatabaseInterface, PackageRepository>(
     update: (_, brewService, db, _) => PackageRepository(brewService, db),
-  ),
-
-  ProxyProvider2<HomebrewRepository, PackageRepository, PackagesViewModel>(
-    update: (_, homebrewRepo, packageRepo, _) =>
-        PackagesViewModel(homebrewRepo, packageRepo),
   ),
 ];

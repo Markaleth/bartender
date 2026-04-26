@@ -1,3 +1,4 @@
+import 'package:bartender/core/constants/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 
@@ -18,22 +19,17 @@ class BrewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: spacingL),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(spacingL),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title, style: Theme.of(context).textTheme.titleMedium),
-                Text(version, style: Theme.of(context).textTheme.bodyMedium),
-              ],
-            ),
-            const SizedBox(height: 8),
+            Text(title, style: Theme.of(context).textTheme.titleMedium),
+            Text(version, style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: spacingM),
             Text(description, style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(height: 16),
+            const SizedBox(height: spacingL),
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(

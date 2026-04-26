@@ -1,3 +1,4 @@
+import 'package:bartender/features/packages/views/packages_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_strings.dart';
@@ -10,11 +11,10 @@ class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BaseView<HomeViewModel, HomeState, HomeEffect>(
-      viewModelBuilder: (_) => HomeViewModel(),
-      builder: (context, viewModel, state) {
-        return Scaffold(
+  Widget build(BuildContext context) =>
+      BaseView<HomeViewModel, HomeState, HomeEffect>(
+        viewModelBuilder: (_) => HomeViewModel(),
+        builder: (context, viewModel, state) => Scaffold(
           body: SafeArea(
             child: Row(
               children: [
@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
                     index: state.selectedTab.index, // Enum index maps perfectly
                     children: const [
                       // Index 0: Browse
-                      Center(child: Text(placeholderBrowse)),
+                      PackagesView(),
                       // Index 1: Library
                       Center(child: Text(placeholderLibrary)),
                       // Index 2: Updates
@@ -40,8 +40,6 @@ class HomeView extends StatelessWidget {
               ],
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
 }

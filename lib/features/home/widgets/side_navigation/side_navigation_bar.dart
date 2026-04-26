@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -19,20 +20,17 @@ class SideNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 250,
+      width: sideBarWidth,
       decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border(
-          right: BorderSide(
-            color: AppColors.borderNeutral,
-            width: thicknessXs,
-          ),
+          right: BorderSide(color: AppColors.borderNeutral, width: thicknessXs),
         ),
       ),
       child: Column(
         children: [
           const SideNavigationHeader(),
-          const Divider(color: AppColors.borderNeutral, height: 1),
+          HorizontalDivider(),
           SizedBox(height: spacingM),
           Expanded(
             child: ListView(
@@ -59,7 +57,7 @@ class SideNavigationBar extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(color: AppColors.borderNeutral, height: 1),
+          HorizontalDivider(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: spacingXs),
             child: SideNavigationItem(

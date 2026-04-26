@@ -19,3 +19,10 @@ const String placeholderSettings = 'Settings View Placeholder';
 
 // Errors
 const String errorNoRoute = 'No route defined for this view';
+
+
+// Packages View
+const String packagesTitle = 'Browse Packages';
+const String popularPackagesTitle = 'Popular Packages';
+const String popularPackagesSubtitle = 'Trending packages in your environment';
+
