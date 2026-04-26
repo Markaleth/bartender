@@ -80,12 +80,13 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     final formulae = futures[0] as List<FormulaModel>;
     final casks = futures[1] as List<CaskModel>;
     final trending = futures[2] as List<CategoryAnalyticsItem>;
+    final trendingLimited = trending.take(25).toList();
 
     emitState(
       state.copyWith(
         formulaeData: FetchState.success(formulae),
         casksData: FetchState.success(casks),
-        trendingData: FetchState.success(trending),
+        trendingData: FetchState.success(trendingLimited),
       ),
     );
   }

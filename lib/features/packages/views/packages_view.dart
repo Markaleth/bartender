@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:bartender/common_widgets/brew_card.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -12,6 +9,7 @@ import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
+import 'package:bartender/features/packages/views/widgets/trending_packages_carousel.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,32 +48,13 @@ class PackagesView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: spacingXl),
                   child: Text(popularPackagesSubtitle),
                 ),
-                SizedBox(
-                  height: 220,
-                  width: double.infinity,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-
-                    itemCount: state.trendingData.maybeMap(
-                      success: (value) => value.data.length,
-                      orElse: () => 0,
-                    ),
-
-                    itemBuilder: (context, index) {
-                      final item = state.trendingData.mapOrNull(
-                        success: (value) => value.data[index],
-                      )!;
-                      return BrewCard(
-                        title: item.cask ?? item.formula!,
-                        onInstall: () => log(
-                          'Install tapped for ${item.cask ?? item.formula!}',
-                        ),
-                      );
-                    },
-                    prototypeItem: SizedBox(
-                      width: 175,
-                      child: BrewCard(title: "Title"),
-                    ),
+                SizedBox(height: spacingM),
+                state.trendingData.maybeMap(
+                  success: (value) =>
+                      TrendingPackagesCarousel(items: value.data),
+                  orElse: () => const SizedBox(
+                    height: 220,
+                    child: Center(child: CircularProgressIndicator()),
                   ),
                 ),
               ],
