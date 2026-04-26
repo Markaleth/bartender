@@ -4,7 +4,7 @@ part 'package_operation.freezed.dart';
 
 enum PackageType { cask, formula }
 
-enum OperationStatus { queued, installing, success, error }
+enum OperationStatus { queued, inProgress, success, error }
 
 /// Represents a single package operation in the queue
 @freezed

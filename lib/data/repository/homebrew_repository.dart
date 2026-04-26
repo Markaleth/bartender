@@ -2,6 +2,7 @@ import '../api/api_client_interface.dart';
 import '../db/database_interface.dart';
 import '../models/formula/formula_model.dart';
 import '../models/cask/cask_model.dart';
+import '../models/analytics/category/category_analytics_model.dart';
 import '../network_resource.dart';
 
 class HomebrewRepository {
@@ -9,6 +10,14 @@ class HomebrewRepository {
   final DatabaseInterface _database;
 
   HomebrewRepository(this._apiClient, this._database);
+
+  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(String category, String days) async {
+    final response = await _apiClient.getCategoryAnalytics(category, days);
+    if (response.status == NetworkStatus.success && response.data != null) {
+      return response.data!.items;
+    }
+    throw Exception('Failed to get category analytics: ${response.errorMessage}');
+  }
 
   // Bulk endpoints
   Future<void> syncFormulae() async {
