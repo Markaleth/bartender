@@ -54,6 +54,12 @@ class SideNavigationBar extends StatelessWidget {
                   isSelected: selectedTab == HomeTab.updates,
                   onTap: () => onTabSelected(HomeTab.updates),
                 ),
+                SideNavigationItem(
+                  icon: Icons.bug_report,
+                  label: "Debug",
+                  isSelected: selectedTab == HomeTab.debug,
+                  onTap: () => onTabSelected(HomeTab.debug),
+                ),
               ],
             ),
           ),

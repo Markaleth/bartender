@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bartender/common_widgets/brew_card.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/core/base_view.dart';
@@ -5,7 +7,6 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
-import 'package:bartender/data/models/analytics/category/category_analytics_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
@@ -50,7 +51,7 @@ class PackagesView extends StatelessWidget {
                   child: Text(popularPackagesSubtitle),
                 ),
                 SizedBox(
-                  height: 211,
+                  height: 220,
                   width: double.infinity,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -66,14 +67,14 @@ class PackagesView extends StatelessWidget {
                       )!;
                       return BrewCard(
                         title: item.cask ?? item.formula!,
-                        version: "Version",
-                        description: "Description",
+                        onInstall: () => log(
+                          'Install tapped for ${item.cask ?? item.formula!}',
+                        ),
                       );
                     },
-                    prototypeItem: BrewCard(
-                      title: "Title",
-                      version: "Version",
-                      description: "Description",
+                    prototypeItem: SizedBox(
+                      width: 175,
+                      child: BrewCard(title: "Title"),
                     ),
                   ),
                 ),

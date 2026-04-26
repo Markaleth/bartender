@@ -3,6 +3,8 @@ import '../models/analytics/formulae/formulae_analytics_model.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
 
+import '../models/analytics/category/category_analytics_model.dart';
+
 abstract class DatabaseInterface {
   Future<void> cacheFormulae(List<FormulaModel> formulae);
   Future<void> cacheCasks(List<CaskModel> casks);
@@ -31,6 +33,7 @@ abstract class DatabaseInterface {
 
   Future<void> cacheFormulaeAnalytics(String period, List<FormulaAnalyticsItem> items);
   Future<void> cacheCasksAnalytics(String period, List<CaskAnalyticsItem> items);
+  Future<void> cacheCategoryAnalytics(String category, String period, List<CategoryAnalyticsItem> items);
 
   Future<void> updateFormulaInstallationStatus(String name, bool isInstalled);
   Future<void> updateCaskInstallationStatus(String token, bool isInstalled);
@@ -38,6 +41,7 @@ abstract class DatabaseInterface {
 
   Future<List<FormulaModel>> getMostDownloadedFormulae(String period);
   Future<List<CaskModel>> getMostDownloadedCasks(String period);
+  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(String category, String period);
 
   Future<String?> getETag(String endpoint);
   Future<void> saveETag(String endpoint, String etag);

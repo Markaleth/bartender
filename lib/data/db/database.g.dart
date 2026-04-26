@@ -1912,6 +1912,501 @@ class FormulaeAnalyticsTableCompanion
   }
 }
 
+class $CategoryAnalyticsTableTable extends CategoryAnalyticsTable
+    with TableInfo<$CategoryAnalyticsTableTable, CategoryAnalyticsTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CategoryAnalyticsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _periodMeta = const VerificationMeta('period');
+  @override
+  late final GeneratedColumn<String> period = GeneratedColumn<String>(
+    'period',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
+  late final GeneratedColumn<int> number = GeneratedColumn<int>(
+    'number',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _formulaMeta = const VerificationMeta(
+    'formula',
+  );
+  @override
+  late final GeneratedColumn<String> formula = GeneratedColumn<String>(
+    'formula',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _caskMeta = const VerificationMeta('cask');
+  @override
+  late final GeneratedColumn<String> cask = GeneratedColumn<String>(
+    'cask',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _countMeta = const VerificationMeta('count');
+  @override
+  late final GeneratedColumn<String> count = GeneratedColumn<String>(
+    'count',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _percentMeta = const VerificationMeta(
+    'percent',
+  );
+  @override
+  late final GeneratedColumn<String> percent = GeneratedColumn<String>(
+    'percent',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    category,
+    period,
+    number,
+    formula,
+    cask,
+    count,
+    percent,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'category_analytics_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CategoryAnalyticsTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('period')) {
+      context.handle(
+        _periodMeta,
+        period.isAcceptableOrUnknown(data['period']!, _periodMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_periodMeta);
+    }
+    if (data.containsKey('number')) {
+      context.handle(
+        _numberMeta,
+        number.isAcceptableOrUnknown(data['number']!, _numberMeta),
+      );
+    }
+    if (data.containsKey('formula')) {
+      context.handle(
+        _formulaMeta,
+        formula.isAcceptableOrUnknown(data['formula']!, _formulaMeta),
+      );
+    }
+    if (data.containsKey('cask')) {
+      context.handle(
+        _caskMeta,
+        cask.isAcceptableOrUnknown(data['cask']!, _caskMeta),
+      );
+    }
+    if (data.containsKey('count')) {
+      context.handle(
+        _countMeta,
+        count.isAcceptableOrUnknown(data['count']!, _countMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_countMeta);
+    }
+    if (data.containsKey('percent')) {
+      context.handle(
+        _percentMeta,
+        percent.isAcceptableOrUnknown(data['percent']!, _percentMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CategoryAnalyticsTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CategoryAnalyticsTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      )!,
+      period: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}period'],
+      )!,
+      number: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}number'],
+      ),
+      formula: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}formula'],
+      ),
+      cask: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cask'],
+      ),
+      count: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}count'],
+      )!,
+      percent: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}percent'],
+      ),
+    );
+  }
+
+  @override
+  $CategoryAnalyticsTableTable createAlias(String alias) {
+    return $CategoryAnalyticsTableTable(attachedDatabase, alias);
+  }
+}
+
+class CategoryAnalyticsTableData extends DataClass
+    implements Insertable<CategoryAnalyticsTableData> {
+  final int id;
+  final String category;
+  final String period;
+  final int? number;
+  final String? formula;
+  final String? cask;
+  final String count;
+  final String? percent;
+  const CategoryAnalyticsTableData({
+    required this.id,
+    required this.category,
+    required this.period,
+    this.number,
+    this.formula,
+    this.cask,
+    required this.count,
+    this.percent,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['category'] = Variable<String>(category);
+    map['period'] = Variable<String>(period);
+    if (!nullToAbsent || number != null) {
+      map['number'] = Variable<int>(number);
+    }
+    if (!nullToAbsent || formula != null) {
+      map['formula'] = Variable<String>(formula);
+    }
+    if (!nullToAbsent || cask != null) {
+      map['cask'] = Variable<String>(cask);
+    }
+    map['count'] = Variable<String>(count);
+    if (!nullToAbsent || percent != null) {
+      map['percent'] = Variable<String>(percent);
+    }
+    return map;
+  }
+
+  CategoryAnalyticsTableCompanion toCompanion(bool nullToAbsent) {
+    return CategoryAnalyticsTableCompanion(
+      id: Value(id),
+      category: Value(category),
+      period: Value(period),
+      number: number == null && nullToAbsent
+          ? const Value.absent()
+          : Value(number),
+      formula: formula == null && nullToAbsent
+          ? const Value.absent()
+          : Value(formula),
+      cask: cask == null && nullToAbsent ? const Value.absent() : Value(cask),
+      count: Value(count),
+      percent: percent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(percent),
+    );
+  }
+
+  factory CategoryAnalyticsTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CategoryAnalyticsTableData(
+      id: serializer.fromJson<int>(json['id']),
+      category: serializer.fromJson<String>(json['category']),
+      period: serializer.fromJson<String>(json['period']),
+      number: serializer.fromJson<int?>(json['number']),
+      formula: serializer.fromJson<String?>(json['formula']),
+      cask: serializer.fromJson<String?>(json['cask']),
+      count: serializer.fromJson<String>(json['count']),
+      percent: serializer.fromJson<String?>(json['percent']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'category': serializer.toJson<String>(category),
+      'period': serializer.toJson<String>(period),
+      'number': serializer.toJson<int?>(number),
+      'formula': serializer.toJson<String?>(formula),
+      'cask': serializer.toJson<String?>(cask),
+      'count': serializer.toJson<String>(count),
+      'percent': serializer.toJson<String?>(percent),
+    };
+  }
+
+  CategoryAnalyticsTableData copyWith({
+    int? id,
+    String? category,
+    String? period,
+    Value<int?> number = const Value.absent(),
+    Value<String?> formula = const Value.absent(),
+    Value<String?> cask = const Value.absent(),
+    String? count,
+    Value<String?> percent = const Value.absent(),
+  }) => CategoryAnalyticsTableData(
+    id: id ?? this.id,
+    category: category ?? this.category,
+    period: period ?? this.period,
+    number: number.present ? number.value : this.number,
+    formula: formula.present ? formula.value : this.formula,
+    cask: cask.present ? cask.value : this.cask,
+    count: count ?? this.count,
+    percent: percent.present ? percent.value : this.percent,
+  );
+  CategoryAnalyticsTableData copyWithCompanion(
+    CategoryAnalyticsTableCompanion data,
+  ) {
+    return CategoryAnalyticsTableData(
+      id: data.id.present ? data.id.value : this.id,
+      category: data.category.present ? data.category.value : this.category,
+      period: data.period.present ? data.period.value : this.period,
+      number: data.number.present ? data.number.value : this.number,
+      formula: data.formula.present ? data.formula.value : this.formula,
+      cask: data.cask.present ? data.cask.value : this.cask,
+      count: data.count.present ? data.count.value : this.count,
+      percent: data.percent.present ? data.percent.value : this.percent,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoryAnalyticsTableData(')
+          ..write('id: $id, ')
+          ..write('category: $category, ')
+          ..write('period: $period, ')
+          ..write('number: $number, ')
+          ..write('formula: $formula, ')
+          ..write('cask: $cask, ')
+          ..write('count: $count, ')
+          ..write('percent: $percent')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, category, period, number, formula, cask, count, percent);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CategoryAnalyticsTableData &&
+          other.id == this.id &&
+          other.category == this.category &&
+          other.period == this.period &&
+          other.number == this.number &&
+          other.formula == this.formula &&
+          other.cask == this.cask &&
+          other.count == this.count &&
+          other.percent == this.percent);
+}
+
+class CategoryAnalyticsTableCompanion
+    extends UpdateCompanion<CategoryAnalyticsTableData> {
+  final Value<int> id;
+  final Value<String> category;
+  final Value<String> period;
+  final Value<int?> number;
+  final Value<String?> formula;
+  final Value<String?> cask;
+  final Value<String> count;
+  final Value<String?> percent;
+  const CategoryAnalyticsTableCompanion({
+    this.id = const Value.absent(),
+    this.category = const Value.absent(),
+    this.period = const Value.absent(),
+    this.number = const Value.absent(),
+    this.formula = const Value.absent(),
+    this.cask = const Value.absent(),
+    this.count = const Value.absent(),
+    this.percent = const Value.absent(),
+  });
+  CategoryAnalyticsTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String category,
+    required String period,
+    this.number = const Value.absent(),
+    this.formula = const Value.absent(),
+    this.cask = const Value.absent(),
+    required String count,
+    this.percent = const Value.absent(),
+  }) : category = Value(category),
+       period = Value(period),
+       count = Value(count);
+  static Insertable<CategoryAnalyticsTableData> custom({
+    Expression<int>? id,
+    Expression<String>? category,
+    Expression<String>? period,
+    Expression<int>? number,
+    Expression<String>? formula,
+    Expression<String>? cask,
+    Expression<String>? count,
+    Expression<String>? percent,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (category != null) 'category': category,
+      if (period != null) 'period': period,
+      if (number != null) 'number': number,
+      if (formula != null) 'formula': formula,
+      if (cask != null) 'cask': cask,
+      if (count != null) 'count': count,
+      if (percent != null) 'percent': percent,
+    });
+  }
+
+  CategoryAnalyticsTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? category,
+    Value<String>? period,
+    Value<int?>? number,
+    Value<String?>? formula,
+    Value<String?>? cask,
+    Value<String>? count,
+    Value<String?>? percent,
+  }) {
+    return CategoryAnalyticsTableCompanion(
+      id: id ?? this.id,
+      category: category ?? this.category,
+      period: period ?? this.period,
+      number: number ?? this.number,
+      formula: formula ?? this.formula,
+      cask: cask ?? this.cask,
+      count: count ?? this.count,
+      percent: percent ?? this.percent,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (period.present) {
+      map['period'] = Variable<String>(period.value);
+    }
+    if (number.present) {
+      map['number'] = Variable<int>(number.value);
+    }
+    if (formula.present) {
+      map['formula'] = Variable<String>(formula.value);
+    }
+    if (cask.present) {
+      map['cask'] = Variable<String>(cask.value);
+    }
+    if (count.present) {
+      map['count'] = Variable<String>(count.value);
+    }
+    if (percent.present) {
+      map['percent'] = Variable<String>(percent.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoryAnalyticsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('category: $category, ')
+          ..write('period: $period, ')
+          ..write('number: $number, ')
+          ..write('formula: $formula, ')
+          ..write('cask: $cask, ')
+          ..write('count: $count, ')
+          ..write('percent: $percent')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SyncMetadataTableTable extends SyncMetadataTable
     with TableInfo<$SyncMetadataTableTable, SyncMetadataTableData> {
   @override
@@ -2194,6 +2689,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $CasksAnalyticsTableTable(this);
   late final $FormulaeAnalyticsTableTable formulaeAnalyticsTable =
       $FormulaeAnalyticsTableTable(this);
+  late final $CategoryAnalyticsTableTable categoryAnalyticsTable =
+      $CategoryAnalyticsTableTable(this);
   late final $SyncMetadataTableTable syncMetadataTable =
       $SyncMetadataTableTable(this);
   @override
@@ -2205,6 +2702,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     formulaeTable,
     casksAnalyticsTable,
     formulaeAnalyticsTable,
+    categoryAnalyticsTable,
     syncMetadataTable,
   ];
 }
@@ -3425,6 +3923,276 @@ typedef $$FormulaeAnalyticsTableTableProcessedTableManager =
       FormulaeAnalyticsTableData,
       PrefetchHooks Function()
     >;
+typedef $$CategoryAnalyticsTableTableCreateCompanionBuilder =
+    CategoryAnalyticsTableCompanion Function({
+      Value<int> id,
+      required String category,
+      required String period,
+      Value<int?> number,
+      Value<String?> formula,
+      Value<String?> cask,
+      required String count,
+      Value<String?> percent,
+    });
+typedef $$CategoryAnalyticsTableTableUpdateCompanionBuilder =
+    CategoryAnalyticsTableCompanion Function({
+      Value<int> id,
+      Value<String> category,
+      Value<String> period,
+      Value<int?> number,
+      Value<String?> formula,
+      Value<String?> cask,
+      Value<String> count,
+      Value<String?> percent,
+    });
+
+class $$CategoryAnalyticsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CategoryAnalyticsTableTable> {
+  $$CategoryAnalyticsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get period => $composableBuilder(
+    column: $table.period,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get formula => $composableBuilder(
+    column: $table.formula,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get cask => $composableBuilder(
+    column: $table.cask,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get count => $composableBuilder(
+    column: $table.count,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get percent => $composableBuilder(
+    column: $table.percent,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CategoryAnalyticsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CategoryAnalyticsTableTable> {
+  $$CategoryAnalyticsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get period => $composableBuilder(
+    column: $table.period,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get formula => $composableBuilder(
+    column: $table.formula,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get cask => $composableBuilder(
+    column: $table.cask,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get count => $composableBuilder(
+    column: $table.count,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get percent => $composableBuilder(
+    column: $table.percent,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CategoryAnalyticsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CategoryAnalyticsTableTable> {
+  $$CategoryAnalyticsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<String> get period =>
+      $composableBuilder(column: $table.period, builder: (column) => column);
+
+  GeneratedColumn<int> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<String> get formula =>
+      $composableBuilder(column: $table.formula, builder: (column) => column);
+
+  GeneratedColumn<String> get cask =>
+      $composableBuilder(column: $table.cask, builder: (column) => column);
+
+  GeneratedColumn<String> get count =>
+      $composableBuilder(column: $table.count, builder: (column) => column);
+
+  GeneratedColumn<String> get percent =>
+      $composableBuilder(column: $table.percent, builder: (column) => column);
+}
+
+class $$CategoryAnalyticsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CategoryAnalyticsTableTable,
+          CategoryAnalyticsTableData,
+          $$CategoryAnalyticsTableTableFilterComposer,
+          $$CategoryAnalyticsTableTableOrderingComposer,
+          $$CategoryAnalyticsTableTableAnnotationComposer,
+          $$CategoryAnalyticsTableTableCreateCompanionBuilder,
+          $$CategoryAnalyticsTableTableUpdateCompanionBuilder,
+          (
+            CategoryAnalyticsTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $CategoryAnalyticsTableTable,
+              CategoryAnalyticsTableData
+            >,
+          ),
+          CategoryAnalyticsTableData,
+          PrefetchHooks Function()
+        > {
+  $$CategoryAnalyticsTableTableTableManager(
+    _$AppDatabase db,
+    $CategoryAnalyticsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CategoryAnalyticsTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$CategoryAnalyticsTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$CategoryAnalyticsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> category = const Value.absent(),
+                Value<String> period = const Value.absent(),
+                Value<int?> number = const Value.absent(),
+                Value<String?> formula = const Value.absent(),
+                Value<String?> cask = const Value.absent(),
+                Value<String> count = const Value.absent(),
+                Value<String?> percent = const Value.absent(),
+              }) => CategoryAnalyticsTableCompanion(
+                id: id,
+                category: category,
+                period: period,
+                number: number,
+                formula: formula,
+                cask: cask,
+                count: count,
+                percent: percent,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String category,
+                required String period,
+                Value<int?> number = const Value.absent(),
+                Value<String?> formula = const Value.absent(),
+                Value<String?> cask = const Value.absent(),
+                required String count,
+                Value<String?> percent = const Value.absent(),
+              }) => CategoryAnalyticsTableCompanion.insert(
+                id: id,
+                category: category,
+                period: period,
+                number: number,
+                formula: formula,
+                cask: cask,
+                count: count,
+                percent: percent,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CategoryAnalyticsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CategoryAnalyticsTableTable,
+      CategoryAnalyticsTableData,
+      $$CategoryAnalyticsTableTableFilterComposer,
+      $$CategoryAnalyticsTableTableOrderingComposer,
+      $$CategoryAnalyticsTableTableAnnotationComposer,
+      $$CategoryAnalyticsTableTableCreateCompanionBuilder,
+      $$CategoryAnalyticsTableTableUpdateCompanionBuilder,
+      (
+        CategoryAnalyticsTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $CategoryAnalyticsTableTable,
+          CategoryAnalyticsTableData
+        >,
+      ),
+      CategoryAnalyticsTableData,
+      PrefetchHooks Function()
+    >;
 typedef $$SyncMetadataTableTableCreateCompanionBuilder =
     SyncMetadataTableCompanion Function({
       required String endpoint,
@@ -3616,6 +4384,11 @@ class $AppDatabaseManager {
       $$FormulaeAnalyticsTableTableTableManager(
         _db,
         _db.formulaeAnalyticsTable,
+      );
+  $$CategoryAnalyticsTableTableTableManager get categoryAnalyticsTable =>
+      $$CategoryAnalyticsTableTableTableManager(
+        _db,
+        _db.categoryAnalyticsTable,
       );
   $$SyncMetadataTableTableTableManager get syncMetadataTable =>
       $$SyncMetadataTableTableTableManager(_db, _db.syncMetadataTable);

@@ -12,11 +12,27 @@ class HomebrewRepository {
   HomebrewRepository(this._apiClient, this._database);
 
   Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(String category, String days) async {
-    final response = await _apiClient.getCategoryAnalytics(category, days);
-    if (response.status == NetworkStatus.success && response.data != null) {
-      return response.data!.items;
+    return await _database.getCategoryAnalytics(category, days);
+  }
+
+  Future<void> syncCategoryAnalytics(String category, String days) async {
+    final endpoint = '/analytics/$category/$days.json';
+    final currentETag = await _database.getETag(endpoint);
+    final response = await _apiClient.getCategoryAnalytics(category, days, eTag: currentETag);
+
+    if (response.status == NetworkStatus.success) {
+      if (response.statusCode == 304) {
+        return;
+      }
+      if (response.data != null) {
+        await _database.cacheCategoryAnalytics(category, days, response.data!.items);
+        if (response.eTag != null) {
+          await _database.saveETag(endpoint, response.eTag!);
+        }
+      }
+    } else {
+      throw Exception('Failed to sync category analytics: ${response.errorMessage}');
     }
-    throw Exception('Failed to get category analytics: ${response.errorMessage}');
   }
 
   // Bulk endpoints

@@ -9,11 +9,13 @@ import 'tables/casks_table.dart';
 import 'tables/formulae_table.dart';
 import 'tables/casks_analytics_table.dart';
 import 'tables/formulae_analytics_table.dart';
+import 'tables/category_analytics_table.dart';
 import 'tables/sync_metadata_table.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
 import '../models/analytics/casks/casks_analytics_model.dart';
 import '../models/analytics/formulae/formulae_analytics_model.dart';
+import '../models/analytics/category/category_analytics_model.dart';
 import 'type_converters.dart';
 import 'database_interface.dart';
 
@@ -25,6 +27,7 @@ part 'database.g.dart';
     FormulaeTable,
     CasksAnalyticsTable,
     FormulaeAnalyticsTable,
+    CategoryAnalyticsTable,
     SyncMetadataTable,
   ],
 )
@@ -237,6 +240,63 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
         mode: InsertMode.insertOrReplace,
       );
     });
+  }
+
+  @override
+  Future<void> cacheCategoryAnalytics(
+    String category,
+    String period,
+    List<CategoryAnalyticsItem> items,
+  ) async {
+    await transaction(() async {
+      await (delete(categoryAnalyticsTable)
+            ..where(
+              (t) => t.category.equals(category) & t.period.equals(period),
+            ))
+          .go();
+
+      await batch((batch) {
+        batch.insertAll(
+          categoryAnalyticsTable,
+          items.map(
+            (item) => CategoryAnalyticsTableCompanion.insert(
+              category: category,
+              period: period,
+              number: Value(item.number),
+              formula: Value(item.formula),
+              cask: Value(item.cask),
+              count: item.count,
+              percent: Value(item.percent),
+            ),
+          ),
+        );
+      });
+    });
+  }
+
+  @override
+  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
+    String category,
+    String period,
+  ) async {
+    final results =
+        await (select(categoryAnalyticsTable)
+              ..where(
+                (t) => t.category.equals(category) & t.period.equals(period),
+              ))
+            .get();
+
+    return results
+        .map(
+          (row) => CategoryAnalyticsItem(
+            number: row.number,
+            formula: row.formula,
+            cask: row.cask,
+            count: row.count,
+            percent: row.percent,
+          ),
+        )
+        .toList();
   }
 
   CustomExpression<int> _parseCountExpression(String columnName) {

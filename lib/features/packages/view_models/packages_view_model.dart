@@ -2,6 +2,8 @@ import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/core/models/package_operations/package_operation.dart';
 import 'package:bartender/data/models/analytics/category/category_analytics_model.dart';
+import 'package:bartender/data/models/cask/cask_model.dart';
+import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
@@ -12,7 +14,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   final PackageRepository _packageRepository;
 
   static const String _formulaeAnalyticsCategory = 'install-on-request';
-  static const List<String> _analyticsPeriods = ['30d', '90d', '365d'];
+  static const String _analyticsPeriod = '30d';
 
   bool _isProcessingQueue = false;
 
@@ -22,8 +24,8 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   Future<void> fetchData() async {
     _setLoadingState();
     try {
-      final trendingData = await _syncRemoteData();
-      await _fetchLocalData(trendingData);
+      await _syncRemoteData();
+      await _fetchLocalData();
     } catch (error) {
       _setErrorState(error.toString());
     }
@@ -32,8 +34,8 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   void _setLoadingState() {
     emitState(
       state.copyWith(
-        casksData: const FetchState.loading(),
         formulaeData: const FetchState.loading(),
+        casksData: const FetchState.loading(),
         trendingData: const FetchState.loading(),
       ),
     );
@@ -49,38 +51,35 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     );
   }
 
-  Future<List<CategoryAnalyticsItem>> _syncRemoteData() async {
-    final syncFutures = <Future<void>>[
+  Future<void> _syncRemoteData() async {
+    await Future.wait([
       _homebrewRepository.syncFormulae(),
       _homebrewRepository.syncCasks(),
-    ];
-
-    for (final period in _analyticsPeriods) {
-      syncFutures.add(
-        _homebrewRepository.syncFormulaeAnalytics(
-          _formulaeAnalyticsCategory,
-          period,
-        ),
-      );
-      syncFutures.add(_homebrewRepository.syncCasksAnalytics(period));
-    }
-
-    final trendingFuture = _homebrewRepository.getCategoryAnalytics(
-      _formulaeAnalyticsCategory,
-      _analyticsPeriods.first,
-    );
-
-    final results = await Future.wait([
-      Future.wait(syncFutures),
-      trendingFuture,
+      _homebrewRepository.syncFormulaeAnalytics(
+        _formulaeAnalyticsCategory,
+        _analyticsPeriod,
+      ),
+      _homebrewRepository.syncCasksAnalytics(_analyticsPeriod),
+      _homebrewRepository.syncCategoryAnalytics(
+        _formulaeAnalyticsCategory,
+        _analyticsPeriod,
+      ),
     ]);
-
-    return results[1] as List<CategoryAnalyticsItem>;
   }
 
-  Future<void> _fetchLocalData(List<CategoryAnalyticsItem> trending) async {
-    final formulae = await _homebrewRepository.getAllFormulae();
-    final casks = await _homebrewRepository.getAllCasks();
+  Future<void> _fetchLocalData() async {
+    final futures = await Future.wait([
+      _homebrewRepository.getAllFormulae(),
+      _homebrewRepository.getAllCasks(),
+      _homebrewRepository.getCategoryAnalytics(
+        _formulaeAnalyticsCategory,
+        _analyticsPeriod,
+      ),
+    ]);
+
+    final formulae = futures[0] as List<FormulaModel>;
+    final casks = futures[1] as List<CaskModel>;
+    final trending = futures[2] as List<CategoryAnalyticsItem>;
 
     emitState(
       state.copyWith(

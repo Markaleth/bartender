@@ -1,3 +1,4 @@
+import 'package:bartender/debug/api_tester.dart';
 import 'package:bartender/features/packages/views/packages_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/base_view.dart';
@@ -34,6 +35,8 @@ class HomeView extends StatelessWidget {
                       Center(child: Text(placeholderUpdates)),
                       // Index 3: Settings
                       Center(child: Text(placeholderSettings)),
+                      // Index 4: Debug
+                      Center(child: ApiTesterWidget()),
                     ],
                   ),
                 ),
