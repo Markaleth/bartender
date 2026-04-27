@@ -1,3 +1,4 @@
+import '../../core/enums/analytics_period.dart';
 import '../api/api_client_interface.dart';
 import '../db/database_interface.dart';
 import '../models/formula/formula_model.dart';
@@ -11,12 +12,12 @@ class HomebrewRepository {
 
   HomebrewRepository(this._apiClient, this._database);
 
-  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(String category, String days) async {
+  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(String category, AnalyticsPeriod days) async {
     return await _database.getCategoryAnalytics(category, days);
   }
 
-  Future<void> syncCategoryAnalytics(String category, String days) async {
-    final endpoint = '/analytics/$category/$days.json';
+  Future<void> syncCategoryAnalytics(String category, AnalyticsPeriod days) async {
+    final endpoint = '/analytics/$category/${days.value}.json';
     final currentETag = await _database.getETag(endpoint);
     final response = await _apiClient.getCategoryAnalytics(category, days, eTag: currentETag);
 
@@ -44,23 +45,23 @@ class HomebrewRepository {
         syncCasks(),
       ]);
       await Future.wait([
-        syncFormulaeAnalytics('install-on-request', '30d'),
-        syncFormulaeAnalytics('install-on-request', '90d'),
-        syncFormulaeAnalytics('install-on-request', '365d'),
-        syncCasksAnalytics('30d'),
-        syncCasksAnalytics('90d'),
-        syncCasksAnalytics('365d'),
+        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days30),
+        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days90),
+        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days365),
+        syncCasksAnalytics(AnalyticsPeriod.days30),
+        syncCasksAnalytics(AnalyticsPeriod.days90),
+        syncCasksAnalytics(AnalyticsPeriod.days365),
       ]);
     } else {
       await Future.wait([
         syncFormulae(),
         syncCasks(),
-        syncFormulaeAnalytics('install-on-request', '30d'),
-        syncFormulaeAnalytics('install-on-request', '90d'),
-        syncFormulaeAnalytics('install-on-request', '365d'),
-        syncCasksAnalytics('30d'),
-        syncCasksAnalytics('90d'),
-        syncCasksAnalytics('365d'),
+        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days30),
+        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days90),
+        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days365),
+        syncCasksAnalytics(AnalyticsPeriod.days30),
+        syncCasksAnalytics(AnalyticsPeriod.days90),
+        syncCasksAnalytics(AnalyticsPeriod.days365),
       ]);
     }
   }
@@ -110,8 +111,8 @@ class HomebrewRepository {
 
   // Example for one of the analytics endpoints
   // You would expand this for all analytics categories/days if needed
-  Future<void> syncFormulaeAnalytics(String category, String days) async {
-    final endpoint = '/analytics/$category/homebrew-core/$days.json';
+  Future<void> syncFormulaeAnalytics(String category, AnalyticsPeriod days) async {
+    final endpoint = '/analytics/$category/homebrew-core/${days.value}.json';
     final currentETag = await _database.getETag(endpoint);
     final response = await _apiClient.getFormulaeAnalytics(category, days, eTag: currentETag);
 
@@ -131,8 +132,8 @@ class HomebrewRepository {
     }
   }
 
-  Future<void> syncCasksAnalytics(String days) async {
-    final endpoint = '/analytics/cask-install/homebrew-cask/$days.json';
+  Future<void> syncCasksAnalytics(AnalyticsPeriod days) async {
+    final endpoint = '/analytics/cask-install/homebrew-cask/${days.value}.json';
     final currentETag = await _database.getETag(endpoint);
     final response = await _apiClient.getCasksAnalytics(days, eTag: currentETag);
 
@@ -179,6 +180,6 @@ class HomebrewRepository {
   Future<List<CaskModel>> getAllCasks() => _database.getAllCasks();
   Future<List<FormulaModel>> searchFormulae(String query) => _database.searchFormulae(query);
   Future<List<CaskModel>> searchCasks(String query) => _database.searchCasks(query);
-  Future<List<FormulaModel>> getTrendingFormulae(String period, {int limit = 10}) => _database.getMostDownloadedFormulae(period, limit: limit);
-  Future<List<CaskModel>> getTrendingCasks(String period, {int limit = 10}) => _database.getMostDownloadedCasks(period, limit: limit);
+  Future<List<FormulaModel>> getTrendingFormulae(AnalyticsPeriod period, {int limit = 10}) => _database.getMostDownloadedFormulae(period, limit: limit);
+  Future<List<CaskModel>> getTrendingCasks(AnalyticsPeriod period, {int limit = 10}) => _database.getMostDownloadedCasks(period, limit: limit);
 }

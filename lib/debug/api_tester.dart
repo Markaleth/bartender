@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../core/enums/analytics_period.dart';
 import '../data/api/api_client_interface.dart';
 import '../data/db/database_interface.dart';
 import '../data/repository/homebrew_repository.dart';
@@ -162,11 +163,11 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                           ElevatedButton(
                             onPressed: () async {
                               _updateResult(
-                                'API: getFormulaeAnalytics("install", "30d")...',
+                                'API: getFormulaeAnalytics("install", AnalyticsPeriod.days30)...',
                               );
                               try {
                                 final res = await _apiClient
-                                    .getFormulaeAnalytics('install', '30d');
+                                    .getFormulaeAnalytics('install', AnalyticsPeriod.days30);
                                 if (res.status == NetworkStatus.success) {
                                   _updateResult(
                                     'Success: ${res.data?.totalItems} items.',
@@ -183,10 +184,10 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                           const SizedBox(height: 8),
                           ElevatedButton(
                             onPressed: () async {
-                              _updateResult('API: getCasksAnalytics("30d")...');
+                              _updateResult('API: getCasksAnalytics(AnalyticsPeriod.days30)...');
                               try {
                                 final res = await _apiClient.getCasksAnalytics(
-                                  '30d',
+                                  AnalyticsPeriod.days30,
                                 );
                                 if (res.status == NetworkStatus.success) {
                                   _updateResult(
@@ -341,11 +342,11 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                 ? null
                                 : () async {
                                     _updateResult(
-                                      'DB: getMostDownloadedFormulae("30d")...',
+                                      'DB: getMostDownloadedFormulae(AnalyticsPeriod.days30)...',
                                     );
                                     try {
                                       final res = await _database
-                                          .getMostDownloadedFormulae('30d');
+                                          .getMostDownloadedFormulae(AnalyticsPeriod.days30);
                                       _updateResult(
                                         'Success: ${res.length} items.',
                                       );
@@ -456,7 +457,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                 try {
                                   await _repository.syncFormulaeAnalytics(
                                     'install',
-                                    '30d',
+                                    AnalyticsPeriod.days30,
                                   );
                                   _updateResult(
                                     'Success: synced formula analytics.',
@@ -474,7 +475,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: syncCasksAnalytics()...',
                                 );
                                 try {
-                                  await _repository.syncCasksAnalytics('30d');
+                                  await _repository.syncCasksAnalytics(AnalyticsPeriod.days30);
                                   _updateResult(
                                     'Success: synced casks analytics.',
                                   );

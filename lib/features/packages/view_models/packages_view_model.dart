@@ -1,4 +1,5 @@
 import 'package:bartender/core/base_view_model.dart';
+import 'package:bartender/core/enums/analytics_period.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/core/models/package_operations/package_operation.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
@@ -12,7 +13,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   final HomebrewRepository _homebrewRepository;
   final PackageRepository _packageRepository;
 
-  static const String _analyticsPeriod = '30d';
+  static const AnalyticsPeriod _analyticsPeriod = AnalyticsPeriod.days30;
 
   bool _isProcessingQueue = false;
 
@@ -70,9 +71,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     final allTrending = <dynamic>[...formulaTrending, ...caskTrending];
     allTrending.sort((a, b) {
       final aInstalls = _getInstalls(a);
-      final bInstalls = b is FormulaModel
-          ? b.installs30d ?? 0
-          : (b as CaskModel).installs30d ?? 0;
+      final bInstalls = _getInstalls(b);
       return bInstalls.compareTo(aInstalls);
     });
 
@@ -94,8 +93,20 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   }
 
   int _getInstalls(dynamic item) {
-    if (item is FormulaModel) return item.installs30d ?? 0;
-    if (item is CaskModel) return item.installs30d ?? 0;
+    if (item is FormulaModel) {
+      return switch (_analyticsPeriod) {
+        AnalyticsPeriod.days30 => item.installs30d ?? 0,
+        AnalyticsPeriod.days90 => item.installs90d ?? 0,
+        AnalyticsPeriod.days365 => item.installs365d ?? 0,
+      };
+    }
+    if (item is CaskModel) {
+      return switch (_analyticsPeriod) {
+        AnalyticsPeriod.days30 => item.installs30d ?? 0,
+        AnalyticsPeriod.days90 => item.installs90d ?? 0,
+        AnalyticsPeriod.days365 => item.installs365d ?? 0,
+      };
+    }
     return 0;
   }
 

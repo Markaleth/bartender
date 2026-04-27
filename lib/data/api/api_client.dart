@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'api_client_interface.dart';
 import '../models/formula/formula_model.dart';
+import '../../core/enums/analytics_period.dart';
 import '../models/cask/cask_model.dart';
 import '../models/analytics/category/category_analytics_model.dart';
 import '../models/analytics/formulae/formulae_analytics_model.dart';
@@ -152,11 +153,11 @@ class ApiClient implements ApiClientInterface {
   @override
   Future<NetworkResource<CategoryAnalyticsResponse>> getCategoryAnalytics(
     String category,
-    String days, {
+    AnalyticsPeriod days, {
     String? eTag,
   }) {
     return _fetchAndParse(
-      '/analytics/$category/$days.json',
+      '/analytics/$category/${days.value}.json',
       eTag,
       _parseCategoryAnalytics,
     );
@@ -165,11 +166,11 @@ class ApiClient implements ApiClientInterface {
   @override
   Future<NetworkResource<FormulaeAnalyticsResponse>> getFormulaeAnalytics(
     String category,
-    String days, {
+    AnalyticsPeriod days, {
     String? eTag,
   }) {
     return _fetchAndParse(
-      '/analytics/$category/homebrew-core/$days.json',
+      '/analytics/$category/homebrew-core/${days.value}.json',
       eTag,
       _parseFormulaeAnalytics,
     );
@@ -177,11 +178,11 @@ class ApiClient implements ApiClientInterface {
 
   @override
   Future<NetworkResource<CasksAnalyticsResponse>> getCasksAnalytics(
-    String days, {
+    AnalyticsPeriod days, {
     String? eTag,
   }) {
     return _fetchAndParse(
-      '/analytics/cask-install/homebrew-cask/$days.json',
+      '/analytics/cask-install/homebrew-cask/${days.value}.json',
       eTag,
       _parseCasksAnalytics,
     );

@@ -15,6 +15,7 @@ import '../models/formula/formula_model.dart';
 import '../models/analytics/casks/casks_analytics_model.dart';
 import '../models/analytics/formulae/formulae_analytics_model.dart';
 import '../models/analytics/category/category_analytics_model.dart';
+import '../../core/enums/analytics_period.dart';
 import 'type_converters.dart';
 import 'database_interface.dart';
 
@@ -285,71 +286,59 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   }
 
   @override
-  Future<void> updateFormulaAnalytics(String name, int installs, String period) async {
+  Future<void> updateFormulaAnalytics(String name, int installs, AnalyticsPeriod period) async {
     final companion = switch (period) {
-      '30d' => FormulaeTableCompanion(installs30d: Value(installs)),
-      '90d' => FormulaeTableCompanion(installs90d: Value(installs)),
-      '365d' => FormulaeTableCompanion(installs365d: Value(installs)),
-      _ => null,
+      AnalyticsPeriod.days30 => FormulaeTableCompanion(installs30d: Value(installs)),
+      AnalyticsPeriod.days90 => FormulaeTableCompanion(installs90d: Value(installs)),
+      AnalyticsPeriod.days365 => FormulaeTableCompanion(installs365d: Value(installs)),
     };
-    if (companion != null) {
-      await (update(formulaeTable)..where((t) => t.name.equals(name))).write(companion);
-    }
+    await (update(formulaeTable)..where((t) => t.name.equals(name))).write(companion);
   }
 
   @override
-  Future<void> updateCaskAnalytics(String token, int installs, String period) async {
+  Future<void> updateCaskAnalytics(String token, int installs, AnalyticsPeriod period) async {
     final companion = switch (period) {
-      '30d' => CasksTableCompanion(installs30d: Value(installs)),
-      '90d' => CasksTableCompanion(installs90d: Value(installs)),
-      '365d' => CasksTableCompanion(installs365d: Value(installs)),
-      _ => null,
+      AnalyticsPeriod.days30 => CasksTableCompanion(installs30d: Value(installs)),
+      AnalyticsPeriod.days90 => CasksTableCompanion(installs90d: Value(installs)),
+      AnalyticsPeriod.days365 => CasksTableCompanion(installs365d: Value(installs)),
     };
-    if (companion != null) {
-      await (update(casksTable)..where((t) => t.token.equals(token))).write(companion);
-    }
+    await (update(casksTable)..where((t) => t.token.equals(token))).write(companion);
   }
 
   @override
-  Future<void> updateFormulaeAnalyticsBatch(List<FormulaAnalyticsItem> items, String period) async {
+  Future<void> updateFormulaeAnalyticsBatch(List<FormulaAnalyticsItem> items, AnalyticsPeriod period) async {
     await batch((batch) {
       for (final item in items) {
         final installs = int.tryParse(item.count.replaceAll(',', '')) ?? 0;
         final companion = switch (period) {
-          '30d' => FormulaeTableCompanion(installs30d: Value(installs)),
-          '90d' => FormulaeTableCompanion(installs90d: Value(installs)),
-          '365d' => FormulaeTableCompanion(installs365d: Value(installs)),
-          _ => null,
+          AnalyticsPeriod.days30 => FormulaeTableCompanion(installs30d: Value(installs)),
+          AnalyticsPeriod.days90 => FormulaeTableCompanion(installs90d: Value(installs)),
+          AnalyticsPeriod.days365 => FormulaeTableCompanion(installs365d: Value(installs)),
         };
-        if (companion != null) {
-          batch.update(
-            formulaeTable,
-            companion,
-            where: (t) => t.name.equals(item.formula),
-          );
-        }
+        batch.update(
+          formulaeTable,
+          companion,
+          where: (t) => t.name.equals(item.formula),
+        );
       }
     });
   }
 
   @override
-  Future<void> updateCasksAnalyticsBatch(List<CaskAnalyticsItem> items, String period) async {
+  Future<void> updateCasksAnalyticsBatch(List<CaskAnalyticsItem> items, AnalyticsPeriod period) async {
     await batch((batch) {
       for (final item in items) {
         final installs = int.tryParse(item.count.replaceAll(',', '')) ?? 0;
         final companion = switch (period) {
-          '30d' => CasksTableCompanion(installs30d: Value(installs)),
-          '90d' => CasksTableCompanion(installs90d: Value(installs)),
-          '365d' => CasksTableCompanion(installs365d: Value(installs)),
-          _ => null,
+          AnalyticsPeriod.days30 => CasksTableCompanion(installs30d: Value(installs)),
+          AnalyticsPeriod.days90 => CasksTableCompanion(installs90d: Value(installs)),
+          AnalyticsPeriod.days365 => CasksTableCompanion(installs365d: Value(installs)),
         };
-        if (companion != null) {
-          batch.update(
-            casksTable,
-            companion,
-            where: (t) => t.token.equals(item.cask),
-          );
-        }
+        batch.update(
+          casksTable,
+          companion,
+          where: (t) => t.token.equals(item.cask),
+        );
       }
     });
   }
@@ -357,12 +346,12 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   @override
   Future<void> cacheCategoryAnalytics(
     String category,
-    String period,
+    AnalyticsPeriod period,
     List<CategoryAnalyticsItem> items,
   ) async {
     await transaction(() async {
       await (delete(categoryAnalyticsTable)..where(
-            (t) => t.category.equals(category) & t.period.equals(period),
+            (t) => t.category.equals(category) & t.period.equals(period.value),
           ))
           .go();
 
@@ -372,7 +361,7 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
           items.map(
             (item) => CategoryAnalyticsTableCompanion.insert(
               category: category,
-              period: period,
+              period: period.value,
               number: Value(item.number),
               formula: Value(item.formula),
               cask: Value(item.cask),
@@ -388,11 +377,11 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   @override
   Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
     String category,
-    String period,
+    AnalyticsPeriod period,
   ) async {
     final results =
         await (select(categoryAnalyticsTable)..where(
-              (t) => t.category.equals(category) & t.period.equals(period),
+              (t) => t.category.equals(category) & t.period.equals(period.value),
             ))
             .get();
 
@@ -411,17 +400,14 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
 
   @override
   Future<List<FormulaModel>> getMostDownloadedFormulae(
-    String period, {
+    AnalyticsPeriod period, {
     int limit = 10,
   }) async {
     final column = switch (period) {
-      '30d' => formulaeTable.installs30d,
-      '90d' => formulaeTable.installs90d,
-      '365d' => formulaeTable.installs365d,
-      _ => null,
+      AnalyticsPeriod.days30 => formulaeTable.installs30d,
+      AnalyticsPeriod.days90 => formulaeTable.installs90d,
+      AnalyticsPeriod.days365 => formulaeTable.installs365d,
     };
-
-    if (column == null) return [];
 
     return (select(formulaeTable)
           ..where((t) => column.isNotNull())
@@ -434,17 +420,14 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
 
   @override
   Future<List<CaskModel>> getMostDownloadedCasks(
-    String period, {
+    AnalyticsPeriod period, {
     int limit = 10,
   }) async {
     final column = switch (period) {
-      '30d' => casksTable.installs30d,
-      '90d' => casksTable.installs90d,
-      '365d' => casksTable.installs365d,
-      _ => null,
+      AnalyticsPeriod.days30 => casksTable.installs30d,
+      AnalyticsPeriod.days90 => casksTable.installs90d,
+      AnalyticsPeriod.days365 => casksTable.installs365d,
     };
-
-    if (column == null) return [];
 
     return (select(casksTable)
           ..where((t) => column.isNotNull())
