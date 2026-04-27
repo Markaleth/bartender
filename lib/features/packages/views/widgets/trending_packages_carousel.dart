@@ -4,11 +4,12 @@ import 'package:bartender/common_widgets/brew_card.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
-import 'package:bartender/data/models/analytics/category/category_analytics_model.dart';
+import 'package:bartender/data/models/cask/cask_model.dart';
+import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:flutter/material.dart';
 
 class TrendingPackagesCarousel extends StatefulWidget {
-  final List<List<CategoryAnalyticsItem>> pages;
+  final List<List<dynamic>> pages;
 
   const TrendingPackagesCarousel({super.key, required this.pages});
 
@@ -101,7 +102,7 @@ class _TrendingPackagesCarouselState extends State<TrendingPackagesCarousel> {
 }
 
 class _CarouselPage extends StatelessWidget {
-  final List<CategoryAnalyticsItem> items;
+  final List<dynamic> items;
   final int itemsPerPage;
 
   const _CarouselPage({
@@ -124,9 +125,9 @@ class _CarouselPage extends StatelessWidget {
               padding: EdgeInsets.only(right: isLastItem ? 0 : spacingS),
               child: item != null
                   ? BrewCard(
-                      title: item.cask ?? item.formula!,
+                      title: item is FormulaModel ? item.name : (item as CaskModel).token,
                       onInstall: () => log(
-                        'Install tapped for ${item.cask ?? item.formula!}',
+                        'Install tapped for ${item is FormulaModel ? item.name : item.token}',
                       ),
                     )
                   : const SizedBox.shrink(),

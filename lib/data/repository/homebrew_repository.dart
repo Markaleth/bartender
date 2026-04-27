@@ -36,6 +36,35 @@ class HomebrewRepository {
   }
 
   // Bulk endpoints
+  Future<void> syncAllData() async {
+    final isDbEmpty = await _database.isDatabaseEmpty();
+    if (isDbEmpty) {
+      await Future.wait([
+        syncFormulae(),
+        syncCasks(),
+      ]);
+      await Future.wait([
+        syncFormulaeAnalytics('install-on-request', '30d'),
+        syncFormulaeAnalytics('install-on-request', '90d'),
+        syncFormulaeAnalytics('install-on-request', '365d'),
+        syncCasksAnalytics('30d'),
+        syncCasksAnalytics('90d'),
+        syncCasksAnalytics('365d'),
+      ]);
+    } else {
+      await Future.wait([
+        syncFormulae(),
+        syncCasks(),
+        syncFormulaeAnalytics('install-on-request', '30d'),
+        syncFormulaeAnalytics('install-on-request', '90d'),
+        syncFormulaeAnalytics('install-on-request', '365d'),
+        syncCasksAnalytics('30d'),
+        syncCasksAnalytics('90d'),
+        syncCasksAnalytics('365d'),
+      ]);
+    }
+  }
+
   Future<void> syncFormulae() async {
     const endpoint = '/formula.json';
     final currentETag = await _database.getETag(endpoint);
@@ -92,7 +121,7 @@ class HomebrewRepository {
       }
       if (response.data != null) {
         final items = response.data!.formulae.values.expand((e) => e).toList();
-        await _database.cacheFormulaeAnalytics(days, items);
+        await _database.updateFormulaeAnalyticsBatch(items, days);
         if (response.eTag != null) {
           await _database.saveETag(endpoint, response.eTag!);
         }
@@ -113,7 +142,7 @@ class HomebrewRepository {
       }
       if (response.data != null) {
         final items = response.data!.casks.values.expand((e) => e).toList();
-        await _database.cacheCasksAnalytics(days, items);
+        await _database.updateCasksAnalyticsBatch(items, days);
         if (response.eTag != null) {
           await _database.saveETag(endpoint, response.eTag!);
         }
@@ -150,4 +179,6 @@ class HomebrewRepository {
   Future<List<CaskModel>> getAllCasks() => _database.getAllCasks();
   Future<List<FormulaModel>> searchFormulae(String query) => _database.searchFormulae(query);
   Future<List<CaskModel>> searchCasks(String query) => _database.searchCasks(query);
+  Future<List<FormulaModel>> getTrendingFormulae(String period, {int limit = 10}) => _database.getMostDownloadedFormulae(period, limit: limit);
+  Future<List<CaskModel>> getTrendingCasks(String period, {int limit = 10}) => _database.getMostDownloadedCasks(period, limit: limit);
 }

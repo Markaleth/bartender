@@ -4,6 +4,7 @@ import 'package:bartender/core/constants/app_strings.dart';
 
 class BrewCard extends StatelessWidget {
   final String title;
+  
 
   final VoidCallback? onInstall;
 
@@ -20,6 +21,8 @@ class BrewCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(title, style: Theme.of(context).textTheme.titleMedium),
+              Text(title, style: Theme.of(context).textTheme.titleMedium),
               Text(title, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: spacingL),
               Spacer(),

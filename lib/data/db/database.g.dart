@@ -170,6 +170,39 @@ class $CasksTableTable extends CasksTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   ).withConverter<Map<String, dynamic>?>($CasksTableTable.$converteranalyticsn);
+  static const VerificationMeta _installs30dMeta = const VerificationMeta(
+    'installs30d',
+  );
+  @override
+  late final GeneratedColumn<int> installs30d = GeneratedColumn<int>(
+    'installs30d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _installs90dMeta = const VerificationMeta(
+    'installs90d',
+  );
+  @override
+  late final GeneratedColumn<int> installs90d = GeneratedColumn<int>(
+    'installs90d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _installs365dMeta = const VerificationMeta(
+    'installs365d',
+  );
+  @override
+  late final GeneratedColumn<int> installs365d = GeneratedColumn<int>(
+    'installs365d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _generatedDateMeta = const VerificationMeta(
     'generatedDate',
   );
@@ -197,6 +230,9 @@ class $CasksTableTable extends CasksTable
     disabled,
     isInstalled,
     analytics,
+    installs30d,
+    installs90d,
+    installs365d,
     generatedDate,
   ];
   @override
@@ -287,6 +323,33 @@ class $CasksTableTable extends CasksTable
         ),
       );
     }
+    if (data.containsKey('installs30d')) {
+      context.handle(
+        _installs30dMeta,
+        installs30d.isAcceptableOrUnknown(
+          data['installs30d']!,
+          _installs30dMeta,
+        ),
+      );
+    }
+    if (data.containsKey('installs90d')) {
+      context.handle(
+        _installs90dMeta,
+        installs90d.isAcceptableOrUnknown(
+          data['installs90d']!,
+          _installs90dMeta,
+        ),
+      );
+    }
+    if (data.containsKey('installs365d')) {
+      context.handle(
+        _installs365dMeta,
+        installs365d.isAcceptableOrUnknown(
+          data['installs365d']!,
+          _installs365dMeta,
+        ),
+      );
+    }
     if (data.containsKey('generated_date')) {
       context.handle(
         _generatedDateMeta,
@@ -367,6 +430,18 @@ class $CasksTableTable extends CasksTable
           data['${effectivePrefix}analytics'],
         ),
       ),
+      installs30d: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}installs30d'],
+      ),
+      installs90d: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}installs90d'],
+      ),
+      installs365d: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}installs365d'],
+      ),
       generatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}generated_date'],
@@ -406,6 +481,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   final Value<bool> disabled;
   final Value<bool> isInstalled;
   final Value<Map<String, dynamic>?> analytics;
+  final Value<int?> installs30d;
+  final Value<int?> installs90d;
+  final Value<int?> installs365d;
   final Value<String?> generatedDate;
   final Value<int> rowid;
   const CasksTableCompanion({
@@ -423,6 +501,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
+    this.installs30d = const Value.absent(),
+    this.installs90d = const Value.absent(),
+    this.installs365d = const Value.absent(),
     this.generatedDate = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -441,6 +522,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
+    this.installs30d = const Value.absent(),
+    this.installs90d = const Value.absent(),
+    this.installs365d = const Value.absent(),
     this.generatedDate = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : token = Value(token),
@@ -461,6 +545,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     Expression<bool>? disabled,
     Expression<bool>? isInstalled,
     Expression<String>? analytics,
+    Expression<int>? installs30d,
+    Expression<int>? installs90d,
+    Expression<int>? installs365d,
     Expression<String>? generatedDate,
     Expression<int>? rowid,
   }) {
@@ -479,6 +566,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
       if (disabled != null) 'disabled': disabled,
       if (isInstalled != null) 'is_installed': isInstalled,
       if (analytics != null) 'analytics': analytics,
+      if (installs30d != null) 'installs30d': installs30d,
+      if (installs90d != null) 'installs90d': installs90d,
+      if (installs365d != null) 'installs365d': installs365d,
       if (generatedDate != null) 'generated_date': generatedDate,
       if (rowid != null) 'rowid': rowid,
     });
@@ -499,6 +589,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     Value<bool>? disabled,
     Value<bool>? isInstalled,
     Value<Map<String, dynamic>?>? analytics,
+    Value<int?>? installs30d,
+    Value<int?>? installs90d,
+    Value<int?>? installs365d,
     Value<String?>? generatedDate,
     Value<int>? rowid,
   }) {
@@ -517,6 +610,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
       disabled: disabled ?? this.disabled,
       isInstalled: isInstalled ?? this.isInstalled,
       analytics: analytics ?? this.analytics,
+      installs30d: installs30d ?? this.installs30d,
+      installs90d: installs90d ?? this.installs90d,
+      installs365d: installs365d ?? this.installs365d,
       generatedDate: generatedDate ?? this.generatedDate,
       rowid: rowid ?? this.rowid,
     );
@@ -573,6 +669,15 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
         $CasksTableTable.$converteranalyticsn.toSql(analytics.value),
       );
     }
+    if (installs30d.present) {
+      map['installs30d'] = Variable<int>(installs30d.value);
+    }
+    if (installs90d.present) {
+      map['installs90d'] = Variable<int>(installs90d.value);
+    }
+    if (installs365d.present) {
+      map['installs365d'] = Variable<int>(installs365d.value);
+    }
     if (generatedDate.present) {
       map['generated_date'] = Variable<String>(generatedDate.value);
     }
@@ -599,6 +704,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
           ..write('disabled: $disabled, ')
           ..write('isInstalled: $isInstalled, ')
           ..write('analytics: $analytics, ')
+          ..write('installs30d: $installs30d, ')
+          ..write('installs90d: $installs90d, ')
+          ..write('installs365d: $installs365d, ')
           ..write('generatedDate: $generatedDate, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -626,6 +734,9 @@ class _$CaskModelInsertable implements Insertable<CaskModel> {
       disabled: Value(_object.disabled),
       isInstalled: Value(_object.isInstalled),
       analytics: Value(_object.analytics),
+      installs30d: Value(_object.installs30d),
+      installs90d: Value(_object.installs90d),
+      installs365d: Value(_object.installs365d),
       generatedDate: Value(_object.generatedDate),
     ).toColumns(false);
   }
@@ -805,6 +916,39 @@ class $FormulaeTableTable extends FormulaeTable
       ).withConverter<Map<String, dynamic>?>(
         $FormulaeTableTable.$converteranalyticsn,
       );
+  static const VerificationMeta _installs30dMeta = const VerificationMeta(
+    'installs30d',
+  );
+  @override
+  late final GeneratedColumn<int> installs30d = GeneratedColumn<int>(
+    'installs30d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _installs90dMeta = const VerificationMeta(
+    'installs90d',
+  );
+  @override
+  late final GeneratedColumn<int> installs90d = GeneratedColumn<int>(
+    'installs90d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _installs365dMeta = const VerificationMeta(
+    'installs365d',
+  );
+  @override
+  late final GeneratedColumn<int> installs365d = GeneratedColumn<int>(
+    'installs365d',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _generatedDateMeta = const VerificationMeta(
     'generatedDate',
   );
@@ -832,6 +976,9 @@ class $FormulaeTableTable extends FormulaeTable
     disabled,
     isInstalled,
     analytics,
+    installs30d,
+    installs90d,
+    installs365d,
     generatedDate,
   ];
   @override
@@ -914,6 +1061,33 @@ class $FormulaeTableTable extends FormulaeTable
         isInstalled.isAcceptableOrUnknown(
           data['is_installed']!,
           _isInstalledMeta,
+        ),
+      );
+    }
+    if (data.containsKey('installs30d')) {
+      context.handle(
+        _installs30dMeta,
+        installs30d.isAcceptableOrUnknown(
+          data['installs30d']!,
+          _installs30dMeta,
+        ),
+      );
+    }
+    if (data.containsKey('installs90d')) {
+      context.handle(
+        _installs90dMeta,
+        installs90d.isAcceptableOrUnknown(
+          data['installs90d']!,
+          _installs90dMeta,
+        ),
+      );
+    }
+    if (data.containsKey('installs365d')) {
+      context.handle(
+        _installs365dMeta,
+        installs365d.isAcceptableOrUnknown(
+          data['installs365d']!,
+          _installs365dMeta,
         ),
       );
     }
@@ -1000,6 +1174,18 @@ class $FormulaeTableTable extends FormulaeTable
           data['${effectivePrefix}analytics'],
         ),
       ),
+      installs30d: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}installs30d'],
+      ),
+      installs90d: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}installs90d'],
+      ),
+      installs365d: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}installs365d'],
+      ),
       generatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}generated_date'],
@@ -1039,6 +1225,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
   final Value<bool> disabled;
   final Value<bool> isInstalled;
   final Value<Map<String, dynamic>?> analytics;
+  final Value<int?> installs30d;
+  final Value<int?> installs90d;
+  final Value<int?> installs365d;
   final Value<String?> generatedDate;
   final Value<int> rowid;
   const FormulaeTableCompanion({
@@ -1056,6 +1245,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
+    this.installs30d = const Value.absent(),
+    this.installs90d = const Value.absent(),
+    this.installs365d = const Value.absent(),
     this.generatedDate = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -1074,6 +1266,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
+    this.installs30d = const Value.absent(),
+    this.installs90d = const Value.absent(),
+    this.installs365d = const Value.absent(),
     this.generatedDate = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : name = Value(name),
@@ -1098,6 +1293,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Expression<bool>? disabled,
     Expression<bool>? isInstalled,
     Expression<String>? analytics,
+    Expression<int>? installs30d,
+    Expression<int>? installs90d,
+    Expression<int>? installs365d,
     Expression<String>? generatedDate,
     Expression<int>? rowid,
   }) {
@@ -1116,6 +1314,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       if (disabled != null) 'disabled': disabled,
       if (isInstalled != null) 'is_installed': isInstalled,
       if (analytics != null) 'analytics': analytics,
+      if (installs30d != null) 'installs30d': installs30d,
+      if (installs90d != null) 'installs90d': installs90d,
+      if (installs365d != null) 'installs365d': installs365d,
       if (generatedDate != null) 'generated_date': generatedDate,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1136,6 +1337,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Value<bool>? disabled,
     Value<bool>? isInstalled,
     Value<Map<String, dynamic>?>? analytics,
+    Value<int?>? installs30d,
+    Value<int?>? installs90d,
+    Value<int?>? installs365d,
     Value<String?>? generatedDate,
     Value<int>? rowid,
   }) {
@@ -1154,6 +1358,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       disabled: disabled ?? this.disabled,
       isInstalled: isInstalled ?? this.isInstalled,
       analytics: analytics ?? this.analytics,
+      installs30d: installs30d ?? this.installs30d,
+      installs90d: installs90d ?? this.installs90d,
+      installs365d: installs365d ?? this.installs365d,
       generatedDate: generatedDate ?? this.generatedDate,
       rowid: rowid ?? this.rowid,
     );
@@ -1214,6 +1421,15 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
         $FormulaeTableTable.$converteranalyticsn.toSql(analytics.value),
       );
     }
+    if (installs30d.present) {
+      map['installs30d'] = Variable<int>(installs30d.value);
+    }
+    if (installs90d.present) {
+      map['installs90d'] = Variable<int>(installs90d.value);
+    }
+    if (installs365d.present) {
+      map['installs365d'] = Variable<int>(installs365d.value);
+    }
     if (generatedDate.present) {
       map['generated_date'] = Variable<String>(generatedDate.value);
     }
@@ -1240,6 +1456,9 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
           ..write('disabled: $disabled, ')
           ..write('isInstalled: $isInstalled, ')
           ..write('analytics: $analytics, ')
+          ..write('installs30d: $installs30d, ')
+          ..write('installs90d: $installs90d, ')
+          ..write('installs365d: $installs365d, ')
           ..write('generatedDate: $generatedDate, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1267,6 +1486,9 @@ class _$FormulaModelInsertable implements Insertable<FormulaModel> {
       disabled: Value(_object.disabled),
       isInstalled: Value(_object.isInstalled),
       analytics: Value(_object.analytics),
+      installs30d: Value(_object.installs30d),
+      installs90d: Value(_object.installs90d),
+      installs365d: Value(_object.installs365d),
       generatedDate: Value(_object.generatedDate),
     ).toColumns(false);
   }
@@ -1275,640 +1497,6 @@ class _$FormulaModelInsertable implements Insertable<FormulaModel> {
 extension FormulaModelToInsertable on FormulaModel {
   _$FormulaModelInsertable toInsertable() {
     return _$FormulaModelInsertable(this);
-  }
-}
-
-class $CasksAnalyticsTableTable extends CasksAnalyticsTable
-    with TableInfo<$CasksAnalyticsTableTable, CasksAnalyticsTableData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $CasksAnalyticsTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _caskMeta = const VerificationMeta('cask');
-  @override
-  late final GeneratedColumn<String> cask = GeneratedColumn<String>(
-    'cask',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _countMeta = const VerificationMeta('count');
-  @override
-  late final GeneratedColumn<String> count = GeneratedColumn<String>(
-    'count',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _percentMeta = const VerificationMeta(
-    'percent',
-  );
-  @override
-  late final GeneratedColumn<String> percent = GeneratedColumn<String>(
-    'percent',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _periodMeta = const VerificationMeta('period');
-  @override
-  late final GeneratedColumn<String> period = GeneratedColumn<String>(
-    'period',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  @override
-  List<GeneratedColumn> get $columns => [cask, count, percent, period];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'casks_analytics_table';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<CasksAnalyticsTableData> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('cask')) {
-      context.handle(
-        _caskMeta,
-        cask.isAcceptableOrUnknown(data['cask']!, _caskMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_caskMeta);
-    }
-    if (data.containsKey('count')) {
-      context.handle(
-        _countMeta,
-        count.isAcceptableOrUnknown(data['count']!, _countMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_countMeta);
-    }
-    if (data.containsKey('percent')) {
-      context.handle(
-        _percentMeta,
-        percent.isAcceptableOrUnknown(data['percent']!, _percentMeta),
-      );
-    }
-    if (data.containsKey('period')) {
-      context.handle(
-        _periodMeta,
-        period.isAcceptableOrUnknown(data['period']!, _periodMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_periodMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {cask, period};
-  @override
-  CasksAnalyticsTableData map(
-    Map<String, dynamic> data, {
-    String? tablePrefix,
-  }) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return CasksAnalyticsTableData(
-      cask: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}cask'],
-      )!,
-      count: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}count'],
-      )!,
-      percent: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}percent'],
-      ),
-      period: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}period'],
-      )!,
-    );
-  }
-
-  @override
-  $CasksAnalyticsTableTable createAlias(String alias) {
-    return $CasksAnalyticsTableTable(attachedDatabase, alias);
-  }
-}
-
-class CasksAnalyticsTableData extends DataClass
-    implements Insertable<CasksAnalyticsTableData> {
-  final String cask;
-  final String count;
-  final String? percent;
-  final String period;
-  const CasksAnalyticsTableData({
-    required this.cask,
-    required this.count,
-    this.percent,
-    required this.period,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['cask'] = Variable<String>(cask);
-    map['count'] = Variable<String>(count);
-    if (!nullToAbsent || percent != null) {
-      map['percent'] = Variable<String>(percent);
-    }
-    map['period'] = Variable<String>(period);
-    return map;
-  }
-
-  CasksAnalyticsTableCompanion toCompanion(bool nullToAbsent) {
-    return CasksAnalyticsTableCompanion(
-      cask: Value(cask),
-      count: Value(count),
-      percent: percent == null && nullToAbsent
-          ? const Value.absent()
-          : Value(percent),
-      period: Value(period),
-    );
-  }
-
-  factory CasksAnalyticsTableData.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return CasksAnalyticsTableData(
-      cask: serializer.fromJson<String>(json['cask']),
-      count: serializer.fromJson<String>(json['count']),
-      percent: serializer.fromJson<String?>(json['percent']),
-      period: serializer.fromJson<String>(json['period']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'cask': serializer.toJson<String>(cask),
-      'count': serializer.toJson<String>(count),
-      'percent': serializer.toJson<String?>(percent),
-      'period': serializer.toJson<String>(period),
-    };
-  }
-
-  CasksAnalyticsTableData copyWith({
-    String? cask,
-    String? count,
-    Value<String?> percent = const Value.absent(),
-    String? period,
-  }) => CasksAnalyticsTableData(
-    cask: cask ?? this.cask,
-    count: count ?? this.count,
-    percent: percent.present ? percent.value : this.percent,
-    period: period ?? this.period,
-  );
-  CasksAnalyticsTableData copyWithCompanion(CasksAnalyticsTableCompanion data) {
-    return CasksAnalyticsTableData(
-      cask: data.cask.present ? data.cask.value : this.cask,
-      count: data.count.present ? data.count.value : this.count,
-      percent: data.percent.present ? data.percent.value : this.percent,
-      period: data.period.present ? data.period.value : this.period,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('CasksAnalyticsTableData(')
-          ..write('cask: $cask, ')
-          ..write('count: $count, ')
-          ..write('percent: $percent, ')
-          ..write('period: $period')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(cask, count, percent, period);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is CasksAnalyticsTableData &&
-          other.cask == this.cask &&
-          other.count == this.count &&
-          other.percent == this.percent &&
-          other.period == this.period);
-}
-
-class CasksAnalyticsTableCompanion
-    extends UpdateCompanion<CasksAnalyticsTableData> {
-  final Value<String> cask;
-  final Value<String> count;
-  final Value<String?> percent;
-  final Value<String> period;
-  final Value<int> rowid;
-  const CasksAnalyticsTableCompanion({
-    this.cask = const Value.absent(),
-    this.count = const Value.absent(),
-    this.percent = const Value.absent(),
-    this.period = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  CasksAnalyticsTableCompanion.insert({
-    required String cask,
-    required String count,
-    this.percent = const Value.absent(),
-    required String period,
-    this.rowid = const Value.absent(),
-  }) : cask = Value(cask),
-       count = Value(count),
-       period = Value(period);
-  static Insertable<CasksAnalyticsTableData> custom({
-    Expression<String>? cask,
-    Expression<String>? count,
-    Expression<String>? percent,
-    Expression<String>? period,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (cask != null) 'cask': cask,
-      if (count != null) 'count': count,
-      if (percent != null) 'percent': percent,
-      if (period != null) 'period': period,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  CasksAnalyticsTableCompanion copyWith({
-    Value<String>? cask,
-    Value<String>? count,
-    Value<String?>? percent,
-    Value<String>? period,
-    Value<int>? rowid,
-  }) {
-    return CasksAnalyticsTableCompanion(
-      cask: cask ?? this.cask,
-      count: count ?? this.count,
-      percent: percent ?? this.percent,
-      period: period ?? this.period,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (cask.present) {
-      map['cask'] = Variable<String>(cask.value);
-    }
-    if (count.present) {
-      map['count'] = Variable<String>(count.value);
-    }
-    if (percent.present) {
-      map['percent'] = Variable<String>(percent.value);
-    }
-    if (period.present) {
-      map['period'] = Variable<String>(period.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('CasksAnalyticsTableCompanion(')
-          ..write('cask: $cask, ')
-          ..write('count: $count, ')
-          ..write('percent: $percent, ')
-          ..write('period: $period, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $FormulaeAnalyticsTableTable extends FormulaeAnalyticsTable
-    with TableInfo<$FormulaeAnalyticsTableTable, FormulaeAnalyticsTableData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $FormulaeAnalyticsTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _formulaMeta = const VerificationMeta(
-    'formula',
-  );
-  @override
-  late final GeneratedColumn<String> formula = GeneratedColumn<String>(
-    'formula',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _countMeta = const VerificationMeta('count');
-  @override
-  late final GeneratedColumn<String> count = GeneratedColumn<String>(
-    'count',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _percentMeta = const VerificationMeta(
-    'percent',
-  );
-  @override
-  late final GeneratedColumn<String> percent = GeneratedColumn<String>(
-    'percent',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _periodMeta = const VerificationMeta('period');
-  @override
-  late final GeneratedColumn<String> period = GeneratedColumn<String>(
-    'period',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  @override
-  List<GeneratedColumn> get $columns => [formula, count, percent, period];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'formulae_analytics_table';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<FormulaeAnalyticsTableData> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('formula')) {
-      context.handle(
-        _formulaMeta,
-        formula.isAcceptableOrUnknown(data['formula']!, _formulaMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_formulaMeta);
-    }
-    if (data.containsKey('count')) {
-      context.handle(
-        _countMeta,
-        count.isAcceptableOrUnknown(data['count']!, _countMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_countMeta);
-    }
-    if (data.containsKey('percent')) {
-      context.handle(
-        _percentMeta,
-        percent.isAcceptableOrUnknown(data['percent']!, _percentMeta),
-      );
-    }
-    if (data.containsKey('period')) {
-      context.handle(
-        _periodMeta,
-        period.isAcceptableOrUnknown(data['period']!, _periodMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_periodMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {formula, period};
-  @override
-  FormulaeAnalyticsTableData map(
-    Map<String, dynamic> data, {
-    String? tablePrefix,
-  }) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return FormulaeAnalyticsTableData(
-      formula: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}formula'],
-      )!,
-      count: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}count'],
-      )!,
-      percent: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}percent'],
-      ),
-      period: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}period'],
-      )!,
-    );
-  }
-
-  @override
-  $FormulaeAnalyticsTableTable createAlias(String alias) {
-    return $FormulaeAnalyticsTableTable(attachedDatabase, alias);
-  }
-}
-
-class FormulaeAnalyticsTableData extends DataClass
-    implements Insertable<FormulaeAnalyticsTableData> {
-  final String formula;
-  final String count;
-  final String? percent;
-  final String period;
-  const FormulaeAnalyticsTableData({
-    required this.formula,
-    required this.count,
-    this.percent,
-    required this.period,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['formula'] = Variable<String>(formula);
-    map['count'] = Variable<String>(count);
-    if (!nullToAbsent || percent != null) {
-      map['percent'] = Variable<String>(percent);
-    }
-    map['period'] = Variable<String>(period);
-    return map;
-  }
-
-  FormulaeAnalyticsTableCompanion toCompanion(bool nullToAbsent) {
-    return FormulaeAnalyticsTableCompanion(
-      formula: Value(formula),
-      count: Value(count),
-      percent: percent == null && nullToAbsent
-          ? const Value.absent()
-          : Value(percent),
-      period: Value(period),
-    );
-  }
-
-  factory FormulaeAnalyticsTableData.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return FormulaeAnalyticsTableData(
-      formula: serializer.fromJson<String>(json['formula']),
-      count: serializer.fromJson<String>(json['count']),
-      percent: serializer.fromJson<String?>(json['percent']),
-      period: serializer.fromJson<String>(json['period']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'formula': serializer.toJson<String>(formula),
-      'count': serializer.toJson<String>(count),
-      'percent': serializer.toJson<String?>(percent),
-      'period': serializer.toJson<String>(period),
-    };
-  }
-
-  FormulaeAnalyticsTableData copyWith({
-    String? formula,
-    String? count,
-    Value<String?> percent = const Value.absent(),
-    String? period,
-  }) => FormulaeAnalyticsTableData(
-    formula: formula ?? this.formula,
-    count: count ?? this.count,
-    percent: percent.present ? percent.value : this.percent,
-    period: period ?? this.period,
-  );
-  FormulaeAnalyticsTableData copyWithCompanion(
-    FormulaeAnalyticsTableCompanion data,
-  ) {
-    return FormulaeAnalyticsTableData(
-      formula: data.formula.present ? data.formula.value : this.formula,
-      count: data.count.present ? data.count.value : this.count,
-      percent: data.percent.present ? data.percent.value : this.percent,
-      period: data.period.present ? data.period.value : this.period,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('FormulaeAnalyticsTableData(')
-          ..write('formula: $formula, ')
-          ..write('count: $count, ')
-          ..write('percent: $percent, ')
-          ..write('period: $period')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(formula, count, percent, period);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is FormulaeAnalyticsTableData &&
-          other.formula == this.formula &&
-          other.count == this.count &&
-          other.percent == this.percent &&
-          other.period == this.period);
-}
-
-class FormulaeAnalyticsTableCompanion
-    extends UpdateCompanion<FormulaeAnalyticsTableData> {
-  final Value<String> formula;
-  final Value<String> count;
-  final Value<String?> percent;
-  final Value<String> period;
-  final Value<int> rowid;
-  const FormulaeAnalyticsTableCompanion({
-    this.formula = const Value.absent(),
-    this.count = const Value.absent(),
-    this.percent = const Value.absent(),
-    this.period = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  FormulaeAnalyticsTableCompanion.insert({
-    required String formula,
-    required String count,
-    this.percent = const Value.absent(),
-    required String period,
-    this.rowid = const Value.absent(),
-  }) : formula = Value(formula),
-       count = Value(count),
-       period = Value(period);
-  static Insertable<FormulaeAnalyticsTableData> custom({
-    Expression<String>? formula,
-    Expression<String>? count,
-    Expression<String>? percent,
-    Expression<String>? period,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (formula != null) 'formula': formula,
-      if (count != null) 'count': count,
-      if (percent != null) 'percent': percent,
-      if (period != null) 'period': period,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  FormulaeAnalyticsTableCompanion copyWith({
-    Value<String>? formula,
-    Value<String>? count,
-    Value<String?>? percent,
-    Value<String>? period,
-    Value<int>? rowid,
-  }) {
-    return FormulaeAnalyticsTableCompanion(
-      formula: formula ?? this.formula,
-      count: count ?? this.count,
-      percent: percent ?? this.percent,
-      period: period ?? this.period,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (formula.present) {
-      map['formula'] = Variable<String>(formula.value);
-    }
-    if (count.present) {
-      map['count'] = Variable<String>(count.value);
-    }
-    if (percent.present) {
-      map['percent'] = Variable<String>(percent.value);
-    }
-    if (period.present) {
-      map['period'] = Variable<String>(period.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('FormulaeAnalyticsTableCompanion(')
-          ..write('formula: $formula, ')
-          ..write('count: $count, ')
-          ..write('percent: $percent, ')
-          ..write('period: $period, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
   }
 }
 
@@ -2685,10 +2273,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CasksTableTable casksTable = $CasksTableTable(this);
   late final $FormulaeTableTable formulaeTable = $FormulaeTableTable(this);
-  late final $CasksAnalyticsTableTable casksAnalyticsTable =
-      $CasksAnalyticsTableTable(this);
-  late final $FormulaeAnalyticsTableTable formulaeAnalyticsTable =
-      $FormulaeAnalyticsTableTable(this);
   late final $CategoryAnalyticsTableTable categoryAnalyticsTable =
       $CategoryAnalyticsTableTable(this);
   late final $SyncMetadataTableTable syncMetadataTable =
@@ -2700,8 +2284,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     casksTable,
     formulaeTable,
-    casksAnalyticsTable,
-    formulaeAnalyticsTable,
     categoryAnalyticsTable,
     syncMetadataTable,
   ];
@@ -2723,6 +2305,9 @@ typedef $$CasksTableTableCreateCompanionBuilder =
       Value<bool> disabled,
       Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
+      Value<int?> installs30d,
+      Value<int?> installs90d,
+      Value<int?> installs365d,
       Value<String?> generatedDate,
       Value<int> rowid,
     });
@@ -2742,6 +2327,9 @@ typedef $$CasksTableTableUpdateCompanionBuilder =
       Value<bool> disabled,
       Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
+      Value<int?> installs30d,
+      Value<int?> installs90d,
+      Value<int?> installs365d,
       Value<String?> generatedDate,
       Value<int> rowid,
     });
@@ -2836,6 +2424,21 @@ class $$CasksTableTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
+  ColumnFilters<int> get installs30d => $composableBuilder(
+    column: $table.installs30d,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get installs90d => $composableBuilder(
+    column: $table.installs90d,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get installs365d => $composableBuilder(
+    column: $table.installs365d,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get generatedDate => $composableBuilder(
     column: $table.generatedDate,
     builder: (column) => ColumnFilters(column),
@@ -2921,6 +2524,21 @@ class $$CasksTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get installs30d => $composableBuilder(
+    column: $table.installs30d,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get installs90d => $composableBuilder(
+    column: $table.installs90d,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get installs365d => $composableBuilder(
+    column: $table.installs365d,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get generatedDate => $composableBuilder(
     column: $table.generatedDate,
     builder: (column) => ColumnOrderings(column),
@@ -2986,6 +2604,21 @@ class $$CasksTableTableAnnotationComposer
   get analytics =>
       $composableBuilder(column: $table.analytics, builder: (column) => column);
 
+  GeneratedColumn<int> get installs30d => $composableBuilder(
+    column: $table.installs30d,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get installs90d => $composableBuilder(
+    column: $table.installs90d,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get installs365d => $composableBuilder(
+    column: $table.installs365d,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get generatedDate => $composableBuilder(
     column: $table.generatedDate,
     builder: (column) => column,
@@ -3037,6 +2670,9 @@ class $$CasksTableTableTableManager
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
+                Value<int?> installs30d = const Value.absent(),
+                Value<int?> installs90d = const Value.absent(),
+                Value<int?> installs365d = const Value.absent(),
                 Value<String?> generatedDate = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CasksTableCompanion(
@@ -3054,6 +2690,9 @@ class $$CasksTableTableTableManager
                 disabled: disabled,
                 isInstalled: isInstalled,
                 analytics: analytics,
+                installs30d: installs30d,
+                installs90d: installs90d,
+                installs365d: installs365d,
                 generatedDate: generatedDate,
                 rowid: rowid,
               ),
@@ -3073,6 +2712,9 @@ class $$CasksTableTableTableManager
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
+                Value<int?> installs30d = const Value.absent(),
+                Value<int?> installs90d = const Value.absent(),
+                Value<int?> installs365d = const Value.absent(),
                 Value<String?> generatedDate = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CasksTableCompanion.insert(
@@ -3090,6 +2732,9 @@ class $$CasksTableTableTableManager
                 disabled: disabled,
                 isInstalled: isInstalled,
                 analytics: analytics,
+                installs30d: installs30d,
+                installs90d: installs90d,
+                installs365d: installs365d,
                 generatedDate: generatedDate,
                 rowid: rowid,
               ),
@@ -3131,6 +2776,9 @@ typedef $$FormulaeTableTableCreateCompanionBuilder =
       Value<bool> disabled,
       Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
+      Value<int?> installs30d,
+      Value<int?> installs90d,
+      Value<int?> installs365d,
       Value<String?> generatedDate,
       Value<int> rowid,
     });
@@ -3150,6 +2798,9 @@ typedef $$FormulaeTableTableUpdateCompanionBuilder =
       Value<bool> disabled,
       Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
+      Value<int?> installs30d,
+      Value<int?> installs90d,
+      Value<int?> installs365d,
       Value<String?> generatedDate,
       Value<int> rowid,
     });
@@ -3241,6 +2892,21 @@ class $$FormulaeTableTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
+  ColumnFilters<int> get installs30d => $composableBuilder(
+    column: $table.installs30d,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get installs90d => $composableBuilder(
+    column: $table.installs90d,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get installs365d => $composableBuilder(
+    column: $table.installs365d,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get generatedDate => $composableBuilder(
     column: $table.generatedDate,
     builder: (column) => ColumnFilters(column),
@@ -3326,6 +2992,21 @@ class $$FormulaeTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get installs30d => $composableBuilder(
+    column: $table.installs30d,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get installs90d => $composableBuilder(
+    column: $table.installs90d,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get installs365d => $composableBuilder(
+    column: $table.installs365d,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get generatedDate => $composableBuilder(
     column: $table.generatedDate,
     builder: (column) => ColumnOrderings(column),
@@ -3394,6 +3075,21 @@ class $$FormulaeTableTableAnnotationComposer
   get analytics =>
       $composableBuilder(column: $table.analytics, builder: (column) => column);
 
+  GeneratedColumn<int> get installs30d => $composableBuilder(
+    column: $table.installs30d,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get installs90d => $composableBuilder(
+    column: $table.installs90d,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get installs365d => $composableBuilder(
+    column: $table.installs365d,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get generatedDate => $composableBuilder(
     column: $table.generatedDate,
     builder: (column) => column,
@@ -3445,6 +3141,9 @@ class $$FormulaeTableTableTableManager
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
+                Value<int?> installs30d = const Value.absent(),
+                Value<int?> installs90d = const Value.absent(),
+                Value<int?> installs365d = const Value.absent(),
                 Value<String?> generatedDate = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => FormulaeTableCompanion(
@@ -3462,6 +3161,9 @@ class $$FormulaeTableTableTableManager
                 disabled: disabled,
                 isInstalled: isInstalled,
                 analytics: analytics,
+                installs30d: installs30d,
+                installs90d: installs90d,
+                installs365d: installs365d,
                 generatedDate: generatedDate,
                 rowid: rowid,
               ),
@@ -3481,6 +3183,9 @@ class $$FormulaeTableTableTableManager
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
+                Value<int?> installs30d = const Value.absent(),
+                Value<int?> installs90d = const Value.absent(),
+                Value<int?> installs365d = const Value.absent(),
                 Value<String?> generatedDate = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => FormulaeTableCompanion.insert(
@@ -3498,6 +3203,9 @@ class $$FormulaeTableTableTableManager
                 disabled: disabled,
                 isInstalled: isInstalled,
                 analytics: analytics,
+                installs30d: installs30d,
+                installs90d: installs90d,
+                installs365d: installs365d,
                 generatedDate: generatedDate,
                 rowid: rowid,
               ),
@@ -3524,403 +3232,6 @@ typedef $$FormulaeTableTableProcessedTableManager =
         BaseReferences<_$AppDatabase, $FormulaeTableTable, FormulaModel>,
       ),
       FormulaModel,
-      PrefetchHooks Function()
-    >;
-typedef $$CasksAnalyticsTableTableCreateCompanionBuilder =
-    CasksAnalyticsTableCompanion Function({
-      required String cask,
-      required String count,
-      Value<String?> percent,
-      required String period,
-      Value<int> rowid,
-    });
-typedef $$CasksAnalyticsTableTableUpdateCompanionBuilder =
-    CasksAnalyticsTableCompanion Function({
-      Value<String> cask,
-      Value<String> count,
-      Value<String?> percent,
-      Value<String> period,
-      Value<int> rowid,
-    });
-
-class $$CasksAnalyticsTableTableFilterComposer
-    extends Composer<_$AppDatabase, $CasksAnalyticsTableTable> {
-  $$CasksAnalyticsTableTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get cask => $composableBuilder(
-    column: $table.cask,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get count => $composableBuilder(
-    column: $table.count,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get percent => $composableBuilder(
-    column: $table.percent,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get period => $composableBuilder(
-    column: $table.period,
-    builder: (column) => ColumnFilters(column),
-  );
-}
-
-class $$CasksAnalyticsTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $CasksAnalyticsTableTable> {
-  $$CasksAnalyticsTableTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get cask => $composableBuilder(
-    column: $table.cask,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get count => $composableBuilder(
-    column: $table.count,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get percent => $composableBuilder(
-    column: $table.percent,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get period => $composableBuilder(
-    column: $table.period,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$CasksAnalyticsTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $CasksAnalyticsTableTable> {
-  $$CasksAnalyticsTableTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get cask =>
-      $composableBuilder(column: $table.cask, builder: (column) => column);
-
-  GeneratedColumn<String> get count =>
-      $composableBuilder(column: $table.count, builder: (column) => column);
-
-  GeneratedColumn<String> get percent =>
-      $composableBuilder(column: $table.percent, builder: (column) => column);
-
-  GeneratedColumn<String> get period =>
-      $composableBuilder(column: $table.period, builder: (column) => column);
-}
-
-class $$CasksAnalyticsTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $CasksAnalyticsTableTable,
-          CasksAnalyticsTableData,
-          $$CasksAnalyticsTableTableFilterComposer,
-          $$CasksAnalyticsTableTableOrderingComposer,
-          $$CasksAnalyticsTableTableAnnotationComposer,
-          $$CasksAnalyticsTableTableCreateCompanionBuilder,
-          $$CasksAnalyticsTableTableUpdateCompanionBuilder,
-          (
-            CasksAnalyticsTableData,
-            BaseReferences<
-              _$AppDatabase,
-              $CasksAnalyticsTableTable,
-              CasksAnalyticsTableData
-            >,
-          ),
-          CasksAnalyticsTableData,
-          PrefetchHooks Function()
-        > {
-  $$CasksAnalyticsTableTableTableManager(
-    _$AppDatabase db,
-    $CasksAnalyticsTableTable table,
-  ) : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$CasksAnalyticsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$CasksAnalyticsTableTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer: () =>
-              $$CasksAnalyticsTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
-          updateCompanionCallback:
-              ({
-                Value<String> cask = const Value.absent(),
-                Value<String> count = const Value.absent(),
-                Value<String?> percent = const Value.absent(),
-                Value<String> period = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => CasksAnalyticsTableCompanion(
-                cask: cask,
-                count: count,
-                percent: percent,
-                period: period,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String cask,
-                required String count,
-                Value<String?> percent = const Value.absent(),
-                required String period,
-                Value<int> rowid = const Value.absent(),
-              }) => CasksAnalyticsTableCompanion.insert(
-                cask: cask,
-                count: count,
-                percent: percent,
-                period: period,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
-      );
-}
-
-typedef $$CasksAnalyticsTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $CasksAnalyticsTableTable,
-      CasksAnalyticsTableData,
-      $$CasksAnalyticsTableTableFilterComposer,
-      $$CasksAnalyticsTableTableOrderingComposer,
-      $$CasksAnalyticsTableTableAnnotationComposer,
-      $$CasksAnalyticsTableTableCreateCompanionBuilder,
-      $$CasksAnalyticsTableTableUpdateCompanionBuilder,
-      (
-        CasksAnalyticsTableData,
-        BaseReferences<
-          _$AppDatabase,
-          $CasksAnalyticsTableTable,
-          CasksAnalyticsTableData
-        >,
-      ),
-      CasksAnalyticsTableData,
-      PrefetchHooks Function()
-    >;
-typedef $$FormulaeAnalyticsTableTableCreateCompanionBuilder =
-    FormulaeAnalyticsTableCompanion Function({
-      required String formula,
-      required String count,
-      Value<String?> percent,
-      required String period,
-      Value<int> rowid,
-    });
-typedef $$FormulaeAnalyticsTableTableUpdateCompanionBuilder =
-    FormulaeAnalyticsTableCompanion Function({
-      Value<String> formula,
-      Value<String> count,
-      Value<String?> percent,
-      Value<String> period,
-      Value<int> rowid,
-    });
-
-class $$FormulaeAnalyticsTableTableFilterComposer
-    extends Composer<_$AppDatabase, $FormulaeAnalyticsTableTable> {
-  $$FormulaeAnalyticsTableTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get formula => $composableBuilder(
-    column: $table.formula,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get count => $composableBuilder(
-    column: $table.count,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get percent => $composableBuilder(
-    column: $table.percent,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get period => $composableBuilder(
-    column: $table.period,
-    builder: (column) => ColumnFilters(column),
-  );
-}
-
-class $$FormulaeAnalyticsTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $FormulaeAnalyticsTableTable> {
-  $$FormulaeAnalyticsTableTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get formula => $composableBuilder(
-    column: $table.formula,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get count => $composableBuilder(
-    column: $table.count,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get percent => $composableBuilder(
-    column: $table.percent,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get period => $composableBuilder(
-    column: $table.period,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$FormulaeAnalyticsTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $FormulaeAnalyticsTableTable> {
-  $$FormulaeAnalyticsTableTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get formula =>
-      $composableBuilder(column: $table.formula, builder: (column) => column);
-
-  GeneratedColumn<String> get count =>
-      $composableBuilder(column: $table.count, builder: (column) => column);
-
-  GeneratedColumn<String> get percent =>
-      $composableBuilder(column: $table.percent, builder: (column) => column);
-
-  GeneratedColumn<String> get period =>
-      $composableBuilder(column: $table.period, builder: (column) => column);
-}
-
-class $$FormulaeAnalyticsTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $FormulaeAnalyticsTableTable,
-          FormulaeAnalyticsTableData,
-          $$FormulaeAnalyticsTableTableFilterComposer,
-          $$FormulaeAnalyticsTableTableOrderingComposer,
-          $$FormulaeAnalyticsTableTableAnnotationComposer,
-          $$FormulaeAnalyticsTableTableCreateCompanionBuilder,
-          $$FormulaeAnalyticsTableTableUpdateCompanionBuilder,
-          (
-            FormulaeAnalyticsTableData,
-            BaseReferences<
-              _$AppDatabase,
-              $FormulaeAnalyticsTableTable,
-              FormulaeAnalyticsTableData
-            >,
-          ),
-          FormulaeAnalyticsTableData,
-          PrefetchHooks Function()
-        > {
-  $$FormulaeAnalyticsTableTableTableManager(
-    _$AppDatabase db,
-    $FormulaeAnalyticsTableTable table,
-  ) : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$FormulaeAnalyticsTableTableFilterComposer(
-                $db: db,
-                $table: table,
-              ),
-          createOrderingComposer: () =>
-              $$FormulaeAnalyticsTableTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer: () =>
-              $$FormulaeAnalyticsTableTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
-          updateCompanionCallback:
-              ({
-                Value<String> formula = const Value.absent(),
-                Value<String> count = const Value.absent(),
-                Value<String?> percent = const Value.absent(),
-                Value<String> period = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => FormulaeAnalyticsTableCompanion(
-                formula: formula,
-                count: count,
-                percent: percent,
-                period: period,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String formula,
-                required String count,
-                Value<String?> percent = const Value.absent(),
-                required String period,
-                Value<int> rowid = const Value.absent(),
-              }) => FormulaeAnalyticsTableCompanion.insert(
-                formula: formula,
-                count: count,
-                percent: percent,
-                period: period,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
-      );
-}
-
-typedef $$FormulaeAnalyticsTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $FormulaeAnalyticsTableTable,
-      FormulaeAnalyticsTableData,
-      $$FormulaeAnalyticsTableTableFilterComposer,
-      $$FormulaeAnalyticsTableTableOrderingComposer,
-      $$FormulaeAnalyticsTableTableAnnotationComposer,
-      $$FormulaeAnalyticsTableTableCreateCompanionBuilder,
-      $$FormulaeAnalyticsTableTableUpdateCompanionBuilder,
-      (
-        FormulaeAnalyticsTableData,
-        BaseReferences<
-          _$AppDatabase,
-          $FormulaeAnalyticsTableTable,
-          FormulaeAnalyticsTableData
-        >,
-      ),
-      FormulaeAnalyticsTableData,
       PrefetchHooks Function()
     >;
 typedef $$CategoryAnalyticsTableTableCreateCompanionBuilder =
@@ -4378,13 +3689,6 @@ class $AppDatabaseManager {
       $$CasksTableTableTableManager(_db, _db.casksTable);
   $$FormulaeTableTableTableManager get formulaeTable =>
       $$FormulaeTableTableTableManager(_db, _db.formulaeTable);
-  $$CasksAnalyticsTableTableTableManager get casksAnalyticsTable =>
-      $$CasksAnalyticsTableTableTableManager(_db, _db.casksAnalyticsTable);
-  $$FormulaeAnalyticsTableTableTableManager get formulaeAnalyticsTable =>
-      $$FormulaeAnalyticsTableTableTableManager(
-        _db,
-        _db.formulaeAnalyticsTable,
-      );
   $$CategoryAnalyticsTableTableTableManager get categoryAnalyticsTable =>
       $$CategoryAnalyticsTableTableTableManager(
         _db,

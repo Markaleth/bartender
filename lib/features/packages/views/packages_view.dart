@@ -51,7 +51,7 @@ class PackagesView extends StatelessWidget {
                 SizedBox(height: spacingM),
                   state.trendingData.maybeMap(
                   success: (value) =>
-                      TrendingPackagesCarousel(pages: value.data),
+                      TrendingPackagesCarousel(pages: value.data as List<List<dynamic>>),
                   orElse: () => const SizedBox(
                     height: 220,
                     child: Center(child: CircularProgressIndicator()),

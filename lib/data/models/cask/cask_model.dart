@@ -20,6 +20,9 @@ abstract class CaskModel with _$CaskModel {
     @Default(false) bool disabled,
     @Default(false) @JsonKey(name: 'is_installed') bool isInstalled,
     Map<String, dynamic>? analytics,
+    int? installs30d,
+    int? installs90d,
+    int? installs365d,
     @JsonKey(name: 'generated_date') String? generatedDate,
   }) = _CaskModel;
 

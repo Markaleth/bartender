@@ -1,7 +1,6 @@
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/core/models/package_operations/package_operation.dart';
-import 'package:bartender/data/models/analytics/category/category_analytics_model.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
@@ -13,7 +12,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   final HomebrewRepository _homebrewRepository;
   final PackageRepository _packageRepository;
 
-  static const String _formulaeAnalyticsCategory = 'install-on-request';
   static const String _analyticsPeriod = '30d';
 
   bool _isProcessingQueue = false;
@@ -52,40 +50,32 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   }
 
   Future<void> _syncRemoteData() async {
-    await Future.wait([
-      _homebrewRepository.syncFormulae(),
-      _homebrewRepository.syncCasks(),
-      _homebrewRepository.syncFormulaeAnalytics(
-        _formulaeAnalyticsCategory,
-        _analyticsPeriod,
-      ),
-      _homebrewRepository.syncCasksAnalytics(_analyticsPeriod),
-      _homebrewRepository.syncCategoryAnalytics(
-        _formulaeAnalyticsCategory,
-        _analyticsPeriod,
-      ),
-    ]);
+    await _homebrewRepository.syncAllData();
   }
 
   Future<void> _fetchLocalData() async {
-    final futures = await Future.wait([
-      _homebrewRepository.getAllFormulae(),
-      _homebrewRepository.getAllCasks(),
-      _homebrewRepository.getCategoryAnalytics(
-        _formulaeAnalyticsCategory,
-        _analyticsPeriod,
-      ),
-    ]);
+    final formulae = await _homebrewRepository.getAllFormulae();
+    final casks = await _homebrewRepository.getAllCasks();
 
-    final formulae = futures[0] as List<FormulaModel>;
-    final casks = futures[1] as List<CaskModel>;
-    final trending = futures[2] as List<CategoryAnalyticsItem>;
-    final trendingLimited = trending.take(25).toList();
+    final formulaTrending = await _homebrewRepository.getTrendingFormulae(_analyticsPeriod, limit: 25);
+    final caskTrending = await _homebrewRepository.getTrendingCasks(_analyticsPeriod, limit: 25);
 
-    final chunkedTrending = <List<CategoryAnalyticsItem>>[];
-    for (var i = 0; i < trendingLimited.length; i += 5) {
-      final end = (i + 5 < trendingLimited.length) ? i + 5 : trendingLimited.length;
-      chunkedTrending.add(trendingLimited.sublist(i, end));
+    // Merge and sort by installs descending across both types
+    final allTrending = <dynamic>[...formulaTrending, ...caskTrending];
+    allTrending.sort((a, b) {
+      final aInstalls = _getInstalls(a);
+      final bInstalls = b is FormulaModel 
+          ? b.installs30d ?? 0 
+          : (b as CaskModel).installs30d ?? 0;
+      return bInstalls.compareTo(aInstalls);
+    });
+
+    final topTrending = allTrending.take(25).toList();
+
+    final chunkedTrending = <List<dynamic>>[];
+    for (var i = 0; i < topTrending.length; i += 5) {
+      final end = (i + 5 < topTrending.length) ? i + 5 : topTrending.length;
+      chunkedTrending.add(topTrending.sublist(i, end));
     }
 
     emitState(
@@ -95,6 +85,12 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
         trendingData: FetchState.success(chunkedTrending),
       ),
     );
+  }
+
+  int _getInstalls(dynamic item) {
+    if (item is FormulaModel) return item.installs30d ?? 0;
+    if (item is CaskModel) return item.installs30d ?? 0;
+    return 0;
   }
 
   void queueInstall(String packageId, PackageType type) {

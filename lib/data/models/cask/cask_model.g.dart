@@ -21,6 +21,9 @@ _CaskModel _$CaskModelFromJson(Map<String, dynamic> json) => _CaskModel(
   disabled: json['disabled'] as bool? ?? false,
   isInstalled: json['is_installed'] as bool? ?? false,
   analytics: json['analytics'] as Map<String, dynamic>?,
+  installs30d: (json['installs30d'] as num?)?.toInt(),
+  installs90d: (json['installs90d'] as num?)?.toInt(),
+  installs365d: (json['installs365d'] as num?)?.toInt(),
   generatedDate: json['generated_date'] as String?,
 );
 
@@ -40,5 +43,8 @@ Map<String, dynamic> _$CaskModelToJson(_CaskModel instance) =>
       'disabled': instance.disabled,
       'is_installed': instance.isInstalled,
       'analytics': instance.analytics,
+      'installs30d': instance.installs30d,
+      'installs90d': instance.installs90d,
+      'installs365d': instance.installs365d,
       'generated_date': instance.generatedDate,
     };

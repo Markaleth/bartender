@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackagesState {
 
- String get searchQuery; FetchState<List<CaskModel>> get casksData; FetchState<List<FormulaModel>> get formulaeData; FetchState<List<List<CategoryAnalyticsItem>>> get trendingData; List<PackageOperation> get operationsQueue;
+ String get searchQuery; FetchState<List<CaskModel>> get casksData; FetchState<List<FormulaModel>> get formulaeData; FetchState<List<dynamic>> get trendingData; List<PackageOperation> get operationsQueue;
 /// Create a copy of PackagesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,11 +45,11 @@ abstract mixin class $PackagesStateCopyWith<$Res>  {
   factory $PackagesStateCopyWith(PackagesState value, $Res Function(PackagesState) _then) = _$PackagesStateCopyWithImpl;
 @useResult
 $Res call({
- String searchQuery, FetchState<List<CaskModel>> casksData, FetchState<List<FormulaModel>> formulaeData, FetchState<List<List<CategoryAnalyticsItem>>> trendingData, List<PackageOperation> operationsQueue
+ String searchQuery, FetchState<List<CaskModel>> casksData, FetchState<List<FormulaModel>> formulaeData, FetchState<List<dynamic>> trendingData, List<PackageOperation> operationsQueue
 });
 
 
-$FetchStateCopyWith<List<CaskModel>, $Res> get casksData;$FetchStateCopyWith<List<FormulaModel>, $Res> get formulaeData;$FetchStateCopyWith<List<List<CategoryAnalyticsItem>>, $Res> get trendingData;
+$FetchStateCopyWith<List<CaskModel>, $Res> get casksData;$FetchStateCopyWith<List<FormulaModel>, $Res> get formulaeData;$FetchStateCopyWith<List<dynamic>, $Res> get trendingData;
 
 }
 /// @nodoc
@@ -68,7 +68,7 @@ searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: ca
 as String,casksData: null == casksData ? _self.casksData : casksData // ignore: cast_nullable_to_non_nullable
 as FetchState<List<CaskModel>>,formulaeData: null == formulaeData ? _self.formulaeData : formulaeData // ignore: cast_nullable_to_non_nullable
 as FetchState<List<FormulaModel>>,trendingData: null == trendingData ? _self.trendingData : trendingData // ignore: cast_nullable_to_non_nullable
-as FetchState<List<List<CategoryAnalyticsItem>>>,operationsQueue: null == operationsQueue ? _self.operationsQueue : operationsQueue // ignore: cast_nullable_to_non_nullable
+as FetchState<List<dynamic>>,operationsQueue: null == operationsQueue ? _self.operationsQueue : operationsQueue // ignore: cast_nullable_to_non_nullable
 as List<PackageOperation>,
   ));
 }
@@ -94,9 +94,9 @@ $FetchStateCopyWith<List<FormulaModel>, $Res> get formulaeData {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$FetchStateCopyWith<List<List<CategoryAnalyticsItem>>, $Res> get trendingData {
+$FetchStateCopyWith<List<dynamic>, $Res> get trendingData {
   
-  return $FetchStateCopyWith<List<List<CategoryAnalyticsItem>>, $Res>(_self.trendingData, (value) {
+  return $FetchStateCopyWith<List<dynamic>, $Res>(_self.trendingData, (value) {
     return _then(_self.copyWith(trendingData: value));
   });
 }
@@ -181,7 +181,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<List<CategoryAnalyticsItem>>> trendingData,  List<PackageOperation> operationsQueue)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackagesState() when $default != null:
 return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue);case _:
@@ -202,7 +202,7 @@ return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trend
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<List<CategoryAnalyticsItem>>> trendingData,  List<PackageOperation> operationsQueue)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue)  $default,) {final _that = this;
 switch (_that) {
 case _PackagesState():
 return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue);case _:
@@ -222,7 +222,7 @@ return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trend
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<List<CategoryAnalyticsItem>>> trendingData,  List<PackageOperation> operationsQueue)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue)?  $default,) {final _that = this;
 switch (_that) {
 case _PackagesState() when $default != null:
 return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue);case _:
@@ -243,7 +243,7 @@ class _PackagesState implements PackagesState {
 @override@JsonKey() final  String searchQuery;
 @override@JsonKey() final  FetchState<List<CaskModel>> casksData;
 @override@JsonKey() final  FetchState<List<FormulaModel>> formulaeData;
-@override@JsonKey() final  FetchState<List<List<CategoryAnalyticsItem>>> trendingData;
+@override@JsonKey() final  FetchState<List<dynamic>> trendingData;
  final  List<PackageOperation> _operationsQueue;
 @override@JsonKey() List<PackageOperation> get operationsQueue {
   if (_operationsQueue is EqualUnmodifiableListView) return _operationsQueue;
@@ -282,11 +282,11 @@ abstract mixin class _$PackagesStateCopyWith<$Res> implements $PackagesStateCopy
   factory _$PackagesStateCopyWith(_PackagesState value, $Res Function(_PackagesState) _then) = __$PackagesStateCopyWithImpl;
 @override @useResult
 $Res call({
- String searchQuery, FetchState<List<CaskModel>> casksData, FetchState<List<FormulaModel>> formulaeData, FetchState<List<List<CategoryAnalyticsItem>>> trendingData, List<PackageOperation> operationsQueue
+ String searchQuery, FetchState<List<CaskModel>> casksData, FetchState<List<FormulaModel>> formulaeData, FetchState<List<dynamic>> trendingData, List<PackageOperation> operationsQueue
 });
 
 
-@override $FetchStateCopyWith<List<CaskModel>, $Res> get casksData;@override $FetchStateCopyWith<List<FormulaModel>, $Res> get formulaeData;@override $FetchStateCopyWith<List<List<CategoryAnalyticsItem>>, $Res> get trendingData;
+@override $FetchStateCopyWith<List<CaskModel>, $Res> get casksData;@override $FetchStateCopyWith<List<FormulaModel>, $Res> get formulaeData;@override $FetchStateCopyWith<List<dynamic>, $Res> get trendingData;
 
 }
 /// @nodoc
@@ -305,7 +305,7 @@ searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: ca
 as String,casksData: null == casksData ? _self.casksData : casksData // ignore: cast_nullable_to_non_nullable
 as FetchState<List<CaskModel>>,formulaeData: null == formulaeData ? _self.formulaeData : formulaeData // ignore: cast_nullable_to_non_nullable
 as FetchState<List<FormulaModel>>,trendingData: null == trendingData ? _self.trendingData : trendingData // ignore: cast_nullable_to_non_nullable
-as FetchState<List<List<CategoryAnalyticsItem>>>,operationsQueue: null == operationsQueue ? _self._operationsQueue : operationsQueue // ignore: cast_nullable_to_non_nullable
+as FetchState<List<dynamic>>,operationsQueue: null == operationsQueue ? _self._operationsQueue : operationsQueue // ignore: cast_nullable_to_non_nullable
 as List<PackageOperation>,
   ));
 }
@@ -332,9 +332,9 @@ $FetchStateCopyWith<List<FormulaModel>, $Res> get formulaeData {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$FetchStateCopyWith<List<List<CategoryAnalyticsItem>>, $Res> get trendingData {
+$FetchStateCopyWith<List<dynamic>, $Res> get trendingData {
   
-  return $FetchStateCopyWith<List<List<CategoryAnalyticsItem>>, $Res>(_self.trendingData, (value) {
+  return $FetchStateCopyWith<List<dynamic>, $Res>(_self.trendingData, (value) {
     return _then(_self.copyWith(trendingData: value));
   });
 }

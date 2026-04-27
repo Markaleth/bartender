@@ -18,6 +18,9 @@ class FormulaeTable extends Table {
   BoolColumn get disabled => boolean().withDefault(const Constant(false))();
   BoolColumn get isInstalled => boolean().withDefault(const Constant(false))();
   TextColumn get analytics => text().map(const MapConverter()).nullable()();
+  IntColumn get installs30d => integer().nullable()();
+  IntColumn get installs90d => integer().nullable()();
+  IntColumn get installs365d => integer().nullable()();
   TextColumn get generatedDate => text().nullable()();
 
   @override

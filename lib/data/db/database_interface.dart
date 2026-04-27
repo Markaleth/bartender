@@ -31,16 +31,20 @@ abstract class DatabaseInterface {
   Future<List<FormulaModel>> getFormulaeSortedByDate();
   Future<List<CaskModel>> getCasksSortedByDate();
 
-  Future<void> cacheFormulaeAnalytics(String period, List<FormulaAnalyticsItem> items);
-  Future<void> cacheCasksAnalytics(String period, List<CaskAnalyticsItem> items);
   Future<void> cacheCategoryAnalytics(String category, String period, List<CategoryAnalyticsItem> items);
 
   Future<void> updateFormulaInstallationStatus(String name, bool isInstalled);
   Future<void> updateCaskInstallationStatus(String token, bool isInstalled);
   Future<void> resetAllInstallationStatuses();
 
-  Future<List<FormulaModel>> getMostDownloadedFormulae(String period);
-  Future<List<CaskModel>> getMostDownloadedCasks(String period);
+  Future<void> updateFormulaAnalytics(String name, int installs, String period);
+  Future<void> updateCaskAnalytics(String token, int installs, String period);
+  
+  Future<void> updateFormulaeAnalyticsBatch(List<FormulaAnalyticsItem> items, String period);
+  Future<void> updateCasksAnalyticsBatch(List<CaskAnalyticsItem> items, String period);
+
+  Future<List<FormulaModel>> getMostDownloadedFormulae(String period, {int limit = 10});
+  Future<List<CaskModel>> getMostDownloadedCasks(String period, {int limit = 10});
   Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(String category, String period);
 
   Future<String?> getETag(String endpoint);
