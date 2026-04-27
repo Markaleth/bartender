@@ -49,9 +49,9 @@ class PackagesView extends StatelessWidget {
                   child: Text(popularPackagesSubtitle),
                 ),
                 SizedBox(height: spacingM),
-                state.trendingData.maybeMap(
+                  state.trendingData.maybeMap(
                   success: (value) =>
-                      TrendingPackagesCarousel(items: value.data),
+                      TrendingPackagesCarousel(pages: value.data),
                   orElse: () => const SizedBox(
                     height: 220,
                     child: Center(child: CircularProgressIndicator()),

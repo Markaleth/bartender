@@ -13,7 +13,7 @@ abstract class PackagesState with _$PackagesState {
     @Default('') String searchQuery,
     @Default(FetchState.loading()) FetchState<List<CaskModel>> casksData,
     @Default(FetchState.loading()) FetchState<List<FormulaModel>> formulaeData,
-    @Default(FetchState.loading()) FetchState<List<CategoryAnalyticsItem>> trendingData,
+    @Default(FetchState.loading()) FetchState<List<List<CategoryAnalyticsItem>>> trendingData,
     
     @Default([]) List<PackageOperation> operationsQueue,
   }) = _PackagesState;

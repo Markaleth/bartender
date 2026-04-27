@@ -22,3 +22,4 @@ const double thicknessXl = 8.0;
 
 // Widget Sizes
 const double sideBarWidth = 250.0;
+const double trendingPackageCarouselHeight = 180;

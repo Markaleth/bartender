@@ -82,11 +82,17 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     final trending = futures[2] as List<CategoryAnalyticsItem>;
     final trendingLimited = trending.take(25).toList();
 
+    final chunkedTrending = <List<CategoryAnalyticsItem>>[];
+    for (var i = 0; i < trendingLimited.length; i += 5) {
+      final end = (i + 5 < trendingLimited.length) ? i + 5 : trendingLimited.length;
+      chunkedTrending.add(trendingLimited.sublist(i, end));
+    }
+
     emitState(
       state.copyWith(
         formulaeData: FetchState.success(formulae),
         casksData: FetchState.success(casks),
-        trendingData: FetchState.success(trendingLimited),
+        trendingData: FetchState.success(chunkedTrending),
       ),
     );
   }

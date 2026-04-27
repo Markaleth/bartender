@@ -3,13 +3,14 @@ import 'dart:developer';
 import 'package:bartender/common_widgets/brew_card.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/core/constants/durations.dart';
 import 'package:bartender/data/models/analytics/category/category_analytics_model.dart';
 import 'package:flutter/material.dart';
 
 class TrendingPackagesCarousel extends StatefulWidget {
-  final List<CategoryAnalyticsItem> items;
+  final List<List<CategoryAnalyticsItem>> pages;
 
-  const TrendingPackagesCarousel({super.key, required this.items});
+  const TrendingPackagesCarousel({super.key, required this.pages});
 
   @override
   State<TrendingPackagesCarousel> createState() =>
@@ -27,11 +28,11 @@ class _TrendingPackagesCarouselState extends State<TrendingPackagesCarousel> {
     super.dispose();
   }
 
-  void _goToPage(int page) {
-    if (page >= 0 && page < (widget.items.length / _itemsPerPage).ceil()) {
+  void _goToPage(int page, int pageCount) {
+    if (page >= 0 && page < pageCount) {
       _pageController.animateToPage(
         page,
-        duration: const Duration(milliseconds: 300),
+        duration: defaultAnimationDuration,
         curve: Curves.easeInOut,
       );
     }
@@ -39,16 +40,16 @@ class _TrendingPackagesCarouselState extends State<TrendingPackagesCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.items.isEmpty) return const SizedBox.shrink();
+    if (widget.pages.isEmpty) return const SizedBox.shrink();
 
-    final int pageCount = (widget.items.length / _itemsPerPage).ceil();
+    final int pageCount = widget.pages.length;
 
     return Column(
       children: [
         Stack(
           children: [
             SizedBox(
-              height: 180,
+              height: trendingPackageCarouselHeight,
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (index) {
@@ -58,90 +59,114 @@ class _TrendingPackagesCarouselState extends State<TrendingPackagesCarousel> {
                 },
                 itemCount: pageCount,
                 itemBuilder: (context, pageIndex) {
-                  final startIndex = pageIndex * _itemsPerPage;
-                  final endIndex =
-                      (startIndex + _itemsPerPage > widget.items.length)
-                      ? widget.items.length
-                      : startIndex + _itemsPerPage;
-                  final pageItems = widget.items.sublist(startIndex, endIndex);
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: spacingXl),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: List.generate(_itemsPerPage, (index) {
-                        if (index < pageItems.length) {
-                          final item = pageItems[index];
-                          return Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: index < _itemsPerPage - 1 ? spacingS : 0,
-                              ),
-                              child: BrewCard(
-                                title: item.cask ?? item.formula!,
-                                onInstall: () => log(
-                                  'Install tapped for ${item.cask ?? item.formula!}',
-                                ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: index < _itemsPerPage - 1 ? spacingS : 0,
-                              ),
-                              child: const SizedBox.shrink(),
-                            ),
-                          );
-                        }
-                      }),
-                    ),
+                  return _CarouselPage(
+                    items: widget.pages[pageIndex],
+                    itemsPerPage: _itemsPerPage,
                   );
                 },
               ),
             ),
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  icon: Icon(Icons.chevron_left),
-                  onPressed: () => _goToPage(_currentPage - 1),
-                  color: AppColors.textPrimary,
+            if (_currentPage > 0)
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.chevron_left),
+                    onPressed: () => _goToPage(_currentPage - 1, pageCount),
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-            ),
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  icon: Icon(Icons.chevron_right),
-                  onPressed: () => _goToPage(_currentPage + 1),
-                  color: AppColors.textPrimary,
+            if (_currentPage < pageCount - 1)
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.chevron_right),
+                    onPressed: () => _goToPage(_currentPage + 1, pageCount),
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         const SizedBox(height: spacingM),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            pageCount,
-            (index) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: _currentPage == index
-                    ? AppColors.primary
-                    : AppColors.textTertiary,
-              ),
-            ),
-          ),
+        _PageIndicators(
+          pageCount: pageCount,
+          currentPage: _currentPage,
         ),
       ],
+    );
+  }
+}
+
+class _CarouselPage extends StatelessWidget {
+  final List<CategoryAnalyticsItem> items;
+  final int itemsPerPage;
+
+  const _CarouselPage({
+    required this.items,
+    required this.itemsPerPage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: spacingXl),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: List.generate(itemsPerPage, (index) {
+          final isLastItem = index == itemsPerPage - 1;
+          final item = index < items.length ? items[index] : null;
+
+          return Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(right: isLastItem ? 0 : spacingS),
+              child: item != null
+                  ? BrewCard(
+                      title: item.cask ?? item.formula!,
+                      onInstall: () => log(
+                        'Install tapped for ${item.cask ?? item.formula!}',
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class _PageIndicators extends StatelessWidget {
+  final int pageCount;
+  final int currentPage;
+
+  const _PageIndicators({
+    required this.pageCount,
+    required this.currentPage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (pageCount <= 1) return const SizedBox.shrink();
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        pageCount,
+        (index) => Container(
+          margin: const EdgeInsets.symmetric(horizontal: spacingXs),
+          width: spacingS,
+          height: spacingS,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: currentPage == index
+                ? AppColors.primary
+                : AppColors.textTertiary,
+          ),
+        ),
+      ),
     );
   }
 }
