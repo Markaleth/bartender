@@ -92,10 +92,7 @@ class _TrendingPackagesCarouselState extends State<TrendingPackagesCarousel> {
           ],
         ),
         const SizedBox(height: spacingM),
-        _PageIndicators(
-          pageCount: pageCount,
-          currentPage: _currentPage,
-        ),
+        _PageIndicators(pageCount: pageCount, currentPage: _currentPage),
       ],
     );
   }
@@ -105,10 +102,7 @@ class _CarouselPage extends StatelessWidget {
   final List<dynamic> items;
   final int itemsPerPage;
 
-  const _CarouselPage({
-    required this.items,
-    required this.itemsPerPage,
-  });
+  const _CarouselPage({required this.items, required this.itemsPerPage});
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +119,15 @@ class _CarouselPage extends StatelessWidget {
               padding: EdgeInsets.only(right: isLastItem ? 0 : spacingS),
               child: item != null
                   ? BrewCard(
-                      title: item is FormulaModel ? item.name : (item as CaskModel).token,
+                      title: item is FormulaModel
+                          ? item.name
+                          : (item as CaskModel).token,
+                      description: item is FormulaModel
+                          ? item.desc
+                          : (item as CaskModel).desc,
+                      version: item is FormulaModel
+                          ? item.versions.stable
+                          : (item as CaskModel).version,
                       onInstall: () => log(
                         'Install tapped for ${item is FormulaModel ? item.name : item.token}',
                       ),
@@ -143,10 +145,7 @@ class _PageIndicators extends StatelessWidget {
   final int pageCount;
   final int currentPage;
 
-  const _PageIndicators({
-    required this.pageCount,
-    required this.currentPage,
-  });
+  const _PageIndicators({required this.pageCount, required this.currentPage});
 
   @override
   Widget build(BuildContext context) {

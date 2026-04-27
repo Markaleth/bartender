@@ -57,20 +57,26 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     final formulae = await _homebrewRepository.getAllFormulae();
     final casks = await _homebrewRepository.getAllCasks();
 
-    final formulaTrending = await _homebrewRepository.getTrendingFormulae(_analyticsPeriod, limit: 25);
-    final caskTrending = await _homebrewRepository.getTrendingCasks(_analyticsPeriod, limit: 25);
+    final formulaTrending = await _homebrewRepository.getTrendingFormulae(
+      _analyticsPeriod,
+      limit: 25,
+    );
+    final caskTrending = await _homebrewRepository.getTrendingCasks(
+      _analyticsPeriod,
+      limit: 25,
+    );
 
     // Merge and sort by installs descending across both types
     final allTrending = <dynamic>[...formulaTrending, ...caskTrending];
     allTrending.sort((a, b) {
       final aInstalls = _getInstalls(a);
-      final bInstalls = b is FormulaModel 
-          ? b.installs30d ?? 0 
+      final bInstalls = b is FormulaModel
+          ? b.installs30d ?? 0
           : (b as CaskModel).installs30d ?? 0;
       return bInstalls.compareTo(aInstalls);
     });
 
-    final topTrending = allTrending.take(25).toList();
+    final topTrending = allTrending.take(50).toList();
 
     final chunkedTrending = <List<dynamic>>[];
     for (var i = 0; i < topTrending.length; i += 5) {
