@@ -8,7 +8,7 @@ class IconResolutionService {
   final DefaultCacheManager _cacheManager = DefaultCacheManager();
   
   final Map<String, ResolvedIcon?> _memoryCache = {};
-  final Set<String> _activeFetches = {};
+  final Map<String, Future<ResolvedIcon?>> _pendingFutures = {};
 
   IconResolutionService(this._db);
 
@@ -19,23 +19,12 @@ class IconResolutionService {
 
   /// The main entry point to resolve an icon.
   Future<ResolvedIcon?> getIcon(String packageName, String? homepage, bool isCask) async {
-    // 1. Check Memory Cache
     if (_memoryCache.containsKey(packageName)) {
       return _memoryCache[packageName];
-    }
-
-    // 2. Prevent concurrent fetches for the same package
-    if (_activeFetches.contains(packageName)) {
-      // If a fetch is active, wait for it or just let the caller handle loading state
-      // For simplicity, we could poll or use a Completer map, but returning null 
-      // temporarily and letting the UI rebuild is often enough, or we can await a Completer.
-      // Let's implement a Completer map for true deduping.
     }
     
     return _resolveAndCache(packageName, homepage, isCask);
   }
-  
-  final Map<String, Future<ResolvedIcon?>> _pendingFutures = {};
 
   Future<ResolvedIcon?> _resolveAndCache(String packageName, String? homepage, bool isCask) {
     if (_pendingFutures.containsKey(packageName)) {
@@ -51,18 +40,32 @@ class IconResolutionService {
   }
 
   Future<ResolvedIcon?> _performResolution(String packageName, String? homepage, bool isCask) async {
-    // 3. Check DB Cache
+    final cachedResult = await _checkDatabaseCache(packageName);
+    if (cachedResult != null) return cachedResult;
+
+    final resolvedIcon = await _runWaterfall(packageName, homepage, isCask);
+    if (resolvedIcon != null) return resolvedIcon;
+
+    return _cacheNegativeResult(packageName);
+  }
+
+  Future<ResolvedIcon?> _checkDatabaseCache(String packageName) async {
     final dbResult = await _db.getIconCache(packageName);
-    if (dbResult != null) {
-      final now = DateTime.now();
-      // If it's less than 30 days old, use it
-      if (now.difference(dbResult.resolvedAt).inDays < 30) {
-        _memoryCache[packageName] = dbResult;
-        return dbResult;
-      }
+    if (dbResult == null) return null;
+
+    final isNegativeCache = dbResult.iconUrl == null;
+    final now = DateTime.now();
+    
+    // Return cached result if it's a valid URL, OR if it's a recent negative cache (< 30 days)
+    if (!isNegativeCache || now.difference(dbResult.resolvedAt).inDays < 30) {
+      _memoryCache[packageName] = dbResult;
+      return dbResult;
     }
 
-    // 4. Run Waterfall
+    return null;
+  }
+
+  Future<ResolvedIcon?> _runWaterfall(String packageName, String? homepage, bool isCask) async {
     final uri = homepage != null ? Uri.tryParse(homepage) : null;
     
     for (final builder in IconUrlBuilders.waterfall) {
@@ -72,36 +75,42 @@ class IconResolutionService {
       try {
         // Try to download. This will throw an exception if it's a 404 or fails.
         await _cacheManager.downloadFile(url);
-        
-        // Let's do a basic SVG detection
-        final isSvgResolved = url.toLowerCase().endsWith('.svg');
-
-        final resolvedIcon = ResolvedIcon(
-          packageName: packageName,
-          iconUrl: url,
-          isSvg: isSvgResolved,
-          resolvedAt: DateTime.now(),
-        );
-
-        // Save to DB and Memory
-        await _db.saveIconCache(packageName, url, isSvgResolved);
-        _memoryCache[packageName] = resolvedIcon;
-        return resolvedIcon;
+        return await _cacheSuccessfulResult(packageName, url);
       } catch (e) {
         // Download failed, move to next provider
         continue;
       }
     }
+    
+    return null;
+  }
 
-    // 5. If all fail, cache the negative result to avoid spamming
+  Future<ResolvedIcon> _cacheSuccessfulResult(String packageName, String url) async {
+    final isSvgResolved = url.toLowerCase().endsWith('.svg');
+    final resolvedIcon = ResolvedIcon(
+      packageName: packageName,
+      iconUrl: url,
+      isSvg: isSvgResolved,
+      resolvedAt: DateTime.now(),
+    );
+
+    await _db.saveIconCache(packageName, url, isSvgResolved);
+    _memoryCache[packageName] = resolvedIcon;
+    
+    return resolvedIcon;
+  }
+
+  Future<ResolvedIcon> _cacheNegativeResult(String packageName) async {
     final nullIcon = ResolvedIcon(
       packageName: packageName,
       iconUrl: null,
       isSvg: false,
       resolvedAt: DateTime.now(),
     );
+    
     await _db.saveIconCache(packageName, null, false);
     _memoryCache[packageName] = nullIcon;
+    
     return nullIcon;
   }
 }
