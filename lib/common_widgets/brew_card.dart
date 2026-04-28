@@ -2,11 +2,14 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/common_widgets/package_icon.dart';
 
 class BrewCard extends StatelessWidget {
   final String title;
   final String? description;
   final String version;
+  final String? homepage;
+  final bool isCask;
 
   final VoidCallback? onInstall;
 
@@ -16,6 +19,8 @@ class BrewCard extends StatelessWidget {
     this.onInstall,
     required this.description,
     required this.version,
+    this.homepage,
+    this.isCask = false,
   });
 
   @override
@@ -29,14 +34,28 @@ class BrewCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: spacing2Xl,
-                child: Text(
-                  title,
-                  style: context.titleM,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PackageIcon(
+                    name: title,
+                    homepage: homepage,
+                    isCask: isCask,
+                    size: 32.0,
+                  ),
+                  const SizedBox(width: spacingS),
+                  Expanded(
+                    child: SizedBox(
+                      height: spacing2Xl,
+                      child: Text(
+                        title,
+                        style: context.titleM,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: spacingM),
               Text(

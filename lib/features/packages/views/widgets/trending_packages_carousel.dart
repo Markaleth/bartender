@@ -128,6 +128,10 @@ class _CarouselPage extends StatelessWidget {
                       version: item is FormulaModel
                           ? item.versions.stable
                           : (item as CaskModel).version,
+                      homepage: item is FormulaModel
+                          ? item.homepage
+                          : (item as CaskModel).homepage,
+                      isCask: item is CaskModel,
                       onInstall: () => log(
                         'Install tapped for ${item is FormulaModel ? item.name : item.token}',
                       ),

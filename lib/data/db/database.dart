@@ -7,6 +7,7 @@ import 'package:path/path.dart' as p;
 
 import 'tables/casks_table.dart';
 import 'tables/formulae_table.dart';
+import 'tables/icon_cache_table.dart';
 
 import 'tables/category_analytics_table.dart';
 import 'tables/sync_metadata_table.dart';
@@ -15,6 +16,7 @@ import '../models/formula/formula_model.dart';
 import '../models/analytics/casks/casks_analytics_model.dart';
 import '../models/analytics/formulae/formulae_analytics_model.dart';
 import '../models/analytics/category/category_analytics_model.dart';
+import '../models/icon_cache/resolved_icon.dart';
 import '../../core/enums/analytics_period.dart';
 import 'type_converters.dart';
 import 'database_interface.dart';
@@ -25,6 +27,7 @@ part 'database.g.dart';
   tables: [
     CasksTable,
     FormulaeTable,
+    IconCacheTable,
     // Removed standalone analytics tables
     CategoryAnalyticsTable,
     SyncMetadataTable,
@@ -41,20 +44,6 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
-      },
-      onUpgrade: (Migrator m, int from, int to) async {
-        if (from < 2) {
-          await m.addColumn(formulaeTable, formulaeTable.isInstalled);
-          await m.addColumn(casksTable, casksTable.isInstalled);
-        }
-        // if (from < 3) {
-        //   await m.addColumn(formulaeTable, formulaeTable.installs30d);
-        //   await m.addColumn(formulaeTable, formulaeTable.installs90d);
-        //   await m.addColumn(formulaeTable, formulaeTable.installs365d);
-        //   await m.addColumn(casksTable, casksTable.installs30d);
-        //   await m.addColumn(casksTable, casksTable.installs90d);
-        //   await m.addColumn(casksTable, casksTable.installs365d);
-        // }
       },
     );
   }
@@ -286,34 +275,67 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   }
 
   @override
-  Future<void> updateFormulaAnalytics(String name, int installs, AnalyticsPeriod period) async {
+  Future<void> updateFormulaAnalytics(
+    String name,
+    int installs,
+    AnalyticsPeriod period,
+  ) async {
     final companion = switch (period) {
-      AnalyticsPeriod.days30 => FormulaeTableCompanion(installs30d: Value(installs)),
-      AnalyticsPeriod.days90 => FormulaeTableCompanion(installs90d: Value(installs)),
-      AnalyticsPeriod.days365 => FormulaeTableCompanion(installs365d: Value(installs)),
+      AnalyticsPeriod.days30 => FormulaeTableCompanion(
+        installs30d: Value(installs),
+      ),
+      AnalyticsPeriod.days90 => FormulaeTableCompanion(
+        installs90d: Value(installs),
+      ),
+      AnalyticsPeriod.days365 => FormulaeTableCompanion(
+        installs365d: Value(installs),
+      ),
     };
-    await (update(formulaeTable)..where((t) => t.name.equals(name))).write(companion);
+    await (update(
+      formulaeTable,
+    )..where((t) => t.name.equals(name))).write(companion);
   }
 
   @override
-  Future<void> updateCaskAnalytics(String token, int installs, AnalyticsPeriod period) async {
+  Future<void> updateCaskAnalytics(
+    String token,
+    int installs,
+    AnalyticsPeriod period,
+  ) async {
     final companion = switch (period) {
-      AnalyticsPeriod.days30 => CasksTableCompanion(installs30d: Value(installs)),
-      AnalyticsPeriod.days90 => CasksTableCompanion(installs90d: Value(installs)),
-      AnalyticsPeriod.days365 => CasksTableCompanion(installs365d: Value(installs)),
+      AnalyticsPeriod.days30 => CasksTableCompanion(
+        installs30d: Value(installs),
+      ),
+      AnalyticsPeriod.days90 => CasksTableCompanion(
+        installs90d: Value(installs),
+      ),
+      AnalyticsPeriod.days365 => CasksTableCompanion(
+        installs365d: Value(installs),
+      ),
     };
-    await (update(casksTable)..where((t) => t.token.equals(token))).write(companion);
+    await (update(
+      casksTable,
+    )..where((t) => t.token.equals(token))).write(companion);
   }
 
   @override
-  Future<void> updateFormulaeAnalyticsBatch(List<FormulaAnalyticsItem> items, AnalyticsPeriod period) async {
+  Future<void> updateFormulaeAnalyticsBatch(
+    List<FormulaAnalyticsItem> items,
+    AnalyticsPeriod period,
+  ) async {
     await batch((batch) {
       for (final item in items) {
         final installs = int.tryParse(item.count.replaceAll(',', '')) ?? 0;
         final companion = switch (period) {
-          AnalyticsPeriod.days30 => FormulaeTableCompanion(installs30d: Value(installs)),
-          AnalyticsPeriod.days90 => FormulaeTableCompanion(installs90d: Value(installs)),
-          AnalyticsPeriod.days365 => FormulaeTableCompanion(installs365d: Value(installs)),
+          AnalyticsPeriod.days30 => FormulaeTableCompanion(
+            installs30d: Value(installs),
+          ),
+          AnalyticsPeriod.days90 => FormulaeTableCompanion(
+            installs90d: Value(installs),
+          ),
+          AnalyticsPeriod.days365 => FormulaeTableCompanion(
+            installs365d: Value(installs),
+          ),
         };
         batch.update(
           formulaeTable,
@@ -325,14 +347,23 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   }
 
   @override
-  Future<void> updateCasksAnalyticsBatch(List<CaskAnalyticsItem> items, AnalyticsPeriod period) async {
+  Future<void> updateCasksAnalyticsBatch(
+    List<CaskAnalyticsItem> items,
+    AnalyticsPeriod period,
+  ) async {
     await batch((batch) {
       for (final item in items) {
         final installs = int.tryParse(item.count.replaceAll(',', '')) ?? 0;
         final companion = switch (period) {
-          AnalyticsPeriod.days30 => CasksTableCompanion(installs30d: Value(installs)),
-          AnalyticsPeriod.days90 => CasksTableCompanion(installs90d: Value(installs)),
-          AnalyticsPeriod.days365 => CasksTableCompanion(installs365d: Value(installs)),
+          AnalyticsPeriod.days30 => CasksTableCompanion(
+            installs30d: Value(installs),
+          ),
+          AnalyticsPeriod.days90 => CasksTableCompanion(
+            installs90d: Value(installs),
+          ),
+          AnalyticsPeriod.days365 => CasksTableCompanion(
+            installs365d: Value(installs),
+          ),
         };
         batch.update(
           casksTable,
@@ -381,7 +412,8 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   ) async {
     final results =
         await (select(categoryAnalyticsTable)..where(
-              (t) => t.category.equals(category) & t.period.equals(period.value),
+              (t) =>
+                  t.category.equals(category) & t.period.equals(period.value),
             ))
             .get();
 
@@ -483,6 +515,30 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
     final formulae = await (select(formulaeTable)..limit(1)).get();
     final casks = await (select(casksTable)..limit(1)).get();
     return formulae.isEmpty && casks.isEmpty;
+  }
+
+  @override
+  Future<void> saveIconCache(
+    String packageName,
+    String? iconUrl,
+    bool isSvg,
+  ) async {
+    await into(iconCacheTable).insert(
+      IconCacheTableCompanion.insert(
+        packageName: packageName,
+        iconUrl: Value(iconUrl),
+        isSvg: Value(isSvg),
+        resolvedAt: DateTime.now(),
+      ),
+      mode: InsertMode.insertOrReplace,
+    );
+  }
+
+  @override
+  Future<ResolvedIcon?> getIconCache(String packageName) {
+    return (select(
+      iconCacheTable,
+    )..where((t) => t.packageName.equals(packageName))).getSingleOrNull();
   }
 }
 

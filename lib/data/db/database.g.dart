@@ -1500,6 +1500,249 @@ extension FormulaModelToInsertable on FormulaModel {
   }
 }
 
+class $IconCacheTableTable extends IconCacheTable
+    with TableInfo<$IconCacheTableTable, ResolvedIcon> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IconCacheTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _packageNameMeta = const VerificationMeta(
+    'packageName',
+  );
+  @override
+  late final GeneratedColumn<String> packageName = GeneratedColumn<String>(
+    'package_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _iconUrlMeta = const VerificationMeta(
+    'iconUrl',
+  );
+  @override
+  late final GeneratedColumn<String> iconUrl = GeneratedColumn<String>(
+    'icon_url',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isSvgMeta = const VerificationMeta('isSvg');
+  @override
+  late final GeneratedColumn<bool> isSvg = GeneratedColumn<bool>(
+    'is_svg',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_svg" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _resolvedAtMeta = const VerificationMeta(
+    'resolvedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> resolvedAt = GeneratedColumn<DateTime>(
+    'resolved_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    packageName,
+    iconUrl,
+    isSvg,
+    resolvedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'icon_cache_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ResolvedIcon> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('package_name')) {
+      context.handle(
+        _packageNameMeta,
+        packageName.isAcceptableOrUnknown(
+          data['package_name']!,
+          _packageNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_packageNameMeta);
+    }
+    if (data.containsKey('icon_url')) {
+      context.handle(
+        _iconUrlMeta,
+        iconUrl.isAcceptableOrUnknown(data['icon_url']!, _iconUrlMeta),
+      );
+    }
+    if (data.containsKey('is_svg')) {
+      context.handle(
+        _isSvgMeta,
+        isSvg.isAcceptableOrUnknown(data['is_svg']!, _isSvgMeta),
+      );
+    }
+    if (data.containsKey('resolved_at')) {
+      context.handle(
+        _resolvedAtMeta,
+        resolvedAt.isAcceptableOrUnknown(data['resolved_at']!, _resolvedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_resolvedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {packageName};
+  @override
+  ResolvedIcon map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ResolvedIcon(
+      packageName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}package_name'],
+      )!,
+      iconUrl: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}icon_url'],
+      ),
+      isSvg: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_svg'],
+      )!,
+      resolvedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}resolved_at'],
+      )!,
+    );
+  }
+
+  @override
+  $IconCacheTableTable createAlias(String alias) {
+    return $IconCacheTableTable(attachedDatabase, alias);
+  }
+}
+
+class IconCacheTableCompanion extends UpdateCompanion<ResolvedIcon> {
+  final Value<String> packageName;
+  final Value<String?> iconUrl;
+  final Value<bool> isSvg;
+  final Value<DateTime> resolvedAt;
+  final Value<int> rowid;
+  const IconCacheTableCompanion({
+    this.packageName = const Value.absent(),
+    this.iconUrl = const Value.absent(),
+    this.isSvg = const Value.absent(),
+    this.resolvedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  IconCacheTableCompanion.insert({
+    required String packageName,
+    this.iconUrl = const Value.absent(),
+    this.isSvg = const Value.absent(),
+    required DateTime resolvedAt,
+    this.rowid = const Value.absent(),
+  }) : packageName = Value(packageName),
+       resolvedAt = Value(resolvedAt);
+  static Insertable<ResolvedIcon> custom({
+    Expression<String>? packageName,
+    Expression<String>? iconUrl,
+    Expression<bool>? isSvg,
+    Expression<DateTime>? resolvedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (packageName != null) 'package_name': packageName,
+      if (iconUrl != null) 'icon_url': iconUrl,
+      if (isSvg != null) 'is_svg': isSvg,
+      if (resolvedAt != null) 'resolved_at': resolvedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  IconCacheTableCompanion copyWith({
+    Value<String>? packageName,
+    Value<String?>? iconUrl,
+    Value<bool>? isSvg,
+    Value<DateTime>? resolvedAt,
+    Value<int>? rowid,
+  }) {
+    return IconCacheTableCompanion(
+      packageName: packageName ?? this.packageName,
+      iconUrl: iconUrl ?? this.iconUrl,
+      isSvg: isSvg ?? this.isSvg,
+      resolvedAt: resolvedAt ?? this.resolvedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (packageName.present) {
+      map['package_name'] = Variable<String>(packageName.value);
+    }
+    if (iconUrl.present) {
+      map['icon_url'] = Variable<String>(iconUrl.value);
+    }
+    if (isSvg.present) {
+      map['is_svg'] = Variable<bool>(isSvg.value);
+    }
+    if (resolvedAt.present) {
+      map['resolved_at'] = Variable<DateTime>(resolvedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IconCacheTableCompanion(')
+          ..write('packageName: $packageName, ')
+          ..write('iconUrl: $iconUrl, ')
+          ..write('isSvg: $isSvg, ')
+          ..write('resolvedAt: $resolvedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class _$ResolvedIconInsertable implements Insertable<ResolvedIcon> {
+  ResolvedIcon _object;
+  _$ResolvedIconInsertable(this._object);
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    return IconCacheTableCompanion(
+      packageName: Value(_object.packageName),
+      iconUrl: Value(_object.iconUrl),
+      isSvg: Value(_object.isSvg),
+      resolvedAt: Value(_object.resolvedAt),
+    ).toColumns(false);
+  }
+}
+
+extension ResolvedIconToInsertable on ResolvedIcon {
+  _$ResolvedIconInsertable toInsertable() {
+    return _$ResolvedIconInsertable(this);
+  }
+}
+
 class $CategoryAnalyticsTableTable extends CategoryAnalyticsTable
     with TableInfo<$CategoryAnalyticsTableTable, CategoryAnalyticsTableData> {
   @override
@@ -2273,6 +2516,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CasksTableTable casksTable = $CasksTableTable(this);
   late final $FormulaeTableTable formulaeTable = $FormulaeTableTable(this);
+  late final $IconCacheTableTable iconCacheTable = $IconCacheTableTable(this);
   late final $CategoryAnalyticsTableTable categoryAnalyticsTable =
       $CategoryAnalyticsTableTable(this);
   late final $SyncMetadataTableTable syncMetadataTable =
@@ -2284,6 +2528,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     casksTable,
     formulaeTable,
+    iconCacheTable,
     categoryAnalyticsTable,
     syncMetadataTable,
   ];
@@ -3234,6 +3479,193 @@ typedef $$FormulaeTableTableProcessedTableManager =
       FormulaModel,
       PrefetchHooks Function()
     >;
+typedef $$IconCacheTableTableCreateCompanionBuilder =
+    IconCacheTableCompanion Function({
+      required String packageName,
+      Value<String?> iconUrl,
+      Value<bool> isSvg,
+      required DateTime resolvedAt,
+      Value<int> rowid,
+    });
+typedef $$IconCacheTableTableUpdateCompanionBuilder =
+    IconCacheTableCompanion Function({
+      Value<String> packageName,
+      Value<String?> iconUrl,
+      Value<bool> isSvg,
+      Value<DateTime> resolvedAt,
+      Value<int> rowid,
+    });
+
+class $$IconCacheTableTableFilterComposer
+    extends Composer<_$AppDatabase, $IconCacheTableTable> {
+  $$IconCacheTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get iconUrl => $composableBuilder(
+    column: $table.iconUrl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isSvg => $composableBuilder(
+    column: $table.isSvg,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get resolvedAt => $composableBuilder(
+    column: $table.resolvedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$IconCacheTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $IconCacheTableTable> {
+  $$IconCacheTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get iconUrl => $composableBuilder(
+    column: $table.iconUrl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isSvg => $composableBuilder(
+    column: $table.isSvg,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get resolvedAt => $composableBuilder(
+    column: $table.resolvedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$IconCacheTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IconCacheTableTable> {
+  $$IconCacheTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get iconUrl =>
+      $composableBuilder(column: $table.iconUrl, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSvg =>
+      $composableBuilder(column: $table.isSvg, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get resolvedAt => $composableBuilder(
+    column: $table.resolvedAt,
+    builder: (column) => column,
+  );
+}
+
+class $$IconCacheTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $IconCacheTableTable,
+          ResolvedIcon,
+          $$IconCacheTableTableFilterComposer,
+          $$IconCacheTableTableOrderingComposer,
+          $$IconCacheTableTableAnnotationComposer,
+          $$IconCacheTableTableCreateCompanionBuilder,
+          $$IconCacheTableTableUpdateCompanionBuilder,
+          (
+            ResolvedIcon,
+            BaseReferences<_$AppDatabase, $IconCacheTableTable, ResolvedIcon>,
+          ),
+          ResolvedIcon,
+          PrefetchHooks Function()
+        > {
+  $$IconCacheTableTableTableManager(
+    _$AppDatabase db,
+    $IconCacheTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IconCacheTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IconCacheTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IconCacheTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> packageName = const Value.absent(),
+                Value<String?> iconUrl = const Value.absent(),
+                Value<bool> isSvg = const Value.absent(),
+                Value<DateTime> resolvedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IconCacheTableCompanion(
+                packageName: packageName,
+                iconUrl: iconUrl,
+                isSvg: isSvg,
+                resolvedAt: resolvedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String packageName,
+                Value<String?> iconUrl = const Value.absent(),
+                Value<bool> isSvg = const Value.absent(),
+                required DateTime resolvedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => IconCacheTableCompanion.insert(
+                packageName: packageName,
+                iconUrl: iconUrl,
+                isSvg: isSvg,
+                resolvedAt: resolvedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$IconCacheTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $IconCacheTableTable,
+      ResolvedIcon,
+      $$IconCacheTableTableFilterComposer,
+      $$IconCacheTableTableOrderingComposer,
+      $$IconCacheTableTableAnnotationComposer,
+      $$IconCacheTableTableCreateCompanionBuilder,
+      $$IconCacheTableTableUpdateCompanionBuilder,
+      (
+        ResolvedIcon,
+        BaseReferences<_$AppDatabase, $IconCacheTableTable, ResolvedIcon>,
+      ),
+      ResolvedIcon,
+      PrefetchHooks Function()
+    >;
 typedef $$CategoryAnalyticsTableTableCreateCompanionBuilder =
     CategoryAnalyticsTableCompanion Function({
       Value<int> id,
@@ -3689,6 +4121,8 @@ class $AppDatabaseManager {
       $$CasksTableTableTableManager(_db, _db.casksTable);
   $$FormulaeTableTableTableManager get formulaeTable =>
       $$FormulaeTableTableTableManager(_db, _db.formulaeTable);
+  $$IconCacheTableTableTableManager get iconCacheTable =>
+      $$IconCacheTableTableTableManager(_db, _db.iconCacheTable);
   $$CategoryAnalyticsTableTableTableManager get categoryAnalyticsTable =>
       $$CategoryAnalyticsTableTableTableManager(
         _db,

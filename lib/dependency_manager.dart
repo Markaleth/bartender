@@ -4,6 +4,7 @@ import 'package:bartender/data/db/database.dart';
 import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
+import 'package:bartender/services/icon_resolution/icon_resolution_service.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/core/routing/navigation_service.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,9 @@ final List<SingleChildWidget> dependencyList = [
     dispose: (_, db) => (db as AppDatabase).close(),
   ),
   Provider<BrewService>(create: (_) => BrewService()),
+  ProxyProvider<DatabaseInterface, IconResolutionService>(
+    update: (_, db, _) => IconResolutionService(db),
+  ),
 
   // Repositories
   ProxyProvider2<ApiClientInterface, DatabaseInterface, HomebrewRepository>(

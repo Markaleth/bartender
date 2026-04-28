@@ -3,6 +3,7 @@ import '../models/analytics/casks/casks_analytics_model.dart';
 import '../models/analytics/formulae/formulae_analytics_model.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
+import '../models/icon_cache/resolved_icon.dart';
 
 import '../models/analytics/category/category_analytics_model.dart';
 
@@ -54,4 +55,7 @@ abstract class DatabaseInterface {
   Future<void> purgeAllData();
   Future<void> deleteDatabaseFile();
   Future<bool> isDatabaseEmpty();
+
+  Future<void> saveIconCache(String packageName, String? iconUrl, bool isSvg);
+  Future<ResolvedIcon?> getIconCache(String packageName);
 }
