@@ -41,7 +41,7 @@ class BrewCard extends StatelessWidget {
                     name: title,
                     homepage: homepage,
                     isCask: isCask,
-                    size: 32.0,
+                    size: spacingXl,
                   ),
                   const SizedBox(width: spacingS),
                   Expanded(

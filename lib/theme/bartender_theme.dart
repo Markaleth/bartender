@@ -1,4 +1,5 @@
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/dimensions.dart';
 import 'package:flutter/material.dart';
 
 class BartenderTheme {
@@ -20,15 +21,15 @@ class BartenderTheme {
       textTheme: _textTheme(ThemeData.dark().textTheme),
       cardTheme: CardThemeData(
         color: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusL)),
         elevation: 4,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onPrimary,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusM)),
+          padding: const EdgeInsets.symmetric(horizontal: spacingL, vertical: spacingM),
         ),
       ),
     );

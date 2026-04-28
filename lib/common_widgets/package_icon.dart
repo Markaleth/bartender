@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../services/icon_resolution/icon_resolution_service.dart';
 import '../data/models/icon_cache/resolved_icon.dart';
 
+//TODO: this needs to be cleaned up and optimized. It's currently doing a lot of redundant work and could be simplified by just using the resolved icon's URL directly in an Image.network or SvgPicture.network widget, letting Flutter handle caching and loading states. The current implementation is trying to manually manage caching and loading states, which is unnecessary and error-prone. We can rely on Flutter's built-in image caching and loading mechanisms instead of trying to manage it ourselves. This will simplify the code significantly and reduce the chances of bugs related to caching and loading states.
 class PackageIcon extends StatefulWidget {
   final String name;
   final String? homepage;
@@ -55,19 +56,27 @@ class _PackageIconState extends State<PackageIcon> {
       setState(() {
         _resolvedIcon = memoryIcon;
         if (memoryIcon.iconUrl != null) {
-          _fileInfoFuture = DefaultCacheManager().getFileFromCache(memoryIcon.iconUrl!);
+          _fileInfoFuture = DefaultCacheManager().getFileFromCache(
+            memoryIcon.iconUrl!,
+          );
         }
         _isLoading = false;
       });
       return;
     }
 
-    final fetchedIcon = await _iconService.getIcon(widget.name, widget.homepage, widget.isCask);
+    final fetchedIcon = await _iconService.getIcon(
+      widget.name,
+      widget.homepage,
+      widget.isCask,
+    );
     if (mounted) {
       setState(() {
         _resolvedIcon = fetchedIcon;
         if (fetchedIcon != null && fetchedIcon.iconUrl != null) {
-          _fileInfoFuture = DefaultCacheManager().getFileFromCache(fetchedIcon.iconUrl!);
+          _fileInfoFuture = DefaultCacheManager().getFileFromCache(
+            fetchedIcon.iconUrl!,
+          );
         }
         _isLoading = false;
       });
@@ -110,7 +119,7 @@ class _PackageIconState extends State<PackageIcon> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return _buildFallback();
         }
-        
+
         if (!snapshot.hasData || snapshot.data == null) {
           // Fallback to network if not in cache for some reason
           if (_resolvedIcon!.isSvg) {
