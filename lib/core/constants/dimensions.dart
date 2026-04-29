@@ -1,4 +1,5 @@
 // Spacing (Layout)
+const double spacing2Xs = 2.0;
 const double spacingXs = 4.0;
 const double spacingS = 8.0;
 const double spacingM = 16.0;
@@ -23,3 +24,4 @@ const double thicknessXl = 8.0;
 // Widget Sizes
 const double sideBarWidth = 250.0;
 const double trendingPackageCarouselHeight = 250;
+const double defaultBrewCardIconSize = 40.0;

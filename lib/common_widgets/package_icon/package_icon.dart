@@ -1,3 +1,6 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
+import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,62 +62,167 @@ class _PackageIconState extends State<PackageIcon> {
           loading: () => _LoadingIndicator(widget: widget, context: context),
           success: (icon) {
             if (icon.isSvg) {
-              return SvgPicture.network(
-                icon.iconUrl!,
-                width: widget.size,
-                height: widget.size,
-                placeholderBuilder: (_) =>
-                    _LoadingIndicator(widget: widget, context: context),
+              return _SvgIcon(
+                url: icon.iconUrl!,
+                size: widget.size,
+                packageIconWidget: widget,
               );
             } else {
-              return CachedNetworkImage(
-                imageUrl: icon.iconUrl!,
-                width: widget.size,
-                height: widget.size,
-                fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    _LoadingIndicator(widget: widget, context: context),
-                errorWidget: (context, url, error) =>
-                    _LoadingIndicator(widget: widget, context: context),
-                imageBuilder: (context, imageProvider) => ClipRRect(
-                  borderRadius: BorderRadius.circular(radiusM),
-                  child: Image(
-                    image: imageProvider,
-                    width: widget.size,
-                    height: widget.size,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              return _NetworkImageIcon(
+                url: icon.iconUrl!,
+                size: widget.size,
+                packageIconWidget: widget,
               );
             }
           },
-          fallback: () => _LoadingIndicator(widget: widget, context: context),
+          fallback: () => _PlaceholderWidget(size: widget.size),
         );
       },
     );
   }
 }
 
-class _LoadingIndicator extends StatelessWidget {
-  const _LoadingIndicator({
-    required this.widget,
-    required this.context,
+class _PlaceholderWidget extends StatelessWidget {
+  final double size;
+  const _PlaceholderWidget({required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.borderNeutral,
+        borderRadius: BorderRadius.circular(radiusM),
+      ),
+      padding: const EdgeInsets.all(spacing2Xs),
+      child: const IconWidget(assetName: brewIcon),
+    );
+  }
+}
+
+class _SvgIcon extends StatelessWidget {
+  final String url;
+  final double size;
+  final PackageIcon packageIconWidget;
+
+  const _SvgIcon({
+    required this.url,
+    required this.size,
+    required this.packageIconWidget,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.borderNeutral,
+        borderRadius: BorderRadius.circular(radiusM),
+      ),
+      padding: const EdgeInsets.all(spacing2Xs),
+      child: SvgPicture.network(
+        url,
+        placeholderBuilder: (_) =>
+            _LoadingIndicator(widget: packageIconWidget, context: context),
+      ),
+    );
+  }
+}
+
+class _NetworkImageIcon extends StatelessWidget {
+  final String url;
+  final double size;
+  final PackageIcon packageIconWidget;
+
+  const _NetworkImageIcon({
+    required this.url,
+    required this.size,
+    required this.packageIconWidget,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      width: size,
+      height: size,
+      fit: BoxFit.cover,
+      placeholder: (context, url) =>
+          _LoadingIndicator(widget: packageIconWidget, context: context),
+      errorWidget: (context, url, error) => _PlaceholderWidget(size: size),
+      imageBuilder: (context, imageProvider) => Container(
+        padding: const EdgeInsets.all(spacing2Xs),
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: AppColors.borderNeutral,
+          borderRadius: BorderRadius.circular(radiusM),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(radiusM),
+          child: Image(image: imageProvider, fit: BoxFit.cover),
+        ),
+      ),
+    );
+  }
+}
+
+class _LoadingIndicator extends StatefulWidget {
+  const _LoadingIndicator({required this.widget, required this.context});
 
   final PackageIcon widget;
   final BuildContext context;
 
   @override
+  State<_LoadingIndicator> createState() => _LoadingIndicatorState();
+}
+
+class _LoadingIndicatorState extends State<_LoadingIndicator>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _shimmerController;
+
+  @override
+  void initState() {
+    super.initState();
+    _shimmerController = AnimationController.unbounded(vsync: this)
+      ..repeat(min: -0.5, max: 1.5, period: const Duration(milliseconds: 1000));
+  }
+
+  @override
+  void dispose() {
+    _shimmerController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      width: widget.size,
-      height: widget.size,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        shape: BoxShape.circle,
-      ),
-      alignment: Alignment.center,
-      child: CircularProgressIndicator(),
+    return AnimatedBuilder(
+      animation: _shimmerController,
+      builder: (context, child) {
+        return Container(
+          width: widget.widget.size,
+          height: widget.widget.size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.textSecondary,
+                AppColors.iconDefault,
+                AppColors.textSecondary,
+              ],
+              stops: [
+                _shimmerController.value - 0.3,
+                _shimmerController.value,
+                _shimmerController.value + 0.3,
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

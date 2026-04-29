@@ -6,6 +6,7 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
+import 'package:bartender/core/utils/string_utils.dart';
 import 'package:flutter/material.dart';
 
 class TrendingPackagesCarousel extends StatefulWidget {
@@ -132,6 +133,11 @@ class _CarouselPage extends StatelessWidget {
                           ? item.homepage
                           : (item as CaskModel).homepage,
                       isCask: item is CaskModel,
+                      downloads: item is FormulaModel
+                          ? StringUtils.formatDownloads(item.installs30d)
+                          : StringUtils.formatDownloads(
+                              (item as CaskModel).installs30d,
+                            ),
                       onInstall: () => log(
                         'Install tapped for ${item is FormulaModel ? item.name : item.token}',
                       ),
