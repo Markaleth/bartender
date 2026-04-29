@@ -2,7 +2,7 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_strings.dart';
-import 'package:bartender/common_widgets/package_icon.dart';
+import 'package:bartender/common_widgets/package_icon/package_icon.dart';
 
 class BrewCard extends StatelessWidget {
   final String title;

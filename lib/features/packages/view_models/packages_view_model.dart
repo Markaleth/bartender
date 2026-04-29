@@ -58,6 +58,18 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     final formulae = await _homebrewRepository.getAllFormulae();
     final casks = await _homebrewRepository.getAllCasks();
 
+    final chunkedTrending = await _getTrendingData();
+
+    emitState(
+      state.copyWith(
+        formulaeData: FetchState.success(formulae),
+        casksData: FetchState.success(casks),
+        trendingData: FetchState.success(chunkedTrending),
+      ),
+    );
+  }
+
+  Future<List<List<dynamic>>> _getTrendingData() async {
     final formulaTrending = await _homebrewRepository.getTrendingFormulae(
       _analyticsPeriod,
       limit: 25,
@@ -67,29 +79,29 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
       limit: 25,
     );
 
-    // Merge and sort by installs descending across both types
+    final allTrending = _mergeAndSortTrending(formulaTrending, caskTrending);
+    final topTrending = allTrending.take(50).toList();
+    
+    return _chunkTrending(topTrending);
+  }
+
+  List<dynamic> _mergeAndSortTrending(List<dynamic> formulaTrending, List<dynamic> caskTrending) {
     final allTrending = <dynamic>[...formulaTrending, ...caskTrending];
     allTrending.sort((a, b) {
       final aInstalls = _getInstalls(a);
       final bInstalls = _getInstalls(b);
       return bInstalls.compareTo(aInstalls);
     });
+    return allTrending;
+  }
 
-    final topTrending = allTrending.take(50).toList();
-
+  List<List<dynamic>> _chunkTrending(List<dynamic> topTrending) {
     final chunkedTrending = <List<dynamic>>[];
     for (var i = 0; i < topTrending.length; i += 5) {
       final end = (i + 5 < topTrending.length) ? i + 5 : topTrending.length;
       chunkedTrending.add(topTrending.sublist(i, end));
     }
-
-    emitState(
-      state.copyWith(
-        formulaeData: FetchState.success(formulae),
-        casksData: FetchState.success(casks),
-        trendingData: FetchState.success(chunkedTrending),
-      ),
-    );
+    return chunkedTrending;
   }
 
   int _getInstalls(dynamic item) {
