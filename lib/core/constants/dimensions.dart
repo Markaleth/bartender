@@ -23,5 +23,5 @@ const double thicknessXl = 8.0;
 
 // Widget Sizes
 const double sideBarWidth = 250.0;
-const double trendingPackageCarouselHeight = 250;
+const double trendingPackageCarouselHeight = 200;
 const double defaultBrewCardIconSize = 40.0;

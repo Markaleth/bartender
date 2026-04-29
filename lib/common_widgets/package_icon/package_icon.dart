@@ -95,7 +95,7 @@ class _PlaceholderWidget extends StatelessWidget {
         color: AppColors.borderNeutral,
         borderRadius: BorderRadius.circular(radiusM),
       ),
-      padding: const EdgeInsets.all(spacing2Xs),
+      padding: const EdgeInsets.all(spacingS),
       child: const IconWidget(assetName: brewIcon),
     );
   }
@@ -121,11 +121,14 @@ class _SvgIcon extends StatelessWidget {
         color: AppColors.borderNeutral,
         borderRadius: BorderRadius.circular(radiusM),
       ),
-      padding: const EdgeInsets.all(spacing2Xs),
+      padding: const EdgeInsets.all(spacingS),
       child: SvgPicture.network(
         url,
-        placeholderBuilder: (_) =>
-            _LoadingIndicator(widget: packageIconWidget, context: context),
+        placeholderBuilder: (_) => OverflowBox(
+          maxWidth: size,
+          maxHeight: size,
+          child: _LoadingIndicator(widget: packageIconWidget, context: context),
+        ),
       ),
     );
   }
@@ -153,7 +156,7 @@ class _NetworkImageIcon extends StatelessWidget {
           _LoadingIndicator(widget: packageIconWidget, context: context),
       errorWidget: (context, url, error) => _PlaceholderWidget(size: size),
       imageBuilder: (context, imageProvider) => Container(
-        padding: const EdgeInsets.all(spacing2Xs),
+        padding: const EdgeInsets.all(spacingS),
         width: size,
         height: size,
         decoration: BoxDecoration(
@@ -205,7 +208,7 @@ class _LoadingIndicatorState extends State<_LoadingIndicator>
           width: widget.widget.size,
           height: widget.widget.size,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
+            borderRadius: BorderRadius.circular(radiusM),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,

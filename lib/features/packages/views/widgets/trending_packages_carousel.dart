@@ -22,7 +22,7 @@ class TrendingPackagesCarousel extends StatefulWidget {
 class _TrendingPackagesCarouselState extends State<TrendingPackagesCarousel> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  static const int _itemsPerPage = 5;
+  static const int _itemsPerPage = 4;
 
   @override
   void dispose() {

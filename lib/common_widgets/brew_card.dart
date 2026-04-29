@@ -31,22 +31,30 @@ class BrewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: spacingXs),
-      child: Card(
-        margin: const EdgeInsets.only(bottom: spacingM),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(radiusM),
+          border: Border.all(
+            color: AppColors.borderNeutral,
+            width: thicknessXs,
+          ),
+        ),
+        margin: const EdgeInsets.only(bottom: spacingS),
         child: Padding(
           padding: const EdgeInsets.all(spacingM),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   PackageIcon(
                     name: title,
                     homepage: homepage,
                     isCask: isCask,
-                    size: defaultBrewCardIconSize,
+                    size: spacing2Xl,
                   ),
                   const SizedBox(width: spacingS),
                   Expanded(
@@ -57,41 +65,45 @@ class BrewCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: spacingM),
-                  IconButton(
-                    onPressed: onInstall,
-                    padding: EdgeInsets.all(spacingS),
-                    constraints: const BoxConstraints(),
-                    icon: const IconWidget(
-                      color: AppColors.primary,
-                      assetName: downloadIcon,
-                      height: spacingL,
-                      width: spacingL,
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: spacingM),
               Text(
                 description ?? '',
                 style: context.labelL,
-                maxLines: 5,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
               const Spacer(),
               Row(
-                spacing: spacingM,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (downloads != null)
                     _DownloadsWidget(downloads: downloads!),
-
-                  Flexible(
-                    child: Text(
-                      'Version: $version',
-                      style: context.labelM,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.only(
+                        left: spacingS,
+                        top: 0,
+                        bottom: 0,
+                        right: 0,
+                      ),
+                      visualDensity: VisualDensity(
+                        vertical: -4,
+                        horizontal: -4,
+                      ),
+                    ),
+                    iconAlignment: IconAlignment.end,
+                    onPressed: onInstall,
+                    icon: Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.secondary,
+                    ),
+                    label: Text(
+                      "Install",
+                      style: context.labelM.copyWith(
+                        color: AppColors.secondary,
+                      ),
                     ),
                   ),
                 ],
@@ -114,7 +126,7 @@ class _DownloadsWidget extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.center,
     spacing: spacingS,
     children: [
-      IconWidget(assetName: starIcon, height: spacingM, width: spacingM),
+      IconWidget(assetName: downloadIcon, height: spacingM, width: spacingM),
       Text(downloads, style: context.labelM),
     ],
   );

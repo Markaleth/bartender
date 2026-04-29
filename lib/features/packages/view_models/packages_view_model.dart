@@ -72,20 +72,22 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   Future<List<List<dynamic>>> _getTrendingData() async {
     final formulaTrending = await _homebrewRepository.getTrendingFormulae(
       _analyticsPeriod,
-      limit: 25,
+      limit: 20,
     );
     final caskTrending = await _homebrewRepository.getTrendingCasks(
       _analyticsPeriod,
-      limit: 25,
+      limit: 20,
     );
 
     final allTrending = _mergeAndSortTrending(formulaTrending, caskTrending);
-    final topTrending = allTrending.take(50).toList();
-    
-    return _chunkTrending(topTrending);
+
+    return _chunkTrending(allTrending);
   }
 
-  List<dynamic> _mergeAndSortTrending(List<dynamic> formulaTrending, List<dynamic> caskTrending) {
+  List<dynamic> _mergeAndSortTrending(
+    List<dynamic> formulaTrending,
+    List<dynamic> caskTrending,
+  ) {
     final allTrending = <dynamic>[...formulaTrending, ...caskTrending];
     allTrending.sort((a, b) {
       final aInstalls = _getInstalls(a);
@@ -96,9 +98,12 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   }
 
   List<List<dynamic>> _chunkTrending(List<dynamic> topTrending) {
+    final chunkSize = 4;
     final chunkedTrending = <List<dynamic>>[];
-    for (var i = 0; i < topTrending.length; i += 5) {
-      final end = (i + 5 < topTrending.length) ? i + 5 : topTrending.length;
+    for (var i = 0; i < topTrending.length; i += chunkSize) {
+      final end = (i + chunkSize < topTrending.length)
+          ? i + chunkSize
+          : topTrending.length;
       chunkedTrending.add(topTrending.sublist(i, end));
     }
     return chunkedTrending;
