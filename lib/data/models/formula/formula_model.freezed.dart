@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FormulaModel {
 
- String get name;@JsonKey(name: 'full_name') String get fullName; String get tap; String get desc; String? get license; String? get homepage; FormulaVersions get versions; List<String> get dependencies;@JsonKey(name: 'build_dependencies') List<String> get buildDependencies; bool get outdated; bool get deprecated; bool get disabled;@JsonKey(name: 'is_installed') bool get isInstalled; Map<String, dynamic>? get analytics; int? get installs30d; int? get installs90d; int? get installs365d;@JsonKey(name: 'generated_date') String? get generatedDate;
+ String get name;@JsonKey(name: 'full_name') String get fullName; String get tap; String get desc; String? get license; String? get homepage; FormulaVersions get versions; List<String> get dependencies;@JsonKey(name: 'build_dependencies') List<String> get buildDependencies; bool get outdated; bool get deprecated; bool get disabled;@JsonKey(name: 'is_installed') bool get isInstalled; Map<String, dynamic>? get bottle; Map<String, dynamic>? get variations; Map<String, dynamic>? get analytics; int? get installs30d; int? get installs90d; int? get installs365d;@JsonKey(name: 'generated_date') String? get generatedDate;
 /// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $FormulaModelCopyWith<FormulaModel> get copyWith => _$FormulaModelCopyWithImpl<F
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FormulaModel&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.tap, tap) || other.tap == tap)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.license, license) || other.license == license)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.versions, versions) || other.versions == versions)&&const DeepCollectionEquality().equals(other.dependencies, dependencies)&&const DeepCollectionEquality().equals(other.buildDependencies, buildDependencies)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&const DeepCollectionEquality().equals(other.analytics, analytics)&&(identical(other.installs30d, installs30d) || other.installs30d == installs30d)&&(identical(other.installs90d, installs90d) || other.installs90d == installs90d)&&(identical(other.installs365d, installs365d) || other.installs365d == installs365d)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FormulaModel&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.tap, tap) || other.tap == tap)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.license, license) || other.license == license)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.versions, versions) || other.versions == versions)&&const DeepCollectionEquality().equals(other.dependencies, dependencies)&&const DeepCollectionEquality().equals(other.buildDependencies, buildDependencies)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&const DeepCollectionEquality().equals(other.bottle, bottle)&&const DeepCollectionEquality().equals(other.variations, variations)&&const DeepCollectionEquality().equals(other.analytics, analytics)&&(identical(other.installs30d, installs30d) || other.installs30d == installs30d)&&(identical(other.installs90d, installs90d) || other.installs90d == installs90d)&&(identical(other.installs365d, installs365d) || other.installs365d == installs365d)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,fullName,tap,desc,license,homepage,versions,const DeepCollectionEquality().hash(dependencies),const DeepCollectionEquality().hash(buildDependencies),outdated,deprecated,disabled,isInstalled,const DeepCollectionEquality().hash(analytics),installs30d,installs90d,installs365d,generatedDate);
+int get hashCode => Object.hashAll([runtimeType,name,fullName,tap,desc,license,homepage,versions,const DeepCollectionEquality().hash(dependencies),const DeepCollectionEquality().hash(buildDependencies),outdated,deprecated,disabled,isInstalled,const DeepCollectionEquality().hash(bottle),const DeepCollectionEquality().hash(variations),const DeepCollectionEquality().hash(analytics),installs30d,installs90d,installs365d,generatedDate]);
 
 @override
 String toString() {
-  return 'FormulaModel(name: $name, fullName: $fullName, tap: $tap, desc: $desc, license: $license, homepage: $homepage, versions: $versions, dependencies: $dependencies, buildDependencies: $buildDependencies, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, isInstalled: $isInstalled, analytics: $analytics, installs30d: $installs30d, installs90d: $installs90d, installs365d: $installs365d, generatedDate: $generatedDate)';
+  return 'FormulaModel(name: $name, fullName: $fullName, tap: $tap, desc: $desc, license: $license, homepage: $homepage, versions: $versions, dependencies: $dependencies, buildDependencies: $buildDependencies, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, isInstalled: $isInstalled, bottle: $bottle, variations: $variations, analytics: $analytics, installs30d: $installs30d, installs90d: $installs90d, installs365d: $installs365d, generatedDate: $generatedDate)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $FormulaModelCopyWith<$Res>  {
   factory $FormulaModelCopyWith(FormulaModel value, $Res Function(FormulaModel) _then) = _$FormulaModelCopyWithImpl;
 @useResult
 $Res call({
- String name,@JsonKey(name: 'full_name') String fullName, String tap, String desc, String? license, String? homepage, FormulaVersions versions, List<String> dependencies,@JsonKey(name: 'build_dependencies') List<String> buildDependencies, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, Map<String, dynamic>? analytics, int? installs30d, int? installs90d, int? installs365d,@JsonKey(name: 'generated_date') String? generatedDate
+ String name,@JsonKey(name: 'full_name') String fullName, String tap, String desc, String? license, String? homepage, FormulaVersions versions, List<String> dependencies,@JsonKey(name: 'build_dependencies') List<String> buildDependencies, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, Map<String, dynamic>? bottle, Map<String, dynamic>? variations, Map<String, dynamic>? analytics, int? installs30d, int? installs90d, int? installs365d,@JsonKey(name: 'generated_date') String? generatedDate
 });
 
 
@@ -65,7 +65,7 @@ class _$FormulaModelCopyWithImpl<$Res>
 
 /// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? fullName = null,Object? tap = null,Object? desc = null,Object? license = freezed,Object? homepage = freezed,Object? versions = null,Object? dependencies = null,Object? buildDependencies = null,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? analytics = freezed,Object? installs30d = freezed,Object? installs90d = freezed,Object? installs365d = freezed,Object? generatedDate = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? fullName = null,Object? tap = null,Object? desc = null,Object? license = freezed,Object? homepage = freezed,Object? versions = null,Object? dependencies = null,Object? buildDependencies = null,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? bottle = freezed,Object? variations = freezed,Object? analytics = freezed,Object? installs30d = freezed,Object? installs90d = freezed,Object? installs365d = freezed,Object? generatedDate = freezed,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
@@ -80,7 +80,9 @@ as List<String>,outdated: null == outdated ? _self.outdated : outdated // ignore
 as bool,deprecated: null == deprecated ? _self.deprecated : deprecated // ignore: cast_nullable_to_non_nullable
 as bool,disabled: null == disabled ? _self.disabled : disabled // ignore: cast_nullable_to_non_nullable
 as bool,isInstalled: null == isInstalled ? _self.isInstalled : isInstalled // ignore: cast_nullable_to_non_nullable
-as bool,analytics: freezed == analytics ? _self.analytics : analytics // ignore: cast_nullable_to_non_nullable
+as bool,bottle: freezed == bottle ? _self.bottle : bottle // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,variations: freezed == variations ? _self.variations : variations // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,analytics: freezed == analytics ? _self.analytics : analytics // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,installs30d: freezed == installs30d ? _self.installs30d : installs30d // ignore: cast_nullable_to_non_nullable
 as int?,installs90d: freezed == installs90d ? _self.installs90d : installs90d // ignore: cast_nullable_to_non_nullable
 as int?,installs365d: freezed == installs365d ? _self.installs365d : installs365d // ignore: cast_nullable_to_non_nullable
@@ -179,10 +181,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? bottle,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FormulaModel() when $default != null:
-return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate);case _:
+return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.bottle,_that.variations,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate);case _:
   return orElse();
 
 }
@@ -200,10 +202,10 @@ return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? bottle,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate)  $default,) {final _that = this;
 switch (_that) {
 case _FormulaModel():
-return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate);case _:
+return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.bottle,_that.variations,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -220,10 +222,10 @@ return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name, @JsonKey(name: 'full_name')  String fullName,  String tap,  String desc,  String? license,  String? homepage,  FormulaVersions versions,  List<String> dependencies, @JsonKey(name: 'build_dependencies')  List<String> buildDependencies,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  Map<String, dynamic>? bottle,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate)?  $default,) {final _that = this;
 switch (_that) {
 case _FormulaModel() when $default != null:
-return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate);case _:
+return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_that.homepage,_that.versions,_that.dependencies,_that.buildDependencies,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.bottle,_that.variations,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate);case _:
   return null;
 
 }
@@ -235,7 +237,7 @@ return $default(_that.name,_that.fullName,_that.tap,_that.desc,_that.license,_th
 @JsonSerializable()
 
 class _FormulaModel implements FormulaModel {
-  const _FormulaModel({required this.name, @JsonKey(name: 'full_name') required this.fullName, required this.tap, required this.desc, this.license, this.homepage, required this.versions, required final  List<String> dependencies, @JsonKey(name: 'build_dependencies') required final  List<String> buildDependencies, this.outdated = false, this.deprecated = false, this.disabled = false, @JsonKey(name: 'is_installed') this.isInstalled = false, final  Map<String, dynamic>? analytics, this.installs30d, this.installs90d, this.installs365d, @JsonKey(name: 'generated_date') this.generatedDate}): _dependencies = dependencies,_buildDependencies = buildDependencies,_analytics = analytics;
+  const _FormulaModel({required this.name, @JsonKey(name: 'full_name') required this.fullName, required this.tap, required this.desc, this.license, this.homepage, required this.versions, required final  List<String> dependencies, @JsonKey(name: 'build_dependencies') required final  List<String> buildDependencies, this.outdated = false, this.deprecated = false, this.disabled = false, @JsonKey(name: 'is_installed') this.isInstalled = false, final  Map<String, dynamic>? bottle, final  Map<String, dynamic>? variations, final  Map<String, dynamic>? analytics, this.installs30d, this.installs90d, this.installs365d, @JsonKey(name: 'generated_date') this.generatedDate}): _dependencies = dependencies,_buildDependencies = buildDependencies,_bottle = bottle,_variations = variations,_analytics = analytics;
   factory _FormulaModel.fromJson(Map<String, dynamic> json) => _$FormulaModelFromJson(json);
 
 @override final  String name;
@@ -263,6 +265,24 @@ class _FormulaModel implements FormulaModel {
 @override@JsonKey() final  bool deprecated;
 @override@JsonKey() final  bool disabled;
 @override@JsonKey(name: 'is_installed') final  bool isInstalled;
+ final  Map<String, dynamic>? _bottle;
+@override Map<String, dynamic>? get bottle {
+  final value = _bottle;
+  if (value == null) return null;
+  if (_bottle is EqualUnmodifiableMapView) return _bottle;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
+ final  Map<String, dynamic>? _variations;
+@override Map<String, dynamic>? get variations {
+  final value = _variations;
+  if (value == null) return null;
+  if (_variations is EqualUnmodifiableMapView) return _variations;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
  final  Map<String, dynamic>? _analytics;
 @override Map<String, dynamic>? get analytics {
   final value = _analytics;
@@ -290,16 +310,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FormulaModel&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.tap, tap) || other.tap == tap)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.license, license) || other.license == license)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.versions, versions) || other.versions == versions)&&const DeepCollectionEquality().equals(other._dependencies, _dependencies)&&const DeepCollectionEquality().equals(other._buildDependencies, _buildDependencies)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&const DeepCollectionEquality().equals(other._analytics, _analytics)&&(identical(other.installs30d, installs30d) || other.installs30d == installs30d)&&(identical(other.installs90d, installs90d) || other.installs90d == installs90d)&&(identical(other.installs365d, installs365d) || other.installs365d == installs365d)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FormulaModel&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.tap, tap) || other.tap == tap)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.license, license) || other.license == license)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.versions, versions) || other.versions == versions)&&const DeepCollectionEquality().equals(other._dependencies, _dependencies)&&const DeepCollectionEquality().equals(other._buildDependencies, _buildDependencies)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&(identical(other.deprecated, deprecated) || other.deprecated == deprecated)&&(identical(other.disabled, disabled) || other.disabled == disabled)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&const DeepCollectionEquality().equals(other._bottle, _bottle)&&const DeepCollectionEquality().equals(other._variations, _variations)&&const DeepCollectionEquality().equals(other._analytics, _analytics)&&(identical(other.installs30d, installs30d) || other.installs30d == installs30d)&&(identical(other.installs90d, installs90d) || other.installs90d == installs90d)&&(identical(other.installs365d, installs365d) || other.installs365d == installs365d)&&(identical(other.generatedDate, generatedDate) || other.generatedDate == generatedDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,fullName,tap,desc,license,homepage,versions,const DeepCollectionEquality().hash(_dependencies),const DeepCollectionEquality().hash(_buildDependencies),outdated,deprecated,disabled,isInstalled,const DeepCollectionEquality().hash(_analytics),installs30d,installs90d,installs365d,generatedDate);
+int get hashCode => Object.hashAll([runtimeType,name,fullName,tap,desc,license,homepage,versions,const DeepCollectionEquality().hash(_dependencies),const DeepCollectionEquality().hash(_buildDependencies),outdated,deprecated,disabled,isInstalled,const DeepCollectionEquality().hash(_bottle),const DeepCollectionEquality().hash(_variations),const DeepCollectionEquality().hash(_analytics),installs30d,installs90d,installs365d,generatedDate]);
 
 @override
 String toString() {
-  return 'FormulaModel(name: $name, fullName: $fullName, tap: $tap, desc: $desc, license: $license, homepage: $homepage, versions: $versions, dependencies: $dependencies, buildDependencies: $buildDependencies, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, isInstalled: $isInstalled, analytics: $analytics, installs30d: $installs30d, installs90d: $installs90d, installs365d: $installs365d, generatedDate: $generatedDate)';
+  return 'FormulaModel(name: $name, fullName: $fullName, tap: $tap, desc: $desc, license: $license, homepage: $homepage, versions: $versions, dependencies: $dependencies, buildDependencies: $buildDependencies, outdated: $outdated, deprecated: $deprecated, disabled: $disabled, isInstalled: $isInstalled, bottle: $bottle, variations: $variations, analytics: $analytics, installs30d: $installs30d, installs90d: $installs90d, installs365d: $installs365d, generatedDate: $generatedDate)';
 }
 
 
@@ -310,7 +330,7 @@ abstract mixin class _$FormulaModelCopyWith<$Res> implements $FormulaModelCopyWi
   factory _$FormulaModelCopyWith(_FormulaModel value, $Res Function(_FormulaModel) _then) = __$FormulaModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name,@JsonKey(name: 'full_name') String fullName, String tap, String desc, String? license, String? homepage, FormulaVersions versions, List<String> dependencies,@JsonKey(name: 'build_dependencies') List<String> buildDependencies, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, Map<String, dynamic>? analytics, int? installs30d, int? installs90d, int? installs365d,@JsonKey(name: 'generated_date') String? generatedDate
+ String name,@JsonKey(name: 'full_name') String fullName, String tap, String desc, String? license, String? homepage, FormulaVersions versions, List<String> dependencies,@JsonKey(name: 'build_dependencies') List<String> buildDependencies, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, Map<String, dynamic>? bottle, Map<String, dynamic>? variations, Map<String, dynamic>? analytics, int? installs30d, int? installs90d, int? installs365d,@JsonKey(name: 'generated_date') String? generatedDate
 });
 
 
@@ -327,7 +347,7 @@ class __$FormulaModelCopyWithImpl<$Res>
 
 /// Create a copy of FormulaModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? fullName = null,Object? tap = null,Object? desc = null,Object? license = freezed,Object? homepage = freezed,Object? versions = null,Object? dependencies = null,Object? buildDependencies = null,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? analytics = freezed,Object? installs30d = freezed,Object? installs90d = freezed,Object? installs365d = freezed,Object? generatedDate = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? fullName = null,Object? tap = null,Object? desc = null,Object? license = freezed,Object? homepage = freezed,Object? versions = null,Object? dependencies = null,Object? buildDependencies = null,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? bottle = freezed,Object? variations = freezed,Object? analytics = freezed,Object? installs30d = freezed,Object? installs90d = freezed,Object? installs365d = freezed,Object? generatedDate = freezed,}) {
   return _then(_FormulaModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
@@ -342,7 +362,9 @@ as List<String>,outdated: null == outdated ? _self.outdated : outdated // ignore
 as bool,deprecated: null == deprecated ? _self.deprecated : deprecated // ignore: cast_nullable_to_non_nullable
 as bool,disabled: null == disabled ? _self.disabled : disabled // ignore: cast_nullable_to_non_nullable
 as bool,isInstalled: null == isInstalled ? _self.isInstalled : isInstalled // ignore: cast_nullable_to_non_nullable
-as bool,analytics: freezed == analytics ? _self._analytics : analytics // ignore: cast_nullable_to_non_nullable
+as bool,bottle: freezed == bottle ? _self._bottle : bottle // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,variations: freezed == variations ? _self._variations : variations // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,analytics: freezed == analytics ? _self._analytics : analytics // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,installs30d: freezed == installs30d ? _self.installs30d : installs30d // ignore: cast_nullable_to_non_nullable
 as int?,installs90d: freezed == installs90d ? _self.installs90d : installs90d // ignore: cast_nullable_to_non_nullable
 as int?,installs365d: freezed == installs365d ? _self.installs365d : installs365d // ignore: cast_nullable_to_non_nullable

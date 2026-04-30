@@ -19,6 +19,8 @@ abstract class FormulaModel with _$FormulaModel {
     @Default(false) bool deprecated,
     @Default(false) bool disabled,
     @Default(false) @JsonKey(name: 'is_installed') bool isInstalled,
+    Map<String, dynamic>? bottle,
+    Map<String, dynamic>? variations,
     Map<String, dynamic>? analytics,
     int? installs30d,
     int? installs90d,

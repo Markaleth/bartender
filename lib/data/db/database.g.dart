@@ -170,6 +170,18 @@ class $CasksTableTable extends CasksTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   ).withConverter<Map<String, dynamic>?>($CasksTableTable.$converteranalyticsn);
+  @override
+  late final GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
+  variations =
+      GeneratedColumn<String>(
+        'variations',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<Map<String, dynamic>?>(
+        $CasksTableTable.$convertervariationsn,
+      );
   static const VerificationMeta _installs30dMeta = const VerificationMeta(
     'installs30d',
   );
@@ -230,6 +242,7 @@ class $CasksTableTable extends CasksTable
     disabled,
     isInstalled,
     analytics,
+    variations,
     installs30d,
     installs90d,
     installs365d,
@@ -424,6 +437,12 @@ class $CasksTableTable extends CasksTable
         DriftSqlType.bool,
         data['${effectivePrefix}is_installed'],
       )!,
+      variations: $CasksTableTable.$convertervariationsn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}variations'],
+        ),
+      ),
       analytics: $CasksTableTable.$converteranalyticsn.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -464,6 +483,10 @@ class $CasksTableTable extends CasksTable
       const MapConverter();
   static TypeConverter<Map<String, dynamic>?, String?> $converteranalyticsn =
       NullAwareTypeConverter.wrap($converteranalytics);
+  static TypeConverter<Map<String, dynamic>, String> $convertervariations =
+      const MapConverter();
+  static TypeConverter<Map<String, dynamic>?, String?> $convertervariationsn =
+      NullAwareTypeConverter.wrap($convertervariations);
 }
 
 class CasksTableCompanion extends UpdateCompanion<CaskModel> {
@@ -481,6 +504,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   final Value<bool> disabled;
   final Value<bool> isInstalled;
   final Value<Map<String, dynamic>?> analytics;
+  final Value<Map<String, dynamic>?> variations;
   final Value<int?> installs30d;
   final Value<int?> installs90d;
   final Value<int?> installs365d;
@@ -501,6 +525,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
+    this.variations = const Value.absent(),
     this.installs30d = const Value.absent(),
     this.installs90d = const Value.absent(),
     this.installs365d = const Value.absent(),
@@ -522,6 +547,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
+    this.variations = const Value.absent(),
     this.installs30d = const Value.absent(),
     this.installs90d = const Value.absent(),
     this.installs365d = const Value.absent(),
@@ -545,6 +571,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     Expression<bool>? disabled,
     Expression<bool>? isInstalled,
     Expression<String>? analytics,
+    Expression<String>? variations,
     Expression<int>? installs30d,
     Expression<int>? installs90d,
     Expression<int>? installs365d,
@@ -566,6 +593,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
       if (disabled != null) 'disabled': disabled,
       if (isInstalled != null) 'is_installed': isInstalled,
       if (analytics != null) 'analytics': analytics,
+      if (variations != null) 'variations': variations,
       if (installs30d != null) 'installs30d': installs30d,
       if (installs90d != null) 'installs90d': installs90d,
       if (installs365d != null) 'installs365d': installs365d,
@@ -589,6 +617,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     Value<bool>? disabled,
     Value<bool>? isInstalled,
     Value<Map<String, dynamic>?>? analytics,
+    Value<Map<String, dynamic>?>? variations,
     Value<int?>? installs30d,
     Value<int?>? installs90d,
     Value<int?>? installs365d,
@@ -610,6 +639,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
       disabled: disabled ?? this.disabled,
       isInstalled: isInstalled ?? this.isInstalled,
       analytics: analytics ?? this.analytics,
+      variations: variations ?? this.variations,
       installs30d: installs30d ?? this.installs30d,
       installs90d: installs90d ?? this.installs90d,
       installs365d: installs365d ?? this.installs365d,
@@ -669,6 +699,11 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
         $CasksTableTable.$converteranalyticsn.toSql(analytics.value),
       );
     }
+    if (variations.present) {
+      map['variations'] = Variable<String>(
+        $CasksTableTable.$convertervariationsn.toSql(variations.value),
+      );
+    }
     if (installs30d.present) {
       map['installs30d'] = Variable<int>(installs30d.value);
     }
@@ -704,6 +739,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
           ..write('disabled: $disabled, ')
           ..write('isInstalled: $isInstalled, ')
           ..write('analytics: $analytics, ')
+          ..write('variations: $variations, ')
           ..write('installs30d: $installs30d, ')
           ..write('installs90d: $installs90d, ')
           ..write('installs365d: $installs365d, ')
@@ -734,6 +770,7 @@ class _$CaskModelInsertable implements Insertable<CaskModel> {
       disabled: Value(_object.disabled),
       isInstalled: Value(_object.isInstalled),
       analytics: Value(_object.analytics),
+      variations: Value(_object.variations),
       installs30d: Value(_object.installs30d),
       installs90d: Value(_object.installs90d),
       installs365d: Value(_object.installs365d),
@@ -916,6 +953,27 @@ class $FormulaeTableTable extends FormulaeTable
       ).withConverter<Map<String, dynamic>?>(
         $FormulaeTableTable.$converteranalyticsn,
       );
+  @override
+  late final GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
+  bottle = GeneratedColumn<String>(
+    'bottle',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  ).withConverter<Map<String, dynamic>?>($FormulaeTableTable.$converterbottlen);
+  @override
+  late final GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
+  variations =
+      GeneratedColumn<String>(
+        'variations',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<Map<String, dynamic>?>(
+        $FormulaeTableTable.$convertervariationsn,
+      );
   static const VerificationMeta _installs30dMeta = const VerificationMeta(
     'installs30d',
   );
@@ -976,6 +1034,8 @@ class $FormulaeTableTable extends FormulaeTable
     disabled,
     isInstalled,
     analytics,
+    bottle,
+    variations,
     installs30d,
     installs90d,
     installs365d,
@@ -1168,6 +1228,18 @@ class $FormulaeTableTable extends FormulaeTable
         DriftSqlType.bool,
         data['${effectivePrefix}is_installed'],
       )!,
+      bottle: $FormulaeTableTable.$converterbottlen.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}bottle'],
+        ),
+      ),
+      variations: $FormulaeTableTable.$convertervariationsn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}variations'],
+        ),
+      ),
       analytics: $FormulaeTableTable.$converteranalyticsn.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -1208,6 +1280,14 @@ class $FormulaeTableTable extends FormulaeTable
       const MapConverter();
   static TypeConverter<Map<String, dynamic>?, String?> $converteranalyticsn =
       NullAwareTypeConverter.wrap($converteranalytics);
+  static TypeConverter<Map<String, dynamic>, String> $converterbottle =
+      const MapConverter();
+  static TypeConverter<Map<String, dynamic>?, String?> $converterbottlen =
+      NullAwareTypeConverter.wrap($converterbottle);
+  static TypeConverter<Map<String, dynamic>, String> $convertervariations =
+      const MapConverter();
+  static TypeConverter<Map<String, dynamic>?, String?> $convertervariationsn =
+      NullAwareTypeConverter.wrap($convertervariations);
 }
 
 class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
@@ -1225,6 +1305,8 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
   final Value<bool> disabled;
   final Value<bool> isInstalled;
   final Value<Map<String, dynamic>?> analytics;
+  final Value<Map<String, dynamic>?> bottle;
+  final Value<Map<String, dynamic>?> variations;
   final Value<int?> installs30d;
   final Value<int?> installs90d;
   final Value<int?> installs365d;
@@ -1245,6 +1327,8 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
+    this.bottle = const Value.absent(),
+    this.variations = const Value.absent(),
     this.installs30d = const Value.absent(),
     this.installs90d = const Value.absent(),
     this.installs365d = const Value.absent(),
@@ -1266,6 +1350,8 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
     this.analytics = const Value.absent(),
+    this.bottle = const Value.absent(),
+    this.variations = const Value.absent(),
     this.installs30d = const Value.absent(),
     this.installs90d = const Value.absent(),
     this.installs365d = const Value.absent(),
@@ -1293,6 +1379,8 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Expression<bool>? disabled,
     Expression<bool>? isInstalled,
     Expression<String>? analytics,
+    Expression<String>? bottle,
+    Expression<String>? variations,
     Expression<int>? installs30d,
     Expression<int>? installs90d,
     Expression<int>? installs365d,
@@ -1314,6 +1402,8 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       if (disabled != null) 'disabled': disabled,
       if (isInstalled != null) 'is_installed': isInstalled,
       if (analytics != null) 'analytics': analytics,
+      if (bottle != null) 'bottle': bottle,
+      if (variations != null) 'variations': variations,
       if (installs30d != null) 'installs30d': installs30d,
       if (installs90d != null) 'installs90d': installs90d,
       if (installs365d != null) 'installs365d': installs365d,
@@ -1337,6 +1427,8 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Value<bool>? disabled,
     Value<bool>? isInstalled,
     Value<Map<String, dynamic>?>? analytics,
+    Value<Map<String, dynamic>?>? bottle,
+    Value<Map<String, dynamic>?>? variations,
     Value<int?>? installs30d,
     Value<int?>? installs90d,
     Value<int?>? installs365d,
@@ -1358,6 +1450,8 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       disabled: disabled ?? this.disabled,
       isInstalled: isInstalled ?? this.isInstalled,
       analytics: analytics ?? this.analytics,
+      bottle: bottle ?? this.bottle,
+      variations: variations ?? this.variations,
       installs30d: installs30d ?? this.installs30d,
       installs90d: installs90d ?? this.installs90d,
       installs365d: installs365d ?? this.installs365d,
@@ -1421,6 +1515,16 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
         $FormulaeTableTable.$converteranalyticsn.toSql(analytics.value),
       );
     }
+    if (bottle.present) {
+      map['bottle'] = Variable<String>(
+        $FormulaeTableTable.$converterbottlen.toSql(bottle.value),
+      );
+    }
+    if (variations.present) {
+      map['variations'] = Variable<String>(
+        $FormulaeTableTable.$convertervariationsn.toSql(variations.value),
+      );
+    }
     if (installs30d.present) {
       map['installs30d'] = Variable<int>(installs30d.value);
     }
@@ -1456,6 +1560,8 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
           ..write('disabled: $disabled, ')
           ..write('isInstalled: $isInstalled, ')
           ..write('analytics: $analytics, ')
+          ..write('bottle: $bottle, ')
+          ..write('variations: $variations, ')
           ..write('installs30d: $installs30d, ')
           ..write('installs90d: $installs90d, ')
           ..write('installs365d: $installs365d, ')
@@ -1486,6 +1592,8 @@ class _$FormulaModelInsertable implements Insertable<FormulaModel> {
       disabled: Value(_object.disabled),
       isInstalled: Value(_object.isInstalled),
       analytics: Value(_object.analytics),
+      bottle: Value(_object.bottle),
+      variations: Value(_object.variations),
       installs30d: Value(_object.installs30d),
       installs90d: Value(_object.installs90d),
       installs365d: Value(_object.installs365d),
@@ -2550,6 +2658,7 @@ typedef $$CasksTableTableCreateCompanionBuilder =
       Value<bool> disabled,
       Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
+      Value<Map<String, dynamic>?> variations,
       Value<int?> installs30d,
       Value<int?> installs90d,
       Value<int?> installs365d,
@@ -2572,6 +2681,7 @@ typedef $$CasksTableTableUpdateCompanionBuilder =
       Value<bool> disabled,
       Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
+      Value<Map<String, dynamic>?> variations,
       Value<int?> installs30d,
       Value<int?> installs90d,
       Value<int?> installs365d,
@@ -2666,6 +2776,16 @@ class $$CasksTableTableFilterComposer
   >
   get analytics => $composableBuilder(
     column: $table.analytics,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    Map<String, dynamic>?,
+    Map<String, dynamic>,
+    String
+  >
+  get variations => $composableBuilder(
+    column: $table.variations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
@@ -2769,6 +2889,11 @@ class $$CasksTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get variations => $composableBuilder(
+    column: $table.variations,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get installs30d => $composableBuilder(
     column: $table.installs30d,
     builder: (column) => ColumnOrderings(column),
@@ -2849,6 +2974,12 @@ class $$CasksTableTableAnnotationComposer
   get analytics =>
       $composableBuilder(column: $table.analytics, builder: (column) => column);
 
+  GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
+  get variations => $composableBuilder(
+    column: $table.variations,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<int> get installs30d => $composableBuilder(
     column: $table.installs30d,
     builder: (column) => column,
@@ -2915,6 +3046,7 @@ class $$CasksTableTableTableManager
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
+                Value<Map<String, dynamic>?> variations = const Value.absent(),
                 Value<int?> installs30d = const Value.absent(),
                 Value<int?> installs90d = const Value.absent(),
                 Value<int?> installs365d = const Value.absent(),
@@ -2935,6 +3067,7 @@ class $$CasksTableTableTableManager
                 disabled: disabled,
                 isInstalled: isInstalled,
                 analytics: analytics,
+                variations: variations,
                 installs30d: installs30d,
                 installs90d: installs90d,
                 installs365d: installs365d,
@@ -2957,6 +3090,7 @@ class $$CasksTableTableTableManager
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
+                Value<Map<String, dynamic>?> variations = const Value.absent(),
                 Value<int?> installs30d = const Value.absent(),
                 Value<int?> installs90d = const Value.absent(),
                 Value<int?> installs365d = const Value.absent(),
@@ -2977,6 +3111,7 @@ class $$CasksTableTableTableManager
                 disabled: disabled,
                 isInstalled: isInstalled,
                 analytics: analytics,
+                variations: variations,
                 installs30d: installs30d,
                 installs90d: installs90d,
                 installs365d: installs365d,
@@ -3021,6 +3156,8 @@ typedef $$FormulaeTableTableCreateCompanionBuilder =
       Value<bool> disabled,
       Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
+      Value<Map<String, dynamic>?> bottle,
+      Value<Map<String, dynamic>?> variations,
       Value<int?> installs30d,
       Value<int?> installs90d,
       Value<int?> installs365d,
@@ -3043,6 +3180,8 @@ typedef $$FormulaeTableTableUpdateCompanionBuilder =
       Value<bool> disabled,
       Value<bool> isInstalled,
       Value<Map<String, dynamic>?> analytics,
+      Value<Map<String, dynamic>?> bottle,
+      Value<Map<String, dynamic>?> variations,
       Value<int?> installs30d,
       Value<int?> installs90d,
       Value<int?> installs365d,
@@ -3134,6 +3273,26 @@ class $$FormulaeTableTableFilterComposer
   >
   get analytics => $composableBuilder(
     column: $table.analytics,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    Map<String, dynamic>?,
+    Map<String, dynamic>,
+    String
+  >
+  get bottle => $composableBuilder(
+    column: $table.bottle,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    Map<String, dynamic>?,
+    Map<String, dynamic>,
+    String
+  >
+  get variations => $composableBuilder(
+    column: $table.variations,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
@@ -3237,6 +3396,16 @@ class $$FormulaeTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get bottle => $composableBuilder(
+    column: $table.bottle,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get variations => $composableBuilder(
+    column: $table.variations,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get installs30d => $composableBuilder(
     column: $table.installs30d,
     builder: (column) => ColumnOrderings(column),
@@ -3320,6 +3489,15 @@ class $$FormulaeTableTableAnnotationComposer
   get analytics =>
       $composableBuilder(column: $table.analytics, builder: (column) => column);
 
+  GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String> get bottle =>
+      $composableBuilder(column: $table.bottle, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
+  get variations => $composableBuilder(
+    column: $table.variations,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<int> get installs30d => $composableBuilder(
     column: $table.installs30d,
     builder: (column) => column,
@@ -3386,6 +3564,8 @@ class $$FormulaeTableTableTableManager
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
+                Value<Map<String, dynamic>?> bottle = const Value.absent(),
+                Value<Map<String, dynamic>?> variations = const Value.absent(),
                 Value<int?> installs30d = const Value.absent(),
                 Value<int?> installs90d = const Value.absent(),
                 Value<int?> installs365d = const Value.absent(),
@@ -3406,6 +3586,8 @@ class $$FormulaeTableTableTableManager
                 disabled: disabled,
                 isInstalled: isInstalled,
                 analytics: analytics,
+                bottle: bottle,
+                variations: variations,
                 installs30d: installs30d,
                 installs90d: installs90d,
                 installs365d: installs365d,
@@ -3428,6 +3610,8 @@ class $$FormulaeTableTableTableManager
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
+                Value<Map<String, dynamic>?> bottle = const Value.absent(),
+                Value<Map<String, dynamic>?> variations = const Value.absent(),
                 Value<int?> installs30d = const Value.absent(),
                 Value<int?> installs90d = const Value.absent(),
                 Value<int?> installs365d = const Value.absent(),
@@ -3448,6 +3632,8 @@ class $$FormulaeTableTableTableManager
                 disabled: disabled,
                 isInstalled: isInstalled,
                 analytics: analytics,
+                bottle: bottle,
+                variations: variations,
                 installs30d: installs30d,
                 installs90d: installs90d,
                 installs365d: installs365d,
