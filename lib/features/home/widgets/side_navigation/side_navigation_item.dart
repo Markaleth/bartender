@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:bartender/core/constants/durations.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 
 class SideNavigationItem extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
@@ -20,9 +21,7 @@ class SideNavigationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isSelected
-        ? AppColors.primary
-        : AppColors.textSecondary;
+    final color = isSelected ? AppColors.primary : AppColors.textSecondary;
     final bgColor = isSelected
         ? AppColors.primary.withValues(alpha: 0.1)
         : Colors.transparent;
@@ -89,7 +88,7 @@ class _SelectionIndicator extends StatelessWidget {
 }
 
 class _AnimatedIcon extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final Color color;
 
   const _AnimatedIcon({required this.icon, required this.color});
@@ -105,9 +104,12 @@ class _AnimatedIcon extends StatelessWidget {
         tween: ColorTween(begin: color, end: color),
         duration: defaultAnimationDuration,
         curve: Curves.easeOutCubic,
-        builder: (context, animatedColor, child) {
-          return Icon(icon, color: animatedColor, size: spacingL);
-        },
+        builder: (context, animatedColor, child) => IconWidget(
+          assetName: icon,
+          color: animatedColor!,
+          height: spacingL,
+          width: spacingL,
+        ),
       ),
     );
   }
@@ -125,15 +127,13 @@ class _AnimatedLabel extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedDefaultTextStyle(
-      duration: defaultAnimationDuration,
-      curve: Curves.easeOutCubic,
-      style: context.bodyL.copyWith(
-        color: color,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-      ),
-      child: Text(label),
-    );
-  }
+  Widget build(BuildContext context) => AnimatedDefaultTextStyle(
+    duration: defaultAnimationDuration,
+    curve: Curves.easeOutCubic,
+    style: context.bodyL.copyWith(
+      color: color,
+      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+    ),
+    child: Text(label),
+  );
 }

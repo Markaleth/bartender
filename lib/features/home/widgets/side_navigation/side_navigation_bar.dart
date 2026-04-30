@@ -1,4 +1,5 @@
 import 'package:bartender/common_widgets/horizontal_divider.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -37,25 +38,25 @@ class SideNavigationBar extends StatelessWidget {
               padding: EdgeInsets.zero,
               children: [
                 SideNavigationItem(
-                  icon: Icons.explore,
+                  icon: packagesIcon,
                   label: navBrowse,
                   isSelected: selectedTab == HomeTab.browse,
                   onTap: () => onTabSelected(HomeTab.browse),
                 ),
                 SideNavigationItem(
-                  icon: Icons.library_books,
+                  icon: libraryIcon,
                   label: navLibrary,
                   isSelected: selectedTab == HomeTab.library,
                   onTap: () => onTabSelected(HomeTab.library),
                 ),
                 SideNavigationItem(
-                  icon: Icons.update,
+                  icon: updateIcon,
                   label: navUpdates,
                   isSelected: selectedTab == HomeTab.updates,
                   onTap: () => onTabSelected(HomeTab.updates),
                 ),
                 SideNavigationItem(
-                  icon: Icons.bug_report,
+                  icon: barrelIcon,
                   label: "Debug",
                   isSelected: selectedTab == HomeTab.debug,
                   onTap: () => onTabSelected(HomeTab.debug),
@@ -67,7 +68,7 @@ class SideNavigationBar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: spacingXs),
             child: SideNavigationItem(
-              icon: Icons.settings,
+              icon: settingsIcon,
               label: navSettings,
               isSelected: selectedTab == HomeTab.settings,
               onTap: () => onTabSelected(HomeTab.settings),

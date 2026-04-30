@@ -30,26 +30,19 @@ extension FormulaCompatibilityExt on FormulaModel {
     return info.toList();
   }
 
-  bool _hasPrecompiledFormula(Map<String, dynamic>? stableFiles) {
-    return stableFiles != null && stableFiles.isNotEmpty;
-  }
+  bool _hasPrecompiledFormula(Map<String, dynamic>? stableFiles) =>
+      stableFiles != null && stableFiles.isNotEmpty;
 
-  bool _hasArm64Mac(Iterable<String> keys) {
-    return keys.any(
-      (key) => key.startsWith('arm64_') && !key.endsWith('_linux'),
-    );
-  }
+  bool _hasArm64Mac(Iterable<String> keys) =>
+      keys.any((key) => key.startsWith('arm64_') && !key.endsWith('_linux'));
 
-  bool _hasIntelMac(Iterable<String> keys) {
-    return keys.any(
-      (key) =>
-          !key.endsWith('_linux') && !key.startsWith('arm64_') && key != 'all',
-    );
-  }
+  bool _hasIntelMac(Iterable<String> keys) => keys.any(
+    (key) =>
+        !key.endsWith('_linux') && !key.startsWith('arm64_') && key != 'all',
+  );
 
-  bool _hasLinux(Iterable<String> keys) {
-    return keys.any((key) => key.endsWith('_linux'));
-  }
+  bool _hasLinux(Iterable<String> keys) =>
+      keys.any((key) => key.endsWith('_linux'));
 }
 
 extension CaskCompatibilityExt on CaskModel {
