@@ -1,3 +1,4 @@
+import 'package:bartender/core/services/hardware_service.dart';
 import 'package:bartender/dependency_manager.dart';
 import 'package:bartender/theme/bartender_theme.dart';
 import 'package:bartender/core/routing/app_router.dart';
@@ -5,10 +6,18 @@ import 'package:bartender/core/routing/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(MultiProvider(providers: dependencyList, child: const MainApp()));
+  final hardwareEnvironment = LinuxHardwareEnvironment();
+  await hardwareEnvironment.init();
+
+  runApp(
+    MultiProvider(
+      providers: buildDependencyList(hardwareEnvironment),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {

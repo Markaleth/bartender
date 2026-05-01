@@ -1,3 +1,4 @@
+import 'package:bartender/core/services/hardware_service.dart';
 import 'package:bartender/data/api/api_client.dart';
 import 'package:bartender/data/api/api_client_interface.dart';
 import 'package:bartender/data/db/database.dart';
@@ -10,26 +11,31 @@ import 'package:bartender/core/routing/navigation_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-final List<SingleChildWidget> dependencyList = [
-  // Navigation
-  Provider<NavigationService>(create: (_) => NavigationService()),
+List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment) {
+  return [
+    // Hardware
+    Provider<DeviceEnvironment>.value(value: deviceEnvironment),
 
-  // Base Services
-  Provider<ApiClientInterface>(create: (_) => ApiClient.initialize()),
-  Provider<DatabaseInterface>(
-    create: (_) => AppDatabase(),
-    dispose: (_, db) => (db as AppDatabase).close(),
-  ),
-  Provider<BrewService>(create: (_) => BrewService()),
-  ProxyProvider<DatabaseInterface, IconResolutionService>(
-    update: (_, db, _) => IconResolutionService(db),
-  ),
+    // Navigation
+    Provider<NavigationService>(create: (_) => NavigationService()),
 
-  // Repositories
-  ProxyProvider2<ApiClientInterface, DatabaseInterface, HomebrewRepository>(
-    update: (_, apiClient, db, _) => HomebrewRepository(apiClient, db),
-  ),
-  ProxyProvider2<BrewService, DatabaseInterface, PackageRepository>(
-    update: (_, brewService, db, _) => PackageRepository(brewService, db),
-  ),
-];
+    // Base Services
+    Provider<ApiClientInterface>(create: (_) => ApiClient.initialize()),
+    Provider<DatabaseInterface>(
+      create: (_) => AppDatabase(),
+      dispose: (_, db) => (db as AppDatabase).close(),
+    ),
+    Provider<BrewService>(create: (_) => BrewService()),
+    ProxyProvider<DatabaseInterface, IconResolutionService>(
+      update: (_, db, _) => IconResolutionService(db),
+    ),
+
+    // Repositories
+    ProxyProvider2<ApiClientInterface, DatabaseInterface, HomebrewRepository>(
+      update: (_, apiClient, db, _) => HomebrewRepository(apiClient, db),
+    ),
+    ProxyProvider2<BrewService, DatabaseInterface, PackageRepository>(
+      update: (_, brewService, db, _) => PackageRepository(brewService, db),
+    ),
+  ];
+}

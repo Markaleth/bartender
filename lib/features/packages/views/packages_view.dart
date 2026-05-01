@@ -94,11 +94,11 @@ class PackagesView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = state.paginatedPackages[index];
                   final isCask = item is CaskModel;
-                  final id = isCask
-                      ? (item as CaskModel).token
+                  final id = item is CaskModel
+                      ? item.token
                       : (item as FormulaModel).name;
-                  final name = isCask
-                      ? (item as CaskModel).name.first
+                  final name = item is CaskModel
+                      ? item.name.first
                       : (item as FormulaModel).fullName;
                   final homepage = item.homepage;
 
