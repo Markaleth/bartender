@@ -23,11 +23,7 @@ class PackageListItem extends StatelessWidget {
         horizontal: spacingL,
         vertical: spacingS,
       ),
-      leading: PackageIcon(
-        name: id,
-        homepage: homepage,
-        isCask: isCask,
-      ),
+      leading: PackageIcon(name: id, homepage: homepage, isCask: isCask),
       title: Text(name),
     );
   }
