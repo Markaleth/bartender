@@ -1,6 +1,7 @@
 import 'package:bartender/common_widgets/package_icon/package_icon.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/utils/string_utils.dart';
+import 'package:bartender/features/packages/widgets/package_variant_tag.dart';
 import 'package:flutter/material.dart';
 
 class PackageListItem extends StatelessWidget {
@@ -32,24 +33,7 @@ class PackageListItem extends StatelessWidget {
             children: [
               Text(name),
               const SizedBox(width: spacingS),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: StringUtils.getVariantColor(tag).withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(
-                    color: StringUtils.getVariantColor(tag).withValues(alpha: 0.5),
-                  ),
-                ),
-                child: Text(
-                  tag,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: StringUtils.getVariantColor(tag),
-                  ),
-                ),
-              ),
+              PackageVariantTag(tag: tag),
             ],
           );
         }
