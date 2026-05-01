@@ -17,6 +17,10 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
 
   bool _isProcessingQueue = false;
 
+  List<dynamic> _allPackages = [];
+  int _currentPaginationOffset = 0;
+  static const int _paginationChunkSize = 50;
+
   PackagesViewModel(this._homebrewRepository, this._packageRepository)
     : super(const PackagesState());
 
@@ -60,11 +64,47 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
 
     final chunkedTrending = await _getTrendingData();
 
+    _allPackages = [...formulae, ...casks];
+    _sortPackagesAlphabetically(_allPackages);
+
+    _currentPaginationOffset = 0;
+    final initialChunk = _getNextChunk();
+
     emitState(
       state.copyWith(
         formulaeData: FetchState.success(formulae),
         casksData: FetchState.success(casks),
         trendingData: FetchState.success(chunkedTrending),
+        paginatedPackages: initialChunk,
+      ),
+    );
+  }
+
+  List<dynamic> _getNextChunk() {
+    final end = (_currentPaginationOffset + _paginationChunkSize).clamp(
+      0,
+      _allPackages.length,
+    );
+    final chunk = _allPackages.sublist(_currentPaginationOffset, end);
+    _currentPaginationOffset = end;
+    return chunk;
+  }
+
+  void _sortPackagesAlphabetically(List<dynamic> packages) {
+    packages.sort((a, b) {
+      final String nameA = a is FormulaModel ? a.name : (a as CaskModel).token;
+      final String nameB = b is FormulaModel ? b.name : (b as CaskModel).token;
+      return nameA.compareTo(nameB);
+    });
+  }
+
+  void loadMorePackages() {
+    if (_currentPaginationOffset >= _allPackages.length) return;
+
+    final nextChunk = _getNextChunk();
+    emitState(
+      state.copyWith(
+        paginatedPackages: [...state.paginatedPackages, ...nextChunk],
       ),
     );
   }

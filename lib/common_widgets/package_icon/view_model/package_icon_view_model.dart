@@ -1,18 +1,31 @@
+import 'dart:async';
+
+import 'package:bartender/core/constants/durations.dart';
+
 import '../../../core/base_view_model.dart';
 import '../../../services/icon_resolution/icon_resolution_service.dart';
 import '../state/package_icon_state.dart';
 
-class PackageIconViewModel extends BaseViewModel<PackageIconState, PackageIconEffect> {
+class PackageIconViewModel
+    extends BaseViewModel<PackageIconState, PackageIconEffect> {
   final IconResolutionService _iconService;
+  Timer? _debounceTimer;
+  bool _isDisposed = false;
 
-  PackageIconViewModel(this._iconService) : super(const PackageIconState.loading());
+  PackageIconViewModel(this._iconService)
+    : super(const PackageIconState.loading());
 
   Future<void> loadIcon(String name, String? homepage, bool isCask) async {
+    _debounceTimer?.cancel();
     emitState(const PackageIconState.loading());
 
     if (_tryLoadFromMemory(name)) return;
-    
-    await _fetchAndLoadIcon(name, homepage, isCask);
+
+    _debounceTimer = Timer(packageIconDebounceDuration, () {
+      if (!_isDisposed) {
+        _fetchAndLoadIcon(name, homepage, isCask);
+      }
+    });
   }
 
   bool _tryLoadFromMemory(String name) {
@@ -24,9 +37,15 @@ class PackageIconViewModel extends BaseViewModel<PackageIconState, PackageIconEf
     return false;
   }
 
-  Future<void> _fetchAndLoadIcon(String name, String? homepage, bool isCask) async {
+  Future<void> _fetchAndLoadIcon(
+    String name,
+    String? homepage,
+    bool isCask,
+  ) async {
     final fetchedIcon = await _iconService.getIcon(name, homepage, isCask);
-    _emitIconResult(fetchedIcon);
+    if (!_isDisposed) {
+      _emitIconResult(fetchedIcon);
+    }
   }
 
   void _emitIconResult(dynamic icon) {
@@ -35,5 +54,12 @@ class PackageIconViewModel extends BaseViewModel<PackageIconState, PackageIconEf
     } else {
       emitState(const PackageIconState.fallback());
     }
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    _debounceTimer?.cancel();
+    super.dispose();
   }
 }

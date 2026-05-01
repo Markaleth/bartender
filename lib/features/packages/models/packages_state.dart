@@ -15,5 +15,7 @@ abstract class PackagesState with _$PackagesState {
     @Default(FetchState.loading()) FetchState<List<dynamic>> trendingData,
     
     @Default([]) List<PackageOperation> operationsQueue,
+    
+    @Default([]) List<dynamic> paginatedPackages,
   }) = _PackagesState;
 }

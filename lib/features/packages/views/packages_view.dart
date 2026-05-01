@@ -4,6 +4,8 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
+import 'package:bartender/data/models/cask/cask_model.dart';
+import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
@@ -14,53 +16,104 @@ import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/package_list_item.dart';
+
 class PackagesView extends StatelessWidget {
   const PackagesView({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      BaseView<PackagesViewModel, PackagesState, PackagesEffect>(
-        viewModelBuilder: (_) => PackagesViewModel(
-          context.read<HomebrewRepository>(),
-          context.read<PackageRepository>(),
-        ),
-        onModelReady: (viewModel) => viewModel.fetchData(),
-        builder: (context, viewModel, state) => Scaffold(
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(spacingM),
-                  child: Text(
-                    packagesTitle,
-                    style: context.headM.copyWith(color: AppColors.primary),
-                  ),
+  Widget build(
+    BuildContext context,
+  ) => BaseView<PackagesViewModel, PackagesState, PackagesEffect>(
+    viewModelBuilder: (_) => PackagesViewModel(
+      context.read<HomebrewRepository>(),
+      context.read<PackageRepository>(),
+    ),
+    onModelReady: (viewModel) => viewModel.fetchData(),
+    builder: (context, viewModel, state) => Scaffold(
+      body: SafeArea(
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification scrollInfo) {
+            if (scrollInfo.metrics.pixels >=
+                scrollInfo.metrics.maxScrollExtent - 500) {
+              viewModel.loadMorePackages();
+            }
+            return false;
+          },
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(spacingM),
+                      child: Text(
+                        packagesTitle,
+                        style: context.headM.copyWith(color: AppColors.primary),
+                      ),
+                    ),
+                    HorizontalDivider(),
+                    SizedBox(height: spacingXl),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: spacingXl,
+                      ),
+                      child: Text(popularPackagesTitle, style: context.titleM),
+                    ),
+                    SizedBox(height: spacingXs),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: spacingXl,
+                      ),
+                      child: Text(popularPackagesSubtitle),
+                    ),
+                    SizedBox(height: spacingM),
+                    state.trendingData.maybeMap(
+                      success: (value) => TrendingPackagesCarousel(
+                        pages: value.data as List<List<dynamic>>,
+                      ),
+                      orElse: () => const SizedBox(
+                        height: trendingPackageCarouselHeight,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                    ),
+                    SizedBox(height: spacingXl),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: spacingXl,
+                      ),
+                      child: Text('All Packages', style: context.titleM),
+                    ),
+                    SizedBox(height: spacingXs),
+                  ],
                 ),
-                HorizontalDivider(),
-                SizedBox(height: spacingXl),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: spacingXl),
-                  child: Text(popularPackagesTitle, style: context.titleM),
-                ),
-                SizedBox(height: spacingXs),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: spacingXl),
-                  child: Text(popularPackagesSubtitle),
-                ),
-                SizedBox(height: spacingM),
-                state.trendingData.maybeMap(
-                  success: (value) => TrendingPackagesCarousel(
-                    pages: value.data as List<List<dynamic>>,
-                  ),
-                  orElse: () => const SizedBox(
-                    height: trendingPackageCarouselHeight,
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                ),
-              ],
-            ),
+              ),
+              SliverList.builder(
+                itemCount: state.paginatedPackages.length,
+                itemBuilder: (context, index) {
+                  final item = state.paginatedPackages[index];
+                  final isCask = item is CaskModel;
+                  final id = isCask
+                      ? (item as CaskModel).token
+                      : (item as FormulaModel).name;
+                  final name = isCask
+                      ? (item as CaskModel).name.first
+                      : (item as FormulaModel).fullName;
+                  final homepage = item.homepage;
+
+                  return PackageListItem(
+                    id: id,
+                    name: name,
+                    homepage: homepage,
+                    isCask: isCask,
+                  );
+                },
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    ),
+  );
 }
