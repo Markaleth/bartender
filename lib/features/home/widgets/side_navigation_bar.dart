@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/app_strings.dart';
-import '../../models/home_state.dart';
+import '../models/home_state.dart';
 import 'side_navigation_header.dart';
 import 'side_navigation_item.dart';
 

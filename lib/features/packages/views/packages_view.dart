@@ -9,7 +9,7 @@ import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
-import 'package:bartender/features/packages/views/widgets/trending_packages_carousel.dart';
+import 'package:bartender/features/packages/widgets/trending_packages_carousel.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

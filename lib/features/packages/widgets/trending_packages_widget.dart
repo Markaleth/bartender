@@ -6,7 +6,7 @@ import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/common_widgets/package_icon/package_icon.dart';
 
-class BrewCard extends StatelessWidget {
+class TrendingPackagesWidget extends StatelessWidget {
   final String title;
   final String? description;
   final String version;
@@ -16,7 +16,7 @@ class BrewCard extends StatelessWidget {
 
   final VoidCallback? onInstall;
 
-  const BrewCard({
+  const TrendingPackagesWidget({
     super.key,
     required this.title,
     this.onInstall,
@@ -70,6 +70,7 @@ class BrewCard extends StatelessWidget {
               const SizedBox(height: spacingM),
               Text(
                 description ?? '',
+
                 style: context.labelL,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,

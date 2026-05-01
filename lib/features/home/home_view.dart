@@ -3,10 +3,10 @@ import 'package:bartender/features/packages/views/packages_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_strings.dart';
-import '../models/home_effect.dart';
-import '../models/home_state.dart';
-import '../view_models/home_view_model.dart';
-import '../widgets/side_navigation/side_navigation_bar.dart';
+import 'models/home_effect.dart';
+import 'models/home_state.dart';
+import 'view_models/home_view_model.dart';
+import 'widgets/side_navigation_bar.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

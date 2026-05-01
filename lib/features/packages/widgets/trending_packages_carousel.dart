@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bartender/common_widgets/brew_card.dart';
+import 'package:bartender/features/packages/widgets/trending_packages_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
@@ -119,7 +119,7 @@ class _CarouselPage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(right: isLastItem ? 0 : spacingS),
               child: item != null
-                  ? BrewCard(
+                  ? TrendingPackagesWidget(
                       title: item is FormulaModel
                           ? item.name
                           : (item as CaskModel).token,

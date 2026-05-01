@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bartender/features/home/views/home_view.dart';
+import 'package:bartender/features/home/home_view.dart';
 
 class AppRoutes {
   static const String home = '/';
