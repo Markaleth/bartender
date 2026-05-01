@@ -52,20 +52,23 @@ class _TrendingPackagesCarouselState extends State<TrendingPackagesCarousel> {
           children: [
             SizedBox(
               height: trendingPackageCarouselHeight,
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemCount: pageCount,
-                itemBuilder: (context, pageIndex) {
-                  return _CarouselPage(
-                    items: widget.pages[pageIndex],
-                    itemsPerPage: _itemsPerPage,
-                  );
-                },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: spacingM),
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  itemCount: pageCount,
+                  itemBuilder: (context, pageIndex) {
+                    return _CarouselPage(
+                      items: widget.pages[pageIndex],
+                      itemsPerPage: _itemsPerPage,
+                    );
+                  },
+                ),
               ),
             ),
             if (_currentPage > 0)
