@@ -15,33 +15,18 @@ enum PackageVariant {
   app,
   unknown;
 
-  static PackageVariant fromTag(String tag) {
-    final lowercaseTag = tag.toLowerCase();
-    switch (lowercaseTag) {
-      case 'alpha':
-        return PackageVariant.alpha;
-      case 'beta':
-        return PackageVariant.beta;
-      case 'app':
-        return PackageVariant.app;
-      case 'ptb':
-        return PackageVariant.ptb;
-      case 'nightly':
-        return PackageVariant.nightly;
-      case 'canary':
-        return PackageVariant.canary;
-      case 'developer-edition':
-      case 'dev':
-        return PackageVariant.developerEdition;
-      case 'esr':
-        return PackageVariant.esr;
-      default:
-        if (RegExp(r'^[0-9.]+$').hasMatch(tag)) {
-          return PackageVariant.version;
-        }
-        return PackageVariant.unknown;
-    }
-  }
+  static PackageVariant fromTag(String tag) => switch (tag.toLowerCase()) {
+    'alpha' => PackageVariant.alpha,
+    'beta' => PackageVariant.beta,
+    'app' => PackageVariant.app,
+    'ptb' => PackageVariant.ptb,
+    'nightly' => PackageVariant.nightly,
+    'canary' => PackageVariant.canary,
+    'developer-edition' || 'dev' => PackageVariant.developerEdition,
+    'esr' => PackageVariant.esr,
+    _ when RegExp(r'^[0-9.]+$').hasMatch(tag) => PackageVariant.version,
+    _ => PackageVariant.unknown,
+  };
 }
 
 class PackageVariantTag extends StatelessWidget {
@@ -51,26 +36,14 @@ class PackageVariantTag extends StatelessWidget {
   PackageVariantTag({super.key, required this.tag})
     : variant = PackageVariant.fromTag(tag);
 
-  Color get _variantColor {
-    switch (variant) {
-      case PackageVariant.app:
-        return AppColors.primary;
-      case PackageVariant.alpha:
-        return AppColors.error; // Red for highly unstable
-      case PackageVariant.beta:
-      case PackageVariant.canary:
-      case PackageVariant.nightly:
-        return AppColors.tertiary; // Mustard Yellow for testing/bleeding-edge
-      case PackageVariant.developerEdition:
-      case PackageVariant.ptb:
-      case PackageVariant.esr:
-        return AppColors.secondary; // Mint for specialized tracks
-      case PackageVariant.version:
-        return AppColors.textSecondary; // Light grey
-      case PackageVariant.unknown:
-        return AppColors.textTertiary; // Darker grey
-    }
-  }
+  Color get _variantColor => switch (variant) {
+    PackageVariant.app => AppColors.primary,
+    PackageVariant.alpha => AppColors.error,
+    PackageVariant.beta || PackageVariant.canary || PackageVariant.nightly => AppColors.tertiary,
+    PackageVariant.developerEdition || PackageVariant.ptb || PackageVariant.esr => AppColors.secondary,
+    PackageVariant.version => AppColors.textSecondary,
+    PackageVariant.unknown => AppColors.textTertiary,
+  };
 
   @override
   Widget build(BuildContext context) {

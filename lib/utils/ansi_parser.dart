@@ -11,28 +11,26 @@ class AnsiParser {
     Color? currentColor;
     FontWeight? currentFontWeight;
     
-    Color? colorFromCode(int code) {
-      switch (code) {
-        case 30: return Colors.black;
-        case 31: return Colors.red;
-        case 32: return Colors.green;
-        case 33: return Colors.yellow;
-        case 34: return Colors.blue;
-        case 35: return Colors.purple; // Magenta
-        case 36: return Colors.cyan;
-        case 37: return Colors.white;
-        // Bright colors
-        case 90: return Colors.grey;
-        case 91: return Colors.redAccent;
-        case 92: return Colors.greenAccent;
-        case 93: return Colors.yellowAccent;
-        case 94: return Colors.blueAccent;
-        case 95: return Colors.purpleAccent;
-        case 96: return Colors.cyanAccent;
-        case 97: return Colors.white;
-        default: return null;
-      }
-    }
+    Color? colorFromCode(int code) => switch (code) {
+      30 => Colors.black,
+      31 => Colors.red,
+      32 => Colors.green,
+      33 => Colors.yellow,
+      34 => Colors.blue,
+      35 => Colors.purple, // Magenta
+      36 => Colors.cyan,
+      37 => Colors.white,
+      // Bright colors
+      90 => Colors.grey,
+      91 => Colors.redAccent,
+      92 => Colors.greenAccent,
+      93 => Colors.yellowAccent,
+      94 => Colors.blueAccent,
+      95 => Colors.purpleAccent,
+      96 => Colors.cyanAccent,
+      97 => Colors.white,
+      _ => null,
+    };
 
     final matches = ansiRegex.allMatches(text);
     for (final match in matches) {
@@ -57,14 +55,13 @@ class AnsiParser {
           final code = int.tryParse(codeStr);
           if (code == null) continue;
           
-          if (code == 1) {
-            currentFontWeight = FontWeight.bold;
-          } else if (code == 22) {
-            currentFontWeight = FontWeight.normal;
-          } else if ((code >= 30 && code <= 37) || (code >= 90 && code <= 97)) {
-            currentColor = colorFromCode(code);
-          } else if (code == 39) {
-            currentColor = null; // Reset text color to default
+          switch (code) {
+            case 1: currentFontWeight = FontWeight.bold;
+            case 22: currentFontWeight = FontWeight.normal;
+            case 39: currentColor = null; // Reset text color to default
+            default:
+              final color = colorFromCode(code);
+              if (color != null) currentColor = color;
           }
         }
       }

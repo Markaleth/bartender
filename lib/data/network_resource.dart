@@ -9,14 +9,26 @@ class NetworkResource<T> {
   final String? errorMessage;
   final String? eTag;
 
-  NetworkResource(this.status, this.statusCode, this.data, this.errorMessage, [this.eTag]);
+  NetworkResource(
+    this.status,
+    this.statusCode,
+    this.data,
+    this.errorMessage, [
+    this.eTag,
+  ]);
 
   factory NetworkResource.success(T? data, int? statusCode, [String? eTag]) {
     return NetworkResource(NetworkStatus.success, statusCode, data, null, eTag);
   }
 
   factory NetworkResource.error(String? errorMessage, int? statusCode) {
-    return NetworkResource(NetworkStatus.error, statusCode, null, errorMessage, null);
+    return NetworkResource(
+      NetworkStatus.error,
+      statusCode,
+      null,
+      errorMessage,
+      null,
+    );
   }
 
   factory NetworkResource.errorFrom(DioException error) {
@@ -40,21 +52,18 @@ class NetworkResource<T> {
     return NetworkResource.error(errorData.toString(), statusCode);
   }
 
-  static String _getStatusCodeMessage(int? statusCode) {
-    return switch (statusCode) {
-      404 => 'Formula not found',
-      500 => 'Server error',
-      401 || 403 => 'Access denied',
-      _ => 'Request failed',
-    };
-  }
+  static String _getStatusCodeMessage(int? statusCode) => switch (statusCode) {
+    404 => 'Formula not found',
+    500 => 'Server error',
+    401 || 403 => 'Access denied',
+    _ => 'Request failed',
+  };
 
-  static String _getNetworkErrorMessage(DioExceptionType type) {
-    return switch (type) {
-      DioExceptionType.connectionTimeout => 'Connection timeout',
-      DioExceptionType.receiveTimeout => 'Request timeout',
-      DioExceptionType.connectionError => 'No internet connection',
-      _ => 'Connection error',
-    };
-  }
+  static String _getNetworkErrorMessage(DioExceptionType type) =>
+      switch (type) {
+        DioExceptionType.connectionTimeout => 'Connection timeout',
+        DioExceptionType.receiveTimeout => 'Request timeout',
+        DioExceptionType.connectionError => 'No internet connection',
+        _ => 'Connection error',
+      };
 }
