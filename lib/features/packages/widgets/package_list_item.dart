@@ -112,20 +112,7 @@ class _PackageListItemHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tag = StringUtils.extractVariantTag(name, id);
     final isLargeScreen = constraints.maxWidth >= widthBreakpoint;
-
-    Widget titleWidget = Text(name, style: context.titleM);
-    if (tag != null) {
-      titleWidget = Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(name, style: context.titleM),
-          const SizedBox(width: spacingS),
-          PackageVariantTag(tag: tag),
-        ],
-      );
-    }
 
     return InkWell(
       onTap: onExpand,
@@ -143,7 +130,7 @@ class _PackageListItemHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  titleWidget,
+                  _PackageListItemTitle(name: name, id: id),
                   if (description != null && description!.isNotEmpty)
                     Text(
                       description!,
@@ -162,7 +149,6 @@ class _PackageListItemHeader extends StatelessWidget {
                 child: Text(
                   version ?? id,
                   style: context.labelM.copyWith(
-                    fontFamily: 'monospace',
                     color: AppColors.textSecondary,
                   ),
                 ),
@@ -175,6 +161,31 @@ class _PackageListItemHeader extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _PackageListItemTitle extends StatelessWidget {
+  final String name;
+  final String id;
+
+  const _PackageListItemTitle({required this.name, required this.id});
+
+  @override
+  Widget build(BuildContext context) {
+    final tag = StringUtils.extractVariantTag(name, id);
+
+    if (tag != null) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(name, style: context.titleM),
+          const SizedBox(width: spacingS),
+          PackageVariantTag(tag: tag),
+        ],
+      );
+    }
+
+    return Text(name, style: context.titleM);
   }
 }
 
@@ -206,18 +217,24 @@ class _PackageListItemDetails extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(
+              OutlinedButton(
                 onPressed: () {
                   // Dummy uninstall
                 },
-                child: const Text('Uninstall'),
+                child: Text(
+                  'Uninstall',
+                  style: context.labelL.copyWith(color: AppColors.primary),
+                ),
               ),
               const SizedBox(width: spacingM),
               ElevatedButton(
                 onPressed: () {
                   // Dummy install
                 },
-                child: const Text('Install'),
+                child: Text(
+                  'Install',
+                  style: context.labelL.copyWith(color: AppColors.onPrimary),
+                ),
               ),
             ],
           ),
