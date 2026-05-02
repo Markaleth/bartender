@@ -10,6 +10,7 @@ import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class PackageListItem extends StatelessWidget {
+  final dynamic model; // CaskModel or FormulaModel
   final String id;
   final String name;
   final String? homepage;
@@ -19,10 +20,10 @@ class PackageListItem extends StatelessWidget {
   final VoidCallback onExpand;
   final String? description;
   final String? version;
-  final List<String> dependencies;
 
   const PackageListItem({
     super.key,
+    required this.model,
     required this.id,
     required this.name,
     this.homepage,
@@ -31,7 +32,6 @@ class PackageListItem extends StatelessWidget {
     required this.onExpand,
     this.description,
     this.version,
-    required this.dependencies,
   });
 
   @override
@@ -74,8 +74,7 @@ class PackageListItem extends StatelessWidget {
                   ),
                   if (isExpanded)
                     _PackageListItemDetails(
-                      version: version,
-                      dependencies: dependencies,
+                      model: model,
                     ),
                 ],
               ),
@@ -190,10 +189,9 @@ class _PackageListItemTitle extends StatelessWidget {
 }
 
 class _PackageListItemDetails extends StatelessWidget {
-  final String? version;
-  final List<String> dependencies;
+  final dynamic model;
 
-  const _PackageListItemDetails({this.version, required this.dependencies});
+  const _PackageListItemDetails({required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -204,8 +202,7 @@ class _PackageListItemDetails extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(spacingL),
           child: PackageGridMatrix(
-            version: version ?? 'Unknown',
-            dependencies: dependencies,
+            model: model,
           ),
         ),
         const HorizontalDivider(),

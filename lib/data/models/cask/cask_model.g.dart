@@ -9,11 +9,15 @@ part of 'cask_model.dart';
 _CaskModel _$CaskModelFromJson(Map<String, dynamic> json) => _CaskModel(
   token: json['token'] as String,
   fullToken: json['full_token'] as String?,
+  tap: json['tap'] as String?,
   name: (json['name'] as List<dynamic>).map((e) => e as String).toList(),
   desc: json['desc'] as String?,
   homepage: json['homepage'] as String?,
   url: json['url'] as String?,
   version: json['version'] as String,
+  artifacts: (json['artifacts'] as List<dynamic>?)
+      ?.map((e) => e as Map<String, dynamic>)
+      .toList(),
   autoUpdates: json['auto_updates'] as bool?,
   dependsOn: json['depends_on'] as Map<String, dynamic>?,
   outdated: json['outdated'] as bool? ?? false,
@@ -32,11 +36,13 @@ Map<String, dynamic> _$CaskModelToJson(_CaskModel instance) =>
     <String, dynamic>{
       'token': instance.token,
       'full_token': instance.fullToken,
+      'tap': instance.tap,
       'name': instance.name,
       'desc': instance.desc,
       'homepage': instance.homepage,
       'url': instance.url,
       'version': instance.version,
+      'artifacts': instance.artifacts,
       'auto_updates': instance.autoUpdates,
       'depends_on': instance.dependsOn,
       'outdated': instance.outdated,

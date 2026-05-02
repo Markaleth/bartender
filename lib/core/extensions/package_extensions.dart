@@ -102,4 +102,36 @@ extension CaskCompatibilityExt on CaskModel {
       return 'macOS ${entry.key} $version';
     });
   }
+
+  String get primaryArtifactType {
+    if (artifacts == null || artifacts!.isEmpty) return 'Unknown';
+
+    for (final artifact in artifacts!) {
+      if (artifact.containsKey('app')) return 'Application (.app)';
+      if (artifact.containsKey('pkg')) return 'Installer (.pkg)';
+      if (artifact.containsKey('binary')) return 'Binary';
+      if (artifact.containsKey('font')) return 'Font';
+      if (artifact.containsKey('dictionary')) return 'Dictionary';
+      if (artifact.containsKey('audio_unit_plugin')) return 'Audio Unit Plugin';
+      if (artifact.containsKey('vst_plugin')) return 'VST Plugin';
+      if (artifact.containsKey('vst3_plugin')) return 'VST3 Plugin';
+      if (artifact.containsKey('colorpicker')) return 'Color Picker';
+      if (artifact.containsKey('prefpane')) return 'Preference Pane';
+      if (artifact.containsKey('qlplugin')) return 'QuickLook Plugin';
+      if (artifact.containsKey('screen_saver')) return 'Screen Saver';
+      if (artifact.containsKey('input_method')) return 'Input Method';
+      if (artifact.containsKey('internet_plugin')) return 'Internet Plugin';
+      if (artifact.containsKey('service')) return 'Service';
+      if (artifact.containsKey('uninstall')) continue;
+      if (artifact.containsKey('zap')) continue;
+      if (artifact.containsKey('postflight')) continue;
+      if (artifact.containsKey('preflight')) continue;
+
+      if (artifact.keys.isNotEmpty) {
+        final firstKey = artifact.keys.first.toString();
+        return firstKey[0].toUpperCase() + firstKey.substring(1);
+      }
+    }
+    return 'Unknown';
+  }
 }

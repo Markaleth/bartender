@@ -6,11 +6,13 @@ import '../type_converters.dart';
 class CasksTable extends Table {
   TextColumn get token => text()();
   TextColumn get fullToken => text().nullable()();
+  TextColumn get tap => text().nullable()();
   TextColumn get name => text().map(const StringListConverter())();
   TextColumn get desc => text().nullable()();
   TextColumn get homepage => text().nullable()();
   TextColumn get url => text().nullable()();
   TextColumn get version => text()();
+  TextColumn get artifacts => text().map(const MapListConverter()).nullable()();
   BoolColumn get autoUpdates => boolean().nullable()();
   TextColumn get dependsOn => text().map(const MapConverter()).nullable()();
   BoolColumn get outdated => boolean().withDefault(const Constant(false))();

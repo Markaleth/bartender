@@ -16,6 +16,20 @@ class StringListConverter extends TypeConverter<List<String>, String> {
   }
 }
 
+class MapListConverter extends TypeConverter<List<Map<String, dynamic>>, String> {
+  const MapListConverter();
+
+  @override
+  List<Map<String, dynamic>> fromSql(String fromDb) {
+    return (jsonDecode(fromDb) as List).cast<Map<String, dynamic>>();
+  }
+
+  @override
+  String toSql(List<Map<String, dynamic>> value) {
+    return jsonEncode(value);
+  }
+}
+
 class MapConverter extends TypeConverter<Map<String, dynamic>, String> {
   const MapConverter();
 

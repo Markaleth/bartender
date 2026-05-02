@@ -29,6 +29,15 @@ class $CasksTableTable extends CasksTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _tapMeta = const VerificationMeta('tap');
+  @override
+  late final GeneratedColumn<String> tap = GeneratedColumn<String>(
+    'tap',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   late final GeneratedColumnWithTypeConverter<List<String>, String> name =
       GeneratedColumn<String>(
@@ -78,6 +87,21 @@ class $CasksTableTable extends CasksTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  @override
+  late final GeneratedColumnWithTypeConverter<
+    List<Map<String, dynamic>>?,
+    String
+  >
+  artifacts =
+      GeneratedColumn<String>(
+        'artifacts',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<List<Map<String, dynamic>>?>(
+        $CasksTableTable.$converterartifactsn,
+      );
   static const VerificationMeta _autoUpdatesMeta = const VerificationMeta(
     'autoUpdates',
   );
@@ -230,11 +254,13 @@ class $CasksTableTable extends CasksTable
   List<GeneratedColumn> get $columns => [
     token,
     fullToken,
+    tap,
     name,
     desc,
     homepage,
     url,
     version,
+    artifacts,
     autoUpdates,
     dependsOn,
     outdated,
@@ -272,6 +298,12 @@ class $CasksTableTable extends CasksTable
       context.handle(
         _fullTokenMeta,
         fullToken.isAcceptableOrUnknown(data['full_token']!, _fullTokenMeta),
+      );
+    }
+    if (data.containsKey('tap')) {
+      context.handle(
+        _tapMeta,
+        tap.isAcceptableOrUnknown(data['tap']!, _tapMeta),
       );
     }
     if (data.containsKey('desc')) {
@@ -389,6 +421,10 @@ class $CasksTableTable extends CasksTable
         DriftSqlType.string,
         data['${effectivePrefix}full_token'],
       ),
+      tap: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tap'],
+      ),
       name: $CasksTableTable.$convertername.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -411,6 +447,12 @@ class $CasksTableTable extends CasksTable
         DriftSqlType.string,
         data['${effectivePrefix}version'],
       )!,
+      artifacts: $CasksTableTable.$converterartifactsn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}artifacts'],
+        ),
+      ),
       autoUpdates: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}auto_updates'],
@@ -475,6 +517,10 @@ class $CasksTableTable extends CasksTable
 
   static TypeConverter<List<String>, String> $convertername =
       const StringListConverter();
+  static TypeConverter<List<Map<String, dynamic>>, String> $converterartifacts =
+      const MapListConverter();
+  static TypeConverter<List<Map<String, dynamic>>?, String?>
+  $converterartifactsn = NullAwareTypeConverter.wrap($converterartifacts);
   static TypeConverter<Map<String, dynamic>, String> $converterdependsOn =
       const MapConverter();
   static TypeConverter<Map<String, dynamic>?, String?> $converterdependsOnn =
@@ -492,11 +538,13 @@ class $CasksTableTable extends CasksTable
 class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   final Value<String> token;
   final Value<String?> fullToken;
+  final Value<String?> tap;
   final Value<List<String>> name;
   final Value<String?> desc;
   final Value<String?> homepage;
   final Value<String?> url;
   final Value<String> version;
+  final Value<List<Map<String, dynamic>>?> artifacts;
   final Value<bool?> autoUpdates;
   final Value<Map<String, dynamic>?> dependsOn;
   final Value<bool> outdated;
@@ -513,11 +561,13 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   const CasksTableCompanion({
     this.token = const Value.absent(),
     this.fullToken = const Value.absent(),
+    this.tap = const Value.absent(),
     this.name = const Value.absent(),
     this.desc = const Value.absent(),
     this.homepage = const Value.absent(),
     this.url = const Value.absent(),
     this.version = const Value.absent(),
+    this.artifacts = const Value.absent(),
     this.autoUpdates = const Value.absent(),
     this.dependsOn = const Value.absent(),
     this.outdated = const Value.absent(),
@@ -535,11 +585,13 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   CasksTableCompanion.insert({
     required String token,
     this.fullToken = const Value.absent(),
+    this.tap = const Value.absent(),
     required List<String> name,
     this.desc = const Value.absent(),
     this.homepage = const Value.absent(),
     this.url = const Value.absent(),
     required String version,
+    this.artifacts = const Value.absent(),
     this.autoUpdates = const Value.absent(),
     this.dependsOn = const Value.absent(),
     this.outdated = const Value.absent(),
@@ -559,11 +611,13 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   static Insertable<CaskModel> custom({
     Expression<String>? token,
     Expression<String>? fullToken,
+    Expression<String>? tap,
     Expression<String>? name,
     Expression<String>? desc,
     Expression<String>? homepage,
     Expression<String>? url,
     Expression<String>? version,
+    Expression<String>? artifacts,
     Expression<bool>? autoUpdates,
     Expression<String>? dependsOn,
     Expression<bool>? outdated,
@@ -581,11 +635,13 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     return RawValuesInsertable({
       if (token != null) 'token': token,
       if (fullToken != null) 'full_token': fullToken,
+      if (tap != null) 'tap': tap,
       if (name != null) 'name': name,
       if (desc != null) 'desc': desc,
       if (homepage != null) 'homepage': homepage,
       if (url != null) 'url': url,
       if (version != null) 'version': version,
+      if (artifacts != null) 'artifacts': artifacts,
       if (autoUpdates != null) 'auto_updates': autoUpdates,
       if (dependsOn != null) 'depends_on': dependsOn,
       if (outdated != null) 'outdated': outdated,
@@ -605,11 +661,13 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   CasksTableCompanion copyWith({
     Value<String>? token,
     Value<String?>? fullToken,
+    Value<String?>? tap,
     Value<List<String>>? name,
     Value<String?>? desc,
     Value<String?>? homepage,
     Value<String?>? url,
     Value<String>? version,
+    Value<List<Map<String, dynamic>>?>? artifacts,
     Value<bool?>? autoUpdates,
     Value<Map<String, dynamic>?>? dependsOn,
     Value<bool>? outdated,
@@ -627,11 +685,13 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     return CasksTableCompanion(
       token: token ?? this.token,
       fullToken: fullToken ?? this.fullToken,
+      tap: tap ?? this.tap,
       name: name ?? this.name,
       desc: desc ?? this.desc,
       homepage: homepage ?? this.homepage,
       url: url ?? this.url,
       version: version ?? this.version,
+      artifacts: artifacts ?? this.artifacts,
       autoUpdates: autoUpdates ?? this.autoUpdates,
       dependsOn: dependsOn ?? this.dependsOn,
       outdated: outdated ?? this.outdated,
@@ -657,6 +717,9 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     if (fullToken.present) {
       map['full_token'] = Variable<String>(fullToken.value);
     }
+    if (tap.present) {
+      map['tap'] = Variable<String>(tap.value);
+    }
     if (name.present) {
       map['name'] = Variable<String>(
         $CasksTableTable.$convertername.toSql(name.value),
@@ -673,6 +736,11 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     }
     if (version.present) {
       map['version'] = Variable<String>(version.value);
+    }
+    if (artifacts.present) {
+      map['artifacts'] = Variable<String>(
+        $CasksTableTable.$converterartifactsn.toSql(artifacts.value),
+      );
     }
     if (autoUpdates.present) {
       map['auto_updates'] = Variable<bool>(autoUpdates.value);
@@ -727,11 +795,13 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     return (StringBuffer('CasksTableCompanion(')
           ..write('token: $token, ')
           ..write('fullToken: $fullToken, ')
+          ..write('tap: $tap, ')
           ..write('name: $name, ')
           ..write('desc: $desc, ')
           ..write('homepage: $homepage, ')
           ..write('url: $url, ')
           ..write('version: $version, ')
+          ..write('artifacts: $artifacts, ')
           ..write('autoUpdates: $autoUpdates, ')
           ..write('dependsOn: $dependsOn, ')
           ..write('outdated: $outdated, ')
@@ -758,11 +828,13 @@ class _$CaskModelInsertable implements Insertable<CaskModel> {
     return CasksTableCompanion(
       token: Value(_object.token),
       fullToken: Value(_object.fullToken),
+      tap: Value(_object.tap),
       name: Value(_object.name),
       desc: Value(_object.desc),
       homepage: Value(_object.homepage),
       url: Value(_object.url),
       version: Value(_object.version),
+      artifacts: Value(_object.artifacts),
       autoUpdates: Value(_object.autoUpdates),
       dependsOn: Value(_object.dependsOn),
       outdated: Value(_object.outdated),
@@ -2646,11 +2718,13 @@ typedef $$CasksTableTableCreateCompanionBuilder =
     CasksTableCompanion Function({
       required String token,
       Value<String?> fullToken,
+      Value<String?> tap,
       required List<String> name,
       Value<String?> desc,
       Value<String?> homepage,
       Value<String?> url,
       required String version,
+      Value<List<Map<String, dynamic>>?> artifacts,
       Value<bool?> autoUpdates,
       Value<Map<String, dynamic>?> dependsOn,
       Value<bool> outdated,
@@ -2669,11 +2743,13 @@ typedef $$CasksTableTableUpdateCompanionBuilder =
     CasksTableCompanion Function({
       Value<String> token,
       Value<String?> fullToken,
+      Value<String?> tap,
       Value<List<String>> name,
       Value<String?> desc,
       Value<String?> homepage,
       Value<String?> url,
       Value<String> version,
+      Value<List<Map<String, dynamic>>?> artifacts,
       Value<bool?> autoUpdates,
       Value<Map<String, dynamic>?> dependsOn,
       Value<bool> outdated,
@@ -2708,6 +2784,11 @@ class $$CasksTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get tap => $composableBuilder(
+    column: $table.tap,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnWithTypeConverterFilters<List<String>, List<String>, String> get name =>
       $composableBuilder(
         column: $table.name,
@@ -2732,6 +2813,16 @@ class $$CasksTableTableFilterComposer
   ColumnFilters<String> get version => $composableBuilder(
     column: $table.version,
     builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    List<Map<String, dynamic>>?,
+    List<Map<String, dynamic>>,
+    String
+  >
+  get artifacts => $composableBuilder(
+    column: $table.artifacts,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   ColumnFilters<bool> get autoUpdates => $composableBuilder(
@@ -2829,6 +2920,11 @@ class $$CasksTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get tap => $composableBuilder(
+    column: $table.tap,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get name => $composableBuilder(
     column: $table.name,
     builder: (column) => ColumnOrderings(column),
@@ -2851,6 +2947,11 @@ class $$CasksTableTableOrderingComposer
 
   ColumnOrderings<String> get version => $composableBuilder(
     column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get artifacts => $composableBuilder(
+    column: $table.artifacts,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2930,6 +3031,9 @@ class $$CasksTableTableAnnotationComposer
   GeneratedColumn<String> get fullToken =>
       $composableBuilder(column: $table.fullToken, builder: (column) => column);
 
+  GeneratedColumn<String> get tap =>
+      $composableBuilder(column: $table.tap, builder: (column) => column);
+
   GeneratedColumnWithTypeConverter<List<String>, String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
 
@@ -2944,6 +3048,10 @@ class $$CasksTableTableAnnotationComposer
 
   GeneratedColumn<String> get version =>
       $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<Map<String, dynamic>>?, String>
+  get artifacts =>
+      $composableBuilder(column: $table.artifacts, builder: (column) => column);
 
   GeneratedColumn<bool> get autoUpdates => $composableBuilder(
     column: $table.autoUpdates,
@@ -3034,11 +3142,14 @@ class $$CasksTableTableTableManager
               ({
                 Value<String> token = const Value.absent(),
                 Value<String?> fullToken = const Value.absent(),
+                Value<String?> tap = const Value.absent(),
                 Value<List<String>> name = const Value.absent(),
                 Value<String?> desc = const Value.absent(),
                 Value<String?> homepage = const Value.absent(),
                 Value<String?> url = const Value.absent(),
                 Value<String> version = const Value.absent(),
+                Value<List<Map<String, dynamic>>?> artifacts =
+                    const Value.absent(),
                 Value<bool?> autoUpdates = const Value.absent(),
                 Value<Map<String, dynamic>?> dependsOn = const Value.absent(),
                 Value<bool> outdated = const Value.absent(),
@@ -3055,11 +3166,13 @@ class $$CasksTableTableTableManager
               }) => CasksTableCompanion(
                 token: token,
                 fullToken: fullToken,
+                tap: tap,
                 name: name,
                 desc: desc,
                 homepage: homepage,
                 url: url,
                 version: version,
+                artifacts: artifacts,
                 autoUpdates: autoUpdates,
                 dependsOn: dependsOn,
                 outdated: outdated,
@@ -3078,11 +3191,14 @@ class $$CasksTableTableTableManager
               ({
                 required String token,
                 Value<String?> fullToken = const Value.absent(),
+                Value<String?> tap = const Value.absent(),
                 required List<String> name,
                 Value<String?> desc = const Value.absent(),
                 Value<String?> homepage = const Value.absent(),
                 Value<String?> url = const Value.absent(),
                 required String version,
+                Value<List<Map<String, dynamic>>?> artifacts =
+                    const Value.absent(),
                 Value<bool?> autoUpdates = const Value.absent(),
                 Value<Map<String, dynamic>?> dependsOn = const Value.absent(),
                 Value<bool> outdated = const Value.absent(),
@@ -3099,11 +3215,13 @@ class $$CasksTableTableTableManager
               }) => CasksTableCompanion.insert(
                 token: token,
                 fullToken: fullToken,
+                tap: tap,
                 name: name,
                 desc: desc,
                 homepage: homepage,
                 url: url,
                 version: version,
+                artifacts: artifacts,
                 autoUpdates: autoUpdates,
                 dependsOn: dependsOn,
                 outdated: outdated,

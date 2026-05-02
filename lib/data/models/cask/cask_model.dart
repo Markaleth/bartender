@@ -8,11 +8,13 @@ abstract class CaskModel with _$CaskModel {
   const factory CaskModel({
     required String token,
     @JsonKey(name: 'full_token') String? fullToken,
+    String? tap,
     required List<String> name,
     String? desc,
     String? homepage,
     String? url,
     required String version,
+    List<Map<String, dynamic>>? artifacts,
     @JsonKey(name: 'auto_updates') bool? autoUpdates,
     @JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn,
     @Default(false) bool outdated,
