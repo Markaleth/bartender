@@ -25,3 +25,7 @@ const double thicknessXl = 8.0;
 const double sideBarWidth = 250.0;
 const double trendingPackageCarouselHeight = 200;
 const double defaultBrewCardIconSize = 40.0;
+
+
+// Layout Breakpoints
+const double widthBreakpoint = 600.0;

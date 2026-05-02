@@ -38,43 +38,47 @@ class PackageListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return AnimatedContainer(
-          duration: defaultAnimationDuration,
-          curve: Curves.easeInOut,
-          margin: EdgeInsets.symmetric(
-            vertical: isExpanded ? spacingS : 0,
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: spacingXs,
+            horizontal: spacingS,
           ),
-          decoration: BoxDecoration(
-            color: isExpanded ? AppColors.surface : Colors.transparent,
-            borderRadius: BorderRadius.circular(isExpanded ? radiusL : 0),
-            border: isExpanded
-                ? Border.all(color: AppColors.borderNeutral)
-                : Border.all(color: Colors.transparent),
-          ),
-          child: AnimatedSize(
+          child: AnimatedContainer(
             duration: defaultAnimationDuration,
             curve: Curves.easeInOut,
-            alignment: Alignment.topCenter,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _PackageListItemHeader(
-                  id: id,
-                  name: name,
-                  homepage: homepage,
-                  isCask: isCask,
-                  isExpanded: isExpanded,
-                  onExpand: onExpand,
-                  description: description,
-                  version: version,
-                  constraints: constraints,
-                ),
-                if (isExpanded)
-                  _PackageListItemDetails(
+            margin: EdgeInsets.symmetric(vertical: isExpanded ? spacingS : 0),
+            decoration: BoxDecoration(
+              color: isExpanded ? AppColors.surface : Colors.transparent,
+              borderRadius: BorderRadius.circular(isExpanded ? radiusL : 0),
+              border: isExpanded
+                  ? Border.all(color: AppColors.borderNeutral)
+                  : Border.all(color: Colors.transparent),
+            ),
+            child: AnimatedSize(
+              duration: defaultAnimationDuration,
+              curve: Curves.easeInOut,
+              alignment: Alignment.topCenter,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _PackageListItemHeader(
+                    id: id,
+                    name: name,
+                    homepage: homepage,
+                    isCask: isCask,
+                    isExpanded: isExpanded,
+                    onExpand: onExpand,
+                    description: description,
                     version: version,
-                    dependencies: dependencies,
+                    constraints: constraints,
                   ),
-              ],
+                  if (isExpanded)
+                    _PackageListItemDetails(
+                      version: version,
+                      dependencies: dependencies,
+                    ),
+                ],
+              ),
             ),
           ),
         );
@@ -109,7 +113,7 @@ class _PackageListItemHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tag = StringUtils.extractVariantTag(name, id);
-    final isLargeScreen = constraints.maxWidth >= 600;
+    final isLargeScreen = constraints.maxWidth >= widthBreakpoint;
 
     Widget titleWidget = Text(name, style: context.titleM);
     if (tag != null) {
@@ -125,7 +129,7 @@ class _PackageListItemHeader extends StatelessWidget {
 
     return InkWell(
       onTap: onExpand,
-      borderRadius: BorderRadius.circular(isExpanded ? radiusL : 0),
+      borderRadius: BorderRadius.circular(radiusL),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: spacingL,
