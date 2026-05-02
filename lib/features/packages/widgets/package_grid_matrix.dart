@@ -19,55 +19,55 @@ class PackageGridMatrix extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (model) {
       CaskModel cask => _BasePackageGridMatrix(
-          homepage: cask.homepage,
-          archs: cask.compatibility
-              .where((info) => info != CompatibilityInfo.precompiled)
-              .map((info) => info.label)
-              .join(', '),
-          version: cask.version,
-          typeAndTap: 'Cask • ${cask.tap ?? 'homebrew/cask'}',
-          fullTag: cask.fullToken ?? cask.token,
-          installs30d: cask.installs30d,
-          extraItems: [
-            PackageDetailGridItem(
-              icon: updateIcon,
-              title: 'Auto-Updates',
-              subtitle: cask.autoUpdates == true
-                  ? 'Managed by App'
-                  : 'Managed by Brew',
-            ),
-            PackageDetailGridItem(
-              icon: unpackIcon,
-              title: 'Artifact Type',
-              subtitle: cask.primaryArtifactType,
-            ),
-          ],
-        ),
+        homepage: cask.homepage,
+        archs: cask.compatibility
+            .where((info) => info != CompatibilityInfo.precompiled)
+            .map((info) => info.label)
+            .join(', '),
+        version: cask.version,
+        typeAndTap: 'Cask • ${cask.tap ?? 'homebrew/cask'}',
+        fullTag: cask.fullToken ?? cask.token,
+        installs30d: cask.installs30d,
+        extraItems: [
+          PackageDetailGridItem(
+            icon: updateIcon,
+            title: 'Auto-Updates',
+            subtitle: cask.autoUpdates == true
+                ? 'Managed by App'
+                : 'Managed by Brew',
+          ),
+          PackageDetailGridItem(
+            icon: unpackIcon,
+            title: 'Artifact Type',
+            subtitle: cask.primaryArtifactType,
+          ),
+        ],
+      ),
       FormulaModel formula => _BasePackageGridMatrix(
-          homepage: formula.homepage,
-          archs: formula.compatibility
-              .where((info) => info != CompatibilityInfo.precompiled)
-              .map((info) => info.label)
-              .join(', '),
-          version: formula.versions.stable,
-          typeAndTap: 'Formula • ${formula.tap}',
-          fullTag: formula.fullName,
-          installs30d: formula.installs30d,
-          extraItems: [
-            PackageDetailGridItem(
-              icon: badgeIcon,
-              title: 'License',
-              subtitle: formula.license ?? 'Unknown',
-            ),
-            PackageDetailGridItem(
-              icon: bottleIcon,
-              title: 'Has Bottle',
-              subtitle: formula.versions.bottle
-                  ? 'Precompiled (Bottle)'
-                  : 'Build from Source',
-            ),
-          ],
-        ),
+        homepage: formula.homepage,
+        archs: formula.compatibility
+            .where((info) => info != CompatibilityInfo.precompiled)
+            .map((info) => info.label)
+            .join(', '),
+        version: formula.versions.stable,
+        typeAndTap: 'Formula • ${formula.tap}',
+        fullTag: formula.fullName,
+        installs30d: formula.installs30d,
+        extraItems: [
+          PackageDetailGridItem(
+            icon: badgeIcon,
+            title: 'License',
+            subtitle: formula.license ?? 'Unknown',
+          ),
+          PackageDetailGridItem(
+            icon: bottleIcon,
+            title: 'Has Bottle',
+            subtitle: formula.versions.bottle
+                ? 'Precompiled (Bottle)'
+                : 'Build from Source',
+          ),
+        ],
+      ),
       _ => const SizedBox.shrink(),
     };
   }
@@ -94,51 +94,64 @@ class _BasePackageGridMatrix extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: spacingM,
-      runSpacing: spacingM,
-      children: [
-        PackageDetailGridItem(
-          icon: homeIcon,
-          title: 'Homepage',
-          subtitle: homepage != null
-              ? (Uri.tryParse(homepage!)?.host.isNotEmpty == true
-                  ? Uri.tryParse(homepage!)!.host
-                  : homepage!)
-              : 'Unknown',
-          onTap: homepage != null
-              ? () => UrlLauncherUtils.launch(homepage!)
-              : null,
-        ),
-        PackageDetailGridItem(
-          icon: cpuIcon,
-          title: 'Architecture',
-          subtitle: archs.isEmpty ? 'Unknown' : archs,
-        ),
-        PackageDetailGridItem(
-          icon: hashIcon,
-          title: 'Version',
-          subtitle: version,
-        ),
-        PackageDetailGridItem(
-          icon: packagesIcon,
-          title: 'Type & Tap',
-          subtitle: typeAndTap,
-        ),
-        PackageDetailGridItem(
-          icon: tagIcon,
-          title: 'Full Tag',
-          subtitle: fullTag,
-        ),
-        PackageDetailGridItem(
-          icon: trendingIcon,
-          title: 'Popularity',
-          subtitle: installs30d != null
-              ? '${StringUtils.formatWithCommas(installs30d!)} installs'
-              : 'N/A',
-        ),
-        ...extraItems,
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final itemWidth = (constraints.maxWidth - (spacingM * 3)) / 4;
+
+        // Floor to avoid sub-pixel overflow (wrapping to next line prematurely)
+        final safeWidth = itemWidth.floorToDouble();
+
+        final children = [
+          PackageDetailGridItem(
+            icon: homeIcon,
+            title: 'Homepage',
+            subtitle: homepage != null
+                ? (Uri.tryParse(homepage!)?.host.isNotEmpty == true
+                      ? Uri.tryParse(homepage!)!.host
+                      : homepage!)
+                : 'Unknown',
+            onTap: homepage != null
+                ? () => UrlLauncherUtils.launch(homepage!)
+                : null,
+          ),
+          PackageDetailGridItem(
+            icon: cpuIcon,
+            title: 'Architecture',
+            subtitle: archs.isEmpty ? 'Unknown' : archs,
+          ),
+          PackageDetailGridItem(
+            icon: hashIcon,
+            title: 'Version',
+            subtitle: version,
+          ),
+          PackageDetailGridItem(
+            icon: packagesIcon,
+            title: 'Type & Tap',
+            subtitle: typeAndTap,
+          ),
+          PackageDetailGridItem(
+            icon: tagIcon,
+            title: 'Full Tag',
+            subtitle: fullTag,
+          ),
+          PackageDetailGridItem(
+            icon: trendingIcon,
+            title: 'Popularity',
+            subtitle: installs30d != null
+                ? '${StringUtils.formatWithCommas(installs30d!)} installs'
+                : 'N/A',
+          ),
+          ...extraItems,
+        ];
+
+        return Wrap(
+          spacing: spacingM,
+          runSpacing: spacingM,
+          children: children
+              .map((child) => SizedBox(width: safeWidth, child: child))
+              .toList(),
+        );
+      },
     );
   }
 }
@@ -160,7 +173,6 @@ class PackageDetailGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
       padding: const EdgeInsets.all(spacingM),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,

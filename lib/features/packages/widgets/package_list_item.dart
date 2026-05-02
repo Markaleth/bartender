@@ -72,10 +72,7 @@ class PackageListItem extends StatelessWidget {
                     version: version,
                     constraints: constraints,
                   ),
-                  if (isExpanded)
-                    _PackageListItemDetails(
-                      model: model,
-                    ),
+                  if (isExpanded) _PackageListItemDetails(model: model),
                 ],
               ),
             ),
@@ -196,14 +193,11 @@ class _PackageListItemDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const HorizontalDivider(),
         Padding(
           padding: const EdgeInsets.all(spacingL),
-          child: PackageGridMatrix(
-            model: model,
-          ),
+          child: PackageGridMatrix(model: model),
         ),
         const HorizontalDivider(),
         Padding(
@@ -211,29 +205,17 @@ class _PackageListItemDetails extends StatelessWidget {
             horizontal: spacingL,
             vertical: spacingM,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              OutlinedButton(
-                onPressed: () {
-                  // Dummy uninstall
-                },
-                child: Text(
-                  'Uninstall',
-                  style: context.labelL.copyWith(color: AppColors.primary),
-                ),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              onPressed: () {
+                // Dummy install
+              },
+              child: Text(
+                model.isInstalled ? 'Reinstall' : 'Install',
+                style: context.labelL.copyWith(color: AppColors.onPrimary),
               ),
-              const SizedBox(width: spacingM),
-              ElevatedButton(
-                onPressed: () {
-                  // Dummy install
-                },
-                child: Text(
-                  'Install',
-                  style: context.labelL.copyWith(color: AppColors.onPrimary),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ],
