@@ -252,4 +252,30 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   void setSearchQuery(String query) {
     emitState(state.copyWith(searchQuery: query));
   }
+
+  void togglePackageExpansion(String id) {
+    if (state.expandedPackageId == id) {
+      emitState(state.copyWith(expandedPackageId: null));
+    } else {
+      emitState(state.copyWith(expandedPackageId: id));
+    }
+  }
+
+  List<String> getDependencies(dynamic item) {
+    if (item is FormulaModel) {
+      return item.dependencies;
+    } else if (item is CaskModel) {
+      final dependencies = <String>[];
+      if (item.dependsOn != null) {
+        if (item.dependsOn!['cask'] is List) {
+          dependencies.addAll((item.dependsOn!['cask'] as List).cast<String>());
+        }
+        if (item.dependsOn!['formula'] is List) {
+          dependencies.addAll((item.dependsOn!['formula'] as List).cast<String>());
+        }
+      }
+      return dependencies;
+    }
+    return [];
+  }
 }

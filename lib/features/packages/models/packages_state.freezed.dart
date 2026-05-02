@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackagesState {
 
- String get searchQuery; FetchState<List<CaskModel>> get casksData; FetchState<List<FormulaModel>> get formulaeData; FetchState<List<dynamic>> get trendingData; List<PackageOperation> get operationsQueue; List<dynamic> get paginatedPackages;
+ String get searchQuery; FetchState<List<CaskModel>> get casksData; FetchState<List<FormulaModel>> get formulaeData; FetchState<List<dynamic>> get trendingData; List<PackageOperation> get operationsQueue; List<dynamic> get paginatedPackages; String? get expandedPackageId;
 /// Create a copy of PackagesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PackagesStateCopyWith<PackagesState> get copyWith => _$PackagesStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackagesState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.casksData, casksData) || other.casksData == casksData)&&(identical(other.formulaeData, formulaeData) || other.formulaeData == formulaeData)&&(identical(other.trendingData, trendingData) || other.trendingData == trendingData)&&const DeepCollectionEquality().equals(other.operationsQueue, operationsQueue)&&const DeepCollectionEquality().equals(other.paginatedPackages, paginatedPackages));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackagesState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.casksData, casksData) || other.casksData == casksData)&&(identical(other.formulaeData, formulaeData) || other.formulaeData == formulaeData)&&(identical(other.trendingData, trendingData) || other.trendingData == trendingData)&&const DeepCollectionEquality().equals(other.operationsQueue, operationsQueue)&&const DeepCollectionEquality().equals(other.paginatedPackages, paginatedPackages)&&(identical(other.expandedPackageId, expandedPackageId) || other.expandedPackageId == expandedPackageId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,searchQuery,casksData,formulaeData,trendingData,const DeepCollectionEquality().hash(operationsQueue),const DeepCollectionEquality().hash(paginatedPackages));
+int get hashCode => Object.hash(runtimeType,searchQuery,casksData,formulaeData,trendingData,const DeepCollectionEquality().hash(operationsQueue),const DeepCollectionEquality().hash(paginatedPackages),expandedPackageId);
 
 @override
 String toString() {
-  return 'PackagesState(searchQuery: $searchQuery, casksData: $casksData, formulaeData: $formulaeData, trendingData: $trendingData, operationsQueue: $operationsQueue, paginatedPackages: $paginatedPackages)';
+  return 'PackagesState(searchQuery: $searchQuery, casksData: $casksData, formulaeData: $formulaeData, trendingData: $trendingData, operationsQueue: $operationsQueue, paginatedPackages: $paginatedPackages, expandedPackageId: $expandedPackageId)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PackagesStateCopyWith<$Res>  {
   factory $PackagesStateCopyWith(PackagesState value, $Res Function(PackagesState) _then) = _$PackagesStateCopyWithImpl;
 @useResult
 $Res call({
- String searchQuery, FetchState<List<CaskModel>> casksData, FetchState<List<FormulaModel>> formulaeData, FetchState<List<dynamic>> trendingData, List<PackageOperation> operationsQueue, List<dynamic> paginatedPackages
+ String searchQuery, FetchState<List<CaskModel>> casksData, FetchState<List<FormulaModel>> formulaeData, FetchState<List<dynamic>> trendingData, List<PackageOperation> operationsQueue, List<dynamic> paginatedPackages, String? expandedPackageId
 });
 
 
@@ -62,7 +62,7 @@ class _$PackagesStateCopyWithImpl<$Res>
 
 /// Create a copy of PackagesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? searchQuery = null,Object? casksData = null,Object? formulaeData = null,Object? trendingData = null,Object? operationsQueue = null,Object? paginatedPackages = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? searchQuery = null,Object? casksData = null,Object? formulaeData = null,Object? trendingData = null,Object? operationsQueue = null,Object? paginatedPackages = null,Object? expandedPackageId = freezed,}) {
   return _then(_self.copyWith(
 searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
 as String,casksData: null == casksData ? _self.casksData : casksData // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,8 @@ as FetchState<List<CaskModel>>,formulaeData: null == formulaeData ? _self.formul
 as FetchState<List<FormulaModel>>,trendingData: null == trendingData ? _self.trendingData : trendingData // ignore: cast_nullable_to_non_nullable
 as FetchState<List<dynamic>>,operationsQueue: null == operationsQueue ? _self.operationsQueue : operationsQueue // ignore: cast_nullable_to_non_nullable
 as List<PackageOperation>,paginatedPackages: null == paginatedPackages ? _self.paginatedPackages : paginatedPackages // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,
+as List<dynamic>,expandedPackageId: freezed == expandedPackageId ? _self.expandedPackageId : expandedPackageId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of PackagesState
@@ -182,10 +183,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue,  List<dynamic> paginatedPackages)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue,  List<dynamic> paginatedPackages,  String? expandedPackageId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackagesState() when $default != null:
-return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue,_that.paginatedPackages);case _:
+return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue,_that.paginatedPackages,_that.expandedPackageId);case _:
   return orElse();
 
 }
@@ -203,10 +204,10 @@ return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trend
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue,  List<dynamic> paginatedPackages)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue,  List<dynamic> paginatedPackages,  String? expandedPackageId)  $default,) {final _that = this;
 switch (_that) {
 case _PackagesState():
-return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue,_that.paginatedPackages);case _:
+return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue,_that.paginatedPackages,_that.expandedPackageId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -223,10 +224,10 @@ return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trend
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue,  List<dynamic> paginatedPackages)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  FetchState<List<CaskModel>> casksData,  FetchState<List<FormulaModel>> formulaeData,  FetchState<List<dynamic>> trendingData,  List<PackageOperation> operationsQueue,  List<dynamic> paginatedPackages,  String? expandedPackageId)?  $default,) {final _that = this;
 switch (_that) {
 case _PackagesState() when $default != null:
-return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue,_that.paginatedPackages);case _:
+return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trendingData,_that.operationsQueue,_that.paginatedPackages,_that.expandedPackageId);case _:
   return null;
 
 }
@@ -238,7 +239,7 @@ return $default(_that.searchQuery,_that.casksData,_that.formulaeData,_that.trend
 
 
 class _PackagesState implements PackagesState {
-  const _PackagesState({this.searchQuery = '', this.casksData = const FetchState.loading(), this.formulaeData = const FetchState.loading(), this.trendingData = const FetchState.loading(), final  List<PackageOperation> operationsQueue = const [], final  List<dynamic> paginatedPackages = const []}): _operationsQueue = operationsQueue,_paginatedPackages = paginatedPackages;
+  const _PackagesState({this.searchQuery = '', this.casksData = const FetchState.loading(), this.formulaeData = const FetchState.loading(), this.trendingData = const FetchState.loading(), final  List<PackageOperation> operationsQueue = const [], final  List<dynamic> paginatedPackages = const [], this.expandedPackageId}): _operationsQueue = operationsQueue,_paginatedPackages = paginatedPackages;
   
 
 @override@JsonKey() final  String searchQuery;
@@ -259,6 +260,7 @@ class _PackagesState implements PackagesState {
   return EqualUnmodifiableListView(_paginatedPackages);
 }
 
+@override final  String? expandedPackageId;
 
 /// Create a copy of PackagesState
 /// with the given fields replaced by the non-null parameter values.
@@ -270,16 +272,16 @@ _$PackagesStateCopyWith<_PackagesState> get copyWith => __$PackagesStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackagesState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.casksData, casksData) || other.casksData == casksData)&&(identical(other.formulaeData, formulaeData) || other.formulaeData == formulaeData)&&(identical(other.trendingData, trendingData) || other.trendingData == trendingData)&&const DeepCollectionEquality().equals(other._operationsQueue, _operationsQueue)&&const DeepCollectionEquality().equals(other._paginatedPackages, _paginatedPackages));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackagesState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.casksData, casksData) || other.casksData == casksData)&&(identical(other.formulaeData, formulaeData) || other.formulaeData == formulaeData)&&(identical(other.trendingData, trendingData) || other.trendingData == trendingData)&&const DeepCollectionEquality().equals(other._operationsQueue, _operationsQueue)&&const DeepCollectionEquality().equals(other._paginatedPackages, _paginatedPackages)&&(identical(other.expandedPackageId, expandedPackageId) || other.expandedPackageId == expandedPackageId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,searchQuery,casksData,formulaeData,trendingData,const DeepCollectionEquality().hash(_operationsQueue),const DeepCollectionEquality().hash(_paginatedPackages));
+int get hashCode => Object.hash(runtimeType,searchQuery,casksData,formulaeData,trendingData,const DeepCollectionEquality().hash(_operationsQueue),const DeepCollectionEquality().hash(_paginatedPackages),expandedPackageId);
 
 @override
 String toString() {
-  return 'PackagesState(searchQuery: $searchQuery, casksData: $casksData, formulaeData: $formulaeData, trendingData: $trendingData, operationsQueue: $operationsQueue, paginatedPackages: $paginatedPackages)';
+  return 'PackagesState(searchQuery: $searchQuery, casksData: $casksData, formulaeData: $formulaeData, trendingData: $trendingData, operationsQueue: $operationsQueue, paginatedPackages: $paginatedPackages, expandedPackageId: $expandedPackageId)';
 }
 
 
@@ -290,7 +292,7 @@ abstract mixin class _$PackagesStateCopyWith<$Res> implements $PackagesStateCopy
   factory _$PackagesStateCopyWith(_PackagesState value, $Res Function(_PackagesState) _then) = __$PackagesStateCopyWithImpl;
 @override @useResult
 $Res call({
- String searchQuery, FetchState<List<CaskModel>> casksData, FetchState<List<FormulaModel>> formulaeData, FetchState<List<dynamic>> trendingData, List<PackageOperation> operationsQueue, List<dynamic> paginatedPackages
+ String searchQuery, FetchState<List<CaskModel>> casksData, FetchState<List<FormulaModel>> formulaeData, FetchState<List<dynamic>> trendingData, List<PackageOperation> operationsQueue, List<dynamic> paginatedPackages, String? expandedPackageId
 });
 
 
@@ -307,7 +309,7 @@ class __$PackagesStateCopyWithImpl<$Res>
 
 /// Create a copy of PackagesState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? searchQuery = null,Object? casksData = null,Object? formulaeData = null,Object? trendingData = null,Object? operationsQueue = null,Object? paginatedPackages = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? searchQuery = null,Object? casksData = null,Object? formulaeData = null,Object? trendingData = null,Object? operationsQueue = null,Object? paginatedPackages = null,Object? expandedPackageId = freezed,}) {
   return _then(_PackagesState(
 searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
 as String,casksData: null == casksData ? _self.casksData : casksData // ignore: cast_nullable_to_non_nullable
@@ -315,7 +317,8 @@ as FetchState<List<CaskModel>>,formulaeData: null == formulaeData ? _self.formul
 as FetchState<List<FormulaModel>>,trendingData: null == trendingData ? _self.trendingData : trendingData // ignore: cast_nullable_to_non_nullable
 as FetchState<List<dynamic>>,operationsQueue: null == operationsQueue ? _self._operationsQueue : operationsQueue // ignore: cast_nullable_to_non_nullable
 as List<PackageOperation>,paginatedPackages: null == paginatedPackages ? _self._paginatedPackages : paginatedPackages // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,
+as List<dynamic>,expandedPackageId: freezed == expandedPackageId ? _self.expandedPackageId : expandedPackageId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

@@ -294,5 +294,18 @@ void main() {
         );
       },
     );
+
+    test('togglePackageExpansion: toggles expandedPackageId', () {
+      expect(viewModel.state.expandedPackageId, null);
+
+      viewModel.togglePackageExpansion('pkg1');
+      expect(viewModel.state.expandedPackageId, 'pkg1');
+
+      viewModel.togglePackageExpansion('pkg2');
+      expect(viewModel.state.expandedPackageId, 'pkg2');
+
+      viewModel.togglePackageExpansion('pkg2');
+      expect(viewModel.state.expandedPackageId, null);
+    });
   });
 }

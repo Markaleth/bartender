@@ -17,5 +17,6 @@ abstract class PackagesState with _$PackagesState {
     @Default([]) List<PackageOperation> operationsQueue,
     
     @Default([]) List<dynamic> paginatedPackages,
+    String? expandedPackageId,
   }) = _PackagesState;
 }

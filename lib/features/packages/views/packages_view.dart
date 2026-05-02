@@ -101,12 +101,22 @@ class PackagesView extends StatelessWidget {
                       ? item.name.first
                       : (item as FormulaModel).fullName;
                   final homepage = item.homepage;
+                  
+                  final description = item is CaskModel ? item.desc : (item as FormulaModel).desc;
+                  final version = item is CaskModel ? item.version : (item as FormulaModel).versions.stable;
+                  final dependencies = viewModel.getDependencies(item);
+                  final isExpanded = state.expandedPackageId == id;
 
                   return PackageListItem(
                     id: id,
                     name: name,
                     homepage: homepage,
                     isCask: isCask,
+                    isExpanded: isExpanded,
+                    onExpand: () => viewModel.togglePackageExpansion(id),
+                    description: description,
+                    version: version,
+                    dependencies: dependencies,
                   );
                 },
               ),
