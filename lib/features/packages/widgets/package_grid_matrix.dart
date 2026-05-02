@@ -18,25 +18,82 @@ class PackageGridMatrix extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (model) {
-      CaskModel cask => CaskGridMatrix(cask: cask),
-      FormulaModel formula => FormulaGridMatrix(formula: formula),
+      CaskModel cask => _BasePackageGridMatrix(
+          homepage: cask.homepage,
+          archs: cask.compatibility
+              .where((info) => info != CompatibilityInfo.precompiled)
+              .map((info) => info.label)
+              .join(', '),
+          version: cask.version,
+          typeAndTap: 'Cask • ${cask.tap ?? 'homebrew/cask'}',
+          fullTag: cask.fullToken ?? cask.token,
+          installs30d: cask.installs30d,
+          extraItems: [
+            PackageDetailGridItem(
+              icon: updateIcon,
+              title: 'Auto-Updates',
+              subtitle: cask.autoUpdates == true
+                  ? 'Managed by App'
+                  : 'Managed by Brew',
+            ),
+            PackageDetailGridItem(
+              icon: unpackIcon,
+              title: 'Artifact Type',
+              subtitle: cask.primaryArtifactType,
+            ),
+          ],
+        ),
+      FormulaModel formula => _BasePackageGridMatrix(
+          homepage: formula.homepage,
+          archs: formula.compatibility
+              .where((info) => info != CompatibilityInfo.precompiled)
+              .map((info) => info.label)
+              .join(', '),
+          version: formula.versions.stable,
+          typeAndTap: 'Formula • ${formula.tap}',
+          fullTag: formula.fullName,
+          installs30d: formula.installs30d,
+          extraItems: [
+            PackageDetailGridItem(
+              icon: badgeIcon,
+              title: 'License',
+              subtitle: formula.license ?? 'Unknown',
+            ),
+            PackageDetailGridItem(
+              icon: bottleIcon,
+              title: 'Has Bottle',
+              subtitle: formula.versions.bottle
+                  ? 'Precompiled (Bottle)'
+                  : 'Build from Source',
+            ),
+          ],
+        ),
       _ => const SizedBox.shrink(),
     };
   }
 }
 
-class CaskGridMatrix extends StatelessWidget {
-  final CaskModel cask;
+class _BasePackageGridMatrix extends StatelessWidget {
+  final String? homepage;
+  final String archs;
+  final String version;
+  final String typeAndTap;
+  final String fullTag;
+  final int? installs30d;
+  final List<Widget> extraItems;
 
-  const CaskGridMatrix({super.key, required this.cask});
+  const _BasePackageGridMatrix({
+    required this.homepage,
+    required this.archs,
+    required this.version,
+    required this.typeAndTap,
+    required this.fullTag,
+    required this.installs30d,
+    required this.extraItems,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final archs = cask.compatibility
-        .where((info) => info != CompatibilityInfo.precompiled)
-        .map((info) => info.label)
-        .join(', ');
-
     return Wrap(
       spacing: spacingM,
       runSpacing: spacingM,
@@ -44,13 +101,13 @@ class CaskGridMatrix extends StatelessWidget {
         PackageDetailGridItem(
           icon: homeIcon,
           title: 'Homepage',
-          subtitle: cask.homepage != null
-              ? (Uri.tryParse(cask.homepage!)?.host.isNotEmpty == true
-                    ? Uri.tryParse(cask.homepage!)!.host
-                    : cask.homepage!)
+          subtitle: homepage != null
+              ? (Uri.tryParse(homepage!)?.host.isNotEmpty == true
+                  ? Uri.tryParse(homepage!)!.host
+                  : homepage!)
               : 'Unknown',
-          onTap: cask.homepage != null
-              ? () => UrlLauncherUtils.launch(cask.homepage!)
+          onTap: homepage != null
+              ? () => UrlLauncherUtils.launch(homepage!)
               : null,
         ),
         PackageDetailGridItem(
@@ -61,109 +118,26 @@ class CaskGridMatrix extends StatelessWidget {
         PackageDetailGridItem(
           icon: hashIcon,
           title: 'Version',
-          subtitle: cask.version,
+          subtitle: version,
         ),
         PackageDetailGridItem(
           icon: packagesIcon,
           title: 'Type & Tap',
-          subtitle: 'Cask • ${cask.tap ?? 'homebrew/cask'}',
+          subtitle: typeAndTap,
         ),
         PackageDetailGridItem(
           icon: tagIcon,
           title: 'Full Tag',
-          subtitle: cask.fullToken ?? cask.token,
+          subtitle: fullTag,
         ),
         PackageDetailGridItem(
           icon: trendingIcon,
           title: 'Popularity',
-          subtitle: cask.installs30d != null
-              ? '${StringUtils.formatWithCommas(cask.installs30d)} installs'
+          subtitle: installs30d != null
+              ? '${StringUtils.formatWithCommas(installs30d!)} installs'
               : 'N/A',
         ),
-        PackageDetailGridItem(
-          icon: updateIcon,
-          title: 'Auto-Updates',
-          subtitle: cask.autoUpdates == true
-              ? 'Managed by App'
-              : 'Managed by Brew',
-        ),
-        PackageDetailGridItem(
-          icon: unpackIcon,
-          title: 'Artifact Type',
-          subtitle: cask.primaryArtifactType,
-        ),
-      ],
-    );
-  }
-}
-
-class FormulaGridMatrix extends StatelessWidget {
-  final FormulaModel formula;
-
-  const FormulaGridMatrix({super.key, required this.formula});
-
-  @override
-  Widget build(BuildContext context) {
-    final archs = formula.compatibility
-        .where((info) => info != CompatibilityInfo.precompiled)
-        .map((info) => info.label)
-        .join(', ');
-
-    return Wrap(
-      spacing: spacingM,
-      runSpacing: spacingM,
-      children: [
-        PackageDetailGridItem(
-          icon: homeIcon,
-          title: 'Homepage',
-          subtitle: formula.homepage != null
-              ? (Uri.tryParse(formula.homepage!)?.host.isNotEmpty == true
-                    ? Uri.tryParse(formula.homepage!)!.host
-                    : formula.homepage!)
-              : 'Unknown',
-          onTap: formula.homepage != null
-              ? () => UrlLauncherUtils.launch(formula.homepage!)
-              : null,
-        ),
-        PackageDetailGridItem(
-          icon: cpuIcon,
-          title: 'Architecture',
-          subtitle: archs.isEmpty ? 'Unknown' : archs,
-        ),
-        PackageDetailGridItem(
-          icon: hashIcon,
-          title: 'Version',
-          subtitle: formula.versions.stable,
-        ),
-        PackageDetailGridItem(
-          icon: packagesIcon,
-          title: 'Type & Tap',
-          subtitle: 'Formula • ${formula.tap}',
-        ),
-        PackageDetailGridItem(
-          icon: tagIcon,
-          title: 'Full Tag',
-          subtitle: formula.fullName,
-        ),
-        PackageDetailGridItem(
-          icon: trendingIcon,
-          title: 'Popularity',
-          subtitle: formula.installs30d != null
-              ? '${StringUtils.formatWithCommas(formula.installs30d)} installs'
-              : 'N/A',
-        ),
-        PackageDetailGridItem(
-          icon: badgeIcon,
-          title: 'License',
-          subtitle: formula.license ?? 'Unknown',
-        ),
-        PackageDetailGridItem(
-          icon: bottleIcon,
-          title: 'Has Bottle',
-          subtitle: formula.versions.bottle
-              ? 'Precompiled (Bottle)'
-              : 'Build from Source',
-        ),
+        ...extraItems,
       ],
     );
   }
