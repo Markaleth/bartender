@@ -39,4 +39,14 @@ class StringUtils {
 
     return value.toString();
   }
+
+  /// Formats an integer with comma separators.
+  /// Example: 120400 becomes '120,400'.
+  static String formatWithCommas(int? value, {String fallback = 'N/A'}) {
+    if (value == null) return fallback;
+    return value.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]},',
+        );
+  }
 }

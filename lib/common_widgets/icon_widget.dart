@@ -6,21 +6,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 class IconWidget extends StatelessWidget {
   final String assetName;
   final Color color;
-  final double height;
-  final double width;
+  final double size;
   const IconWidget({
     super.key,
     required this.assetName,
     this.color = AppColors.iconDefault,
-    this.height = spacingXl,
-    this.width = spacingXl,
+    this.size = spacingXl,
   });
 
   @override
   Widget build(BuildContext context) => SvgPicture.asset(
     assetName,
     colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-    height: height,
-    width: width,
+    height: size,
+    width: size,
   );
 }

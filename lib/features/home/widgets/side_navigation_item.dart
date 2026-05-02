@@ -104,12 +104,8 @@ class _AnimatedIcon extends StatelessWidget {
         tween: ColorTween(begin: color, end: color),
         duration: defaultAnimationDuration,
         curve: Curves.easeOutCubic,
-        builder: (context, animatedColor, child) => IconWidget(
-          assetName: icon,
-          color: animatedColor!,
-          height: spacingL,
-          width: spacingL,
-        ),
+        builder: (context, animatedColor, child) =>
+            IconWidget(assetName: icon, color: animatedColor!, size: spacingL),
       ),
     );
   }

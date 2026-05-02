@@ -127,7 +127,7 @@ class _DownloadsWidget extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.center,
     spacing: spacingS,
     children: [
-      IconWidget(assetName: downloadIcon, height: spacingM, width: spacingM),
+      IconWidget(assetName: downloadIcon, size: spacingM),
       Text(downloads, style: context.labelM),
     ],
   );
