@@ -21,6 +21,9 @@ import '../../core/enums/analytics_period.dart';
 import 'type_converters.dart';
 import 'database_interface.dart';
 
+import '../../core/enums/package_type_filter.dart';
+import '../../core/enums/os_support_filter.dart';
+
 part 'database.g.dart';
 
 @DriftDatabase(
@@ -46,6 +49,131 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
         await m.createAll();
       },
     );
+  }
+
+  @override
+  Future<List<dynamic>> getFilteredPackages({
+    String query = '',
+    bool installedOnly = false,
+    PackageTypeFilter type = PackageTypeFilter.all,
+    OsSupportFilter osSupport = OsSupportFilter.all,
+    int limit = 50,
+    int offset = 0,
+  }) async {
+    final args = <Variable>[];
+    String formulaWhere = '1=1';
+    String caskWhere = '1=1';
+
+    if (query.isNotEmpty) {
+      final likeQuery = '%$query%';
+      formulaWhere += ' AND (name LIKE ? OR desc LIKE ?)';
+      caskWhere += ' AND (token LIKE ? OR name LIKE ? OR desc LIKE ?)';
+      args.addAll([
+        Variable.withString(likeQuery),
+        Variable.withString(likeQuery),
+        Variable.withString(likeQuery),
+        Variable.withString(likeQuery),
+        Variable.withString(likeQuery),
+      ]);
+    }
+
+    if (installedOnly) {
+      formulaWhere += ' AND is_installed = 1';
+      caskWhere += ' AND is_installed = 1';
+    }
+
+    if (osSupport == OsSupportFilter.linux) {
+      formulaWhere +=
+          " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"macos\"%')";
+    } else if (osSupport == OsSupportFilter.macOS) {
+      formulaWhere +=
+          " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"linux\"%')";
+    }
+
+    String sql = '';
+
+    if (type == PackageTypeFilter.all) {
+      sql =
+          '''
+        SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $formulaWhere
+        UNION ALL
+        SELECT token AS id, 'cask' AS type FROM casks_table WHERE $caskWhere
+        ORDER BY id ASC
+        LIMIT ? OFFSET ?
+      ''';
+    } else if (type == PackageTypeFilter.formulae) {
+      sql =
+          '''
+        SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $formulaWhere
+        ORDER BY id ASC
+        LIMIT ? OFFSET ?
+      ''';
+      if (query.isNotEmpty) {
+        args.removeLast();
+        args.removeLast();
+        args.removeLast();
+      }
+    } else if (type == PackageTypeFilter.casks) {
+      sql =
+          '''
+        SELECT token AS id, 'cask' AS type FROM casks_table WHERE $caskWhere
+        ORDER BY id ASC
+        LIMIT ? OFFSET ?
+      ''';
+      if (query.isNotEmpty) {
+        args.clear();
+        args.addAll([
+          Variable.withString('%$query%'),
+          Variable.withString('%$query%'),
+          Variable.withString('%$query%'),
+        ]);
+      }
+    }
+
+    args.add(Variable.withInt(limit));
+    args.add(Variable.withInt(offset));
+
+    final result = await customSelect(sql, variables: args).get();
+
+    final formulaIds = <String>[];
+    final caskIds = <String>[];
+
+    for (final row in result) {
+      if (row.read<String>('type') == 'formula') {
+        formulaIds.add(row.read<String>('id'));
+      } else {
+        caskIds.add(row.read<String>('id'));
+      }
+    }
+
+    final formulae = formulaIds.isNotEmpty
+        ? await (select(
+            formulaeTable,
+          )..where((t) => t.name.isIn(formulaIds))).get()
+        : <FormulaModel>[];
+    final casks = caskIds.isNotEmpty
+        ? await (select(casksTable)..where((t) => t.token.isIn(caskIds))).get()
+        : <CaskModel>[];
+
+    final formulaMap = {for (var f in formulae) f.name: f};
+    final caskMap = {for (var c in casks) c.token: c};
+
+    final orderedResults = <dynamic>[];
+    for (final row in result) {
+      final id = row.read<String>('id');
+      final pType = row.read<String>('type');
+      if (pType == 'formula') {
+        if (formulaMap.containsKey(id)) {
+          orderedResults.add(formulaMap[id]);
+        }
+      } else {
+        if (caskMap.containsKey(id)) {
+          orderedResults.add(caskMap[id]);
+        }
+      }
+    }
+
+    return orderedResults;
   }
 
   @override

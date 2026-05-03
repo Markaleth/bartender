@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/enums/analytics_period.dart';
+import 'package:bartender/core/enums/os_support_filter.dart';
+import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/core/models/package_operations/package_operation.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
@@ -17,96 +21,86 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
 
   bool _isProcessingQueue = false;
 
-  List<dynamic> _allPackages = [];
   int _currentPaginationOffset = 0;
   static const int _paginationChunkSize = 50;
+  bool _isLoadingMore = false;
 
   PackagesViewModel(this._homebrewRepository, this._packageRepository)
-    : super(const PackagesState());
+    : super(
+        PackagesState(
+          osSupport: Platform.isMacOS
+              ? OsSupportFilter.macOS
+              : (Platform.isLinux
+                    ? OsSupportFilter.linux
+                    : OsSupportFilter.all),
+        ),
+      );
 
   Future<void> fetchData() async {
-    _setLoadingState();
+    emitState(state.copyWith(trendingData: const FetchState.loading()));
     try {
       await _syncRemoteData();
-      await _fetchLocalData();
+      await _fetchInitialData();
     } catch (error) {
-      _setErrorState(error.toString());
+      emitState(
+        state.copyWith(trendingData: FetchState.error(error.toString())),
+      );
     }
-  }
-
-  void _setLoadingState() {
-    emitState(
-      state.copyWith(
-        formulaeData: const FetchState.loading(),
-        casksData: const FetchState.loading(),
-        trendingData: const FetchState.loading(),
-      ),
-    );
-  }
-
-  void _setErrorState(String errorMessage) {
-    emitState(
-      state.copyWith(
-        formulaeData: FetchState.error(errorMessage),
-        casksData: FetchState.error(errorMessage),
-        trendingData: FetchState.error(errorMessage),
-      ),
-    );
   }
 
   Future<void> _syncRemoteData() async {
     await _homebrewRepository.syncAllData();
   }
 
-  Future<void> _fetchLocalData() async {
-    final formulae = await _homebrewRepository.getAllFormulae();
-    final casks = await _homebrewRepository.getAllCasks();
+  Future<void> _fetchInitialData() async {
+    _currentPaginationOffset = 0;
 
     final chunkedTrending = await _getTrendingData();
 
-    _allPackages = [...formulae, ...casks];
-    _sortPackagesAlphabetically(_allPackages);
+    final initialChunk = await _homebrewRepository.getFilteredPackages(
+      query: state.searchQuery,
+      installedOnly: state.showInstalledOnly,
+      type: state.packageType,
+      osSupport: state.osSupport,
+      limit: _paginationChunkSize,
+      offset: _currentPaginationOffset,
+    );
 
-    _currentPaginationOffset = 0;
-    final initialChunk = _getNextChunk();
+    _currentPaginationOffset += initialChunk.length;
 
     emitState(
       state.copyWith(
-        formulaeData: FetchState.success(formulae),
-        casksData: FetchState.success(casks),
         trendingData: FetchState.success(chunkedTrending),
         paginatedPackages: initialChunk,
       ),
     );
   }
 
-  List<dynamic> _getNextChunk() {
-    final end = (_currentPaginationOffset + _paginationChunkSize).clamp(
-      0,
-      _allPackages.length,
-    );
-    final chunk = _allPackages.sublist(_currentPaginationOffset, end);
-    _currentPaginationOffset = end;
-    return chunk;
-  }
+  Future<void> loadMorePackages() async {
+    if (_isLoadingMore) return;
+    _isLoadingMore = true;
 
-  void _sortPackagesAlphabetically(List<dynamic> packages) {
-    packages.sort((a, b) {
-      final String nameA = a is FormulaModel ? a.name : (a as CaskModel).token;
-      final String nameB = b is FormulaModel ? b.name : (b as CaskModel).token;
-      return nameA.compareTo(nameB);
-    });
-  }
+    try {
+      final nextChunk = await _homebrewRepository.getFilteredPackages(
+        query: state.searchQuery,
+        installedOnly: state.showInstalledOnly,
+        type: state.packageType,
+        osSupport: state.osSupport,
+        limit: _paginationChunkSize,
+        offset: _currentPaginationOffset,
+      );
 
-  void loadMorePackages() {
-    if (_currentPaginationOffset >= _allPackages.length) return;
-
-    final nextChunk = _getNextChunk();
-    emitState(
-      state.copyWith(
-        paginatedPackages: [...state.paginatedPackages, ...nextChunk],
-      ),
-    );
+      if (nextChunk.isNotEmpty) {
+        _currentPaginationOffset += nextChunk.length;
+        emitState(
+          state.copyWith(
+            paginatedPackages: [...state.paginatedPackages, ...nextChunk],
+          ),
+        );
+      }
+    } finally {
+      _isLoadingMore = false;
+    }
   }
 
   Future<List<List<dynamic>>> _getTrendingData() async {
@@ -238,19 +232,59 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   }
 
   Future<void> _refreshListings() async {
-    final formulae = await _homebrewRepository.getAllFormulae();
-    final casks = await _homebrewRepository.getAllCasks();
-
-    emitState(
-      state.copyWith(
-        formulaeData: FetchState.success(formulae),
-        casksData: FetchState.success(casks),
-      ),
+    _currentPaginationOffset = 0;
+    final initialChunk = await _homebrewRepository.getFilteredPackages(
+      query: state.searchQuery,
+      installedOnly: state.showInstalledOnly,
+      type: state.packageType,
+      osSupport: state.osSupport,
+      limit: _paginationChunkSize,
+      offset: _currentPaginationOffset,
     );
+    _currentPaginationOffset += initialChunk.length;
+
+    emitState(state.copyWith(paginatedPackages: initialChunk));
   }
 
   void setSearchQuery(String query) {
+    if (state.searchQuery == query) return;
     emitState(state.copyWith(searchQuery: query));
+    _applyFilters();
+  }
+
+  void setPackageType(PackageTypeFilter type) {
+    if (state.packageType == type) return;
+    emitState(state.copyWith(packageType: type));
+    _applyFilters();
+  }
+
+  void toggleInstalledOnly(bool installedOnly) {
+    if (state.showInstalledOnly == installedOnly) return;
+    emitState(state.copyWith(showInstalledOnly: installedOnly));
+    _applyFilters();
+  }
+
+  void setOsSupport(OsSupportFilter osSupport) {
+    if (state.osSupport == osSupport) return;
+    emitState(state.copyWith(osSupport: osSupport));
+    _applyFilters();
+  }
+
+  Future<void> _applyFilters() async {
+    _currentPaginationOffset = 0;
+    emitState(state.copyWith(paginatedPackages: []));
+
+    final initialChunk = await _homebrewRepository.getFilteredPackages(
+      query: state.searchQuery,
+      installedOnly: state.showInstalledOnly,
+      type: state.packageType,
+      osSupport: state.osSupport,
+      limit: _paginationChunkSize,
+      offset: _currentPaginationOffset,
+    );
+    _currentPaginationOffset += initialChunk.length;
+
+    emitState(state.copyWith(paginatedPackages: initialChunk));
   }
 
   void togglePackageExpansion(String id) {
@@ -271,7 +305,9 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
           dependencies.addAll((item.dependsOn!['cask'] as List).cast<String>());
         }
         if (item.dependsOn!['formula'] is List) {
-          dependencies.addAll((item.dependsOn!['formula'] as List).cast<String>());
+          dependencies.addAll(
+            (item.dependsOn!['formula'] as List).cast<String>(),
+          );
         }
       }
       return dependencies;

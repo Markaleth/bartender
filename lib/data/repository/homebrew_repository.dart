@@ -1,3 +1,5 @@
+import '../../core/enums/package_type_filter.dart';
+import '../../core/enums/os_support_filter.dart';
 import '../../core/enums/analytics_period.dart';
 import '../api/api_client_interface.dart';
 import '../db/database_interface.dart';
@@ -12,27 +14,43 @@ class HomebrewRepository {
 
   HomebrewRepository(this._apiClient, this._database);
 
-  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(String category, AnalyticsPeriod days) async {
+  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
+    String category,
+    AnalyticsPeriod days,
+  ) async {
     return await _database.getCategoryAnalytics(category, days);
   }
 
-  Future<void> syncCategoryAnalytics(String category, AnalyticsPeriod days) async {
+  Future<void> syncCategoryAnalytics(
+    String category,
+    AnalyticsPeriod days,
+  ) async {
     final endpoint = '/analytics/$category/${days.value}.json';
     final currentETag = await _database.getETag(endpoint);
-    final response = await _apiClient.getCategoryAnalytics(category, days, eTag: currentETag);
+    final response = await _apiClient.getCategoryAnalytics(
+      category,
+      days,
+      eTag: currentETag,
+    );
 
     if (response.status == NetworkStatus.success) {
       if (response.statusCode == 304) {
         return;
       }
       if (response.data != null) {
-        await _database.cacheCategoryAnalytics(category, days, response.data!.items);
+        await _database.cacheCategoryAnalytics(
+          category,
+          days,
+          response.data!.items,
+        );
         if (response.eTag != null) {
           await _database.saveETag(endpoint, response.eTag!);
         }
       }
     } else {
-      throw Exception('Failed to sync category analytics: ${response.errorMessage}');
+      throw Exception(
+        'Failed to sync category analytics: ${response.errorMessage}',
+      );
     }
   }
 
@@ -40,10 +58,7 @@ class HomebrewRepository {
   Future<void> syncAllData() async {
     final isDbEmpty = await _database.isDatabaseEmpty();
     if (isDbEmpty) {
-      await Future.wait([
-        syncFormulae(),
-        syncCasks(),
-      ]);
+      await Future.wait([syncFormulae(), syncCasks()]);
       await Future.wait([
         syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days30),
         syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days90),
@@ -111,10 +126,17 @@ class HomebrewRepository {
 
   // Example for one of the analytics endpoints
   // You would expand this for all analytics categories/days if needed
-  Future<void> syncFormulaeAnalytics(String category, AnalyticsPeriod days) async {
+  Future<void> syncFormulaeAnalytics(
+    String category,
+    AnalyticsPeriod days,
+  ) async {
     final endpoint = '/analytics/$category/homebrew-core/${days.value}.json';
     final currentETag = await _database.getETag(endpoint);
-    final response = await _apiClient.getFormulaeAnalytics(category, days, eTag: currentETag);
+    final response = await _apiClient.getFormulaeAnalytics(
+      category,
+      days,
+      eTag: currentETag,
+    );
 
     if (response.status == NetworkStatus.success) {
       if (response.statusCode == 304) {
@@ -128,14 +150,19 @@ class HomebrewRepository {
         }
       }
     } else {
-      throw Exception('Failed to sync formulae analytics: ${response.errorMessage}');
+      throw Exception(
+        'Failed to sync formulae analytics: ${response.errorMessage}',
+      );
     }
   }
 
   Future<void> syncCasksAnalytics(AnalyticsPeriod days) async {
     final endpoint = '/analytics/cask-install/homebrew-cask/${days.value}.json';
     final currentETag = await _database.getETag(endpoint);
-    final response = await _apiClient.getCasksAnalytics(days, eTag: currentETag);
+    final response = await _apiClient.getCasksAnalytics(
+      days,
+      eTag: currentETag,
+    );
 
     if (response.status == NetworkStatus.success) {
       if (response.statusCode == 304) {
@@ -149,7 +176,9 @@ class HomebrewRepository {
         }
       }
     } else {
-      throw Exception('Failed to sync casks analytics: ${response.errorMessage}');
+      throw Exception(
+        'Failed to sync casks analytics: ${response.errorMessage}',
+      );
     }
   }
 
@@ -176,10 +205,36 @@ class HomebrewRepository {
   }
 
   // Local access methods
+  Future<List<dynamic>> getFilteredPackages({
+    String query = '',
+    bool installedOnly = false,
+    PackageTypeFilter type = PackageTypeFilter.all,
+    OsSupportFilter osSupport = OsSupportFilter.all,
+    int limit = 50,
+    int offset = 0,
+  }) {
+    return _database.getFilteredPackages(
+      query: query,
+      installedOnly: installedOnly,
+      type: type,
+      osSupport: osSupport,
+      limit: limit,
+      offset: offset,
+    );
+  }
+
   Future<List<FormulaModel>> getAllFormulae() => _database.getAllFormulae();
   Future<List<CaskModel>> getAllCasks() => _database.getAllCasks();
-  Future<List<FormulaModel>> searchFormulae(String query) => _database.searchFormulae(query);
-  Future<List<CaskModel>> searchCasks(String query) => _database.searchCasks(query);
-  Future<List<FormulaModel>> getTrendingFormulae(AnalyticsPeriod period, {int limit = 10}) => _database.getMostDownloadedFormulae(period, limit: limit);
-  Future<List<CaskModel>> getTrendingCasks(AnalyticsPeriod period, {int limit = 10}) => _database.getMostDownloadedCasks(period, limit: limit);
+  Future<List<FormulaModel>> searchFormulae(String query) =>
+      _database.searchFormulae(query);
+  Future<List<CaskModel>> searchCasks(String query) =>
+      _database.searchCasks(query);
+  Future<List<FormulaModel>> getTrendingFormulae(
+    AnalyticsPeriod period, {
+    int limit = 10,
+  }) => _database.getMostDownloadedFormulae(period, limit: limit);
+  Future<List<CaskModel>> getTrendingCasks(
+    AnalyticsPeriod period, {
+    int limit = 10,
+  }) => _database.getMostDownloadedCasks(period, limit: limit);
 }

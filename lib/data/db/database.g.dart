@@ -1014,6 +1014,21 @@ class $FormulaeTableTable extends FormulaeTable
     defaultValue: const Constant(false),
   );
   @override
+  late final GeneratedColumnWithTypeConverter<
+    List<Map<String, dynamic>>?,
+    String
+  >
+  requirements =
+      GeneratedColumn<String>(
+        'requirements',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<List<Map<String, dynamic>>?>(
+        $FormulaeTableTable.$converterrequirementsn,
+      );
+  @override
   late final GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
   analytics =
       GeneratedColumn<String>(
@@ -1105,6 +1120,7 @@ class $FormulaeTableTable extends FormulaeTable
     deprecated,
     disabled,
     isInstalled,
+    requirements,
     analytics,
     bottle,
     variations,
@@ -1300,6 +1316,12 @@ class $FormulaeTableTable extends FormulaeTable
         DriftSqlType.bool,
         data['${effectivePrefix}is_installed'],
       )!,
+      requirements: $FormulaeTableTable.$converterrequirementsn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}requirements'],
+        ),
+      ),
       bottle: $FormulaeTableTable.$converterbottlen.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -1348,6 +1370,10 @@ class $FormulaeTableTable extends FormulaeTable
       const StringListConverter();
   static TypeConverter<List<String>, String> $converterbuildDependencies =
       const StringListConverter();
+  static TypeConverter<List<Map<String, dynamic>>, String>
+  $converterrequirements = const MapListConverter();
+  static TypeConverter<List<Map<String, dynamic>>?, String?>
+  $converterrequirementsn = NullAwareTypeConverter.wrap($converterrequirements);
   static TypeConverter<Map<String, dynamic>, String> $converteranalytics =
       const MapConverter();
   static TypeConverter<Map<String, dynamic>?, String?> $converteranalyticsn =
@@ -1376,6 +1402,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
   final Value<bool> deprecated;
   final Value<bool> disabled;
   final Value<bool> isInstalled;
+  final Value<List<Map<String, dynamic>>?> requirements;
   final Value<Map<String, dynamic>?> analytics;
   final Value<Map<String, dynamic>?> bottle;
   final Value<Map<String, dynamic>?> variations;
@@ -1398,6 +1425,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.deprecated = const Value.absent(),
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
+    this.requirements = const Value.absent(),
     this.analytics = const Value.absent(),
     this.bottle = const Value.absent(),
     this.variations = const Value.absent(),
@@ -1421,6 +1449,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.deprecated = const Value.absent(),
     this.disabled = const Value.absent(),
     this.isInstalled = const Value.absent(),
+    this.requirements = const Value.absent(),
     this.analytics = const Value.absent(),
     this.bottle = const Value.absent(),
     this.variations = const Value.absent(),
@@ -1450,6 +1479,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Expression<bool>? deprecated,
     Expression<bool>? disabled,
     Expression<bool>? isInstalled,
+    Expression<String>? requirements,
     Expression<String>? analytics,
     Expression<String>? bottle,
     Expression<String>? variations,
@@ -1473,6 +1503,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       if (deprecated != null) 'deprecated': deprecated,
       if (disabled != null) 'disabled': disabled,
       if (isInstalled != null) 'is_installed': isInstalled,
+      if (requirements != null) 'requirements': requirements,
       if (analytics != null) 'analytics': analytics,
       if (bottle != null) 'bottle': bottle,
       if (variations != null) 'variations': variations,
@@ -1498,6 +1529,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Value<bool>? deprecated,
     Value<bool>? disabled,
     Value<bool>? isInstalled,
+    Value<List<Map<String, dynamic>>?>? requirements,
     Value<Map<String, dynamic>?>? analytics,
     Value<Map<String, dynamic>?>? bottle,
     Value<Map<String, dynamic>?>? variations,
@@ -1521,6 +1553,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       deprecated: deprecated ?? this.deprecated,
       disabled: disabled ?? this.disabled,
       isInstalled: isInstalled ?? this.isInstalled,
+      requirements: requirements ?? this.requirements,
       analytics: analytics ?? this.analytics,
       bottle: bottle ?? this.bottle,
       variations: variations ?? this.variations,
@@ -1582,6 +1615,11 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     if (isInstalled.present) {
       map['is_installed'] = Variable<bool>(isInstalled.value);
     }
+    if (requirements.present) {
+      map['requirements'] = Variable<String>(
+        $FormulaeTableTable.$converterrequirementsn.toSql(requirements.value),
+      );
+    }
     if (analytics.present) {
       map['analytics'] = Variable<String>(
         $FormulaeTableTable.$converteranalyticsn.toSql(analytics.value),
@@ -1631,6 +1669,7 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
           ..write('deprecated: $deprecated, ')
           ..write('disabled: $disabled, ')
           ..write('isInstalled: $isInstalled, ')
+          ..write('requirements: $requirements, ')
           ..write('analytics: $analytics, ')
           ..write('bottle: $bottle, ')
           ..write('variations: $variations, ')
@@ -1663,6 +1702,7 @@ class _$FormulaModelInsertable implements Insertable<FormulaModel> {
       deprecated: Value(_object.deprecated),
       disabled: Value(_object.disabled),
       isInstalled: Value(_object.isInstalled),
+      requirements: Value(_object.requirements),
       analytics: Value(_object.analytics),
       bottle: Value(_object.bottle),
       variations: Value(_object.variations),
@@ -3273,6 +3313,7 @@ typedef $$FormulaeTableTableCreateCompanionBuilder =
       Value<bool> deprecated,
       Value<bool> disabled,
       Value<bool> isInstalled,
+      Value<List<Map<String, dynamic>>?> requirements,
       Value<Map<String, dynamic>?> analytics,
       Value<Map<String, dynamic>?> bottle,
       Value<Map<String, dynamic>?> variations,
@@ -3297,6 +3338,7 @@ typedef $$FormulaeTableTableUpdateCompanionBuilder =
       Value<bool> deprecated,
       Value<bool> disabled,
       Value<bool> isInstalled,
+      Value<List<Map<String, dynamic>>?> requirements,
       Value<Map<String, dynamic>?> analytics,
       Value<Map<String, dynamic>?> bottle,
       Value<Map<String, dynamic>?> variations,
@@ -3382,6 +3424,16 @@ class $$FormulaeTableTableFilterComposer
   ColumnFilters<bool> get isInstalled => $composableBuilder(
     column: $table.isInstalled,
     builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    List<Map<String, dynamic>>?,
+    List<Map<String, dynamic>>,
+    String
+  >
+  get requirements => $composableBuilder(
+    column: $table.requirements,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   ColumnWithTypeConverterFilters<
@@ -3509,6 +3561,11 @@ class $$FormulaeTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get requirements => $composableBuilder(
+    column: $table.requirements,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get analytics => $composableBuilder(
     column: $table.analytics,
     builder: (column) => ColumnOrderings(column),
@@ -3603,6 +3660,12 @@ class $$FormulaeTableTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumnWithTypeConverter<List<Map<String, dynamic>>?, String>
+  get requirements => $composableBuilder(
+    column: $table.requirements,
+    builder: (column) => column,
+  );
+
   GeneratedColumnWithTypeConverter<Map<String, dynamic>?, String>
   get analytics =>
       $composableBuilder(column: $table.analytics, builder: (column) => column);
@@ -3681,6 +3744,8 @@ class $$FormulaeTableTableTableManager
                 Value<bool> deprecated = const Value.absent(),
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
+                Value<List<Map<String, dynamic>>?> requirements =
+                    const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
                 Value<Map<String, dynamic>?> bottle = const Value.absent(),
                 Value<Map<String, dynamic>?> variations = const Value.absent(),
@@ -3703,6 +3768,7 @@ class $$FormulaeTableTableTableManager
                 deprecated: deprecated,
                 disabled: disabled,
                 isInstalled: isInstalled,
+                requirements: requirements,
                 analytics: analytics,
                 bottle: bottle,
                 variations: variations,
@@ -3727,6 +3793,8 @@ class $$FormulaeTableTableTableManager
                 Value<bool> deprecated = const Value.absent(),
                 Value<bool> disabled = const Value.absent(),
                 Value<bool> isInstalled = const Value.absent(),
+                Value<List<Map<String, dynamic>>?> requirements =
+                    const Value.absent(),
                 Value<Map<String, dynamic>?> analytics = const Value.absent(),
                 Value<Map<String, dynamic>?> bottle = const Value.absent(),
                 Value<Map<String, dynamic>?> variations = const Value.absent(),
@@ -3749,6 +3817,7 @@ class $$FormulaeTableTableTableManager
                 deprecated: deprecated,
                 disabled: disabled,
                 isInstalled: isInstalled,
+                requirements: requirements,
                 analytics: analytics,
                 bottle: bottle,
                 variations: variations,

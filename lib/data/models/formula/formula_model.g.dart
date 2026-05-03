@@ -27,6 +27,9 @@ _FormulaModel _$FormulaModelFromJson(Map<String, dynamic> json) =>
       deprecated: json['deprecated'] as bool? ?? false,
       disabled: json['disabled'] as bool? ?? false,
       isInstalled: json['is_installed'] as bool? ?? false,
+      requirements: (json['requirements'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList(),
       bottle: json['bottle'] as Map<String, dynamic>?,
       variations: json['variations'] as Map<String, dynamic>?,
       analytics: json['analytics'] as Map<String, dynamic>?,
@@ -51,6 +54,7 @@ Map<String, dynamic> _$FormulaModelToJson(_FormulaModel instance) =>
       'deprecated': instance.deprecated,
       'disabled': instance.disabled,
       'is_installed': instance.isInstalled,
+      'requirements': instance.requirements,
       'bottle': instance.bottle,
       'variations': instance.variations,
       'analytics': instance.analytics,

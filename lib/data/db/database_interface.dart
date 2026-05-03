@@ -6,8 +6,19 @@ import '../models/formula/formula_model.dart';
 import '../models/icon_cache/resolved_icon.dart';
 
 import '../models/analytics/category/category_analytics_model.dart';
+import '../../core/enums/package_type_filter.dart';
+import '../../core/enums/os_support_filter.dart';
 
 abstract class DatabaseInterface {
+  Future<List<dynamic>> getFilteredPackages({
+    String query = '',
+    bool installedOnly = false,
+    PackageTypeFilter type = PackageTypeFilter.all,
+    OsSupportFilter osSupport = OsSupportFilter.all,
+    int limit = 50,
+    int offset = 0,
+  });
+
   Future<void> cacheFormulae(List<FormulaModel> formulae);
   Future<void> cacheCasks(List<CaskModel> casks);
 

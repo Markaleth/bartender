@@ -17,6 +17,7 @@ class FormulaeTable extends Table {
   BoolColumn get deprecated => boolean().withDefault(const Constant(false))();
   BoolColumn get disabled => boolean().withDefault(const Constant(false))();
   BoolColumn get isInstalled => boolean().withDefault(const Constant(false))();
+  TextColumn get requirements => text().map(const MapListConverter()).nullable()();
   TextColumn get analytics => text().map(const MapConverter()).nullable()();
   TextColumn get bottle => text().map(const MapConverter()).nullable()();
   TextColumn get variations => text().map(const MapConverter()).nullable()();
