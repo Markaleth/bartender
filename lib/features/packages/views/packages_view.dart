@@ -19,8 +19,48 @@ import 'package:provider/provider.dart';
 
 import '../widgets/package_list_item.dart';
 
-class PackagesView extends StatelessWidget {
+class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double height;
+  _StickyHeaderDelegate({required this.child, required this.height});
+  @override
+  double get minExtent => height;
+  @override
+  double get maxExtent => height;
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => child;
+  @override
+  bool shouldRebuild(covariant _StickyHeaderDelegate oldDelegate) => oldDelegate.height != height || oldDelegate.child != child;
+}
+
+class PackagesView extends StatefulWidget {
   const PackagesView({super.key});
+
+  @override
+  State<PackagesView> createState() => _PackagesViewState();
+}
+
+class _PackagesViewState extends State<PackagesView> {
+  final ScrollController _scrollController = ScrollController();
+  bool _showScrollToTop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 400 && !_showScrollToTop) {
+        setState(() => _showScrollToTop = true);
+      } else if (_scrollController.offset <= 400 && _showScrollToTop) {
+        setState(() => _showScrollToTop = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(
@@ -32,6 +72,18 @@ class PackagesView extends StatelessWidget {
     ),
     onModelReady: (viewModel) => viewModel.fetchData(),
     builder: (context, viewModel, state) => Scaffold(
+      floatingActionButton: _showScrollToTop
+          ? FloatingActionButton(
+              onPressed: () {
+                _scrollController.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              },
+              child: const Icon(Icons.arrow_upward),
+            )
+          : null,
       body: SafeArea(
         child: NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification scrollInfo) {
@@ -42,6 +94,7 @@ class PackagesView extends StatelessWidget {
             return false;
           },
           child: CustomScrollView(
+            controller: _scrollController,
             slivers: [
               SliverToBoxAdapter(
                 child: Column(
@@ -54,22 +107,22 @@ class PackagesView extends StatelessWidget {
                         style: context.headM.copyWith(color: AppColors.primary),
                       ),
                     ),
-                    HorizontalDivider(),
-                    SizedBox(height: spacingL),
+                    const HorizontalDivider(),
+                    const SizedBox(height: spacingL),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: spacingXl,
                       ),
                       child: Text(popularPackagesTitle, style: context.titleM),
                     ),
-                    SizedBox(height: spacingXs),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
+                    const SizedBox(height: spacingXs),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
                         horizontal: spacingXl,
                       ),
                       child: Text(popularPackagesSubtitle),
                     ),
-                    SizedBox(height: spacingM),
+                    const SizedBox(height: spacingM),
                     state.trendingData.maybeMap(
                       success: (value) => TrendingPackagesCarousel(
                         pages: value.data as List<List<dynamic>>,
@@ -79,17 +132,22 @@ class PackagesView extends StatelessWidget {
                         child: Center(child: CircularProgressIndicator()),
                       ),
                     ),
-                    SizedBox(height: spacingXl),
+                    const SizedBox(height: spacingXl),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: spacingXl,
                       ),
                       child: Text('All Packages', style: context.titleM),
                     ),
-                    SizedBox(height: spacingM),
-                    PackageFilters(viewModel: viewModel, state: state),
-                    SizedBox(height: spacingM),
+                    const SizedBox(height: spacingM),
                   ],
+                ),
+              ),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _StickyHeaderDelegate(
+                  height: 130.0,
+                  child: PackageFilters(viewModel: viewModel, state: state),
                 ),
               ),
               SliverList.builder(
