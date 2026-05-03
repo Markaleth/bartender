@@ -8,3 +8,5 @@
 - [ ] Do a pass over all components to see if there's any performance gains you're missing
 - [ ] See if there's anything you can do to boost the performance of your packages view
 - [ ] Look into the use of color in your app. Are we using stuff ocnsistently?
+- [ ] Oprtimize loading times for home page
+- [ ] Look into search and filter options for the packages (i.e. why show stuff that's not supported on your operating system?)
