@@ -26,18 +26,19 @@ import '../../core/enums/os_support_filter.dart';
 
 part 'database.g.dart';
 
+typedef _QueryData = ({String sql, List<Variable<Object>> args});
+
 @DriftDatabase(
   tables: [
     CasksTable,
     FormulaeTable,
     IconCacheTable,
-    // Removed standalone analytics tables
     CategoryAnalyticsTable,
     SyncMetadataTable,
   ],
 )
 class AppDatabase extends _$AppDatabase implements DatabaseInterface {
-  AppDatabase() : super(_openConnection());
+  AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
   int get schemaVersion => 1;
@@ -60,17 +61,47 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
     int limit = 50,
     int offset = 0,
   }) async {
-    final args = <Variable>[];
+    final queryData = _buildPackageQuery(
+      query: query,
+      installedOnly: installedOnly,
+      type: type,
+      osSupport: osSupport,
+      limit: limit,
+      offset: offset,
+    );
+
+    final result = await customSelect(
+      queryData.sql,
+      variables: queryData.args,
+    ).get();
+
+    return await _fetchOrderedPackageModels(result);
+  }
+
+  _QueryData _buildPackageQuery({
+    required String query,
+    required bool installedOnly,
+    required PackageTypeFilter type,
+    required OsSupportFilter osSupport,
+    required int limit,
+    required int offset,
+  }) {
+    final formulaArgs = <Variable<Object>>[];
+    final caskArgs = <Variable<Object>>[];
+
     String formulaWhere = '1=1';
     String caskWhere = '1=1';
 
     if (query.isNotEmpty) {
       final likeQuery = '%$query%';
       formulaWhere += ' AND (name LIKE ? OR desc LIKE ?)';
+      formulaArgs.addAll([
+        Variable.withString(likeQuery),
+        Variable.withString(likeQuery),
+      ]);
+
       caskWhere += ' AND (token LIKE ? OR name LIKE ? OR desc LIKE ?)';
-      args.addAll([
-        Variable.withString(likeQuery),
-        Variable.withString(likeQuery),
+      caskArgs.addAll([
         Variable.withString(likeQuery),
         Variable.withString(likeQuery),
         Variable.withString(likeQuery),
@@ -91,6 +122,7 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
     }
 
     String sql = '';
+    final args = <Variable<Object>>[];
 
     if (type == PackageTypeFilter.all) {
       sql =
@@ -101,6 +133,7 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
+      args.addAll([...formulaArgs, ...caskArgs]);
     } else if (type == PackageTypeFilter.formulae) {
       sql =
           '''
@@ -108,11 +141,7 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
-      if (query.isNotEmpty) {
-        args.removeLast();
-        args.removeLast();
-        args.removeLast();
-      }
+      args.addAll(formulaArgs);
     } else if (type == PackageTypeFilter.casks) {
       sql =
           '''
@@ -120,21 +149,17 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
-      if (query.isNotEmpty) {
-        args.clear();
-        args.addAll([
-          Variable.withString('%$query%'),
-          Variable.withString('%$query%'),
-          Variable.withString('%$query%'),
-        ]);
-      }
+      args.addAll(caskArgs);
     }
 
-    args.add(Variable.withInt(limit));
-    args.add(Variable.withInt(offset));
+    args.addAll([Variable.withInt(limit), Variable.withInt(offset)]);
 
-    final result = await customSelect(sql, variables: args).get();
+    return (sql: sql, args: args);
+  }
 
+  Future<List<dynamic>> _fetchOrderedPackageModels(
+    List<QueryRow> result,
+  ) async {
     final formulaIds = <String>[];
     final caskIds = <String>[];
 
@@ -176,29 +201,50 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
     return orderedResults;
   }
 
+  Insertable<FormulaModel> _updateFormulaFromExcluded($FormulaeTableTable ex) {
+    return FormulaeTableCompanion.custom(
+      fullName: ex.fullName,
+      tap: ex.tap,
+      desc: ex.desc,
+      license: ex.license,
+      homepage: ex.homepage,
+      versions: ex.versions,
+      dependencies: ex.dependencies,
+      buildDependencies: ex.buildDependencies,
+      outdated: ex.outdated,
+      deprecated: ex.deprecated,
+      disabled: ex.disabled,
+      generatedDate: ex.generatedDate,
+    );
+  }
+
+  Insertable<CaskModel> _updateCaskFromExcluded($CasksTableTable ex) {
+    return CasksTableCompanion.custom(
+      fullToken: ex.fullToken,
+      name: ex.name,
+      desc: ex.desc,
+      homepage: ex.homepage,
+      url: ex.url,
+      version: ex.version,
+      autoUpdates: ex.autoUpdates,
+      dependsOn: ex.dependsOn,
+      outdated: ex.outdated,
+      deprecated: ex.deprecated,
+      disabled: ex.disabled,
+      generatedDate: ex.generatedDate,
+    );
+  }
+
   @override
   Future<void> cacheFormulae(List<FormulaModel> formulae) async {
     await batch((batch) {
       batch.insertAll(
         formulaeTable,
         formulae.map((model) => model.toInsertable()),
-        onConflict: DoUpdate.withExcluded((old, excluded) {
-          final ex = excluded as FormulaeTable;
-          return FormulaeTableCompanion.custom(
-            fullName: ex.fullName,
-            tap: ex.tap,
-            desc: ex.desc,
-            license: ex.license,
-            homepage: ex.homepage,
-            versions: ex.versions,
-            dependencies: ex.dependencies,
-            buildDependencies: ex.buildDependencies,
-            outdated: ex.outdated,
-            deprecated: ex.deprecated,
-            disabled: ex.disabled,
-            generatedDate: ex.generatedDate,
-          );
-        }),
+        onConflict: DoUpdate.withExcluded(
+          (old, excluded) =>
+              _updateFormulaFromExcluded(excluded as $FormulaeTableTable),
+        ),
       );
     });
   }
@@ -209,23 +255,10 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
       batch.insertAll(
         casksTable,
         casks.map((model) => model.toInsertable()),
-        onConflict: DoUpdate.withExcluded((old, excluded) {
-          final ex = excluded as CasksTable;
-          return CasksTableCompanion.custom(
-            fullToken: ex.fullToken,
-            name: ex.name,
-            desc: ex.desc,
-            homepage: ex.homepage,
-            url: ex.url,
-            version: ex.version,
-            autoUpdates: ex.autoUpdates,
-            dependsOn: ex.dependsOn,
-            outdated: ex.outdated,
-            deprecated: ex.deprecated,
-            disabled: ex.disabled,
-            generatedDate: ex.generatedDate,
-          );
-        }),
+        onConflict: DoUpdate.withExcluded(
+          (old, excluded) =>
+              _updateCaskFromExcluded(excluded as $CasksTableTable),
+        ),
       );
     });
   }
@@ -234,23 +267,10 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   Future<void> cacheFormula(FormulaModel formula) async {
     await into(formulaeTable).insert(
       formula.toInsertable(),
-      onConflict: DoUpdate.withExcluded((old, excluded) {
-        final ex = excluded as FormulaeTable;
-        return FormulaeTableCompanion.custom(
-          fullName: ex.fullName,
-          tap: ex.tap,
-          desc: ex.desc,
-          license: ex.license,
-          homepage: ex.homepage,
-          versions: ex.versions,
-          dependencies: ex.dependencies,
-          buildDependencies: ex.buildDependencies,
-          outdated: ex.outdated,
-          deprecated: ex.deprecated,
-          disabled: ex.disabled,
-          generatedDate: ex.generatedDate,
-        );
-      }),
+      onConflict: DoUpdate.withExcluded(
+        (old, excluded) =>
+            _updateFormulaFromExcluded(excluded as $FormulaeTableTable),
+      ),
     );
   }
 
@@ -258,23 +278,10 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
   Future<void> cacheCask(CaskModel cask) async {
     await into(casksTable).insert(
       cask.toInsertable(),
-      onConflict: DoUpdate.withExcluded((old, excluded) {
-        final ex = excluded as CasksTable;
-        return CasksTableCompanion.custom(
-          fullToken: ex.fullToken,
-          name: ex.name,
-          desc: ex.desc,
-          homepage: ex.homepage,
-          url: ex.url,
-          version: ex.version,
-          autoUpdates: ex.autoUpdates,
-          dependsOn: ex.dependsOn,
-          outdated: ex.outdated,
-          deprecated: ex.deprecated,
-          disabled: ex.disabled,
-          generatedDate: ex.generatedDate,
-        );
-      }),
+      onConflict: DoUpdate.withExcluded(
+        (old, excluded) =>
+            _updateCaskFromExcluded(excluded as $CasksTableTable),
+      ),
     );
   }
 
@@ -402,13 +409,11 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
         .get();
   }
 
-  @override
-  Future<void> updateFormulaAnalytics(
-    String name,
-    int installs,
+  FormulaeTableCompanion _createFormulaAnalyticsCompanion(
     AnalyticsPeriod period,
-  ) async {
-    final companion = switch (period) {
+    int installs,
+  ) {
+    return switch (period) {
       AnalyticsPeriod.days30 => FormulaeTableCompanion(
         installs30d: Value(installs),
       ),
@@ -419,18 +424,13 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
         installs365d: Value(installs),
       ),
     };
-    await (update(
-      formulaeTable,
-    )..where((t) => t.name.equals(name))).write(companion);
   }
 
-  @override
-  Future<void> updateCaskAnalytics(
-    String token,
-    int installs,
+  CasksTableCompanion _createCaskAnalyticsCompanion(
     AnalyticsPeriod period,
-  ) async {
-    final companion = switch (period) {
+    int installs,
+  ) {
+    return switch (period) {
       AnalyticsPeriod.days30 => CasksTableCompanion(
         installs30d: Value(installs),
       ),
@@ -441,9 +441,28 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
         installs365d: Value(installs),
       ),
     };
-    await (update(
-      casksTable,
-    )..where((t) => t.token.equals(token))).write(companion);
+  }
+
+  @override
+  Future<void> updateFormulaAnalytics(
+    String name,
+    int installs,
+    AnalyticsPeriod period,
+  ) async {
+    await (update(formulaeTable)..where((t) => t.name.equals(name))).write(
+      _createFormulaAnalyticsCompanion(period, installs),
+    );
+  }
+
+  @override
+  Future<void> updateCaskAnalytics(
+    String token,
+    int installs,
+    AnalyticsPeriod period,
+  ) async {
+    await (update(casksTable)..where((t) => t.token.equals(token))).write(
+      _createCaskAnalyticsCompanion(period, installs),
+    );
   }
 
   @override
@@ -454,20 +473,9 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
     await batch((batch) {
       for (final item in items) {
         final installs = int.tryParse(item.count.replaceAll(',', '')) ?? 0;
-        final companion = switch (period) {
-          AnalyticsPeriod.days30 => FormulaeTableCompanion(
-            installs30d: Value(installs),
-          ),
-          AnalyticsPeriod.days90 => FormulaeTableCompanion(
-            installs90d: Value(installs),
-          ),
-          AnalyticsPeriod.days365 => FormulaeTableCompanion(
-            installs365d: Value(installs),
-          ),
-        };
         batch.update(
           formulaeTable,
-          companion,
+          _createFormulaAnalyticsCompanion(period, installs),
           where: (t) => t.name.equals(item.formula),
         );
       }
@@ -482,20 +490,9 @@ class AppDatabase extends _$AppDatabase implements DatabaseInterface {
     await batch((batch) {
       for (final item in items) {
         final installs = int.tryParse(item.count.replaceAll(',', '')) ?? 0;
-        final companion = switch (period) {
-          AnalyticsPeriod.days30 => CasksTableCompanion(
-            installs30d: Value(installs),
-          ),
-          AnalyticsPeriod.days90 => CasksTableCompanion(
-            installs90d: Value(installs),
-          ),
-          AnalyticsPeriod.days365 => CasksTableCompanion(
-            installs365d: Value(installs),
-          ),
-        };
         batch.update(
           casksTable,
-          companion,
+          _createCaskAnalyticsCompanion(period, installs),
           where: (t) => t.token.equals(item.cask),
         );
       }
