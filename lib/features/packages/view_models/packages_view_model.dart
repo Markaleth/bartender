@@ -59,7 +59,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
 
     final initialChunk = await _homebrewRepository.getFilteredPackages(
       query: state.searchQuery,
-      installedOnly: state.showInstalledOnly,
       type: state.packageType,
       osSupport: state.osSupport,
       limit: _paginationChunkSize,
@@ -83,7 +82,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     try {
       final nextChunk = await _homebrewRepository.getFilteredPackages(
         query: state.searchQuery,
-        installedOnly: state.showInstalledOnly,
         type: state.packageType,
         osSupport: state.osSupport,
         limit: _paginationChunkSize,
@@ -235,7 +233,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     _currentPaginationOffset = 0;
     final initialChunk = await _homebrewRepository.getFilteredPackages(
       query: state.searchQuery,
-      installedOnly: state.showInstalledOnly,
       type: state.packageType,
       osSupport: state.osSupport,
       limit: _paginationChunkSize,
@@ -258,12 +255,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     _applyFilters();
   }
 
-  void toggleInstalledOnly(bool installedOnly) {
-    if (state.showInstalledOnly == installedOnly) return;
-    emitState(state.copyWith(showInstalledOnly: installedOnly));
-    _applyFilters();
-  }
-
   void setOsSupport(OsSupportFilter osSupport) {
     if (state.osSupport == osSupport) return;
     emitState(state.copyWith(osSupport: osSupport));
@@ -276,7 +267,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
 
     final initialChunk = await _homebrewRepository.getFilteredPackages(
       query: state.searchQuery,
-      installedOnly: state.showInstalledOnly,
       type: state.packageType,
       osSupport: state.osSupport,
       limit: _paginationChunkSize,

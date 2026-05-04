@@ -10,7 +10,6 @@ part 'packages_state.freezed.dart';
 abstract class PackagesState with _$PackagesState {
   const factory PackagesState({
     @Default('') String searchQuery,
-    @Default(false) bool showInstalledOnly,
     @Default(PackageTypeFilter.all) PackageTypeFilter packageType,
     @Default(OsSupportFilter.all) OsSupportFilter osSupport,
 

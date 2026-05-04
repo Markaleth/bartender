@@ -65,6 +65,14 @@ class PackageFilters extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: spacingXl),
               child: Row(
                 children: [
+                  Text(
+                    'Type',
+                    style: context.labelM.copyWith(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: spacingS),
                   _FilterPill(
                     label: 'All',
                     isSelected: state.packageType == PackageTypeFilter.all,
@@ -85,7 +93,15 @@ class PackageFilters extends StatelessWidget {
                     onTap: () =>
                         viewModel.setPackageType(PackageTypeFilter.casks),
                   ),
-                  const SizedBox(width: spacingM),
+                  const SizedBox(width: spacingXl),
+                  Text(
+                    'Platform',
+                    style: context.labelM.copyWith(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: spacingS),
                   _FilterPill(
                     label: 'Any OS',
                     isSelected: state.osSupport == OsSupportFilter.all,
@@ -102,13 +118,6 @@ class PackageFilters extends StatelessWidget {
                     label: 'Linux',
                     isSelected: state.osSupport == OsSupportFilter.linux,
                     onTap: () => viewModel.setOsSupport(OsSupportFilter.linux),
-                  ),
-                  const SizedBox(width: spacingM),
-                  _FilterPill(
-                    label: 'Installed Only',
-                    isSelected: state.showInstalledOnly,
-                    onTap: () =>
-                        viewModel.toggleInstalledOnly(!state.showInstalledOnly),
                   ),
                 ],
               ),
