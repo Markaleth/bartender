@@ -9,6 +9,7 @@
 - [ ] See if there's anything you can do to boost the performance of your packages view
 - [ ] Look into the use of color in your app. Are we using stuff ocnsistently?
 - [ ] Oprtimize loading times for home page
-- [ ] Look into search and filter options for the packages (i.e. why show stuff that's not supported on your operating system?)
+- [x] Look into search and filter options for the packages (i.e. why show stuff that's not supported on your operating system?)
 - [ ] Scrolling back to top by using the button is janky as fuck. Let's investigate that. Let's also investigate if we need that at all considering we already "scroll to top" when we change filters
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
+- [ ] View behaves kind of strageny when toggling between filters. It resets the scroll position to top sometimes and sometimes it doesnt (after you've scrolled just a bit). Look into that.
