@@ -28,9 +28,14 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   double get maxExtent => height;
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => child;
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) => child;
   @override
-  bool shouldRebuild(covariant _StickyHeaderDelegate oldDelegate) => oldDelegate.height != height || oldDelegate.child != child;
+  bool shouldRebuild(covariant _StickyHeaderDelegate oldDelegate) =>
+      oldDelegate.height != height || oldDelegate.child != child;
 }
 
 class PackagesView extends StatefulWidget {
@@ -117,9 +122,7 @@ class _PackagesViewState extends State<PackagesView> {
                     ),
                     const SizedBox(height: spacingXs),
                     const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: spacingXl,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: spacingXl),
                       child: Text(popularPackagesSubtitle),
                     ),
                     const SizedBox(height: spacingM),

@@ -11,3 +11,4 @@
 - [ ] Oprtimize loading times for home page
 - [ ] Look into search and filter options for the packages (i.e. why show stuff that's not supported on your operating system?)
 - [ ] Scrolling back to top by using the button is janky as fuck. Let's investigate that. Let's also investigate if we need that at all considering we already "scroll to top" when we change filters
+- [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.

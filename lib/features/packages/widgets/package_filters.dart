@@ -1,8 +1,10 @@
+import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/enums/os_support_filter.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class PackageFilters extends StatelessWidget {
@@ -29,10 +31,30 @@ class PackageFilters extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: spacingXl),
               child: TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Search packages...',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(),
+                cursorColor: AppColors.textSecondary,
+                decoration: InputDecoration(
+                  filled: true,
+                  hintText: 'Search for flasks or casks...',
+                  prefixIcon: Icon(Icons.search, color: AppColors.iconDefault),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.borderNeutral),
+                    borderRadius: BorderRadius.circular(radiusM),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: AppColors.surface),
+                    borderRadius: BorderRadius.circular(radiusM),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: AppColors.secondary,
+                      width: thicknessS,
+                    ),
+                    borderRadius: BorderRadius.circular(radiusM),
+                  ),
+                  hintStyle: context.bodyM.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  fillColor: AppColors.surface,
                 ),
                 onChanged: viewModel.setSearchQuery,
               ),
@@ -43,57 +65,104 @@ class PackageFilters extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: spacingXl),
               child: Row(
                 children: [
-                  SegmentedButton<PackageTypeFilter>(
-                    segments: const [
-                      ButtonSegment(
-                        value: PackageTypeFilter.all,
-                        label: Text('All'),
-                      ),
-                      ButtonSegment(
-                        value: PackageTypeFilter.formulae,
-                        label: Text('Formulae'),
-                      ),
-                      ButtonSegment(
-                        value: PackageTypeFilter.casks,
-                        label: Text('Casks'),
-                      ),
-                    ],
-                    selected: {state.packageType},
-                    onSelectionChanged: (Set<PackageTypeFilter> newSelection) {
-                      viewModel.setPackageType(newSelection.first);
-                    },
+                  _FilterPill(
+                    label: 'All',
+                    isSelected: state.packageType == PackageTypeFilter.all,
+                    onTap: () =>
+                        viewModel.setPackageType(PackageTypeFilter.all),
+                  ),
+                  const SizedBox(width: spacingS),
+                  _FilterPill(
+                    label: 'Formulae',
+                    isSelected: state.packageType == PackageTypeFilter.formulae,
+                    onTap: () =>
+                        viewModel.setPackageType(PackageTypeFilter.formulae),
+                  ),
+                  const SizedBox(width: spacingS),
+                  _FilterPill(
+                    label: 'Casks',
+                    isSelected: state.packageType == PackageTypeFilter.casks,
+                    onTap: () =>
+                        viewModel.setPackageType(PackageTypeFilter.casks),
                   ),
                   const SizedBox(width: spacingM),
-                  SegmentedButton<OsSupportFilter>(
-                    segments: const [
-                      ButtonSegment(
-                        value: OsSupportFilter.all,
-                        label: Text('Any OS'),
-                      ),
-                      ButtonSegment(
-                        value: OsSupportFilter.macOS,
-                        label: Text('macOS'),
-                      ),
-                      ButtonSegment(
-                        value: OsSupportFilter.linux,
-                        label: Text('Linux'),
-                      ),
-                    ],
-                    selected: {state.osSupport},
-                    onSelectionChanged: (Set<OsSupportFilter> newSelection) {
-                      viewModel.setOsSupport(newSelection.first);
-                    },
+                  _FilterPill(
+                    label: 'Any OS',
+                    isSelected: state.osSupport == OsSupportFilter.all,
+                    onTap: () => viewModel.setOsSupport(OsSupportFilter.all),
+                  ),
+                  const SizedBox(width: spacingS),
+                  _FilterPill(
+                    label: 'macOS',
+                    isSelected: state.osSupport == OsSupportFilter.macOS,
+                    onTap: () => viewModel.setOsSupport(OsSupportFilter.macOS),
+                  ),
+                  const SizedBox(width: spacingS),
+                  _FilterPill(
+                    label: 'Linux',
+                    isSelected: state.osSupport == OsSupportFilter.linux,
+                    onTap: () => viewModel.setOsSupport(OsSupportFilter.linux),
                   ),
                   const SizedBox(width: spacingM),
-                  FilterChip(
-                    label: const Text('Installed Only'),
-                    selected: state.showInstalledOnly,
-                    onSelected: viewModel.toggleInstalledOnly,
+                  _FilterPill(
+                    label: 'Installed Only',
+                    isSelected: state.showInstalledOnly,
+                    onTap: () =>
+                        viewModel.toggleInstalledOnly(!state.showInstalledOnly),
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FilterPill extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _FilterPill({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.secondary : Colors.transparent,
+            borderRadius: BorderRadius.circular(100),
+            border: isSelected
+                ? null
+                : Border.all(color: AppColors.borderNeutral),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: AppColors.secondary.withValues(alpha: 0.3),
+                      blurRadius: 15,
+                    ),
+                  ]
+                : null,
+          ),
+          child: Text(
+            label,
+            style: context.bodyM.copyWith(
+              color: isSelected
+                  ? AppColors.onSecondary
+                  : AppColors.textSecondary,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            ),
+          ),
         ),
       ),
     );
