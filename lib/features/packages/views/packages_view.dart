@@ -149,7 +149,7 @@ class _PackagesViewState extends State<PackagesView> {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _StickyHeaderDelegate(
-                  height: 130.0,
+                  height: searchBarHeight,
                   child: PackageFilters(viewModel: viewModel, state: state),
                 ),
               ),

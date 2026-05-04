@@ -1,11 +1,15 @@
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/enums/os_support_filter.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
 import 'package:bartender/theme/bartender_context.dart';
+import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/constants/durations.dart';
 
 class PackageFilters extends StatelessWidget {
   final PackagesViewModel viewModel;
@@ -20,160 +24,212 @@ class PackageFilters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 130.0,
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: AppColors.background,
+      padding: const EdgeInsets.symmetric(
+        horizontal: spacingXl,
+        vertical: spacingM,
+      ),
       child: Align(
         alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: spacingXl),
-              child: TextField(
-                cursorColor: AppColors.textSecondary,
-                decoration: InputDecoration(
-                  filled: true,
-                  hintText: 'Search for flasks or casks...',
-                  prefixIcon: Icon(Icons.search, color: AppColors.iconDefault),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.borderNeutral),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(radiusM),
+            border: Border.all(color: AppColors.borderNeutral),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(spacingM),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
                     borderRadius: BorderRadius.circular(radiusM),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: AppColors.surface),
-                    borderRadius: BorderRadius.circular(radiusM),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: AppColors.secondary,
-                      width: thicknessS,
+                  child: TextField(
+                    cursorColor: AppColors.textSecondary,
+                    decoration: InputDecoration(
+                      hintText: 'Search for flasks or casks...',
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: AppColors.iconDefault,
+                      ),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      hintStyle: context.bodyM.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: spacingM,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(radiusM),
+                    onChanged: viewModel.setSearchQuery,
                   ),
-                  hintStyle: context.bodyM.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                  fillColor: AppColors.surface,
                 ),
-                onChanged: viewModel.setSearchQuery,
               ),
-            ),
-            const SizedBox(height: spacingM),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: spacingXl),
-              child: Row(
-                children: [
-                  Text(
-                    'Type',
-                    style: context.labelM.copyWith(
-                      color: AppColors.textSecondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(width: spacingS),
-                  _FilterPill(
-                    label: 'All',
-                    isSelected: state.packageType == PackageTypeFilter.all,
-                    onTap: () =>
-                        viewModel.setPackageType(PackageTypeFilter.all),
-                  ),
-                  const SizedBox(width: spacingS),
-                  _FilterPill(
-                    label: 'Formulae',
-                    isSelected: state.packageType == PackageTypeFilter.formulae,
-                    onTap: () =>
-                        viewModel.setPackageType(PackageTypeFilter.formulae),
-                  ),
-                  const SizedBox(width: spacingS),
-                  _FilterPill(
-                    label: 'Casks',
-                    isSelected: state.packageType == PackageTypeFilter.casks,
-                    onTap: () =>
-                        viewModel.setPackageType(PackageTypeFilter.casks),
-                  ),
-                  const SizedBox(width: spacingXl),
-                  Text(
-                    'Platform',
-                    style: context.labelM.copyWith(
-                      color: AppColors.textSecondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(width: spacingS),
-                  _FilterPill(
-                    label: 'Any OS',
-                    isSelected: state.osSupport == OsSupportFilter.all,
-                    onTap: () => viewModel.setOsSupport(OsSupportFilter.all),
-                  ),
-                  const SizedBox(width: spacingS),
-                  _FilterPill(
-                    label: 'macOS',
-                    isSelected: state.osSupport == OsSupportFilter.macOS,
-                    onTap: () => viewModel.setOsSupport(OsSupportFilter.macOS),
-                  ),
-                  const SizedBox(width: spacingS),
-                  _FilterPill(
-                    label: 'Linux',
-                    isSelected: state.osSupport == OsSupportFilter.linux,
-                    onTap: () => viewModel.setOsSupport(OsSupportFilter.linux),
-                  ),
-                ],
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.borderNeutral,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(spacingM),
+                child: Wrap(
+                  spacing: spacingXl,
+                  runSpacing: spacingM,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    _FilterGroup<PackageTypeFilter>(
+                      groupLabel: 'Type:',
+                      selectedValue: state.packageType,
+                      unselectedValue: PackageTypeFilter.all,
+                      onChanged: viewModel.setPackageType,
+                      options: const [
+                        _FilterOption(
+                          label: 'Formulae',
+                          value: PackageTypeFilter.formulae,
+                          assetName: flaskIcon,
+                        ),
+                        _FilterOption(
+                          label: 'Casks',
+                          value: PackageTypeFilter.casks,
+                          assetName: barrelIcon,
+                        ),
+                      ],
+                    ),
+                    _FilterGroup<OsSupportFilter>(
+                      groupLabel: 'Platform:',
+                      selectedValue: state.osSupport,
+                      unselectedValue: OsSupportFilter.all,
+                      onChanged: viewModel.setOsSupport,
+                      options: const [
+                        _FilterOption(
+                          label: 'macOS',
+                          value: OsSupportFilter.macOS,
+                          assetName: appleIcon,
+                        ),
+                        _FilterOption(
+                          label: 'Linux',
+                          value: OsSupportFilter.linux,
+                          assetName: linuxIcon,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _FilterPill extends StatelessWidget {
+class _FilterOption<T> {
   final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
+  final T value;
+  final String? assetName;
 
-  const _FilterPill({
+  const _FilterOption({
     required this.label,
-    required this.isSelected,
-    required this.onTap,
+    required this.value,
+    this.assetName,
+  });
+}
+
+class _FilterGroup<T> extends StatelessWidget {
+  final List<_FilterOption<T>> options;
+  final T selectedValue;
+  final T unselectedValue;
+  final ValueChanged<T> onChanged;
+  final String groupLabel;
+
+  const _FilterGroup({
+    required this.options,
+    required this.selectedValue,
+    required this.unselectedValue,
+    required this.onChanged,
+    required this.groupLabel,
   });
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.secondary : Colors.transparent,
-            borderRadius: BorderRadius.circular(100),
-            border: isSelected
-                ? null
-                : Border.all(color: AppColors.borderNeutral),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: AppColors.secondary.withValues(alpha: 0.3),
-                      blurRadius: 15,
-                    ),
-                  ]
-                : null,
-          ),
-          child: Text(
-            label,
-            style: context.bodyM.copyWith(
-              color: isSelected
-                  ? AppColors.onSecondary
-                  : AppColors.textSecondary,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          groupLabel,
+          style: context.bodyM.copyWith(
+            color: AppColors.textSecondary,
+            fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+        const SizedBox(width: spacingM),
+        Wrap(
+          spacing: spacingS,
+          children: options.map((option) {
+            final isSelected = option.value == selectedValue;
+            return MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  if (isSelected) {
+                    onChanged(unselectedValue);
+                  } else {
+                    onChanged(option.value);
+                  }
+                },
+                child: AnimatedContainer(
+                  duration: defaultAnimationDuration,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: spacingM,
+                    vertical: spacingS,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppColors.secondary.withValues(alpha: 0.1)
+                        : AppColors.background,
+                    borderRadius: BorderRadius.circular(radiusXl),
+                    border: Border.all(
+                      color: isSelected
+                          ? AppColors.secondary
+                          : AppColors.borderNeutral,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (option.assetName != null) ...[
+                        IconWidget(
+                          assetName: option.assetName!,
+                          size: spacingL,
+                          color: isSelected
+                              ? AppColors.secondary
+                              : AppColors.textSecondary,
+                        ),
+                        const SizedBox(width: spacingXs),
+                      ],
+                      Text(
+                        option.label,
+                        style: context.bodyM.copyWith(
+                          color: isSelected
+                              ? AppColors.secondary
+                              : AppColors.textPrimary,
+                          fontWeight: isSelected ? FontWeight.bold : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }

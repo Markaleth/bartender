@@ -14,3 +14,6 @@ const trendingIcon = 'assets/icons/trending_icon.svg';
 const badgeIcon = 'assets/icons/badge_icon.svg';
 const bottleIcon = 'assets/icons/bottle_icon.svg';
 const homeIcon = 'assets/icons/home_icon.svg';
+const linuxIcon = 'assets/icons/linux_icon.svg';
+const appleIcon = 'assets/icons/apple_icon.svg';
+const flaskIcon = 'assets/icons/flask_icon.svg';

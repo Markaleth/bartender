@@ -24,8 +24,8 @@ const double thicknessXl = 8.0;
 // Widget Sizes
 const double sideBarWidth = 250.0;
 const double trendingPackageCarouselHeight = 200;
-const double defaultBrewCardIconSize = 40.0;
-
+const double defaultTrendingWidgetIconSize = 40.0;
+const double searchBarHeight = 200.0;
 
 // Layout Breakpoints
 const double widthBreakpoint = 600.0;

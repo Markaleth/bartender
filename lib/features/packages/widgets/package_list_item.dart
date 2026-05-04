@@ -212,7 +212,7 @@ class _PackageListItemDetails extends StatelessWidget {
                 // Dummy install
               },
               child: Text(
-                model.isInstalled ? 'Reinstall' : 'Install',
+                model.isInstalled ? 'Uninstall' : 'Install',
                 style: context.labelL.copyWith(color: AppColors.onPrimary),
               ),
             ),
