@@ -36,29 +36,43 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
         ),
       );
 
+  // --- Initialization & Data Fetching ---
+
   Future<void> fetchData() async {
     emitState(state.copyWith(trendingData: const FetchState.loading()));
     try {
       final isDbEmpty = await _homebrewRepository.isDatabaseEmpty();
       if (isDbEmpty) {
-        await _syncRemoteData();
-        await _fetchInitialData();
+        await _handleInitialColdStart();
       } else {
-        await _fetchInitialData();
-        emitState(state.copyWith(isSyncingBackground: true));
-        _syncRemoteData().then((_) async {
-          await _refreshListings();
-          emitState(state.copyWith(isSyncingBackground: false));
-        }).catchError((error) {
-          // Silently swallow or log network errors during background sync
-          emitState(state.copyWith(isSyncingBackground: false));
-        });
+        await _handleWarmStart();
       }
     } catch (error) {
       emitState(
         state.copyWith(trendingData: FetchState.error(error.toString())),
       );
     }
+  }
+
+  Future<void> _handleInitialColdStart() async {
+    await _syncRemoteData();
+    await _fetchInitialData();
+  }
+
+  Future<void> _handleWarmStart() async {
+    await _fetchInitialData();
+    _startBackgroundSync();
+  }
+
+  void _startBackgroundSync() {
+    emitState(state.copyWith(isSyncingBackground: true));
+    _syncRemoteData().then((_) async {
+      await _refreshListings();
+      emitState(state.copyWith(isSyncingBackground: false));
+    }).catchError((error) {
+      // Silently swallow or log network errors during background sync
+      emitState(state.copyWith(isSyncingBackground: false));
+    });
   }
 
   Future<void> _syncRemoteData() async {
@@ -88,6 +102,8 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     );
   }
 
+  // --- Pagination ---
+
   Future<void> loadMorePackages() async {
     if (_isLoadingMore) return;
     _isLoadingMore = true;
@@ -113,6 +129,8 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
       _isLoadingMore = false;
     }
   }
+
+  // --- Trending Data ---
 
   Future<List<List<dynamic>>> _getTrendingData() async {
     final formulaTrending = await _homebrewRepository.getTrendingFormulae(
@@ -171,6 +189,8 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     }
     return 0;
   }
+
+  // --- Queue Operations ---
 
   void queueInstall(String packageId, PackageType type) {
     final newOperation = PackageOperation(
@@ -242,8 +262,12 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     emitState(state.copyWith(operationsQueue: updatedQueue));
   }
 
-  Future<void> _refreshListings() async {
+  Future<void> _refreshListings({bool clearExisting = false}) async {
     _currentPaginationOffset = 0;
+    if (clearExisting) {
+      emitState(state.copyWith(paginatedPackages: []));
+    }
+
     final initialChunk = await _homebrewRepository.getFilteredPackages(
       query: state.searchQuery,
       type: state.packageType,
@@ -256,39 +280,27 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     emitState(state.copyWith(paginatedPackages: initialChunk));
   }
 
+  // --- Filtering & Searching ---
+
   void setSearchQuery(String query) {
     if (state.searchQuery == query) return;
     emitState(state.copyWith(searchQuery: query));
-    _applyFilters();
+    _refreshListings(clearExisting: true);
   }
 
   void setPackageType(PackageTypeFilter type) {
     if (state.packageType == type) return;
     emitState(state.copyWith(packageType: type));
-    _applyFilters();
+    _refreshListings(clearExisting: true);
   }
 
   void setOsSupport(OsSupportFilter osSupport) {
     if (state.osSupport == osSupport) return;
     emitState(state.copyWith(osSupport: osSupport));
-    _applyFilters();
+    _refreshListings(clearExisting: true);
   }
 
-  Future<void> _applyFilters() async {
-    _currentPaginationOffset = 0;
-    emitState(state.copyWith(paginatedPackages: []));
-
-    final initialChunk = await _homebrewRepository.getFilteredPackages(
-      query: state.searchQuery,
-      type: state.packageType,
-      osSupport: state.osSupport,
-      limit: _paginationChunkSize,
-      offset: _currentPaginationOffset,
-    );
-    _currentPaginationOffset += initialChunk.length;
-
-    emitState(state.copyWith(paginatedPackages: initialChunk));
-  }
+  // --- UI State & Helpers ---
 
   void togglePackageExpansion(String id) {
     if (state.expandedPackageId == id) {
