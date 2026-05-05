@@ -66,13 +66,15 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
 
   void _startBackgroundSync() {
     emitState(state.copyWith(isSyncingBackground: true));
-    _syncRemoteData().then((_) async {
-      await _refreshListings();
-      emitState(state.copyWith(isSyncingBackground: false));
-    }).catchError((error) {
-      // Silently swallow or log network errors during background sync
-      emitState(state.copyWith(isSyncingBackground: false));
-    });
+    _syncRemoteData()
+        .then((_) async {
+          await _refreshListings();
+          emitState(state.copyWith(isSyncingBackground: false));
+        })
+        .catchError((error) {
+          // Silently swallow or log network errors during background sync
+          emitState(state.copyWith(isSyncingBackground: false));
+        });
   }
 
   Future<void> _syncRemoteData() async {
@@ -132,10 +134,12 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
 
   void truncateForScrollToTop() {
     if (state.paginatedPackages.length <= _paginationChunkSize) return;
-    
-    final truncated = state.paginatedPackages.take(_paginationChunkSize).toList();
+
+    final truncated = state.paginatedPackages
+        .take(_paginationChunkSize)
+        .toList();
     _currentPaginationOffset = _paginationChunkSize;
-    
+
     emitState(state.copyWith(paginatedPackages: truncated));
   }
 
@@ -273,8 +277,9 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
 
   Future<void> _refreshListings({bool clearExisting = false}) async {
     _currentPaginationOffset = 0;
+
     if (clearExisting) {
-      emitState(state.copyWith(paginatedPackages: []));
+      truncateForScrollToTop();
     }
 
     final initialChunk = await _homebrewRepository.getFilteredPackages(
