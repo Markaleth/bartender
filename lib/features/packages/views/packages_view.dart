@@ -47,16 +47,18 @@ class PackagesView extends StatefulWidget {
 
 class _PackagesViewState extends State<PackagesView> {
   final ScrollController _scrollController = ScrollController();
-  bool _showScrollToTop = false;
+  final ValueNotifier<bool> _showScrollToTop = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      if (_scrollController.offset > 400 && !_showScrollToTop) {
-        setState(() => _showScrollToTop = true);
-      } else if (_scrollController.offset <= 400 && _showScrollToTop) {
-        setState(() => _showScrollToTop = false);
+      if (_scrollController.offset > scrollToTopDisplayThreashold &&
+          !_showScrollToTop.value) {
+        _showScrollToTop.value = true;
+      } else if (_scrollController.offset <= scrollToTopDisplayThreashold &&
+          _showScrollToTop.value) {
+        _showScrollToTop.value = false;
       }
     });
   }
@@ -64,6 +66,7 @@ class _PackagesViewState extends State<PackagesView> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _showScrollToTop.dispose();
     super.dispose();
   }
 
@@ -77,23 +80,25 @@ class _PackagesViewState extends State<PackagesView> {
     ),
     onModelReady: (viewModel) => viewModel.fetchData(),
     builder: (context, viewModel, state) => Scaffold(
-      floatingActionButton: _showScrollToTop
-          ? FloatingActionButton(
-              onPressed: () {
-                _scrollController.animateTo(
-                  0,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-              child: const Icon(Icons.arrow_upward),
-            )
-          : null,
+      floatingActionButton: ValueListenableBuilder<bool>(
+        valueListenable: _showScrollToTop,
+        builder: (context, show, child) => !show
+            ? const SizedBox.shrink()
+            : FloatingActionButton(
+                onPressed: () {
+                  viewModel.truncateForScrollToTop();
+                  _scrollController.jumpTo(0);
+                },
+                child: const Icon(Icons.arrow_upward),
+              ),
+      ),
       body: SafeArea(
         child: NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification scrollInfo) {
-            if (scrollInfo.metrics.pixels >=
-                scrollInfo.metrics.maxScrollExtent - 500) {
+            if (scrollInfo.metrics.pixels > 0 &&
+                scrollInfo.metrics.pixels >=
+                    scrollInfo.metrics.maxScrollExtent -
+                        maxScrollExtentOffset) {
               viewModel.loadMorePackages();
             }
             return false;

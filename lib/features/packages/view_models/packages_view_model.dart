@@ -130,6 +130,15 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     }
   }
 
+  void truncateForScrollToTop() {
+    if (state.paginatedPackages.length <= _paginationChunkSize) return;
+    
+    final truncated = state.paginatedPackages.take(_paginationChunkSize).toList();
+    _currentPaginationOffset = _paginationChunkSize;
+    
+    emitState(state.copyWith(paginatedPackages: truncated));
+  }
+
   // --- Trending Data ---
 
   Future<List<List<dynamic>>> _getTrendingData() async {

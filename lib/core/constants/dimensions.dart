@@ -29,3 +29,7 @@ const double searchBarHeight = 200.0;
 
 // Layout Breakpoints
 const double widthBreakpoint = 600.0;
+
+// Packages View
+const int maxScrollExtentOffset = 500;
+const int scrollToTopDisplayThreashold = 400;
