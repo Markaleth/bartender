@@ -21,6 +21,10 @@ class HomebrewRepository {
     return await _database.getCategoryAnalytics(category, days);
   }
 
+  Future<bool> isDatabaseEmpty() async {
+    return await _database.isDatabaseEmpty();
+  }
+
   Future<void> syncCategoryAnalytics(
     String category,
     AnalyticsPeriod days,

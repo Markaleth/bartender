@@ -153,6 +153,11 @@ class _PackagesViewState extends State<PackagesView> {
                   child: PackageFilters(viewModel: viewModel, state: state),
                 ),
               ),
+              //TODO: we need to extract this to a more prominent widget.
+              if (state.isSyncingBackground)
+                const SliverToBoxAdapter(
+                  child: LinearProgressIndicator(minHeight: 2),
+                ),
               SliverList.builder(
                 itemCount: state.paginatedPackages.length,
                 itemBuilder: (context, index) {
