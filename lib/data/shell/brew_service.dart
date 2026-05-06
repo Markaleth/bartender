@@ -42,6 +42,18 @@ class BrewService {
     return StreamingShellCommand(process);
   }
 
+  // --- Generic Commands ---
+
+  /// Run an arbitrary brew command without streaming.
+  Future<ShellCommandResult> runCustom(List<String> args) {
+    return runCommand(args);
+  }
+
+  /// Run an arbitrary brew command and stream its output.
+  Future<StreamingShellCommand> runCustomStream(List<String> args) {
+    return streamCommand(args);
+  }
+
   // --- Essential Commands Helpers ---
 
   Future<ShellCommandResult> install(String package, {bool isCask = false}) {
