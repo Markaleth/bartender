@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'package_operation.dart';
+part of 'operation_task.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,21 +12,21 @@ part of 'package_operation.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$PackageOperation {
+mixin _$OperationTask {
 
  String get packageId;// e.g., 'google-chrome' or 'wget'
  PackageType get type; OperationStatus get status; String? get errorMessage;
-/// Create a copy of PackageOperation
+/// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$PackageOperationCopyWith<PackageOperation> get copyWith => _$PackageOperationCopyWithImpl<PackageOperation>(this as PackageOperation, _$identity);
+$OperationTaskCopyWith<OperationTask> get copyWith => _$OperationTaskCopyWithImpl<OperationTask>(this as OperationTask, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackageOperation&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OperationTask&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
@@ -35,15 +35,15 @@ int get hashCode => Object.hash(runtimeType,packageId,type,status,errorMessage);
 
 @override
 String toString() {
-  return 'PackageOperation(packageId: $packageId, type: $type, status: $status, errorMessage: $errorMessage)';
+  return 'OperationTask(packageId: $packageId, type: $type, status: $status, errorMessage: $errorMessage)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $PackageOperationCopyWith<$Res>  {
-  factory $PackageOperationCopyWith(PackageOperation value, $Res Function(PackageOperation) _then) = _$PackageOperationCopyWithImpl;
+abstract mixin class $OperationTaskCopyWith<$Res>  {
+  factory $OperationTaskCopyWith(OperationTask value, $Res Function(OperationTask) _then) = _$OperationTaskCopyWithImpl;
 @useResult
 $Res call({
  String packageId, PackageType type, OperationStatus status, String? errorMessage
@@ -54,14 +54,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$PackageOperationCopyWithImpl<$Res>
-    implements $PackageOperationCopyWith<$Res> {
-  _$PackageOperationCopyWithImpl(this._self, this._then);
+class _$OperationTaskCopyWithImpl<$Res>
+    implements $OperationTaskCopyWith<$Res> {
+  _$OperationTaskCopyWithImpl(this._self, this._then);
 
-  final PackageOperation _self;
-  final $Res Function(PackageOperation) _then;
+  final OperationTask _self;
+  final $Res Function(OperationTask) _then;
 
-/// Create a copy of PackageOperation
+/// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? packageId = null,Object? type = null,Object? status = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
@@ -76,8 +76,8 @@ as String?,
 }
 
 
-/// Adds pattern-matching-related methods to [PackageOperation].
-extension PackageOperationPatterns on PackageOperation {
+/// Adds pattern-matching-related methods to [OperationTask].
+extension OperationTaskPatterns on OperationTask {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -90,10 +90,10 @@ extension PackageOperationPatterns on PackageOperation {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _PackageOperation value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _OperationTask value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _PackageOperation() when $default != null:
+case _OperationTask() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -112,10 +112,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _PackageOperation value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _OperationTask value)  $default,){
 final _that = this;
 switch (_that) {
-case _PackageOperation():
+case _OperationTask():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -133,10 +133,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _PackageOperation value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _OperationTask value)?  $default,){
 final _that = this;
 switch (_that) {
-case _PackageOperation() when $default != null:
+case _OperationTask() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -156,7 +156,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String packageId,  PackageType type,  OperationStatus status,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _PackageOperation() when $default != null:
+case _OperationTask() when $default != null:
 return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case _:
   return orElse();
 
@@ -177,7 +177,7 @@ return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String packageId,  PackageType type,  OperationStatus status,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
-case _PackageOperation():
+case _OperationTask():
 return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
@@ -197,7 +197,7 @@ return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String packageId,  PackageType type,  OperationStatus status,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
-case _PackageOperation() when $default != null:
+case _OperationTask() when $default != null:
 return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case _:
   return null;
 
@@ -209,8 +209,8 @@ return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case
 /// @nodoc
 
 
-class _PackageOperation implements PackageOperation {
-  const _PackageOperation({required this.packageId, required this.type, this.status = OperationStatus.queued, this.errorMessage});
+class _OperationTask implements OperationTask {
+  const _OperationTask({required this.packageId, required this.type, this.status = OperationStatus.queued, this.errorMessage});
   
 
 @override final  String packageId;
@@ -219,17 +219,17 @@ class _PackageOperation implements PackageOperation {
 @override@JsonKey() final  OperationStatus status;
 @override final  String? errorMessage;
 
-/// Create a copy of PackageOperation
+/// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$PackageOperationCopyWith<_PackageOperation> get copyWith => __$PackageOperationCopyWithImpl<_PackageOperation>(this, _$identity);
+_$OperationTaskCopyWith<_OperationTask> get copyWith => __$OperationTaskCopyWithImpl<_OperationTask>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackageOperation&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OperationTask&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
@@ -238,15 +238,15 @@ int get hashCode => Object.hash(runtimeType,packageId,type,status,errorMessage);
 
 @override
 String toString() {
-  return 'PackageOperation(packageId: $packageId, type: $type, status: $status, errorMessage: $errorMessage)';
+  return 'OperationTask(packageId: $packageId, type: $type, status: $status, errorMessage: $errorMessage)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$PackageOperationCopyWith<$Res> implements $PackageOperationCopyWith<$Res> {
-  factory _$PackageOperationCopyWith(_PackageOperation value, $Res Function(_PackageOperation) _then) = __$PackageOperationCopyWithImpl;
+abstract mixin class _$OperationTaskCopyWith<$Res> implements $OperationTaskCopyWith<$Res> {
+  factory _$OperationTaskCopyWith(_OperationTask value, $Res Function(_OperationTask) _then) = __$OperationTaskCopyWithImpl;
 @override @useResult
 $Res call({
  String packageId, PackageType type, OperationStatus status, String? errorMessage
@@ -257,17 +257,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$PackageOperationCopyWithImpl<$Res>
-    implements _$PackageOperationCopyWith<$Res> {
-  __$PackageOperationCopyWithImpl(this._self, this._then);
+class __$OperationTaskCopyWithImpl<$Res>
+    implements _$OperationTaskCopyWith<$Res> {
+  __$OperationTaskCopyWithImpl(this._self, this._then);
 
-  final _PackageOperation _self;
-  final $Res Function(_PackageOperation) _then;
+  final _OperationTask _self;
+  final $Res Function(_OperationTask) _then;
 
-/// Create a copy of PackageOperation
+/// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? packageId = null,Object? type = null,Object? status = null,Object? errorMessage = freezed,}) {
-  return _then(_PackageOperation(
+  return _then(_OperationTask(
 packageId: null == packageId ? _self.packageId : packageId // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as PackageType,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable

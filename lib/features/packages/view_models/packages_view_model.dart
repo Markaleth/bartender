@@ -5,7 +5,7 @@ import 'package:bartender/core/enums/analytics_period.dart';
 import 'package:bartender/core/enums/os_support_filter.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
-import 'package:bartender/core/models/package_operations/package_operation.dart';
+import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
@@ -206,7 +206,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   // --- Queue Operations ---
 
   void queueInstall(String packageId, PackageType type) {
-    final newOperation = PackageOperation(
+    final newOperation = OperationTask(
       packageId: packageId,
       type: type,
       status: OperationStatus.queued,
@@ -267,7 +267,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     OperationStatus status, {
     String? errorMessage,
   }) {
-    final updatedQueue = List<PackageOperation>.from(state.operationsQueue);
+    final updatedQueue = List<OperationTask>.from(state.operationsQueue);
     updatedQueue[index] = updatedQueue[index].copyWith(
       status: status,
       errorMessage: errorMessage,
