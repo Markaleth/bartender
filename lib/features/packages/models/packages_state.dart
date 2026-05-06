@@ -1,7 +1,6 @@
 import 'package:bartender/core/enums/os_support_filter.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
-import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'packages_state.freezed.dart';
@@ -16,8 +15,6 @@ abstract class PackagesState with _$PackagesState {
     @Default(FetchState.loading()) FetchState<List<dynamic>> trendingData,
 
     @Default(false) bool isSyncingBackground,
-
-    @Default([]) List<OperationTask> operationsQueue,
 
     @Default([]) List<dynamic> paginatedPackages,
     String? expandedPackageId,

@@ -14,3 +14,11 @@
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [x] View behaves kind of strageny when toggling between filters. It resets the scroll position to top sometimes and sometimes it doesnt (after you've scrolled just a bit). Look into that.
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
+
+# Issues:
+
+- [ ] Terminal close icon is not very suggestive (should be an x or something instantly recognizable)
+- [ ] when minimising the termial, we're getting some overflow errors
+- [ ] text in terminal look blurry. play with the styling to improve that
+- [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
+- [ ] Button label doesn't update for [package_list_item.dart](lib/features/packages/widgets/package_list_item.dart). need to look into that

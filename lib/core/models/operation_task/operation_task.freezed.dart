@@ -14,8 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OperationTask {
 
- String get packageId;// e.g., 'google-chrome' or 'wget'
- PackageType get type; OperationStatus get status; String? get errorMessage;
+ String get id; String get packageId;// e.g., 'google-chrome' or 'wget'
+ PackageType get type; OperationType get operation; OperationStatus get status; List<String> get logs; bool get isArchived; String? get errorMessage;
 /// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $OperationTaskCopyWith<OperationTask> get copyWith => _$OperationTaskCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OperationTask&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OperationTask&&(identical(other.id, id) || other.id == id)&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.logs, logs)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,packageId,type,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,id,packageId,type,operation,status,const DeepCollectionEquality().hash(logs),isArchived,errorMessage);
 
 @override
 String toString() {
-  return 'OperationTask(packageId: $packageId, type: $type, status: $status, errorMessage: $errorMessage)';
+  return 'OperationTask(id: $id, packageId: $packageId, type: $type, operation: $operation, status: $status, logs: $logs, isArchived: $isArchived, errorMessage: $errorMessage)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $OperationTaskCopyWith<$Res>  {
   factory $OperationTaskCopyWith(OperationTask value, $Res Function(OperationTask) _then) = _$OperationTaskCopyWithImpl;
 @useResult
 $Res call({
- String packageId, PackageType type, OperationStatus status, String? errorMessage
+ String id, String packageId, PackageType type, OperationType operation, OperationStatus status, List<String> logs, bool isArchived, String? errorMessage
 });
 
 
@@ -63,12 +63,16 @@ class _$OperationTaskCopyWithImpl<$Res>
 
 /// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? packageId = null,Object? type = null,Object? status = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? packageId = null,Object? type = null,Object? operation = null,Object? status = null,Object? logs = null,Object? isArchived = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
-packageId: null == packageId ? _self.packageId : packageId // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,packageId: null == packageId ? _self.packageId : packageId // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as PackageType,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as OperationStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as PackageType,operation: null == operation ? _self.operation : operation // ignore: cast_nullable_to_non_nullable
+as OperationType,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as OperationStatus,logs: null == logs ? _self.logs : logs // ignore: cast_nullable_to_non_nullable
+as List<String>,isArchived: null == isArchived ? _self.isArchived : isArchived // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -154,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String packageId,  PackageType type,  OperationStatus status,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OperationTask() when $default != null:
-return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case _:
+return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -175,10 +179,10 @@ return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String packageId,  PackageType type,  OperationStatus status,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _OperationTask():
-return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case _:
+return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +199,10 @@ return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String packageId,  PackageType type,  OperationStatus status,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _OperationTask() when $default != null:
-return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case _:
+return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage);case _:
   return null;
 
 }
@@ -210,13 +214,23 @@ return $default(_that.packageId,_that.type,_that.status,_that.errorMessage);case
 
 
 class _OperationTask implements OperationTask {
-  const _OperationTask({required this.packageId, required this.type, this.status = OperationStatus.queued, this.errorMessage});
+  const _OperationTask({required this.id, required this.packageId, required this.type, required this.operation, this.status = OperationStatus.queued, final  List<String> logs = const [], this.isArchived = false, this.errorMessage}): _logs = logs;
   
 
+@override final  String id;
 @override final  String packageId;
 // e.g., 'google-chrome' or 'wget'
 @override final  PackageType type;
+@override final  OperationType operation;
 @override@JsonKey() final  OperationStatus status;
+ final  List<String> _logs;
+@override@JsonKey() List<String> get logs {
+  if (_logs is EqualUnmodifiableListView) return _logs;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_logs);
+}
+
+@override@JsonKey() final  bool isArchived;
 @override final  String? errorMessage;
 
 /// Create a copy of OperationTask
@@ -229,16 +243,16 @@ _$OperationTaskCopyWith<_OperationTask> get copyWith => __$OperationTaskCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OperationTask&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OperationTask&&(identical(other.id, id) || other.id == id)&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,packageId,type,status,errorMessage);
+int get hashCode => Object.hash(runtimeType,id,packageId,type,operation,status,const DeepCollectionEquality().hash(_logs),isArchived,errorMessage);
 
 @override
 String toString() {
-  return 'OperationTask(packageId: $packageId, type: $type, status: $status, errorMessage: $errorMessage)';
+  return 'OperationTask(id: $id, packageId: $packageId, type: $type, operation: $operation, status: $status, logs: $logs, isArchived: $isArchived, errorMessage: $errorMessage)';
 }
 
 
@@ -249,7 +263,7 @@ abstract mixin class _$OperationTaskCopyWith<$Res> implements $OperationTaskCopy
   factory _$OperationTaskCopyWith(_OperationTask value, $Res Function(_OperationTask) _then) = __$OperationTaskCopyWithImpl;
 @override @useResult
 $Res call({
- String packageId, PackageType type, OperationStatus status, String? errorMessage
+ String id, String packageId, PackageType type, OperationType operation, OperationStatus status, List<String> logs, bool isArchived, String? errorMessage
 });
 
 
@@ -266,12 +280,16 @@ class __$OperationTaskCopyWithImpl<$Res>
 
 /// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? packageId = null,Object? type = null,Object? status = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? packageId = null,Object? type = null,Object? operation = null,Object? status = null,Object? logs = null,Object? isArchived = null,Object? errorMessage = freezed,}) {
   return _then(_OperationTask(
-packageId: null == packageId ? _self.packageId : packageId // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,packageId: null == packageId ? _self.packageId : packageId // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as PackageType,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as OperationStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as PackageType,operation: null == operation ? _self.operation : operation // ignore: cast_nullable_to_non_nullable
+as OperationType,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as OperationStatus,logs: null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
+as List<String>,isArchived: null == isArchived ? _self.isArchived : isArchived // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

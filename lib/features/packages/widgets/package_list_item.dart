@@ -8,6 +8,9 @@ import 'package:bartender/features/packages/widgets/package_grid_matrix.dart';
 import 'package:bartender/features/packages/widgets/package_variant_tag.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
+import 'package:bartender/core/models/operation_task/operation_task.dart';
+import 'package:bartender/features/queue/view_models/queue_view_model.dart';
+import 'package:provider/provider.dart';
 
 class PackageListItem extends StatelessWidget {
   final dynamic model; // CaskModel or FormulaModel
@@ -72,7 +75,7 @@ class PackageListItem extends StatelessWidget {
                     version: version,
                     constraints: constraints,
                   ),
-                  if (isExpanded) _PackageListItemDetails(model: model),
+                  if (isExpanded) _PackageListItemDetails(model: model, id: id, isCask: isCask),
                 ],
               ),
             ),
@@ -187,8 +190,10 @@ class _PackageListItemTitle extends StatelessWidget {
 
 class _PackageListItemDetails extends StatelessWidget {
   final dynamic model;
+  final String id;
+  final bool isCask;
 
-  const _PackageListItemDetails({required this.model});
+  const _PackageListItemDetails({required this.model, required this.id, required this.isCask});
 
   @override
   Widget build(BuildContext context) {
@@ -207,14 +212,10 @@ class _PackageListItemDetails extends StatelessWidget {
           ),
           child: Align(
             alignment: Alignment.centerRight,
-            child: ElevatedButton(
-              onPressed: () {
-                // Dummy install
-              },
-              child: Text(
-                model.isInstalled ? 'Uninstall' : 'Install',
-                style: context.labelL.copyWith(color: AppColors.onPrimary),
-              ),
+            child: _PackageActionButton(
+              model: model,
+              id: id,
+              isCask: isCask,
             ),
           ),
         ),
@@ -222,3 +223,72 @@ class _PackageListItemDetails extends StatelessWidget {
     );
   }
 }
+
+class _PackageActionButton extends StatelessWidget {
+  final dynamic model;
+  final String id;
+  final bool isCask;
+
+  const _PackageActionButton({
+    required this.model,
+    required this.id,
+    required this.isCask,
+  });
+
+  String _getButtonLabel(bool isQueued, bool isInProgress) {
+    if (isQueued) return 'Queued...';
+    if (isInProgress) return model.isInstalled ? 'Uninstalling...' : 'Installing...';
+    return model.isInstalled ? 'Uninstall' : 'Install';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<QueueViewModel>(
+      builder: (context, queueViewModel, _) {
+        final activeTask = queueViewModel.state.tasks
+            .where((t) => t.packageId == id)
+            .lastOrNull;
+
+        bool isQueued = activeTask?.status == OperationStatus.queued;
+        bool isInProgress = activeTask?.status == OperationStatus.inProgress;
+
+        return ElevatedButton(
+          onPressed: (isQueued || isInProgress)
+              ? null
+              : () {
+                  queueViewModel.queueOperation(
+                    packageId: id,
+                    type: isCask ? PackageType.cask : PackageType.formula,
+                    operation: model.isInstalled
+                        ? OperationType.uninstall
+                        : OperationType.install,
+                  );
+                },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isInProgress) ...[
+                const SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.onPrimary),
+                  ),
+                ),
+                const SizedBox(width: spacingS),
+              ],
+              Text(
+                _getButtonLabel(isQueued, isInProgress),
+                style: context.labelL.copyWith(
+                  color: (isQueued || isInProgress) ? AppColors.textSecondary : AppColors.onPrimary,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+

@@ -8,6 +8,7 @@ import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/services/icon_resolution/icon_resolution_service.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/core/routing/navigation_service.dart';
+import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -26,6 +27,10 @@ List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment)
       dispose: (_, db) => (db as AppDatabase).close(),
     ),
     Provider<BrewService>(create: (_) => BrewService()),
+    ChangeNotifierProxyProvider<BrewService, QueueViewModel>(
+      create: (context) => QueueViewModel(context.read<BrewService>()),
+      update: (_, brewService, previous) => previous ?? QueueViewModel(brewService),
+    ),
     ProxyProvider<DatabaseInterface, IconResolutionService>(
       update: (_, db, _) => IconResolutionService(db),
     ),

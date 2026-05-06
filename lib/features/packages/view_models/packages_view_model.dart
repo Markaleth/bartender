@@ -5,27 +5,22 @@ import 'package:bartender/core/enums/analytics_period.dart';
 import 'package:bartender/core/enums/os_support_filter.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
-import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 
 class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   final HomebrewRepository _homebrewRepository;
-  final PackageRepository _packageRepository;
 
   static const AnalyticsPeriod _analyticsPeriod = AnalyticsPeriod.days30;
-
-  bool _isProcessingQueue = false;
 
   int _currentPaginationOffset = 0;
   static const int _paginationChunkSize = 50;
   bool _isLoadingMore = false;
 
-  PackagesViewModel(this._homebrewRepository, this._packageRepository)
+  PackagesViewModel(this._homebrewRepository)
     : super(
         PackagesState(
           osSupport: Platform.isMacOS
@@ -201,78 +196,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
       };
     }
     return 0;
-  }
-
-  // --- Queue Operations ---
-
-  void queueInstall(String packageId, PackageType type) {
-    final newOperation = OperationTask(
-      packageId: packageId,
-      type: type,
-      status: OperationStatus.queued,
-    );
-
-    emitState(
-      state.copyWith(operationsQueue: [...state.operationsQueue, newOperation]),
-    );
-
-    _processQueue();
-  }
-
-  Future<void> _processQueue() async {
-    if (_isProcessingQueue) return;
-    _isProcessingQueue = true;
-
-    try {
-      while (_hasQueuedOperations()) {
-        await _processNextOperation();
-      }
-    } finally {
-      _isProcessingQueue = false;
-    }
-  }
-
-  bool _hasQueuedOperations() =>
-      state.operationsQueue.any((op) => op.status == OperationStatus.queued);
-
-  Future<void> _processNextOperation() async {
-    final queuedIndex = state.operationsQueue.indexWhere(
-      (op) => op.status == OperationStatus.queued,
-    );
-
-    if (queuedIndex == -1) return;
-
-    final operation = state.operationsQueue[queuedIndex];
-    _updateOperationStatus(queuedIndex, OperationStatus.inProgress);
-
-    try {
-      await _packageRepository.install(
-        operation.packageId,
-        isCask: operation.type == PackageType.cask,
-      );
-
-      _updateOperationStatus(queuedIndex, OperationStatus.success);
-      await _refreshListings();
-    } catch (e) {
-      _updateOperationStatus(
-        queuedIndex,
-        OperationStatus.error,
-        errorMessage: e.toString(),
-      );
-    }
-  }
-
-  void _updateOperationStatus(
-    int index,
-    OperationStatus status, {
-    String? errorMessage,
-  }) {
-    final updatedQueue = List<OperationTask>.from(state.operationsQueue);
-    updatedQueue[index] = updatedQueue[index].copyWith(
-      status: status,
-      errorMessage: errorMessage,
-    );
-    emitState(state.copyWith(operationsQueue: updatedQueue));
   }
 
   Future<void> _refreshListings({bool clearExisting = false}) async {

@@ -7,7 +7,6 @@ import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
@@ -76,7 +75,6 @@ class _PackagesViewState extends State<PackagesView> {
   ) => BaseView<PackagesViewModel, PackagesState, PackagesEffect>(
     viewModelBuilder: (_) => PackagesViewModel(
       context.read<HomebrewRepository>(),
-      context.read<PackageRepository>(),
     ),
     onModelReady: (viewModel) => viewModel.fetchData(),
     builder: (context, viewModel, state) => Scaffold(
