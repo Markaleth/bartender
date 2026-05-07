@@ -34,7 +34,7 @@ class MainApp extends StatelessWidget {
       builder: (context, child) {
         return Stack(
           children: [
-            if (child != null) child,
+            child ?? const SizedBox.shrink(),
             const Positioned(
               bottom: 0,
               right: 0,

@@ -30,8 +30,10 @@ class TerminalDrawerOverlay extends StatelessWidget {
             child: AnimatedContainer(
               duration: defaultAnimationDuration,
               curve: Curves.easeInOut,
-              width: 400,
-              height: state.isDrawerExpanded ? 320 : 48,
+              width: terminalDrawerWidth,
+              height: state.isDrawerExpanded
+                  ? terminalDrawerExpandedHeight
+                  : terminalDrawerCollapsedHeight,
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(radiusL),
@@ -41,7 +43,7 @@ class TerminalDrawerOverlay extends StatelessWidget {
                     color: Colors.black.withValues(alpha: 0.5),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
-                  )
+                  ),
                 ],
               ),
               child: state.isDrawerExpanded
@@ -55,7 +57,10 @@ class TerminalDrawerOverlay extends StatelessWidget {
   }
 
   Widget _buildCollapsed(
-      BuildContext context, QueueViewModel viewModel, int inProgressCount) {
+    BuildContext context,
+    QueueViewModel viewModel,
+    int inProgressCount,
+  ) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -72,12 +77,13 @@ class TerminalDrawerOverlay extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsets.only(right: spacingS),
                       child: SizedBox(
-                        width: 8,
-                        height: 8,
+                        width: spacingS,
+                        height: spacingS,
                         child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(AppColors.primary),
+                          strokeWidth: thicknessS,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.primary,
+                          ),
                         ),
                       ),
                     ),
@@ -96,19 +102,29 @@ class TerminalDrawerOverlay extends StatelessWidget {
   }
 
   Widget _buildExpanded(
-      BuildContext context, QueueViewModel viewModel, QueueState state) {
+    BuildContext context,
+    QueueViewModel viewModel,
+    QueueState state,
+  ) {
     return Column(
       children: [
         _buildHeader(context, viewModel),
-        _buildQueueVisualizer(context, viewModel, state),
-        Expanded(child: _buildLogViewer(state)),
+        _BuildVisualizerWidget(
+          context: context,
+          viewModel: viewModel,
+          state: state,
+        ),
+        Expanded(child: _LogViewerWidget(state: state)),
       ],
     );
   }
 
   Widget _buildHeader(BuildContext context, QueueViewModel viewModel) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: spacingM, vertical: spacingS),
+      padding: const EdgeInsets.symmetric(
+        horizontal: spacingM,
+        vertical: spacingS,
+      ),
       decoration: const BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(radiusL)),
@@ -119,7 +135,11 @@ class TerminalDrawerOverlay extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.terminal, color: AppColors.secondary, size: 16),
+              const Icon(
+                Icons.terminal,
+                color: AppColors.secondary,
+                size: spacingM,
+              ),
               const SizedBox(width: spacingS),
               Text(
                 'ACTIVE QUEUE',
@@ -133,7 +153,7 @@ class TerminalDrawerOverlay extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.clear_all, size: 16),
+                icon: const Icon(Icons.clear_all, size: spacingM),
                 onPressed: viewModel.clearCompleted,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -141,7 +161,7 @@ class TerminalDrawerOverlay extends StatelessWidget {
               ),
               const SizedBox(width: spacingM),
               IconButton(
-                icon: const Icon(Icons.expand_more, size: 16),
+                icon: const Icon(Icons.expand_more, size: spacingM),
                 onPressed: viewModel.toggleDrawer,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -153,11 +173,39 @@ class TerminalDrawerOverlay extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildQueueVisualizer(
-      BuildContext context, QueueViewModel viewModel, QueueState state) {
+class _LogViewerWidget extends StatelessWidget {
+  const _LogViewerWidget({required this.state});
+
+  final QueueState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final activeTask = state.tasks
+        .where((t) => t.id == state.activeTaskId)
+        .firstOrNull;
+    if (activeTask == null) return const SizedBox.shrink();
+
+    return _LogListViewer(logs: activeTask.logs);
+  }
+}
+
+class _BuildVisualizerWidget extends StatelessWidget {
+  const _BuildVisualizerWidget({
+    required this.context,
+    required this.viewModel,
+    required this.state,
+  });
+
+  final BuildContext context;
+  final QueueViewModel viewModel;
+  final QueueState state;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      height: 60,
+      height: terminalDrawerQueueVisualizerHeight,
       padding: const EdgeInsets.symmetric(horizontal: spacingM),
       decoration: const BoxDecoration(
         color: AppColors.surface,
@@ -166,20 +214,20 @@ class TerminalDrawerOverlay extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: state.tasks.length,
-        separatorBuilder: (_, __) => Container(
-          width: 16,
+        separatorBuilder: (_, _) => Container(
+          width: spacingM,
           height: 1,
           color: AppColors.borderNeutral,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
+          margin: const EdgeInsets.symmetric(horizontal: spacingS),
         ),
         itemBuilder: (context, index) {
           final task = state.tasks[index];
           final isSelected = state.activeTaskId == task.id;
-          
+
           Color borderColor = AppColors.borderNeutral;
           Color bgColor = AppColors.surface;
           IconData icon = Icons.inventory_2;
-          
+
           if (task.status == OperationStatus.inProgress) {
             borderColor = AppColors.primary;
             bgColor = AppColors.primary.withValues(alpha: 0.2);
@@ -190,7 +238,7 @@ class TerminalDrawerOverlay extends StatelessWidget {
             borderColor = AppColors.error;
             bgColor = AppColors.error.withValues(alpha: 0.1);
           }
-          
+
           return GestureDetector(
             onTap: () => viewModel.selectTask(task.id),
             child: Center(
@@ -209,24 +257,23 @@ class TerminalDrawerOverlay extends StatelessWidget {
                           BoxShadow(
                             color: AppColors.primary.withValues(alpha: 0.5),
                             blurRadius: 10,
-                          )
+                          ),
                         ]
                       : null,
                 ),
-                child: Icon(icon, size: 16, color: borderColor == AppColors.borderNeutral ? AppColors.textSecondary : borderColor),
+                child: Icon(
+                  icon,
+                  size: 16,
+                  color: borderColor == AppColors.borderNeutral
+                      ? AppColors.textSecondary
+                      : borderColor,
+                ),
               ),
             ),
           );
         },
       ),
     );
-  }
-
-  Widget _buildLogViewer(QueueState state) {
-    final activeTask = state.tasks.where((t) => t.id == state.activeTaskId).firstOrNull;
-    if (activeTask == null) return const SizedBox.shrink();
-
-    return _LogListViewer(logs: activeTask.logs);
   }
 }
 

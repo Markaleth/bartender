@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bartender/core/constants/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:xterm/xterm.dart';
 
@@ -51,7 +52,7 @@ class _TerminalOutputViewState extends State<TerminalOutputView> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black87,
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(spacingS),
       child: TerminalView(_terminal),
     );
   }
