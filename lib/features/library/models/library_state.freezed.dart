@@ -212,8 +212,8 @@ return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_th
 /// @nodoc
 
 
-class _LibraryState implements LibraryState {
-  const _LibraryState({this.isLoading = true, final  List<FormulaModel> installedFormulae = const [], final  List<CaskModel> installedCasks = const [], this.selectedPackage, this.systemStorageUsed = '0 B', this.orphanedDependenciesCount = 0, this.globalHealthScore = 100, this.brewPrefix = '/opt/homebrew'}): _installedFormulae = installedFormulae,_installedCasks = installedCasks;
+class _LibraryState extends LibraryState {
+  const _LibraryState({this.isLoading = true, final  List<FormulaModel> installedFormulae = const [], final  List<CaskModel> installedCasks = const [], this.selectedPackage, this.systemStorageUsed = '0 B', this.orphanedDependenciesCount = 0, this.globalHealthScore = 100, this.brewPrefix = '/opt/homebrew'}): _installedFormulae = installedFormulae,_installedCasks = installedCasks,super._();
   
 
 @override@JsonKey() final  bool isLoading;

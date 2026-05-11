@@ -19,7 +19,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _buildBentoCard(
+            child: StatusCard(
               title: 'System Storage',
               value: state.systemStorageUsed,
               icon: Icons.storage,
@@ -28,7 +28,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
           ),
           const SizedBox(width: spacingM),
           Expanded(
-            child: _buildBentoCard(
+            child: StatusCard(
               title: 'Orphaned Dependencies',
               value: state.orphanedDependenciesCount.toString(),
               icon: Icons.cleaning_services,
@@ -54,7 +54,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
           ),
           const SizedBox(width: spacingM),
           Expanded(
-            child: _buildBentoCard(
+            child: StatusCard(
               title: 'Global Health Score',
               value: '${state.globalHealthScore}%',
               icon: Icons.favorite,
@@ -71,14 +71,26 @@ class GlobalHealthStatusWidget extends StatelessWidget {
     if (score >= 70) return AppColors.tertiary;
     return AppColors.error;
   }
+}
 
-  Widget _buildBentoCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    required Color color,
-    Widget? action,
-  }) {
+class StatusCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+  final Widget? action;
+
+  const StatusCard({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+    this.action,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(spacingM),
       decoration: BoxDecoration(
@@ -102,7 +114,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              ?action,
+              action ?? const SizedBox.shrink(),
             ],
           ),
           const SizedBox(height: spacingM),
