@@ -1,4 +1,5 @@
 import 'package:bartender/core/services/hardware_service.dart';
+import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/dependency_manager.dart';
 import 'package:bartender/theme/bartender_theme.dart';
 import 'package:bartender/core/routing/app_router.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ShellUtils.init();
 
   final hardwareEnvironment = LinuxHardwareEnvironment();
   await hardwareEnvironment.init();

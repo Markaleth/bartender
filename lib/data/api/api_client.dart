@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bartender/core/constants/durations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'api_client_interface.dart';
@@ -65,16 +66,16 @@ class ApiClient implements ApiClientInterface {
   }
 
   static const String _baseUrl = 'https://formulae.brew.sh/api';
-  static const _defaultTimeoutDuration = Duration(seconds: 10);
+  
 
   static final BaseOptions _defaultOptions = BaseOptions(
-    receiveTimeout: _defaultTimeoutDuration,
+    receiveTimeout: defaultTimeoutDuration,
     baseUrl: _baseUrl,
   );
 
   Options _getOptionsWithETag(String? eTag) {
     return Options(
-      receiveTimeout: _defaultTimeoutDuration,
+      receiveTimeout: defaultTimeoutDuration,
       headers: eTag != null ? {'If-None-Match': eTag} : null,
       validateStatus: (status) =>
           status != null && (status >= 200 && status < 300 || status == 304),
