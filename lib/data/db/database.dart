@@ -22,7 +22,6 @@ import 'type_converters.dart';
 import 'database_interface.dart';
 
 import '../../core/enums/package_type_filter.dart';
-import '../../core/enums/os_support_filter.dart';
 
 import 'database_utils.dart';
 

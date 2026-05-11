@@ -6,7 +6,6 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     String query = '',
     bool installedOnly = false,
     PackageTypeFilter type = PackageTypeFilter.all,
-    OsSupportFilter osSupport = OsSupportFilter.all,
     int limit = 50,
     int offset = 0,
   }) async {
@@ -14,7 +13,6 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
       query: query,
       installedOnly: installedOnly,
       type: type,
-      osSupport: osSupport,
       limit: limit,
       offset: offset,
     );

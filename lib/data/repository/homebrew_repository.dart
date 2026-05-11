@@ -1,5 +1,4 @@
 import '../../core/enums/package_type_filter.dart';
-import '../../core/enums/os_support_filter.dart';
 import '../../core/enums/analytics_period.dart';
 import '../api/api_client_interface.dart';
 import '../db/database_interface.dart';
@@ -213,15 +212,13 @@ class HomebrewRepository {
     String query = '',
     bool installedOnly = false,
     PackageTypeFilter type = PackageTypeFilter.all,
-    OsSupportFilter osSupport = OsSupportFilter.all,
     int limit = 50,
     int offset = 0,
-  }) {
+  }) async {
     return _database.getFilteredPackages(
       query: query,
       installedOnly: installedOnly,
       type: type,
-      osSupport: osSupport,
       limit: limit,
       offset: offset,
     );

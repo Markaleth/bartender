@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/enums/analytics_period.dart';
-import 'package:bartender/core/enums/os_support_filter.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
@@ -23,11 +22,9 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   PackagesViewModel(this._homebrewRepository)
     : super(
         PackagesState(
-          osSupport: Platform.isMacOS
-              ? OsSupportFilter.macOS
-              : (Platform.isLinux
-                    ? OsSupportFilter.linux
-                    : OsSupportFilter.all),
+          packageType: Platform.isLinux
+              ? PackageTypeFilter.formulae
+              : PackageTypeFilter.all,
         ),
       );
 
@@ -84,7 +81,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     final initialChunk = await _homebrewRepository.getFilteredPackages(
       query: state.searchQuery,
       type: state.packageType,
-      osSupport: state.osSupport,
       limit: _paginationChunkSize,
       offset: _currentPaginationOffset,
     );
@@ -109,7 +105,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
       final nextChunk = await _homebrewRepository.getFilteredPackages(
         query: state.searchQuery,
         type: state.packageType,
-        osSupport: state.osSupport,
         limit: _paginationChunkSize,
         offset: _currentPaginationOffset,
       );
@@ -208,7 +203,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     final initialChunk = await _homebrewRepository.getFilteredPackages(
       query: state.searchQuery,
       type: state.packageType,
-      osSupport: state.osSupport,
       limit: _paginationChunkSize,
       offset: _currentPaginationOffset,
     );
@@ -228,12 +222,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   void setPackageType(PackageTypeFilter type) {
     if (state.packageType == type) return;
     emitState(state.copyWith(packageType: type));
-    _refreshListings(clearExisting: true);
-  }
-
-  void setOsSupport(OsSupportFilter osSupport) {
-    if (state.osSupport == osSupport) return;
-    emitState(state.copyWith(osSupport: osSupport));
     _refreshListings(clearExisting: true);
   }
 

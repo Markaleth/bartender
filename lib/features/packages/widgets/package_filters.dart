@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
-import 'package:bartender/core/enums/os_support_filter.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
@@ -70,57 +71,43 @@ class PackageFilters extends StatelessWidget {
                   ),
                 ),
               ),
-              const Divider(
-                height: 1,
-                thickness: 1,
-                color: AppColors.borderNeutral,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(spacingM),
-                child: Wrap(
-                  spacing: spacingXl,
-                  runSpacing: spacingM,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    _FilterGroup<PackageTypeFilter>(
-                      groupLabel: 'Type:',
-                      selectedValue: state.packageType,
-                      unselectedValue: PackageTypeFilter.all,
-                      onChanged: viewModel.setPackageType,
-                      options: const [
-                        _FilterOption(
-                          label: 'Formulae',
-                          value: PackageTypeFilter.formulae,
-                          assetName: flaskIcon,
-                        ),
-                        _FilterOption(
-                          label: 'Casks',
-                          value: PackageTypeFilter.casks,
-                          assetName: barrelIcon,
-                        ),
-                      ],
-                    ),
-                    _FilterGroup<OsSupportFilter>(
-                      groupLabel: 'Platform:',
-                      selectedValue: state.osSupport,
-                      unselectedValue: OsSupportFilter.all,
-                      onChanged: viewModel.setOsSupport,
-                      options: const [
-                        _FilterOption(
-                          label: 'macOS',
-                          value: OsSupportFilter.macOS,
-                          assetName: appleIcon,
-                        ),
-                        _FilterOption(
-                          label: 'Linux',
-                          value: OsSupportFilter.linux,
-                          assetName: linuxIcon,
-                        ),
-                      ],
-                    ),
-                  ],
+              if (Platform.isMacOS) ...[
+                const Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: AppColors.borderNeutral,
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(spacingM),
+                  child: Wrap(
+                    spacing: spacingXl,
+                    runSpacing: spacingM,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      _SegmentedFilterControl<PackageTypeFilter>(
+                        selectedValue: state.packageType,
+                        onChanged: viewModel.setPackageType,
+                        options: const [
+                          _FilterOption(
+                            label: 'All',
+                            value: PackageTypeFilter.all,
+                          ),
+                          _FilterOption(
+                            label: 'Formulae',
+                            value: PackageTypeFilter.formulae,
+                            assetName: flaskIcon,
+                          ),
+                          _FilterOption(
+                            label: 'Casks',
+                            value: PackageTypeFilter.casks,
+                            assetName: barrelIcon,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -141,19 +128,15 @@ class _FilterOption<T> {
   });
 }
 
-class _FilterGroup<T> extends StatelessWidget {
+class _SegmentedFilterControl<T> extends StatelessWidget {
   final List<_FilterOption<T>> options;
   final T selectedValue;
-  final T unselectedValue;
   final ValueChanged<T> onChanged;
-  final String groupLabel;
 
-  const _FilterGroup({
+  const _SegmentedFilterControl({
     required this.options,
     required this.selectedValue,
-    required this.unselectedValue,
     required this.onChanged,
-    required this.groupLabel,
   });
 
   @override
@@ -161,25 +144,17 @@ class _FilterGroup<T> extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          groupLabel,
-          style: context.bodyM.copyWith(
-            color: AppColors.textSecondary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(width: spacingM),
         Wrap(
           spacing: spacingS,
           children: options.map((option) {
             final isSelected = option.value == selectedValue;
             return MouseRegion(
-              cursor: SystemMouseCursors.click,
+              cursor: isSelected
+                  ? SystemMouseCursors.basic
+                  : SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  if (isSelected) {
-                    onChanged(unselectedValue);
-                  } else {
+                  if (!isSelected) {
                     onChanged(option.value);
                   }
                 },

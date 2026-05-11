@@ -15,6 +15,7 @@
 - [x] View behaves kind of strageny when toggling between filters. It resets the scroll position to top sometimes and sometimes it doesnt (after you've scrolled just a bit). Look into that.
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
+- [ ] Think about if we need to change the background of filters and search (restyle it maybe)
 
 # Issues:
 
@@ -42,4 +43,3 @@
 - [ ] Verify / Repair (Check checksum/re-download)
 - [ ] Open Directory (Open OS file explorer to install dir)
 - [ ] Clear Cache / Reset (Wipe local config/cache)
-

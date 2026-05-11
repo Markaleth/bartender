@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 
 import '../../core/enums/analytics_period.dart';
-import '../../core/enums/os_support_filter.dart';
 import '../../core/enums/package_type_filter.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
@@ -13,10 +14,13 @@ PackageQueryData buildPackageQuery({
   required String query,
   required bool installedOnly,
   required PackageTypeFilter type,
-  required OsSupportFilter osSupport,
   required int limit,
   required int offset,
 }) {
+  if (Platform.isLinux && type == PackageTypeFilter.all) {
+    type = PackageTypeFilter.formulae;
+  }
+
   final formulaArgs = <Variable<Object>>[];
   final caskArgs = <Variable<Object>>[];
 
@@ -44,10 +48,11 @@ PackageQueryData buildPackageQuery({
     caskWhere += ' AND is_installed = 1';
   }
 
-  if (osSupport == OsSupportFilter.linux) {
+  if (Platform.isLinux) {
     formulaWhere +=
         " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"macos\"%')";
-  } else if (osSupport == OsSupportFilter.macOS) {
+    caskWhere += " AND 1=0";
+  } else if (Platform.isMacOS) {
     formulaWhere +=
         " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"linux\"%')";
   }

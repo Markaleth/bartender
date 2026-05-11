@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackagesState {
 
- String get searchQuery; PackageTypeFilter get packageType; OsSupportFilter get osSupport; FetchState<List<dynamic>> get trendingData; bool get isSyncingBackground; List<dynamic> get paginatedPackages; String? get expandedPackageId;
+ String get searchQuery; PackageTypeFilter get packageType; FetchState<List<dynamic>> get trendingData; bool get isSyncingBackground; List<dynamic> get paginatedPackages; String? get expandedPackageId;
 /// Create a copy of PackagesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PackagesStateCopyWith<PackagesState> get copyWith => _$PackagesStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackagesState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.packageType, packageType) || other.packageType == packageType)&&(identical(other.osSupport, osSupport) || other.osSupport == osSupport)&&(identical(other.trendingData, trendingData) || other.trendingData == trendingData)&&(identical(other.isSyncingBackground, isSyncingBackground) || other.isSyncingBackground == isSyncingBackground)&&const DeepCollectionEquality().equals(other.paginatedPackages, paginatedPackages)&&(identical(other.expandedPackageId, expandedPackageId) || other.expandedPackageId == expandedPackageId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackagesState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.packageType, packageType) || other.packageType == packageType)&&(identical(other.trendingData, trendingData) || other.trendingData == trendingData)&&(identical(other.isSyncingBackground, isSyncingBackground) || other.isSyncingBackground == isSyncingBackground)&&const DeepCollectionEquality().equals(other.paginatedPackages, paginatedPackages)&&(identical(other.expandedPackageId, expandedPackageId) || other.expandedPackageId == expandedPackageId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,searchQuery,packageType,osSupport,trendingData,isSyncingBackground,const DeepCollectionEquality().hash(paginatedPackages),expandedPackageId);
+int get hashCode => Object.hash(runtimeType,searchQuery,packageType,trendingData,isSyncingBackground,const DeepCollectionEquality().hash(paginatedPackages),expandedPackageId);
 
 @override
 String toString() {
-  return 'PackagesState(searchQuery: $searchQuery, packageType: $packageType, osSupport: $osSupport, trendingData: $trendingData, isSyncingBackground: $isSyncingBackground, paginatedPackages: $paginatedPackages, expandedPackageId: $expandedPackageId)';
+  return 'PackagesState(searchQuery: $searchQuery, packageType: $packageType, trendingData: $trendingData, isSyncingBackground: $isSyncingBackground, paginatedPackages: $paginatedPackages, expandedPackageId: $expandedPackageId)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PackagesStateCopyWith<$Res>  {
   factory $PackagesStateCopyWith(PackagesState value, $Res Function(PackagesState) _then) = _$PackagesStateCopyWithImpl;
 @useResult
 $Res call({
- String searchQuery, PackageTypeFilter packageType, OsSupportFilter osSupport, FetchState<List<dynamic>> trendingData, bool isSyncingBackground, List<dynamic> paginatedPackages, String? expandedPackageId
+ String searchQuery, PackageTypeFilter packageType, FetchState<List<dynamic>> trendingData, bool isSyncingBackground, List<dynamic> paginatedPackages, String? expandedPackageId
 });
 
 
@@ -62,12 +62,11 @@ class _$PackagesStateCopyWithImpl<$Res>
 
 /// Create a copy of PackagesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? searchQuery = null,Object? packageType = null,Object? osSupport = null,Object? trendingData = null,Object? isSyncingBackground = null,Object? paginatedPackages = null,Object? expandedPackageId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? searchQuery = null,Object? packageType = null,Object? trendingData = null,Object? isSyncingBackground = null,Object? paginatedPackages = null,Object? expandedPackageId = freezed,}) {
   return _then(_self.copyWith(
 searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
 as String,packageType: null == packageType ? _self.packageType : packageType // ignore: cast_nullable_to_non_nullable
-as PackageTypeFilter,osSupport: null == osSupport ? _self.osSupport : osSupport // ignore: cast_nullable_to_non_nullable
-as OsSupportFilter,trendingData: null == trendingData ? _self.trendingData : trendingData // ignore: cast_nullable_to_non_nullable
+as PackageTypeFilter,trendingData: null == trendingData ? _self.trendingData : trendingData // ignore: cast_nullable_to_non_nullable
 as FetchState<List<dynamic>>,isSyncingBackground: null == isSyncingBackground ? _self.isSyncingBackground : isSyncingBackground // ignore: cast_nullable_to_non_nullable
 as bool,paginatedPackages: null == paginatedPackages ? _self.paginatedPackages : paginatedPackages // ignore: cast_nullable_to_non_nullable
 as List<dynamic>,expandedPackageId: freezed == expandedPackageId ? _self.expandedPackageId : expandedPackageId // ignore: cast_nullable_to_non_nullable
@@ -165,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  PackageTypeFilter packageType,  OsSupportFilter osSupport,  FetchState<List<dynamic>> trendingData,  bool isSyncingBackground,  List<dynamic> paginatedPackages,  String? expandedPackageId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String searchQuery,  PackageTypeFilter packageType,  FetchState<List<dynamic>> trendingData,  bool isSyncingBackground,  List<dynamic> paginatedPackages,  String? expandedPackageId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackagesState() when $default != null:
-return $default(_that.searchQuery,_that.packageType,_that.osSupport,_that.trendingData,_that.isSyncingBackground,_that.paginatedPackages,_that.expandedPackageId);case _:
+return $default(_that.searchQuery,_that.packageType,_that.trendingData,_that.isSyncingBackground,_that.paginatedPackages,_that.expandedPackageId);case _:
   return orElse();
 
 }
@@ -186,10 +185,10 @@ return $default(_that.searchQuery,_that.packageType,_that.osSupport,_that.trendi
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  PackageTypeFilter packageType,  OsSupportFilter osSupport,  FetchState<List<dynamic>> trendingData,  bool isSyncingBackground,  List<dynamic> paginatedPackages,  String? expandedPackageId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String searchQuery,  PackageTypeFilter packageType,  FetchState<List<dynamic>> trendingData,  bool isSyncingBackground,  List<dynamic> paginatedPackages,  String? expandedPackageId)  $default,) {final _that = this;
 switch (_that) {
 case _PackagesState():
-return $default(_that.searchQuery,_that.packageType,_that.osSupport,_that.trendingData,_that.isSyncingBackground,_that.paginatedPackages,_that.expandedPackageId);case _:
+return $default(_that.searchQuery,_that.packageType,_that.trendingData,_that.isSyncingBackground,_that.paginatedPackages,_that.expandedPackageId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +205,10 @@ return $default(_that.searchQuery,_that.packageType,_that.osSupport,_that.trendi
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  PackageTypeFilter packageType,  OsSupportFilter osSupport,  FetchState<List<dynamic>> trendingData,  bool isSyncingBackground,  List<dynamic> paginatedPackages,  String? expandedPackageId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String searchQuery,  PackageTypeFilter packageType,  FetchState<List<dynamic>> trendingData,  bool isSyncingBackground,  List<dynamic> paginatedPackages,  String? expandedPackageId)?  $default,) {final _that = this;
 switch (_that) {
 case _PackagesState() when $default != null:
-return $default(_that.searchQuery,_that.packageType,_that.osSupport,_that.trendingData,_that.isSyncingBackground,_that.paginatedPackages,_that.expandedPackageId);case _:
+return $default(_that.searchQuery,_that.packageType,_that.trendingData,_that.isSyncingBackground,_that.paginatedPackages,_that.expandedPackageId);case _:
   return null;
 
 }
@@ -221,12 +220,11 @@ return $default(_that.searchQuery,_that.packageType,_that.osSupport,_that.trendi
 
 
 class _PackagesState implements PackagesState {
-  const _PackagesState({this.searchQuery = '', this.packageType = PackageTypeFilter.all, this.osSupport = OsSupportFilter.all, this.trendingData = const FetchState.loading(), this.isSyncingBackground = false, final  List<dynamic> paginatedPackages = const [], this.expandedPackageId}): _paginatedPackages = paginatedPackages;
+  const _PackagesState({this.searchQuery = '', this.packageType = PackageTypeFilter.all, this.trendingData = const FetchState.loading(), this.isSyncingBackground = false, final  List<dynamic> paginatedPackages = const [], this.expandedPackageId}): _paginatedPackages = paginatedPackages;
   
 
 @override@JsonKey() final  String searchQuery;
 @override@JsonKey() final  PackageTypeFilter packageType;
-@override@JsonKey() final  OsSupportFilter osSupport;
 @override@JsonKey() final  FetchState<List<dynamic>> trendingData;
 @override@JsonKey() final  bool isSyncingBackground;
  final  List<dynamic> _paginatedPackages;
@@ -248,16 +246,16 @@ _$PackagesStateCopyWith<_PackagesState> get copyWith => __$PackagesStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackagesState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.packageType, packageType) || other.packageType == packageType)&&(identical(other.osSupport, osSupport) || other.osSupport == osSupport)&&(identical(other.trendingData, trendingData) || other.trendingData == trendingData)&&(identical(other.isSyncingBackground, isSyncingBackground) || other.isSyncingBackground == isSyncingBackground)&&const DeepCollectionEquality().equals(other._paginatedPackages, _paginatedPackages)&&(identical(other.expandedPackageId, expandedPackageId) || other.expandedPackageId == expandedPackageId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackagesState&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.packageType, packageType) || other.packageType == packageType)&&(identical(other.trendingData, trendingData) || other.trendingData == trendingData)&&(identical(other.isSyncingBackground, isSyncingBackground) || other.isSyncingBackground == isSyncingBackground)&&const DeepCollectionEquality().equals(other._paginatedPackages, _paginatedPackages)&&(identical(other.expandedPackageId, expandedPackageId) || other.expandedPackageId == expandedPackageId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,searchQuery,packageType,osSupport,trendingData,isSyncingBackground,const DeepCollectionEquality().hash(_paginatedPackages),expandedPackageId);
+int get hashCode => Object.hash(runtimeType,searchQuery,packageType,trendingData,isSyncingBackground,const DeepCollectionEquality().hash(_paginatedPackages),expandedPackageId);
 
 @override
 String toString() {
-  return 'PackagesState(searchQuery: $searchQuery, packageType: $packageType, osSupport: $osSupport, trendingData: $trendingData, isSyncingBackground: $isSyncingBackground, paginatedPackages: $paginatedPackages, expandedPackageId: $expandedPackageId)';
+  return 'PackagesState(searchQuery: $searchQuery, packageType: $packageType, trendingData: $trendingData, isSyncingBackground: $isSyncingBackground, paginatedPackages: $paginatedPackages, expandedPackageId: $expandedPackageId)';
 }
 
 
@@ -268,7 +266,7 @@ abstract mixin class _$PackagesStateCopyWith<$Res> implements $PackagesStateCopy
   factory _$PackagesStateCopyWith(_PackagesState value, $Res Function(_PackagesState) _then) = __$PackagesStateCopyWithImpl;
 @override @useResult
 $Res call({
- String searchQuery, PackageTypeFilter packageType, OsSupportFilter osSupport, FetchState<List<dynamic>> trendingData, bool isSyncingBackground, List<dynamic> paginatedPackages, String? expandedPackageId
+ String searchQuery, PackageTypeFilter packageType, FetchState<List<dynamic>> trendingData, bool isSyncingBackground, List<dynamic> paginatedPackages, String? expandedPackageId
 });
 
 
@@ -285,12 +283,11 @@ class __$PackagesStateCopyWithImpl<$Res>
 
 /// Create a copy of PackagesState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? searchQuery = null,Object? packageType = null,Object? osSupport = null,Object? trendingData = null,Object? isSyncingBackground = null,Object? paginatedPackages = null,Object? expandedPackageId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? searchQuery = null,Object? packageType = null,Object? trendingData = null,Object? isSyncingBackground = null,Object? paginatedPackages = null,Object? expandedPackageId = freezed,}) {
   return _then(_PackagesState(
 searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
 as String,packageType: null == packageType ? _self.packageType : packageType // ignore: cast_nullable_to_non_nullable
-as PackageTypeFilter,osSupport: null == osSupport ? _self.osSupport : osSupport // ignore: cast_nullable_to_non_nullable
-as OsSupportFilter,trendingData: null == trendingData ? _self.trendingData : trendingData // ignore: cast_nullable_to_non_nullable
+as PackageTypeFilter,trendingData: null == trendingData ? _self.trendingData : trendingData // ignore: cast_nullable_to_non_nullable
 as FetchState<List<dynamic>>,isSyncingBackground: null == isSyncingBackground ? _self.isSyncingBackground : isSyncingBackground // ignore: cast_nullable_to_non_nullable
 as bool,paginatedPackages: null == paginatedPackages ? _self._paginatedPackages : paginatedPackages // ignore: cast_nullable_to_non_nullable
 as List<dynamic>,expandedPackageId: freezed == expandedPackageId ? _self.expandedPackageId : expandedPackageId // ignore: cast_nullable_to_non_nullable
