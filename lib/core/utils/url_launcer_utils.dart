@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,8 +19,8 @@ class UrlLauncherUtils {
 
       if (kDebugMode && Platform.isLinux) {
         // uri.toString() is now guaranteed to be an http/https URL,
-        // and Process.run (with runInShell: false) prevents shell injection.
-        await Process.run('xdg-open', [uri.toString()]);
+        // and ShellUtils.run (with runInShell: false) prevents shell injection.
+        await ShellUtils.run('xdg-open', [uri.toString()]);
       } else {
         final launched = await launchUrl(uri);
         if (!launched) {

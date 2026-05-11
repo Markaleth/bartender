@@ -1,31 +1,12 @@
-import 'dart:io';
-
+import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/data/shell/shell_command_result.dart';
 import 'package:bartender/data/shell/streaming_shell_command.dart';
-import 'package:flutter/foundation.dart';
 
 class BrewService {
-  bool get _isInContainer =>
-      Platform.isLinux && File('/run/.containerenv').existsSync();
-
-  String get _executable {
-    if (kDebugMode && _isInContainer) {
-      return 'distrobox-host-exec';
-    }
-    return 'brew';
-  }
-
-  List<String> _buildArgs(List<String> args) {
-    if (kDebugMode && _isInContainer) {
-      return ['/home/linuxbrew/.linuxbrew/bin/brew', ...args];
-    }
-    return args;
-  }
-
   /// Runs a command quickly without streaming output.
   Future<ShellCommandResult> runCommand(List<String> args) async {
     try {
-      final result = await Process.run(_executable, _buildArgs(args));
+      final result = await ShellUtils.run('brew', args);
       return ShellCommandResult(
         exitCode: result.exitCode,
         stdout: result.stdout as String,
@@ -38,7 +19,7 @@ class BrewService {
 
   /// Starts a command and streams its output.
   Future<StreamingShellCommand> streamCommand(List<String> args) async {
-    final process = await Process.start(_executable, _buildArgs(args));
+    final process = await ShellUtils.start('brew', args);
     return StreamingShellCommand(process);
   }
 

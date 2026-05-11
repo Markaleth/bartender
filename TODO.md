@@ -14,6 +14,7 @@
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [x] View behaves kind of strageny when toggling between filters. It resets the scroll position to top sometimes and sometimes it doesnt (after you've scrolled just a bit). Look into that.
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
+- [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 
 # Issues:
 
@@ -22,3 +23,23 @@
 - [ ] text in terminal look blurry. play with the styling to improve that
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
 - [ ] Button label doesn't update for [package_list_item.dart](lib/features/packages/widgets/package_list_item.dart). need to look into that
+
+# Supported information for "Library"
+
+- [ ] Version Comparison (Current vs. Latest)
+- [ ] Disk Usage (Package size + cached data)
+- [ ] Installation Path (Where it lives on the system)
+- [ ] Changelogs/Release Notes (Inline or modal before update)
+- [ ] Dependencies (Requires/Required By)
+- [ ] Last Used / Installation Date
+- [ ] Status Indicators (Running, broken, restart required)
+
+# Supported actions for "Library"
+
+- [ ] Launch / Open (For executables/CLI tools)
+- [ ] Downgrade / Rollback (Install previous version)
+- [ ] Pin / Lock Version (Exclude from Update All)
+- [ ] Verify / Repair (Check checksum/re-download)
+- [ ] Open Directory (Open OS file explorer to install dir)
+- [ ] Clear Cache / Reset (Wipe local config/cache)
+

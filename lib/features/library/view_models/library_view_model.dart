@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/shell/brew_service.dart';
@@ -65,7 +65,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
   }
 
   Future<String?> _fetchSystemStorage(String brewPrefix) async {
-    final duResult = await Process.run('du', ['-sh', brewPrefix]);
+    final duResult = await ShellUtils.run('du', ['-sh', brewPrefix]);
     if (duResult.exitCode == 0) {
       final storageLine = duResult.stdout.toString().trim();
       final sizeMatch = RegExp(r'^(\S+)').firstMatch(storageLine);
