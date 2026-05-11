@@ -2,11 +2,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'operation_task.freezed.dart';
 
-enum PackageType { cask, formula }
+enum PackageType { cask, formula, system }
 
 enum OperationStatus { queued, inProgress, success, error }
 
-enum OperationType { install, uninstall, update }
+enum OperationType { install, uninstall, update, pin, autoremove }
 
 /// Represents a single package operation in the queue
 @freezed

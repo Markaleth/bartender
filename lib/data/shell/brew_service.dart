@@ -114,6 +114,14 @@ class BrewService {
     return runCommand(['list']);
   }
 
+  Future<ShellCommandResult> pin(String package) {
+    return runCommand(['pin', package]);
+  }
+
+  Future<ShellCommandResult> unpin(String package) {
+    return runCommand(['unpin', package]);
+  }
+
   Future<ShellCommandResult> info(String package) {
     return runCommand(['info', '--json=v2', package]);
   }

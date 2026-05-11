@@ -1,5 +1,6 @@
 import 'package:bartender/debug/api_tester.dart';
 import 'package:bartender/features/packages/views/packages_view.dart';
+import 'package:bartender/features/library/views/library_command_center_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_strings.dart';
@@ -30,7 +31,7 @@ class HomeView extends StatelessWidget {
                       // Index 0: Browse
                       PackagesView(),
                       // Index 1: Library
-                      Center(child: Text(placeholderLibrary)),
+                      LibraryCommandCenterView(),
                       // Index 2: Updates
                       Center(child: Text(placeholderUpdates)),
                       // Index 3: Settings
