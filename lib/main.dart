@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
       theme: BartenderTheme.darkTheme,
       navigatorKey: context.read<NavigationService>().navigatorKey,
       onGenerateRoute: AppRouter.generateRoute,
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.startup,
       builder: (context, child) {
         return Stack(
           children: [

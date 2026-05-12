@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../core/enums/package_type_filter.dart';
 import '../../core/enums/analytics_period.dart';
 import '../api/api_client_interface.dart';
@@ -59,29 +61,23 @@ class HomebrewRepository {
 
   // Bulk endpoints
   Future<void> syncAllData() async {
-    final isDbEmpty = await _database.isDatabaseEmpty();
-    if (isDbEmpty) {
-      await Future.wait([syncFormulae(), syncCasks()]);
-      await Future.wait([
-        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days30),
-        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days90),
-        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days365),
+    // Sync base packages first
+    await Future.wait([
+      syncFormulae(),
+      if (!Platform.isLinux) syncCasks(),
+    ]);
+
+    // Then sync analytics
+    await Future.wait([
+      syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days30),
+      syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days90),
+      syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days365),
+      if (!Platform.isLinux) ...[
         syncCasksAnalytics(AnalyticsPeriod.days30),
         syncCasksAnalytics(AnalyticsPeriod.days90),
         syncCasksAnalytics(AnalyticsPeriod.days365),
-      ]);
-    } else {
-      await Future.wait([
-        syncFormulae(),
-        syncCasks(),
-        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days30),
-        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days90),
-        syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days365),
-        syncCasksAnalytics(AnalyticsPeriod.days30),
-        syncCasksAnalytics(AnalyticsPeriod.days90),
-        syncCasksAnalytics(AnalyticsPeriod.days365),
-      ]);
-    }
+      ],
+    ]);
   }
 
   Future<void> syncFormulae() async {

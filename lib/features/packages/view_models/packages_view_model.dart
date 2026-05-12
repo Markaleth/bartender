@@ -33,44 +33,12 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   Future<void> fetchData() async {
     emitState(state.copyWith(trendingData: const FetchState.loading()));
     try {
-      final isDbEmpty = await _homebrewRepository.isDatabaseEmpty();
-      if (isDbEmpty) {
-        await _handleInitialColdStart();
-      } else {
-        await _handleWarmStart();
-      }
+      await _fetchInitialData();
     } catch (error) {
       emitState(
         state.copyWith(trendingData: FetchState.error(error.toString())),
       );
     }
-  }
-
-  Future<void> _handleInitialColdStart() async {
-    await _syncRemoteData();
-    await _fetchInitialData();
-  }
-
-  Future<void> _handleWarmStart() async {
-    await _fetchInitialData();
-    _startBackgroundSync();
-  }
-
-  void _startBackgroundSync() {
-    emitState(state.copyWith(isSyncingBackground: true));
-    _syncRemoteData()
-        .then((_) async {
-          await _refreshListings();
-          emitState(state.copyWith(isSyncingBackground: false));
-        })
-        .catchError((error) {
-          // Silently swallow or log network errors during background sync
-          emitState(state.copyWith(isSyncingBackground: false));
-        });
-  }
-
-  Future<void> _syncRemoteData() async {
-    await _homebrewRepository.syncAllData();
   }
 
   Future<void> _fetchInitialData() async {

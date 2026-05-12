@@ -1,10 +1,10 @@
+import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/debug/api_tester.dart';
 import 'package:bartender/features/packages/views/packages_view.dart';
 import 'package:bartender/features/library/views/library_command_center_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_strings.dart';
-import 'models/home_effect.dart';
 import 'models/home_state.dart';
 import 'view_models/home_view_model.dart';
 import 'widgets/side_navigation_bar.dart';
@@ -14,7 +14,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BaseView<HomeViewModel, HomeState, HomeEffect>(
+      BaseView<HomeViewModel, HomeState, ScreenEffect>(
         viewModelBuilder: (_) => HomeViewModel(),
         builder: (context, viewModel, state) => Scaffold(
           body: SafeArea(
