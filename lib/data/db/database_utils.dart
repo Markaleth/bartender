@@ -61,7 +61,8 @@ PackageQueryData buildPackageQuery({
   final args = <Variable<Object>>[];
 
   if (type == PackageTypeFilter.all) {
-    sql = '''
+    sql =
+        '''
         SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $formulaWhere
         UNION ALL
         SELECT token AS id, 'cask' AS type FROM casks_table WHERE $caskWhere
@@ -70,14 +71,16 @@ PackageQueryData buildPackageQuery({
       ''';
     args.addAll([...formulaArgs, ...caskArgs]);
   } else if (type == PackageTypeFilter.formulae) {
-    sql = '''
+    sql =
+        '''
         SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $formulaWhere
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
     args.addAll(formulaArgs);
   } else if (type == PackageTypeFilter.casks) {
-    sql = '''
+    sql =
+        '''
         SELECT token AS id, 'cask' AS type FROM casks_table WHERE $caskWhere
         ORDER BY id ASC
         LIMIT ? OFFSET ?
@@ -104,6 +107,7 @@ Insertable<FormulaModel> updateFormulaFromExcluded($FormulaeTableTable ex) {
     deprecated: ex.deprecated,
     disabled: ex.disabled,
     generatedDate: ex.generatedDate,
+    isInstalled: ex.isInstalled,
   );
 }
 
@@ -117,6 +121,7 @@ Insertable<CaskModel> updateCaskFromExcluded($CasksTableTable ex) {
     version: ex.version,
     autoUpdates: ex.autoUpdates,
     dependsOn: ex.dependsOn,
+    isInstalled: ex.isInstalled,
     outdated: ex.outdated,
     deprecated: ex.deprecated,
     disabled: ex.disabled,
@@ -146,12 +151,8 @@ CasksTableCompanion createCaskAnalyticsCompanion(
   int installs,
 ) {
   return switch (period) {
-    AnalyticsPeriod.days30 => CasksTableCompanion(
-      installs30d: Value(installs),
-    ),
-    AnalyticsPeriod.days90 => CasksTableCompanion(
-      installs90d: Value(installs),
-    ),
+    AnalyticsPeriod.days30 => CasksTableCompanion(installs30d: Value(installs)),
+    AnalyticsPeriod.days90 => CasksTableCompanion(installs90d: Value(installs)),
     AnalyticsPeriod.days365 => CasksTableCompanion(
       installs365d: Value(installs),
     ),
