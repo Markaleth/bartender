@@ -26,37 +26,47 @@ class HomebrewRepository {
     return await _database.isDatabaseEmpty();
   }
 
-  Future<void> syncCategoryAnalytics(
-    String category,
-    AnalyticsPeriod days,
-  ) async {
-    final endpoint = '/analytics/$category/${days.value}.json';
+  Future<void> _fetchAndCache<T>({
+    required String endpoint,
+    required Future<NetworkResource<T>> Function(String? currentETag) fetcher,
+    required Future<void> Function(T data) cacher,
+    required String errorMessage,
+  }) async {
     final currentETag = await _database.getETag(endpoint);
-    final response = await _apiClient.getCategoryAnalytics(
-      category,
-      days,
-      eTag: currentETag,
-    );
+    final response = await fetcher(currentETag);
 
     if (response.status == NetworkStatus.success) {
-      if (response.statusCode == 304) {
-        return;
-      }
+      if (response.statusCode == 304) return;
       if (response.data != null) {
-        await _database.cacheCategoryAnalytics(
-          category,
-          days,
-          response.data!.items,
-        );
+        await cacher(response.data as T);
         if (response.eTag != null) {
           await _database.saveETag(endpoint, response.eTag!);
         }
       }
     } else {
-      throw Exception(
-        'Failed to sync category analytics: ${response.errorMessage}',
-      );
+      throw Exception('$errorMessage: ${response.errorMessage}');
     }
+  }
+
+  Future<void> syncCategoryAnalytics(
+    String category,
+    AnalyticsPeriod days,
+  ) async {
+    final endpoint = '/analytics/$category/${days.value}.json';
+    await _fetchAndCache(
+      endpoint: endpoint,
+      fetcher: (eTag) => _apiClient.getCategoryAnalytics(
+        category,
+        days,
+        eTag: eTag,
+      ),
+      cacher: (data) => _database.cacheCategoryAnalytics(
+        category,
+        days,
+        data.items,
+      ),
+      errorMessage: 'Failed to sync category analytics',
+    );
   }
 
   // Bulk endpoints
@@ -82,45 +92,22 @@ class HomebrewRepository {
 
   Future<void> syncFormulae() async {
     const endpoint = '/formula.json';
-    final currentETag = await _database.getETag(endpoint);
-    final response = await _apiClient.getFormulaeListing(eTag: currentETag);
-
-    if (response.status == NetworkStatus.success) {
-      if (response.statusCode == 304) {
-        // Up to date
-        return;
-      }
-      if (response.data != null) {
-        await _database.cacheFormulae(response.data!);
-        if (response.eTag != null) {
-          await _database.saveETag(endpoint, response.eTag!);
-        }
-      }
-    } else {
-      // Handle error or just ignore to use cached data
-      throw Exception('Failed to sync formulae: ${response.errorMessage}');
-    }
+    await _fetchAndCache(
+      endpoint: endpoint,
+      fetcher: (eTag) => _apiClient.getFormulaeListing(eTag: eTag),
+      cacher: (data) => _database.cacheFormulae(data),
+      errorMessage: 'Failed to sync formulae',
+    );
   }
 
   Future<void> syncCasks() async {
     const endpoint = '/cask.json';
-    final currentETag = await _database.getETag(endpoint);
-    final response = await _apiClient.getCasksListing(eTag: currentETag);
-
-    if (response.status == NetworkStatus.success) {
-      if (response.statusCode == 304) {
-        // Up to date
-        return;
-      }
-      if (response.data != null) {
-        await _database.cacheCasks(response.data!);
-        if (response.eTag != null) {
-          await _database.saveETag(endpoint, response.eTag!);
-        }
-      }
-    } else {
-      throw Exception('Failed to sync casks: ${response.errorMessage}');
-    }
+    await _fetchAndCache(
+      endpoint: endpoint,
+      fetcher: (eTag) => _apiClient.getCasksListing(eTag: eTag),
+      cacher: (data) => _database.cacheCasks(data),
+      errorMessage: 'Failed to sync casks',
+    );
   }
 
   // Example for one of the analytics endpoints
@@ -130,55 +117,35 @@ class HomebrewRepository {
     AnalyticsPeriod days,
   ) async {
     final endpoint = '/analytics/$category/homebrew-core/${days.value}.json';
-    final currentETag = await _database.getETag(endpoint);
-    final response = await _apiClient.getFormulaeAnalytics(
-      category,
-      days,
-      eTag: currentETag,
-    );
-
-    if (response.status == NetworkStatus.success) {
-      if (response.statusCode == 304) {
-        return;
-      }
-      if (response.data != null) {
-        final items = response.data!.formulae.values.expand((e) => e).toList();
+    await _fetchAndCache(
+      endpoint: endpoint,
+      fetcher: (eTag) => _apiClient.getFormulaeAnalytics(
+        category,
+        days,
+        eTag: eTag,
+      ),
+      cacher: (data) async {
+        final items = data.formulae.values.expand((e) => e).toList();
         await _database.updateFormulaeAnalyticsBatch(items, days);
-        if (response.eTag != null) {
-          await _database.saveETag(endpoint, response.eTag!);
-        }
-      }
-    } else {
-      throw Exception(
-        'Failed to sync formulae analytics: ${response.errorMessage}',
-      );
-    }
+      },
+      errorMessage: 'Failed to sync formulae analytics',
+    );
   }
 
   Future<void> syncCasksAnalytics(AnalyticsPeriod days) async {
     final endpoint = '/analytics/cask-install/homebrew-cask/${days.value}.json';
-    final currentETag = await _database.getETag(endpoint);
-    final response = await _apiClient.getCasksAnalytics(
-      days,
-      eTag: currentETag,
-    );
-
-    if (response.status == NetworkStatus.success) {
-      if (response.statusCode == 304) {
-        return;
-      }
-      if (response.data != null) {
-        final items = response.data!.casks.values.expand((e) => e).toList();
+    await _fetchAndCache(
+      endpoint: endpoint,
+      fetcher: (eTag) => _apiClient.getCasksAnalytics(
+        days,
+        eTag: eTag,
+      ),
+      cacher: (data) async {
+        final items = data.casks.values.expand((e) => e).toList();
         await _database.updateCasksAnalyticsBatch(items, days);
-        if (response.eTag != null) {
-          await _database.saveETag(endpoint, response.eTag!);
-        }
-      }
-    } else {
-      throw Exception(
-        'Failed to sync casks analytics: ${response.errorMessage}',
-      );
-    }
+      },
+      errorMessage: 'Failed to sync casks analytics',
+    );
   }
 
   // Individual endpoints
