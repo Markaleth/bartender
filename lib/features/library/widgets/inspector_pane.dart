@@ -54,7 +54,7 @@ class InspectorPane extends StatelessWidget {
           
           const SizedBox(height: spacingL),
           
-          if (!state.isSelectedPackageCask && state.selectedPackageDependencies.isNotEmpty) ...[
+          if (state.selectedPackageDependencies.isNotEmpty) ...[
             DependencyGraphWidget(
               dependencies: state.selectedPackageDependencies,
             ),
