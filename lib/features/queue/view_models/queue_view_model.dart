@@ -5,13 +5,15 @@ import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/data/shell/streaming_shell_command.dart';
 import 'package:bartender/features/queue/models/queue_state.dart';
 import 'package:bartender/data/db/database_interface.dart';
+import 'package:bartender/core/services/package_status_notifier.dart';
 
 class QueueViewModel extends BaseViewModel<QueueState, void> {
   final BrewService _brewService;
   final DatabaseInterface _database;
+  final PackageStatusNotifier _notifier;
   bool _isProcessing = false;
 
-  QueueViewModel(this._brewService, this._database) : super(QueueState());
+  QueueViewModel(this._brewService, this._database, this._notifier) : super(QueueState());
 
   void enqueue(OperationTask task) {
     final updatedTasks = List<OperationTask>.from(state.tasks)..add(task);
@@ -146,6 +148,9 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
         isInstall,
       );
     }
+
+    // Trigger UI updates
+    _notifier.markUpdated(task.packageId, isInstall);
   }
 
   void _handleCommandError(String taskId, String error) {

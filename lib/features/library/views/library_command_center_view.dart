@@ -8,17 +8,23 @@ import 'package:bartender/features/library/widgets/inspector_pane.dart';
 import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 
+import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/base_view.dart';
+import 'package:bartender/features/library/models/library_effect.dart';
+import 'package:bartender/features/library/models/library_state.dart';
+
 class LibraryCommandCenterView extends StatelessWidget {
   const LibraryCommandCenterView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => LibraryViewModel(
+    return BaseView<LibraryViewModel, LibraryState, LibraryEffect>(
+      viewModelBuilder: (context) => LibraryViewModel(
         db: context.read<DatabaseInterface>(),
         brewService: context.read<BrewService>(),
+        statusNotifier: context.read<PackageStatusNotifier>(),
       )..init(),
-      child: const _LibraryCommandCenterContent(),
+      builder: (context, viewModel, state) => const _LibraryCommandCenterContent(),
     );
   }
 }

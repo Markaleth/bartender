@@ -9,9 +9,11 @@ import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
+import 'package:bartender/core/services/package_status_notifier.dart';
 
 class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   final HomebrewRepository _homebrewRepository;
+  final PackageStatusNotifier _statusNotifier;
 
   static const AnalyticsPeriod _analyticsPeriod = AnalyticsPeriod.days30;
 
@@ -19,18 +21,37 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   static const int _paginationChunkSize = 50;
   bool _isLoadingMore = false;
 
-  PackagesViewModel(this._homebrewRepository)
+  PackagesViewModel(this._homebrewRepository, this._statusNotifier)
     : super(
         PackagesState(
           packageType: Platform.isLinux
               ? PackageTypeFilter.formulae
               : PackageTypeFilter.all,
         ),
+      ) {
+    _statusNotifier.addListener(_onStatusNotifierUpdated);
+  }
+
+  @override
+  void dispose() {
+    _statusNotifier.removeListener(_onStatusNotifierUpdated);
+    super.dispose();
+  }
+
+  void _onStatusNotifierUpdated() {
+    final update = _statusNotifier.value;
+    if (update != null) {
+      onPackageStatusChanged(
+        update.packageId,
+        update.isInstalled,
+        update.timestamp,
       );
+    }
+  }
 
   // --- Initialization & Data Fetching ---
 
-  Future<void> fetchData() async {
+  Future<void> init() async {
     emitState(state.copyWith(trendingData: const FetchState.loading()));
     try {
       await _fetchInitialData();
@@ -194,6 +215,39 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   }
 
   // --- UI State & Helpers ---
+  DateTime? _lastUpdateTimestamp;
+
+  void onPackageStatusChanged(
+    String packageId,
+    bool isInstalled,
+    DateTime timestamp,
+  ) {
+    if (_lastUpdateTimestamp == timestamp) return;
+    _lastUpdateTimestamp = timestamp;
+
+    final updatedList = _updatePackageListWithStatus(
+      state.paginatedPackages,
+      packageId,
+      isInstalled,
+    );
+
+    emitState(state.copyWith(paginatedPackages: updatedList));
+  }
+
+  List<dynamic> _updatePackageListWithStatus(
+    List<dynamic> packages,
+    String packageId,
+    bool isInstalled,
+  ) {
+    return packages.map((pkg) {
+      if (pkg is FormulaModel && pkg.name == packageId) {
+        return pkg.copyWith(isInstalled: isInstalled);
+      } else if (pkg is CaskModel && pkg.token == packageId) {
+        return pkg.copyWith(isInstalled: isInstalled);
+      }
+      return pkg;
+    }).toList();
+  }
 
   void togglePackageExpansion(String id) {
     if (state.expandedPackageId == id) {

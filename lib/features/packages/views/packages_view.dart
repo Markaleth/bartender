@@ -15,6 +15,7 @@ import 'package:bartender/features/packages/widgets/trending_packages_carousel.d
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:bartender/core/services/package_status_notifier.dart';
 
 import '../widgets/package_list_item.dart';
 
@@ -73,11 +74,11 @@ class _PackagesViewState extends State<PackagesView> {
   Widget build(
     BuildContext context,
   ) => BaseView<PackagesViewModel, PackagesState, PackagesEffect>(
-    viewModelBuilder: (_) => PackagesViewModel(
-      context.read<HomebrewRepository>(),
-    ),
-    onModelReady: (viewModel) => viewModel.fetchData(),
-    builder: (context, viewModel, state) => Scaffold(
+        viewModelBuilder: (context) => PackagesViewModel(
+          context.read<HomebrewRepository>(),
+          context.read<PackageStatusNotifier>(),
+        )..init(),
+        builder: (context, viewModel, state) => Scaffold(
       floatingActionButton: ValueListenableBuilder<bool>(
         valueListenable: _showScrollToTop,
         builder: (context, show, child) => !show

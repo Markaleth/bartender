@@ -7,6 +7,7 @@ import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/services/icon_resolution/icon_resolution_service.dart';
 import 'package:bartender/data/shell/brew_service.dart';
+import 'package:bartender/core/services/package_status_notifier.dart';
 import 'package:bartender/core/routing/navigation_service.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +28,10 @@ List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment)
       dispose: (_, db) => (db as AppDatabase).close(),
     ),
     Provider<BrewService>(create: (_) => BrewService()),
-    ChangeNotifierProxyProvider2<BrewService, DatabaseInterface, QueueViewModel>(
-      create: (context) => QueueViewModel(context.read<BrewService>(), context.read<DatabaseInterface>()),
-      update: (_, brewService, db, previous) => previous ?? QueueViewModel(brewService, db),
+    ChangeNotifierProvider<PackageStatusNotifier>(create: (_) => PackageStatusNotifier()),
+    ChangeNotifierProxyProvider3<BrewService, DatabaseInterface, PackageStatusNotifier, QueueViewModel>(
+      create: (context) => QueueViewModel(context.read<BrewService>(), context.read<DatabaseInterface>(), context.read<PackageStatusNotifier>()),
+      update: (_, brewService, db, packageStatusNotifier, previous) => previous ?? QueueViewModel(brewService, db, packageStatusNotifier),
     ),
     ProxyProvider<DatabaseInterface, IconResolutionService>(
       update: (_, db, _) => IconResolutionService(db),
