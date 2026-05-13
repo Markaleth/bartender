@@ -129,6 +129,40 @@ Insertable<CaskModel> updateCaskFromExcluded($CasksTableTable ex) {
   );
 }
 
+Insertable<FormulaModel> updateNetworkFormulaFromExcluded($FormulaeTableTable ex) {
+  return FormulaeTableCompanion.custom(
+    fullName: ex.fullName,
+    tap: ex.tap,
+    desc: ex.desc,
+    license: ex.license,
+    homepage: ex.homepage,
+    versions: ex.versions,
+    dependencies: ex.dependencies,
+    buildDependencies: ex.buildDependencies,
+    outdated: ex.outdated,
+    deprecated: ex.deprecated,
+    disabled: ex.disabled,
+    generatedDate: ex.generatedDate,
+  );
+}
+
+Insertable<CaskModel> updateNetworkCaskFromExcluded($CasksTableTable ex) {
+  return CasksTableCompanion.custom(
+    fullToken: ex.fullToken,
+    name: ex.name,
+    desc: ex.desc,
+    homepage: ex.homepage,
+    url: ex.url,
+    version: ex.version,
+    autoUpdates: ex.autoUpdates,
+    dependsOn: ex.dependsOn,
+    outdated: ex.outdated,
+    deprecated: ex.deprecated,
+    disabled: ex.disabled,
+    generatedDate: ex.generatedDate,
+  );
+}
+
 FormulaeTableCompanion createFormulaAnalyticsCompanion(
   AnalyticsPeriod period,
   int installs,

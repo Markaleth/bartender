@@ -95,7 +95,7 @@ class HomebrewRepository {
     await _fetchAndCache(
       endpoint: endpoint,
       fetcher: (eTag) => _apiClient.getFormulaeListing(eTag: eTag),
-      cacher: (data) => _database.cacheFormulae(data),
+      cacher: (data) => _database.cacheNetworkFormulae(data),
       errorMessage: 'Failed to sync formulae',
     );
   }
@@ -105,7 +105,7 @@ class HomebrewRepository {
     await _fetchAndCache(
       endpoint: endpoint,
       fetcher: (eTag) => _apiClient.getCasksListing(eTag: eTag),
-      cacher: (data) => _database.cacheCasks(data),
+      cacher: (data) => _database.cacheNetworkCasks(data),
       errorMessage: 'Failed to sync casks',
     );
   }
@@ -154,7 +154,7 @@ class HomebrewRepository {
     final response = await _apiClient.getFormulaDetails(name);
     if (response.status == NetworkStatus.success && response.data != null) {
       final formula = response.data!;
-      await _database.cacheFormula(formula);
+      await _database.cacheNetworkFormula(formula);
       return formula;
     }
     return _database.getFormula(name);
@@ -164,7 +164,7 @@ class HomebrewRepository {
     final response = await _apiClient.getCaskDetails(token);
     if (response.status == NetworkStatus.success && response.data != null) {
       final cask = response.data!;
-      await _database.cacheCask(cask);
+      await _database.cacheNetworkCask(cask);
       return cask;
     }
     return _database.getCask(token);

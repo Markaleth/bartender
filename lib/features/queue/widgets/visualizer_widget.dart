@@ -24,17 +24,17 @@ class VisualizerWidget extends StatelessWidget {
       OperationStatus.inProgress => (
         borderColor: AppColors.primary,
         bgColor: AppColors.primary.withValues(alpha: 0.2),
-        icon: Icons.inventory_2,
+        icon: Icons.download,
       ),
       OperationStatus.success => (
         borderColor: AppColors.secondary,
         bgColor: AppColors.secondary.withValues(alpha: 0.1),
-        icon: Icons.inventory_2,
+        icon: Icons.check_circle_outline,
       ),
       OperationStatus.error => (
         borderColor: AppColors.error,
         bgColor: AppColors.error.withValues(alpha: 0.1),
-        icon: Icons.inventory_2,
+        icon: Icons.error_outline,
       ),
       _ => (
         borderColor: AppColors.borderNeutral,

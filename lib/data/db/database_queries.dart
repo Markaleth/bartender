@@ -118,6 +118,54 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
   }
 
   @override
+  Future<void> cacheNetworkFormulae(List<FormulaModel> formulae) async {
+    await batch((batch) {
+      batch.insertAll(
+        formulaeTable,
+        formulae.map((model) => model.toInsertable()),
+        onConflict: DoUpdate.withExcluded(
+          (old, excluded) =>
+              updateNetworkFormulaFromExcluded(excluded as $FormulaeTableTable),
+        ),
+      );
+    });
+  }
+
+  @override
+  Future<void> cacheNetworkCasks(List<CaskModel> casks) async {
+    await batch((batch) {
+      batch.insertAll(
+        casksTable,
+        casks.map((model) => model.toInsertable()),
+        onConflict: DoUpdate.withExcluded(
+          (old, excluded) =>
+              updateNetworkCaskFromExcluded(excluded as $CasksTableTable),
+        ),
+      );
+    });
+  }
+
+  @override
+  Future<void> cacheNetworkFormula(FormulaModel formula) async {
+    await into(formulaeTable).insert(
+      formula.toInsertable(),
+      onConflict: DoUpdate.withExcluded(
+        (old, excluded) => updateNetworkFormulaFromExcluded(excluded),
+      ),
+    );
+  }
+
+  @override
+  Future<void> cacheNetworkCask(CaskModel cask) async {
+    await into(casksTable).insert(
+      cask.toInsertable(),
+      onConflict: DoUpdate.withExcluded(
+        (old, excluded) => updateNetworkCaskFromExcluded(excluded),
+      ),
+    );
+  }
+
+  @override
   Future<void> updateFormulaInstallationStatus(
     String name,
     bool isInstalled,

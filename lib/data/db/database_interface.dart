@@ -20,8 +20,14 @@ abstract class DatabaseInterface {
   Future<void> cacheFormulae(List<FormulaModel> formulae);
   Future<void> cacheCasks(List<CaskModel> casks);
 
+  Future<void> cacheNetworkFormulae(List<FormulaModel> formulae);
+  Future<void> cacheNetworkCasks(List<CaskModel> casks);
+
   Future<void> cacheFormula(FormulaModel formula);
   Future<void> cacheCask(CaskModel cask);
+
+  Future<void> cacheNetworkFormula(FormulaModel formula);
+  Future<void> cacheNetworkCask(CaskModel cask);
 
   Future<List<FormulaModel>> getAllFormulae();
   Future<List<CaskModel>> getAllCasks();
