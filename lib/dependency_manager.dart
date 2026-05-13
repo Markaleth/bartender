@@ -27,9 +27,9 @@ List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment)
       dispose: (_, db) => (db as AppDatabase).close(),
     ),
     Provider<BrewService>(create: (_) => BrewService()),
-    ChangeNotifierProxyProvider<BrewService, QueueViewModel>(
-      create: (context) => QueueViewModel(context.read<BrewService>()),
-      update: (_, brewService, previous) => previous ?? QueueViewModel(brewService),
+    ChangeNotifierProxyProvider2<BrewService, DatabaseInterface, QueueViewModel>(
+      create: (context) => QueueViewModel(context.read<BrewService>(), context.read<DatabaseInterface>()),
+      update: (_, brewService, db, previous) => previous ?? QueueViewModel(brewService, db),
     ),
     ProxyProvider<DatabaseInterface, IconResolutionService>(
       update: (_, db, _) => IconResolutionService(db),

@@ -4,25 +4,31 @@ import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/data/shell/streaming_shell_command.dart';
 import 'package:bartender/features/queue/models/queue_state.dart';
+import 'package:bartender/data/db/database_interface.dart';
 
 class QueueViewModel extends BaseViewModel<QueueState, void> {
   final BrewService _brewService;
+  final DatabaseInterface _database;
   bool _isProcessing = false;
 
-  QueueViewModel(this._brewService) : super(QueueState());
+  QueueViewModel(this._brewService, this._database) : super(QueueState());
 
   void enqueue(OperationTask task) {
     final updatedTasks = List<OperationTask>.from(state.tasks)..add(task);
-    
+
     // Automatically open drawer on first task
-    final isDrawerExpanded = state.tasks.isEmpty ? true : state.isDrawerExpanded;
+    final isDrawerExpanded = state.tasks.isEmpty
+        ? true
+        : state.isDrawerExpanded;
     final activeTaskId = state.activeTaskId ?? task.id;
 
-    emitState(state.copyWith(
-      tasks: updatedTasks,
-      isDrawerExpanded: isDrawerExpanded,
-      activeTaskId: activeTaskId,
-    ));
+    emitState(
+      state.copyWith(
+        tasks: updatedTasks,
+        isDrawerExpanded: isDrawerExpanded,
+        activeTaskId: activeTaskId,
+      ),
+    );
 
     _processQueue();
   }
@@ -86,28 +92,60 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
   void _listenToCommandOutput(StreamingShellCommand command, String taskId) {
     command.mergedOutput.listen((chunk) {
       final lines = chunk.split('\n');
-      
+
       final currentTaskIndex = state.tasks.indexWhere((t) => t.id == taskId);
       if (currentTaskIndex == -1) return;
-      
+
       final currentTask = state.tasks[currentTaskIndex];
       final updatedLogs = List<String>.from(currentTask.logs)..addAll(lines);
-      
+
       _updateTask(currentTask.copyWith(logs: updatedLogs));
     });
   }
 
-  Future<void> _handleCommandCompletion(StreamingShellCommand command, String taskId) async {
+  Future<void> _handleCommandCompletion(
+    StreamingShellCommand command,
+    String taskId,
+  ) async {
     final exitCode = await command.exitCode;
-    
-    final currentTaskIndex = state.tasks.indexWhere((t) => t.id == taskId);
+
+    final currentTaskIndex = state.tasks.indexWhere(
+      (task) => task.id == taskId,
+    );
     if (currentTaskIndex == -1) return;
 
     final currentTask = state.tasks[currentTaskIndex];
-    _updateTask(currentTask.copyWith(
-      status: exitCode == 0 ? OperationStatus.success : OperationStatus.error,
-      errorMessage: exitCode != 0 ? 'Exited with code $exitCode' : null,
-    ));
+
+    await _syncInstallationStatus(
+      currentTask,
+    ); // Update DB based on operation result
+
+    _updateTask(
+      currentTask.copyWith(
+        status: exitCode == 0 ? OperationStatus.success : OperationStatus.error,
+        errorMessage: exitCode == 0 ? null : 'Exited with code $exitCode',
+      ),
+    );
+  }
+
+  Future<void> _syncInstallationStatus(OperationTask task) async {
+    final isInstall =
+        task.operation == OperationType.install ||
+        task.operation == OperationType.update;
+    final isUninstall = task.operation == OperationType.uninstall;
+
+    if (!isInstall && !isUninstall) return;
+
+    final isCask = task.type == PackageType.cask;
+
+    if (isCask) {
+      await _database.updateCaskInstallationStatus(task.packageId, isInstall);
+    } else if (task.type == PackageType.formula) {
+      await _database.updateFormulaInstallationStatus(
+        task.packageId,
+        isInstall,
+      );
+    }
   }
 
   void _handleCommandError(String taskId, String error) {
@@ -115,10 +153,9 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
     if (currentTaskIndex == -1) return;
 
     final currentTask = state.tasks[currentTaskIndex];
-    _updateTask(currentTask.copyWith(
-      status: OperationStatus.error,
-      errorMessage: error,
-    ));
+    _updateTask(
+      currentTask.copyWith(status: OperationStatus.error, errorMessage: error),
+    );
   }
 
   void _updateTask(OperationTask updatedTask) {
@@ -126,7 +163,7 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
       if (t.id == updatedTask.id) return updatedTask;
       return t;
     }).toList();
-    
+
     emitState(state.copyWith(tasks: updatedTasks));
   }
 
@@ -140,18 +177,23 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
 
   void clearCompleted() {
     final remainingTasks = state.tasks.where((t) {
-      return t.status == OperationStatus.queued || t.status == OperationStatus.inProgress;
+      return t.status == OperationStatus.queued ||
+          t.status == OperationStatus.inProgress;
     }).toList();
-    
+
     String? newActiveId = state.activeTaskId;
     if (remainingTasks.where((t) => t.id == state.activeTaskId).isEmpty) {
       newActiveId = remainingTasks.isNotEmpty ? remainingTasks.last.id : null;
     }
 
-    emitState(state.copyWith(
-      tasks: remainingTasks,
-      activeTaskId: newActiveId,
-      isDrawerExpanded: remainingTasks.isEmpty ? false : state.isDrawerExpanded,
-    ));
+    emitState(
+      state.copyWith(
+        tasks: remainingTasks,
+        activeTaskId: newActiveId,
+        isDrawerExpanded: remainingTasks.isEmpty
+            ? false
+            : state.isDrawerExpanded,
+      ),
+    );
   }
 }
