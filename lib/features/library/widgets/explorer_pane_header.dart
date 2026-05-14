@@ -41,25 +41,24 @@ class ExplorerPaneHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              if (state.isSyncing)
-                const SizedBox(
-                  width: spacingM,
-                  height: spacingM,
-                  child: CircularProgressIndicator(
-                    strokeWidth: thicknessS,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColors.primary,
+              state.isSyncing
+                  ? const SizedBox(
+                      width: spacingM,
+                      height: spacingM,
+                      child: CircularProgressIndicator(
+                        strokeWidth: thicknessS,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primary,
+                        ),
+                      ),
+                    )
+                  : IconButton(
+                      icon: const Icon(Icons.refresh, size: spacingM),
+                      color: AppColors.textSecondary,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      onPressed: () => viewModel.syncData(),
                     ),
-                  ),
-                )
-              else
-                IconButton(
-                  icon: const Icon(Icons.refresh, size: spacingM),
-                  color: AppColors.textSecondary,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  onPressed: () => viewModel.syncData(),
-                ),
             ],
           ),
           Padding(
