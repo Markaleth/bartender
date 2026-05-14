@@ -10,6 +10,7 @@
 - [x] Scrolling back to top by using the button is janky as fuck. Let's investigate that. Let's also investigate if we need that at all considering we already "scroll to top" when we change filters
 - [x] View behaves kind of strageny when toggling between filters. It resets the scroll position to top sometimes and sometimes it doesnt (after you've scrolled just a bit). Look into that.
 - [x] We should do all our setup when the app is initialized, not when the viewModel is initialized.
+- [x] See about improving performance because we expect to have potentially long lists of items there so just using columns might not work
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
@@ -20,7 +21,6 @@
 - [ ] Consider renaming "library" to "Installed".
 - [ ] Think about if the "updates" tab is actually necessary
 - [ ] Add animations to expanding and collapsing folders in the "explorer" pane
-- [ ] See about improving performance because we expect to have potentially long lists of items there so just using columns might not work
 
 # Issues:
 
