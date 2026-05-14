@@ -9,6 +9,7 @@ import 'package:bartender/features/library/view_models/library_view_model.dart';
 import 'explorer_pane_header.dart';
 import 'file_system_folder_header.dart';
 import 'file_system_item.dart';
+import 'collapsible_sliver_list.dart';
 
 class ExplorerPane extends StatelessWidget {
   const ExplorerPane({super.key});
@@ -35,7 +36,7 @@ class ExplorerPane extends StatelessWidget {
                     state.installedFormulae.isEmpty &&
                     state.installedCasks.isEmpty
                 ? const Center(child: CircularProgressIndicator())
-                : CustomScrollView(
+                  : CustomScrollView(
                     slivers: [
                       const SliverToBoxAdapter(
                         child: SizedBox(height: spacingS),
@@ -48,20 +49,22 @@ class ExplorerPane extends StatelessWidget {
                           onTap: () => viewModel.toggleFormulaeExpanded(),
                         ),
                       ),
-                      if (state.formulaeExpanded)
-                        SliverList.builder(
-                          itemCount: state.filteredFormulae.length,
-                          itemBuilder: (context, index) {
-                            final formula = state.filteredFormulae[index];
-                            return FileSystemItem(
+                      CollapsibleSliverList<dynamic>(
+                        items: state.filteredFormulae,
+                        isExpanded: state.formulaeExpanded,
+                        itemBuilder: (context, formula, animation) {
+                          return SizeTransition(
+                            sizeFactor: animation,
+                            child: FileSystemItem(
                               title: formula.name,
                               version: formula.versions.stable,
                               isSelected: state.selectedPackage == formula,
                               isCask: false,
                               onTap: () => viewModel.selectPackage(formula),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
+                      ),
                       if (!Platform.isLinux)
                         SliverToBoxAdapter(
                           child: FileSystemFolderHeader(
@@ -71,17 +74,20 @@ class ExplorerPane extends StatelessWidget {
                             onTap: () => viewModel.toggleCasksExpanded(),
                           ),
                         ),
-                      if (!Platform.isLinux && state.casksExpanded)
-                        SliverList.builder(
-                          itemCount: state.filteredCasks.length,
-                          itemBuilder: (context, index) {
-                            final cask = state.filteredCasks[index];
-                            return FileSystemItem(
-                              title: cask.token,
-                              version: cask.version,
-                              isSelected: state.selectedPackage == cask,
-                              isCask: true,
-                              onTap: () => viewModel.selectPackage(cask),
+                      if (!Platform.isLinux)
+                        CollapsibleSliverList<dynamic>(
+                          items: state.filteredCasks,
+                          isExpanded: state.casksExpanded,
+                          itemBuilder: (context, cask, animation) {
+                            return SizeTransition(
+                              sizeFactor: animation,
+                              child: FileSystemItem(
+                                title: cask.token,
+                                version: cask.version,
+                                isSelected: state.selectedPackage == cask,
+                                isCask: true,
+                                onTap: () => viewModel.selectPackage(cask),
+                              ),
                             );
                           },
                         ),
