@@ -1,3 +1,4 @@
+import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/data/db/database_interface.dart';
@@ -10,14 +11,17 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
   final DatabaseInterface _db;
   final BrewService _brewService;
   final PackageStatusNotifier _statusNotifier;
+  final PackageRepository _packageRepository;
 
   LibraryViewModel({
     required DatabaseInterface db,
     required BrewService brewService,
     required PackageStatusNotifier statusNotifier,
+    required PackageRepository packageRepository,
   }) : _db = db,
        _brewService = brewService,
        _statusNotifier = statusNotifier,
+       _packageRepository = packageRepository,
        super(const LibraryState()) {
     _statusNotifier.addListener(_onStatusNotifierUpdated);
   }
@@ -36,6 +40,22 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
         update.isInstalled,
         update.timestamp,
       );
+    }
+  }
+
+  void setFilterQuery(String query) {
+    emitState(state.copyWith(filterQuery: query));
+  }
+
+  Future<void> syncData() async {
+    emitState(state.copyWith(isSyncing: true));
+    try {
+      await _packageRepository.syncInstalledPackages();
+      await refreshData();
+    } catch (e) {
+      emitEffect(LibraryEffect.error('Failed to sync data: $e'));
+    } finally {
+      emitState(state.copyWith(isSyncing: false));
     }
   }
 

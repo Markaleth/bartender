@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LibraryState {
 
- bool get isLoading; List<FormulaModel> get installedFormulae; List<CaskModel> get installedCasks; dynamic get selectedPackage; String get systemStorageUsed; int get orphanedDependenciesCount; int get globalHealthScore; String get brewPrefix;
+ bool get isLoading; List<FormulaModel> get installedFormulae; List<CaskModel> get installedCasks; dynamic get selectedPackage; String get systemStorageUsed; int get orphanedDependenciesCount; int get globalHealthScore; String get brewPrefix; bool get isSyncing; String get filterQuery;
 /// Create a copy of LibraryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LibraryStateCopyWith<LibraryState> get copyWith => _$LibraryStateCopyWithImpl<L
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LibraryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.installedFormulae, installedFormulae)&&const DeepCollectionEquality().equals(other.installedCasks, installedCasks)&&const DeepCollectionEquality().equals(other.selectedPackage, selectedPackage)&&(identical(other.systemStorageUsed, systemStorageUsed) || other.systemStorageUsed == systemStorageUsed)&&(identical(other.orphanedDependenciesCount, orphanedDependenciesCount) || other.orphanedDependenciesCount == orphanedDependenciesCount)&&(identical(other.globalHealthScore, globalHealthScore) || other.globalHealthScore == globalHealthScore)&&(identical(other.brewPrefix, brewPrefix) || other.brewPrefix == brewPrefix));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LibraryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.installedFormulae, installedFormulae)&&const DeepCollectionEquality().equals(other.installedCasks, installedCasks)&&const DeepCollectionEquality().equals(other.selectedPackage, selectedPackage)&&(identical(other.systemStorageUsed, systemStorageUsed) || other.systemStorageUsed == systemStorageUsed)&&(identical(other.orphanedDependenciesCount, orphanedDependenciesCount) || other.orphanedDependenciesCount == orphanedDependenciesCount)&&(identical(other.globalHealthScore, globalHealthScore) || other.globalHealthScore == globalHealthScore)&&(identical(other.brewPrefix, brewPrefix) || other.brewPrefix == brewPrefix)&&(identical(other.isSyncing, isSyncing) || other.isSyncing == isSyncing)&&(identical(other.filterQuery, filterQuery) || other.filterQuery == filterQuery));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(installedFormulae),const DeepCollectionEquality().hash(installedCasks),const DeepCollectionEquality().hash(selectedPackage),systemStorageUsed,orphanedDependenciesCount,globalHealthScore,brewPrefix);
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(installedFormulae),const DeepCollectionEquality().hash(installedCasks),const DeepCollectionEquality().hash(selectedPackage),systemStorageUsed,orphanedDependenciesCount,globalHealthScore,brewPrefix,isSyncing,filterQuery);
 
 @override
 String toString() {
-  return 'LibraryState(isLoading: $isLoading, installedFormulae: $installedFormulae, installedCasks: $installedCasks, selectedPackage: $selectedPackage, systemStorageUsed: $systemStorageUsed, orphanedDependenciesCount: $orphanedDependenciesCount, globalHealthScore: $globalHealthScore, brewPrefix: $brewPrefix)';
+  return 'LibraryState(isLoading: $isLoading, installedFormulae: $installedFormulae, installedCasks: $installedCasks, selectedPackage: $selectedPackage, systemStorageUsed: $systemStorageUsed, orphanedDependenciesCount: $orphanedDependenciesCount, globalHealthScore: $globalHealthScore, brewPrefix: $brewPrefix, isSyncing: $isSyncing, filterQuery: $filterQuery)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LibraryStateCopyWith<$Res>  {
   factory $LibraryStateCopyWith(LibraryState value, $Res Function(LibraryState) _then) = _$LibraryStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, List<FormulaModel> installedFormulae, List<CaskModel> installedCasks, dynamic selectedPackage, String systemStorageUsed, int orphanedDependenciesCount, int globalHealthScore, String brewPrefix
+ bool isLoading, List<FormulaModel> installedFormulae, List<CaskModel> installedCasks, dynamic selectedPackage, String systemStorageUsed, int orphanedDependenciesCount, int globalHealthScore, String brewPrefix, bool isSyncing, String filterQuery
 });
 
 
@@ -62,7 +62,7 @@ class _$LibraryStateCopyWithImpl<$Res>
 
 /// Create a copy of LibraryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? installedFormulae = null,Object? installedCasks = null,Object? selectedPackage = freezed,Object? systemStorageUsed = null,Object? orphanedDependenciesCount = null,Object? globalHealthScore = null,Object? brewPrefix = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? installedFormulae = null,Object? installedCasks = null,Object? selectedPackage = freezed,Object? systemStorageUsed = null,Object? orphanedDependenciesCount = null,Object? globalHealthScore = null,Object? brewPrefix = null,Object? isSyncing = null,Object? filterQuery = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,installedFormulae: null == installedFormulae ? _self.installedFormulae : installedFormulae // ignore: cast_nullable_to_non_nullable
@@ -72,6 +72,8 @@ as dynamic,systemStorageUsed: null == systemStorageUsed ? _self.systemStorageUse
 as String,orphanedDependenciesCount: null == orphanedDependenciesCount ? _self.orphanedDependenciesCount : orphanedDependenciesCount // ignore: cast_nullable_to_non_nullable
 as int,globalHealthScore: null == globalHealthScore ? _self.globalHealthScore : globalHealthScore // ignore: cast_nullable_to_non_nullable
 as int,brewPrefix: null == brewPrefix ? _self.brewPrefix : brewPrefix // ignore: cast_nullable_to_non_nullable
+as String,isSyncing: null == isSyncing ? _self.isSyncing : isSyncing // ignore: cast_nullable_to_non_nullable
+as bool,filterQuery: null == filterQuery ? _self.filterQuery : filterQuery // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -157,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  dynamic selectedPackage,  String systemStorageUsed,  int orphanedDependenciesCount,  int globalHealthScore,  String brewPrefix)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  dynamic selectedPackage,  String systemStorageUsed,  int orphanedDependenciesCount,  int globalHealthScore,  String brewPrefix,  bool isSyncing,  String filterQuery)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LibraryState() when $default != null:
-return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.selectedPackage,_that.systemStorageUsed,_that.orphanedDependenciesCount,_that.globalHealthScore,_that.brewPrefix);case _:
+return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.selectedPackage,_that.systemStorageUsed,_that.orphanedDependenciesCount,_that.globalHealthScore,_that.brewPrefix,_that.isSyncing,_that.filterQuery);case _:
   return orElse();
 
 }
@@ -178,10 +180,10 @@ return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  dynamic selectedPackage,  String systemStorageUsed,  int orphanedDependenciesCount,  int globalHealthScore,  String brewPrefix)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  dynamic selectedPackage,  String systemStorageUsed,  int orphanedDependenciesCount,  int globalHealthScore,  String brewPrefix,  bool isSyncing,  String filterQuery)  $default,) {final _that = this;
 switch (_that) {
 case _LibraryState():
-return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.selectedPackage,_that.systemStorageUsed,_that.orphanedDependenciesCount,_that.globalHealthScore,_that.brewPrefix);case _:
+return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.selectedPackage,_that.systemStorageUsed,_that.orphanedDependenciesCount,_that.globalHealthScore,_that.brewPrefix,_that.isSyncing,_that.filterQuery);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +200,10 @@ return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  dynamic selectedPackage,  String systemStorageUsed,  int orphanedDependenciesCount,  int globalHealthScore,  String brewPrefix)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  dynamic selectedPackage,  String systemStorageUsed,  int orphanedDependenciesCount,  int globalHealthScore,  String brewPrefix,  bool isSyncing,  String filterQuery)?  $default,) {final _that = this;
 switch (_that) {
 case _LibraryState() when $default != null:
-return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.selectedPackage,_that.systemStorageUsed,_that.orphanedDependenciesCount,_that.globalHealthScore,_that.brewPrefix);case _:
+return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.selectedPackage,_that.systemStorageUsed,_that.orphanedDependenciesCount,_that.globalHealthScore,_that.brewPrefix,_that.isSyncing,_that.filterQuery);case _:
   return null;
 
 }
@@ -213,7 +215,7 @@ return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_th
 
 
 class _LibraryState extends LibraryState {
-  const _LibraryState({this.isLoading = true, final  List<FormulaModel> installedFormulae = const [], final  List<CaskModel> installedCasks = const [], this.selectedPackage, this.systemStorageUsed = '0 B', this.orphanedDependenciesCount = 0, this.globalHealthScore = 100, this.brewPrefix = '/opt/homebrew'}): _installedFormulae = installedFormulae,_installedCasks = installedCasks,super._();
+  const _LibraryState({this.isLoading = true, final  List<FormulaModel> installedFormulae = const [], final  List<CaskModel> installedCasks = const [], this.selectedPackage, this.systemStorageUsed = '0 B', this.orphanedDependenciesCount = 0, this.globalHealthScore = 100, this.brewPrefix = '/opt/homebrew', this.isSyncing = false, this.filterQuery = ''}): _installedFormulae = installedFormulae,_installedCasks = installedCasks,super._();
   
 
 @override@JsonKey() final  bool isLoading;
@@ -236,6 +238,8 @@ class _LibraryState extends LibraryState {
 @override@JsonKey() final  int orphanedDependenciesCount;
 @override@JsonKey() final  int globalHealthScore;
 @override@JsonKey() final  String brewPrefix;
+@override@JsonKey() final  bool isSyncing;
+@override@JsonKey() final  String filterQuery;
 
 /// Create a copy of LibraryState
 /// with the given fields replaced by the non-null parameter values.
@@ -247,16 +251,16 @@ _$LibraryStateCopyWith<_LibraryState> get copyWith => __$LibraryStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibraryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._installedFormulae, _installedFormulae)&&const DeepCollectionEquality().equals(other._installedCasks, _installedCasks)&&const DeepCollectionEquality().equals(other.selectedPackage, selectedPackage)&&(identical(other.systemStorageUsed, systemStorageUsed) || other.systemStorageUsed == systemStorageUsed)&&(identical(other.orphanedDependenciesCount, orphanedDependenciesCount) || other.orphanedDependenciesCount == orphanedDependenciesCount)&&(identical(other.globalHealthScore, globalHealthScore) || other.globalHealthScore == globalHealthScore)&&(identical(other.brewPrefix, brewPrefix) || other.brewPrefix == brewPrefix));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibraryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._installedFormulae, _installedFormulae)&&const DeepCollectionEquality().equals(other._installedCasks, _installedCasks)&&const DeepCollectionEquality().equals(other.selectedPackage, selectedPackage)&&(identical(other.systemStorageUsed, systemStorageUsed) || other.systemStorageUsed == systemStorageUsed)&&(identical(other.orphanedDependenciesCount, orphanedDependenciesCount) || other.orphanedDependenciesCount == orphanedDependenciesCount)&&(identical(other.globalHealthScore, globalHealthScore) || other.globalHealthScore == globalHealthScore)&&(identical(other.brewPrefix, brewPrefix) || other.brewPrefix == brewPrefix)&&(identical(other.isSyncing, isSyncing) || other.isSyncing == isSyncing)&&(identical(other.filterQuery, filterQuery) || other.filterQuery == filterQuery));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_installedFormulae),const DeepCollectionEquality().hash(_installedCasks),const DeepCollectionEquality().hash(selectedPackage),systemStorageUsed,orphanedDependenciesCount,globalHealthScore,brewPrefix);
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_installedFormulae),const DeepCollectionEquality().hash(_installedCasks),const DeepCollectionEquality().hash(selectedPackage),systemStorageUsed,orphanedDependenciesCount,globalHealthScore,brewPrefix,isSyncing,filterQuery);
 
 @override
 String toString() {
-  return 'LibraryState(isLoading: $isLoading, installedFormulae: $installedFormulae, installedCasks: $installedCasks, selectedPackage: $selectedPackage, systemStorageUsed: $systemStorageUsed, orphanedDependenciesCount: $orphanedDependenciesCount, globalHealthScore: $globalHealthScore, brewPrefix: $brewPrefix)';
+  return 'LibraryState(isLoading: $isLoading, installedFormulae: $installedFormulae, installedCasks: $installedCasks, selectedPackage: $selectedPackage, systemStorageUsed: $systemStorageUsed, orphanedDependenciesCount: $orphanedDependenciesCount, globalHealthScore: $globalHealthScore, brewPrefix: $brewPrefix, isSyncing: $isSyncing, filterQuery: $filterQuery)';
 }
 
 
@@ -267,7 +271,7 @@ abstract mixin class _$LibraryStateCopyWith<$Res> implements $LibraryStateCopyWi
   factory _$LibraryStateCopyWith(_LibraryState value, $Res Function(_LibraryState) _then) = __$LibraryStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, List<FormulaModel> installedFormulae, List<CaskModel> installedCasks, dynamic selectedPackage, String systemStorageUsed, int orphanedDependenciesCount, int globalHealthScore, String brewPrefix
+ bool isLoading, List<FormulaModel> installedFormulae, List<CaskModel> installedCasks, dynamic selectedPackage, String systemStorageUsed, int orphanedDependenciesCount, int globalHealthScore, String brewPrefix, bool isSyncing, String filterQuery
 });
 
 
@@ -284,7 +288,7 @@ class __$LibraryStateCopyWithImpl<$Res>
 
 /// Create a copy of LibraryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? installedFormulae = null,Object? installedCasks = null,Object? selectedPackage = freezed,Object? systemStorageUsed = null,Object? orphanedDependenciesCount = null,Object? globalHealthScore = null,Object? brewPrefix = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? installedFormulae = null,Object? installedCasks = null,Object? selectedPackage = freezed,Object? systemStorageUsed = null,Object? orphanedDependenciesCount = null,Object? globalHealthScore = null,Object? brewPrefix = null,Object? isSyncing = null,Object? filterQuery = null,}) {
   return _then(_LibraryState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,installedFormulae: null == installedFormulae ? _self._installedFormulae : installedFormulae // ignore: cast_nullable_to_non_nullable
@@ -294,6 +298,8 @@ as dynamic,systemStorageUsed: null == systemStorageUsed ? _self.systemStorageUse
 as String,orphanedDependenciesCount: null == orphanedDependenciesCount ? _self.orphanedDependenciesCount : orphanedDependenciesCount // ignore: cast_nullable_to_non_nullable
 as int,globalHealthScore: null == globalHealthScore ? _self.globalHealthScore : globalHealthScore // ignore: cast_nullable_to_non_nullable
 as int,brewPrefix: null == brewPrefix ? _self.brewPrefix : brewPrefix // ignore: cast_nullable_to_non_nullable
+as String,isSyncing: null == isSyncing ? _self.isSyncing : isSyncing // ignore: cast_nullable_to_non_nullable
+as bool,filterQuery: null == filterQuery ? _self.filterQuery : filterQuery // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

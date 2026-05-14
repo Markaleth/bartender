@@ -6,6 +6,7 @@ import 'package:bartender/features/library/widgets/global_health_status_widget.d
 import 'package:bartender/features/library/widgets/explorer_pane.dart';
 import 'package:bartender/features/library/widgets/inspector_pane.dart';
 import 'package:bartender/data/db/database_interface.dart';
+import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 
 import 'package:bartender/core/services/package_status_notifier.dart';
@@ -13,8 +14,8 @@ import 'package:bartender/core/base_view.dart';
 import 'package:bartender/features/library/models/library_effect.dart';
 import 'package:bartender/features/library/models/library_state.dart';
 
-class LibraryCommandCenterView extends StatelessWidget {
-  const LibraryCommandCenterView({super.key});
+class LibraryView extends StatelessWidget {
+  const LibraryView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +24,10 @@ class LibraryCommandCenterView extends StatelessWidget {
         db: context.read<DatabaseInterface>(),
         brewService: context.read<BrewService>(),
         statusNotifier: context.read<PackageStatusNotifier>(),
+        packageRepository: context.read<PackageRepository>(),
       )..init(),
-      builder: (context, viewModel, state) => const _LibraryCommandCenterContent(),
+      builder: (context, viewModel, state) =>
+          const _LibraryCommandCenterContent(),
     );
   }
 }

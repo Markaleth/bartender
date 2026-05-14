@@ -17,7 +17,19 @@ abstract class LibraryState with _$LibraryState {
     @Default(0) int orphanedDependenciesCount,
     @Default(100) int globalHealthScore,
     @Default('/opt/homebrew') String brewPrefix,
+    @Default(false) bool isSyncing,
+    @Default('') String filterQuery,
   }) = _LibraryState;
+
+  List<FormulaModel> get filteredFormulae {
+    if (filterQuery.isEmpty) return installedFormulae;
+    return installedFormulae.where((f) => f.name.toLowerCase().contains(filterQuery.toLowerCase())).toList();
+  }
+
+  List<CaskModel> get filteredCasks {
+    if (filterQuery.isEmpty) return installedCasks;
+    return installedCasks.where((c) => c.token.toLowerCase().contains(filterQuery.toLowerCase())).toList();
+  }
 
   bool get isSelectedPackageCask => selectedPackage is CaskModel;
   

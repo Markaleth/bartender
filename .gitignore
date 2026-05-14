@@ -46,3 +46,6 @@ app.*.map.json
 /android/app/release
 .kilo/
 .vscode/
+stitch_brew_desktop_manager/code.html
+stitch_brew_desktop_manager/DESIGN.md
+stitch_brew_desktop_manager/screen.png
