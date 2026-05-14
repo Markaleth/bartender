@@ -163,4 +163,12 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
   void selectPackage(dynamic package) {
     emitState(state.copyWith(selectedPackage: package));
   }
+
+  void toggleFormulaeExpanded() {
+    emitState(state.copyWith(formulaeExpanded: !state.formulaeExpanded));
+  }
+
+  void toggleCasksExpanded() {
+    emitState(state.copyWith(casksExpanded: !state.casksExpanded));
+  }
 }

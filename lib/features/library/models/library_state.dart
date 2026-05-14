@@ -19,6 +19,8 @@ abstract class LibraryState with _$LibraryState {
     @Default('/opt/homebrew') String brewPrefix,
     @Default(false) bool isSyncing,
     @Default('') String filterQuery,
+    @Default(true) bool formulaeExpanded,
+    @Default(true) bool casksExpanded,
   }) = _LibraryState;
 
   List<FormulaModel> get filteredFormulae {

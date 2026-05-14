@@ -10,16 +10,8 @@ import 'explorer_pane_header.dart';
 import 'file_system_folder_header.dart';
 import 'file_system_item.dart';
 
-class ExplorerPane extends StatefulWidget {
+class ExplorerPane extends StatelessWidget {
   const ExplorerPane({super.key});
-
-  @override
-  State<ExplorerPane> createState() => _ExplorerPaneState();
-}
-
-class _ExplorerPaneState extends State<ExplorerPane> {
-  bool _formulaeExpanded = true;
-  bool _casksExpanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +44,11 @@ class _ExplorerPaneState extends State<ExplorerPane> {
                         child: FileSystemFolderHeader(
                           title: 'Formulae (${state.filteredFormulae.length})',
                           installPath: '${state.brewPrefix}/Cellar',
-                          isExpanded: _formulaeExpanded,
-                          onTap: () => setState(
-                            () => _formulaeExpanded = !_formulaeExpanded,
-                          ),
+                          isExpanded: state.formulaeExpanded,
+                          onTap: () => viewModel.toggleFormulaeExpanded(),
                         ),
                       ),
-                      if (_formulaeExpanded)
+                      if (state.formulaeExpanded)
                         SliverList.builder(
                           itemCount: state.filteredFormulae.length,
                           itemBuilder: (context, index) {
@@ -77,13 +67,11 @@ class _ExplorerPaneState extends State<ExplorerPane> {
                           child: FileSystemFolderHeader(
                             title: 'Casks (${state.filteredCasks.length})',
                             installPath: '${state.brewPrefix}/Caskroom',
-                            isExpanded: _casksExpanded,
-                            onTap: () => setState(
-                              () => _casksExpanded = !_casksExpanded,
-                            ),
+                            isExpanded: state.casksExpanded,
+                            onTap: () => viewModel.toggleCasksExpanded(),
                           ),
                         ),
-                      if (!Platform.isLinux && _casksExpanded)
+                      if (!Platform.isLinux && state.casksExpanded)
                         SliverList.builder(
                           itemCount: state.filteredCasks.length,
                           itemBuilder: (context, index) {
