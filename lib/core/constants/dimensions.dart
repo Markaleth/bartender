@@ -34,7 +34,6 @@ const double widthBreakpoint = 600.0;
 const int maxScrollExtentOffset = 500;
 const int scrollToTopDisplayThreashold = 400;
 
-
 // Terminal Drawer Overlay
 const double terminalDrawerCollapsedHeight = 48.0;
 const double terminalDrawerExpandedHeight = 320.0;

@@ -21,38 +21,35 @@ class FileSystemFolderHeader extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(spacingS),
+        padding: const EdgeInsets.symmetric(
+          vertical: spacingS,
+          horizontal: spacingXs,
+        ),
         child: Row(
+          spacing: spacingXs,
           children: [
             Icon(
               isExpanded ? Icons.arrow_drop_down : Icons.arrow_right,
               color: AppColors.iconDefault,
               size: spacingM,
             ),
-            const SizedBox(width: spacingXs),
+
             Icon(
               Icons.folder,
               color: isExpanded ? AppColors.primary : AppColors.iconDefault,
               size: spacingM,
             ),
-            const SizedBox(width: spacingS),
+
             Expanded(
               child: Text(
-                title,
+                installPath,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.w600,
+                  color: AppColors.textSecondary,
                   fontFamily: 'monospace',
-                  fontSize: 13,
+                  fontSize: 11,
                 ),
-              ),
-            ),
-            Text(
-              installPath,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-                fontFamily: 'monospace',
-                fontSize: 11,
               ),
             ),
           ],
