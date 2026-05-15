@@ -9,8 +9,14 @@ class ShellUtils {
       Platform.isLinux && File('/run/.containerenv').existsSync();
 
   static Future<void> init() async {
-    if (!kDebugMode || !_isInContainer) return;
+    if (kDebugMode && _isInContainer) {
+      await _initForContainer();
+    } else {
+      _initForHost();
+    }
+  }
 
+  static Future<void> _initForContainer() async {
     final hostShellPath = await _resolveViaHostShell();
     if (hostShellPath != null) {
       _resolvedBrewPath = hostShellPath;
@@ -27,6 +33,20 @@ class ShellUtils {
     debugPrint(
       'Failed to resolve brew path dynamically. Defaulting to: $_resolvedBrewPath',
     );
+  }
+
+  static void _initForHost() {
+    if (File('/opt/homebrew/bin/brew').existsSync()) {
+      _resolvedBrewPath = '/opt/homebrew/bin/brew';
+    } else if (File('/usr/local/bin/brew').existsSync()) {
+      _resolvedBrewPath = '/usr/local/bin/brew';
+    } else if (File('/home/linuxbrew/.linuxbrew/bin/brew').existsSync()) {
+      _resolvedBrewPath = '/home/linuxbrew/.linuxbrew/bin/brew';
+    } else {
+      debugPrint(
+        'Failed to resolve brew path natively. Relying on system PATH.',
+      );
+    }
   }
 
   static Future<String?> _resolveViaHostShell() async {
@@ -75,6 +95,9 @@ class ShellUtils {
   static String _getExecutable(String executable) {
     if (kDebugMode && _isInContainer) {
       return 'distrobox-host-exec';
+    }
+    if (executable == 'brew') {
+      return _resolvedBrewPath ?? executable;
     }
     return executable;
   }
