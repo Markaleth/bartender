@@ -5,7 +5,7 @@ const String appVersion = 'v4.2.3 - Placeholder';
 // Navigation
 const String navBrowse = 'Packages';
 const String navLibrary = 'Library';
-const String navUpdates = 'Updates';
+const String navTaps = 'Taps';
 const String navSettings = 'Settings';
 
 // Common Actions

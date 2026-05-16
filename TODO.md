@@ -22,6 +22,8 @@
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [ ] Consider renaming "library" to "Installed".
 - [ ] Think about if the "updates" tab is actually necessary
+- [ ] Add tap support. 
+
 
 # Issues:
 
@@ -49,3 +51,25 @@
 - [ ] Verify / Repair (Check checksum/re-download)
 - [ ] Open Directory (Open OS file explorer to install dir)
 - [ ] Clear Cache / Reset (Wipe local config/cache)
+
+# Homebrew Taps (Summary)
+
+## What Taps Are
+Taps are third-party catalogs or repositories of software (like kegs of specific drinks for a bartender). Homebrew comes with default taps (`homebrew/core`, `homebrew/cask`), but anyone can host their own tap on GitHub (e.g., `mongodb/brew`, `hashicorp/tap`). When a tap is added, the entire catalog inside that tap becomes available to the local Homebrew CLI. There is no central registry of all available taps in the world.
+
+## Current Support Level
+- **API Limitation:** The online Homebrew API (`formulae.brew.sh/api/...`) we currently use only knows about the official default taps. It does not index third-party taps.
+- **Local CLI:** The local `brew` command (`brew info --installed --json=v2`) successfully detects and lists third-party packages installed on the user's machine.
+- **Models:** Our data models (`FormulaModel` and `CaskModel`) already support and parse the `tap` field correctly (e.g., `"tap": "1password/tap"`).
+
+## Required Changes
+- **`brew_service.dart`:** Add a `tapRepo(String input, {String? customUrl})` method to execute `brew tap <name> [url]`. Add another method to fetch info about a specific tap using `brew tap-info --json=v1 <tap_name>`.
+- **Models:** Create a new model (e.g., `TapModel`) to parse the JSON response from `brew tap-info`, which contains lists of `formula_names` and `cask_tokens` available in that tap.
+
+## UI Options & Recommendations
+To let users add new taps, we need to handle the standard `user/repo` format and the rare edge case of full Git URLs.
+- **Option 1: Two Input Fields (Name and URL)**
+  - *Why:* Explicitly covers the 1% of non-GitHub or private enterprise taps.
+  - *Drawback:* Clunky UX for the 99% of users just pasting `user/repo`.
+- **Option 2: Single "Smart Input" Field (Recommended)**
+  - *Why:* Ask the user for a "Tap Name or Git URL". If they type a standard `user/repo` (e.g., `mongodb/brew`), we just run `brew tap mongodb/brew`. If they paste a full URL (e.g., `https://gitlab.com/...`), our logic parses the string to extract a valid name, and runs `brew tap <extracted_name> <full_url>`. This keeps the UI completely clean while dynamically supporting all use cases.
