@@ -31,7 +31,6 @@ ip
 - [ ] when minimising the termial, we're getting some overflow errors
 - [ ] text in terminal look blurry. play with the styling to improve that
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
-- [ ] You are not showing packages in a tap you just added. Need to look into that.
 
 # Supported information for "Library"
 

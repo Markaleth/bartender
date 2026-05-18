@@ -30,6 +30,85 @@ class HomebrewRepository {
     }
   }
 
+  Future<void> syncThirdPartyTapPackages() async {
+    final result = await _brewService.listTaps();
+    if (result.exitCode != 0) return;
+
+    try {
+      final packagesToFetch = _extractThirdPartyPackages(result.stdout);
+      if (packagesToFetch.isEmpty) return;
+
+      await _fetchAndCachePackageChunks(packagesToFetch);
+    } catch (e) {
+      // Ignore errors if taps cannot be parsed
+    }
+  }
+
+  List<String> _extractThirdPartyPackages(String tapsJson) {
+    final List<dynamic> jsonList = jsonDecode(tapsJson);
+    final packagesToFetch = <String>[];
+
+    for (final tapJson in jsonList) {
+      final name = tapJson['name'] as String?;
+      if (name == null || name == 'homebrew/core' || name == 'homebrew/cask') {
+        continue;
+      }
+
+      final formulaNames = List<String>.from(tapJson['formula_names'] ?? []);
+      final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
+
+      packagesToFetch.addAll(formulaNames);
+      packagesToFetch.addAll(caskTokens);
+    }
+
+    return packagesToFetch;
+  }
+
+  Future<void> _fetchAndCachePackageChunks(List<String> packagesToFetch) async {
+    const chunkSize = 50;
+    for (var i = 0; i < packagesToFetch.length; i += chunkSize) {
+      final end = (i + chunkSize < packagesToFetch.length)
+          ? i + chunkSize
+          : packagesToFetch.length;
+      final chunk = packagesToFetch.sublist(i, end);
+
+      final infoResult = await _brewService.runCommand([
+        'info',
+        '--json=v2',
+        ...chunk,
+      ]);
+
+      if (infoResult.exitCode == 0) {
+        try {
+          await _parseAndCacheInfo(infoResult.stdout);
+        } catch (e) {
+          // Ignore parse errors for specific chunks to allow other chunks to proceed
+        }
+      }
+    }
+  }
+
+  Future<void> _parseAndCacheInfo(String infoJsonString) async {
+    final infoJson = jsonDecode(infoJsonString);
+
+    if (infoJson['formulae'] != null) {
+      final List<dynamic> formulaeJson = infoJson['formulae'];
+      final formulae =
+          formulaeJson.map((json) => FormulaModel.fromJson(json)).toList();
+      if (formulae.isNotEmpty) {
+        await _database.cacheNetworkFormulae(formulae);
+      }
+    }
+
+    if (infoJson['casks'] != null) {
+      final List<dynamic> casksJson = infoJson['casks'];
+      final casks = casksJson.map((json) => CaskModel.fromJson(json)).toList();
+      if (casks.isNotEmpty) {
+        await _database.cacheNetworkCasks(casks);
+      }
+    }
+  }
+
   Future<List<TapModel>> getTaps() => _database.getTaps();
 
   Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
@@ -72,16 +151,10 @@ class HomebrewRepository {
     final endpoint = '/analytics/$category/${days.value}.json';
     await _fetchAndCache(
       endpoint: endpoint,
-      fetcher: (eTag) => _apiClient.getCategoryAnalytics(
-        category,
-        days,
-        eTag: eTag,
-      ),
-      cacher: (data) => _database.cacheCategoryAnalytics(
-        category,
-        days,
-        data.items,
-      ),
+      fetcher: (eTag) =>
+          _apiClient.getCategoryAnalytics(category, days, eTag: eTag),
+      cacher: (data) =>
+          _database.cacheCategoryAnalytics(category, days, data.items),
       errorMessage: 'Failed to sync category analytics',
     );
   }
@@ -89,10 +162,10 @@ class HomebrewRepository {
   // Bulk endpoints
   Future<void> syncAllData() async {
     // Sync base packages first
-    await Future.wait([
-      syncFormulae(),
-      if (!Platform.isLinux) syncCasks(),
-    ]);
+    await Future.wait([syncFormulae(), if (!Platform.isLinux) syncCasks()]);
+
+    await syncTaps();
+    await syncThirdPartyTapPackages();
 
     // Then sync analytics
     await Future.wait([
@@ -136,11 +209,8 @@ class HomebrewRepository {
     final endpoint = '/analytics/$category/homebrew-core/${days.value}.json';
     await _fetchAndCache(
       endpoint: endpoint,
-      fetcher: (eTag) => _apiClient.getFormulaeAnalytics(
-        category,
-        days,
-        eTag: eTag,
-      ),
+      fetcher: (eTag) =>
+          _apiClient.getFormulaeAnalytics(category, days, eTag: eTag),
       cacher: (data) async {
         final items = data.formulae.values.expand((e) => e).toList();
         await _database.updateFormulaeAnalyticsBatch(items, days);
@@ -153,10 +223,7 @@ class HomebrewRepository {
     final endpoint = '/analytics/cask-install/homebrew-cask/${days.value}.json';
     await _fetchAndCache(
       endpoint: endpoint,
-      fetcher: (eTag) => _apiClient.getCasksAnalytics(
-        days,
-        eTag: eTag,
-      ),
+      fetcher: (eTag) => _apiClient.getCasksAnalytics(days, eTag: eTag),
       cacher: (data) async {
         final items = data.casks.values.expand((e) => e).toList();
         await _database.updateCasksAnalyticsBatch(items, days);

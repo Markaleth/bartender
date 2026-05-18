@@ -220,8 +220,8 @@ return $default(_that.searchQuery,_that.packageType,_that.trendingData,_that.isS
 /// @nodoc
 
 
-class _PackagesState implements PackagesState {
-  const _PackagesState({this.searchQuery = '', this.packageType = PackageTypeFilter.all, this.trendingData = const FetchState.loading(), this.isSyncingBackground = false, final  List<dynamic> paginatedPackages = const [], this.expandedPackageId, final  List<TapModel> taps = const []}): _paginatedPackages = paginatedPackages,_taps = taps;
+class _PackagesState extends PackagesState {
+  const _PackagesState({this.searchQuery = '', this.packageType = PackageTypeFilter.all, this.trendingData = const FetchState.loading(), this.isSyncingBackground = false, final  List<dynamic> paginatedPackages = const [], this.expandedPackageId, final  List<TapModel> taps = const []}): _paginatedPackages = paginatedPackages,_taps = taps,super._();
   
 
 @override@JsonKey() final  String searchQuery;

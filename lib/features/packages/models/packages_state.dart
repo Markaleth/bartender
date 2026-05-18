@@ -19,12 +19,12 @@ abstract class PackagesState with _$PackagesState {
 
     @Default([]) List<dynamic> paginatedPackages,
     String? expandedPackageId,
-    
+
     @Default([]) List<TapModel> taps,
   }) = _PackagesState;
 
   Set<String> get uniqueTapNames => taps.map((t) => t.name).toSet();
-  
-  bool isValidTapSelection(String? selectedTap) => 
+
+  bool isValidTapSelection(String? selectedTap) =>
       selectedTap == null || uniqueTapNames.contains(selectedTap);
 }
