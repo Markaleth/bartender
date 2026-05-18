@@ -1,0 +1,158 @@
+import 'package:flutter/material.dart';
+import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/theme/bartender_context.dart';
+import 'package:bartender/data/models/tap/tap_model.dart';
+
+class TapCard extends StatelessWidget {
+  final TapModel tap;
+  final bool isSyncing;
+  final VoidCallback onViewPackages;
+  final VoidCallback onRemove;
+
+  const TapCard({
+    super.key,
+    required this.tap,
+    required this.isSyncing,
+    required this.onViewPackages,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radiusM),
+        side: const BorderSide(
+          color: AppColors.borderNeutral,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(spacingM),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(
+                  Icons.account_tree_outlined,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(width: spacingXs),
+                Expanded(
+                  child: Text(
+                    tap.name,
+                    style: context.titleM.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: spacingXs),
+            if (tap.remote != null)
+              Text(
+                tap.remote!,
+                style: context.bodyM.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            const SizedBox(height: spacingXs),
+            Row(
+              children: [
+                if (tap.formulaNames.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(right: spacingXs),
+                    child: _Badge(
+                      text: '${tap.formulaNames.length} Formulae',
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                if (tap.caskTokens.isNotEmpty)
+                  _Badge(
+                    text: '${tap.caskTokens.length} Casks',
+                    color: AppColors.tertiary,
+                  ),
+              ],
+            ),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: onViewPackages,
+                  child: const Text('View Packages'),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: AppColors.error,
+                  ),
+                  onPressed: isSyncing
+                      ? null
+                      : () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: const Text('Remove Tap'),
+                              content: Text(
+                                'Are you sure you want to untap ${tap.name}?',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                    onRemove();
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: AppColors.error,
+                                  ),
+                                  child: const Text('Remove'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  final String text;
+  final Color color;
+
+  const _Badge({required this.text, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
+      ),
+      child: Text(
+        text,
+        style: context.labelS.copyWith(
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}

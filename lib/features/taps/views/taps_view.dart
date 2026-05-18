@@ -12,6 +12,8 @@ import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import '../models/taps_state.dart';
 import '../view_models/taps_view_model.dart';
+import '../widgets/add_tap_dialog.dart';
+import '../widgets/tap_card.dart';
 
 class TapsView extends StatelessWidget {
   final HomeViewModel homeViewModel;
@@ -19,34 +21,10 @@ class TapsView extends StatelessWidget {
   const TapsView({super.key, required this.homeViewModel});
 
   void _showAddTapDialog(BuildContext context, TapsViewModel viewModel) {
-    final controller = TextEditingController();
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Add Tap'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            hintText: 'user/repo or URL',
-            border: OutlineInputBorder(),
-          ),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (controller.text.isNotEmpty) {
-                viewModel.addTap(controller.text);
-              }
-              Navigator.of(context).pop();
-            },
-            child: const Text('Add'),
-          ),
-        ],
+      builder: (context) => AddTapDialog(
+        onAddTap: (tapName) => viewModel.addTap(tapName),
       ),
     );
   }
@@ -141,131 +119,13 @@ class TapsView extends StatelessWidget {
                       itemCount: taps.length,
                       itemBuilder: (context, index) {
                         final tap = taps[index];
-                        return Card(
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(radiusM),
-                            side: const BorderSide(
-                              color: AppColors.borderNeutral,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(spacingM),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.account_tree_outlined,
-                                      color: AppColors.primary,
-                                    ),
-                                    const SizedBox(width: spacingXs),
-                                    Expanded(
-                                      child: Text(
-                                        tap.name,
-                                        style: context.titleM.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: spacingXs),
-                                if (tap.remote != null)
-                                  Text(
-                                    tap.remote!,
-                                    style: context.bodyM.copyWith(
-                                      color: AppColors.textSecondary,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                const SizedBox(height: spacingXs),
-                                Row(
-                                  children: [
-                                    if (tap.formulaNames.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: spacingXs),
-                                        child: _Badge(
-                                          text: '${tap.formulaNames.length} Formulae',
-                                          color: AppColors.secondary,
-                                        ),
-                                      ),
-                                    if (tap.caskTokens.isNotEmpty)
-                                      _Badge(
-                                        text: '${tap.caskTokens.length} Casks',
-                                        color: AppColors.tertiary,
-                                      ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        homeViewModel.navigateAndFilterByTap(
-                                          tap.name,
-                                        );
-                                      },
-                                      child: const Text('View Packages'),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.delete_outline,
-                                        color: AppColors.error,
-                                      ),
-                                      onPressed: state.isSyncing
-                                          ? null
-                                          : () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (ctx) => AlertDialog(
-                                                  title: const Text(
-                                                    'Remove Tap',
-                                                  ),
-                                                  content: Text(
-                                                    'Are you sure you want to untap ${tap.name}?',
-                                                  ),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.of(
-                                                            ctx,
-                                                          ).pop(),
-                                                      child: const Text(
-                                                        'Cancel',
-                                                      ),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(ctx).pop();
-                                                        viewModel.removeTap(
-                                                          tap.name,
-                                                        );
-                                                      },
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                            foregroundColor:
-                                                                AppColors.error,
-                                                          ),
-                                                      child: const Text(
-                                                        'Remove',
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+                        return TapCard(
+                          tap: tap,
+                          isSyncing: state.isSyncing,
+                          onViewPackages: () {
+                            homeViewModel.navigateAndFilterByTap(tap.name);
+                          },
+                          onRemove: () => viewModel.removeTap(tap.name),
                         );
                       },
                     );
@@ -276,32 +136,6 @@ class TapsView extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _Badge extends StatelessWidget {
-  final String text;
-  final Color color;
-
-  const _Badge({required this.text, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.5)),
-      ),
-      child: Text(
-        text,
-        style: context.labelS.copyWith(
-          color: color,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
     );
   }
 }
