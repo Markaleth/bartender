@@ -13,6 +13,7 @@
 - [x] See about improving performance because we expect to have potentially long lists of items there so just using columns might not work
 - [x] Add animations to expanding and collapsing folders in the "explorer" pane
 - [x] Add animation to item selection in the library explorer pannel
+- [X] Add tap support. 
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
@@ -22,16 +23,15 @@
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [ ] Consider renaming "library" to "Installed".
 - [ ] Think about if the "updates" tab is actually necessary
-- [ ] Add tap support. 
 
 
 # Issues:
-
+ip
 - [ ] Terminal close icon is not very suggestive (should be an x or something instantly recognizable)
 - [ ] when minimising the termial, we're getting some overflow errors
 - [ ] text in terminal look blurry. play with the styling to improve that
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
-- [ ] Button label doesn't update for [package_list_item.dart](lib/features/packages/widgets/package_list_item.dart). need to look into that
+- [ ] You are not showing packages in a tap you just added. Need to look into that.
 
 # Supported information for "Library"
 
@@ -73,9 +73,3 @@ To let users add new taps, we need to handle the standard `user/repo` format and
   - *Drawback:* Clunky UX for the 99% of users just pasting `user/repo`.
 - **Option 2: Single "Smart Input" Field (Recommended)**
   - *Why:* Ask the user for a "Tap Name or Git URL". If they type a standard `user/repo` (e.g., `mongodb/brew`), we just run `brew tap mongodb/brew`. If they paste a full URL (e.g., `https://gitlab.com/...`), our logic parses the string to extract a valid name, and runs `brew tap <extracted_name> <full_url>`. This keeps the UI completely clean while dynamically supporting all use cases.
-
-# Taps Architecture / UX Approach (Option 1)
-- [ ] Create a dedicated "Taps / Sources" screen (e.g. via sidebar/settings) for purely managing subscriptions (adding, removing, viewing health metrics).
-- [ ] Use `packages_view.dart` as an aggregated "Global Search" that dumps everything the user has tapped (both core and custom taps).
-- [ ] Add a prominent "Source" or "Tap" filter to `packages_view.dart` so users can isolate packages from specific taps.
-- [ ] Implement a "Quick Add" bridge: If a search in `packages_view.dart` yields 0 results, show an empty state ("No packages found. Is it in a custom tap? [Add a Tap]") that navigates directly to the dedicated Taps screen.

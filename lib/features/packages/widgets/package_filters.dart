@@ -119,7 +119,9 @@ class PackageFilters extends StatelessWidget {
                           ),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
-                              value: tapNotifier.selectedTap,
+                              value: state.isValidTapSelection(tapNotifier.selectedTap) 
+                                  ? tapNotifier.selectedTap 
+                                  : null,
                               hint: Text(
                                 'Filter by Tap',
                                 style: context.bodyM.copyWith(
@@ -139,10 +141,10 @@ class PackageFilters extends StatelessWidget {
                                   value: null,
                                   child: Text('All Taps'),
                                 ),
-                                ...state.taps.map((tap) {
+                                ...state.uniqueTapNames.map((tapName) {
                                   return DropdownMenuItem<String>(
-                                    value: tap.name,
-                                    child: Text(tap.name),
+                                    value: tapName,
+                                    child: Text(tapName),
                                   );
                                 }),
                               ],

@@ -7,6 +7,8 @@ part 'packages_state.freezed.dart';
 
 @freezed
 abstract class PackagesState with _$PackagesState {
+  const PackagesState._();
+
   const factory PackagesState({
     @Default('') String searchQuery,
     @Default(PackageTypeFilter.all) PackageTypeFilter packageType,
@@ -20,4 +22,9 @@ abstract class PackagesState with _$PackagesState {
     
     @Default([]) List<TapModel> taps,
   }) = _PackagesState;
+
+  Set<String> get uniqueTapNames => taps.map((t) => t.name).toSet();
+  
+  bool isValidTapSelection(String? selectedTap) => 
+      selectedTap == null || uniqueTapNames.contains(selectedTap);
 }
