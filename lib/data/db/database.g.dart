@@ -2827,6 +2827,26 @@ class $TapsTableTable extends TapsTable
     requiredDuringInsert: false,
   );
   @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  formulaNames = GeneratedColumn<String>(
+    'formula_names',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($TapsTableTable.$converterformulaNames);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> caskTokens =
+      GeneratedColumn<String>(
+        'cask_tokens',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('[]'),
+      ).withConverter<List<String>>($TapsTableTable.$convertercaskTokens);
+  @override
   List<GeneratedColumn> get $columns => [
     name,
     user,
@@ -2836,6 +2856,8 @@ class $TapsTableTable extends TapsTable
     official,
     customRemote,
     remote,
+    formulaNames,
+    caskTokens,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2949,6 +2971,18 @@ class $TapsTableTable extends TapsTable
         DriftSqlType.string,
         data['${effectivePrefix}remote'],
       ),
+      formulaNames: $TapsTableTable.$converterformulaNames.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}formula_names'],
+        )!,
+      ),
+      caskTokens: $TapsTableTable.$convertercaskTokens.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}cask_tokens'],
+        )!,
+      ),
     );
   }
 
@@ -2956,6 +2990,11 @@ class $TapsTableTable extends TapsTable
   $TapsTableTable createAlias(String alias) {
     return $TapsTableTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<List<String>, String> $converterformulaNames =
+      const StringListConverter();
+  static TypeConverter<List<String>, String> $convertercaskTokens =
+      const StringListConverter();
 }
 
 class TapsTableCompanion extends UpdateCompanion<TapModel> {
@@ -2967,6 +3006,8 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
   final Value<bool> official;
   final Value<bool?> customRemote;
   final Value<String?> remote;
+  final Value<List<String>> formulaNames;
+  final Value<List<String>> caskTokens;
   final Value<int> rowid;
   const TapsTableCompanion({
     this.name = const Value.absent(),
@@ -2977,6 +3018,8 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     this.official = const Value.absent(),
     this.customRemote = const Value.absent(),
     this.remote = const Value.absent(),
+    this.formulaNames = const Value.absent(),
+    this.caskTokens = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TapsTableCompanion.insert({
@@ -2988,6 +3031,8 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     this.official = const Value.absent(),
     this.customRemote = const Value.absent(),
     this.remote = const Value.absent(),
+    this.formulaNames = const Value.absent(),
+    this.caskTokens = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : name = Value(name),
        user = Value(user),
@@ -3002,6 +3047,8 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     Expression<bool>? official,
     Expression<bool>? customRemote,
     Expression<String>? remote,
+    Expression<String>? formulaNames,
+    Expression<String>? caskTokens,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3013,6 +3060,8 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
       if (official != null) 'official': official,
       if (customRemote != null) 'custom_remote': customRemote,
       if (remote != null) 'remote': remote,
+      if (formulaNames != null) 'formula_names': formulaNames,
+      if (caskTokens != null) 'cask_tokens': caskTokens,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3026,6 +3075,8 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     Value<bool>? official,
     Value<bool?>? customRemote,
     Value<String?>? remote,
+    Value<List<String>>? formulaNames,
+    Value<List<String>>? caskTokens,
     Value<int>? rowid,
   }) {
     return TapsTableCompanion(
@@ -3037,6 +3088,8 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
       official: official ?? this.official,
       customRemote: customRemote ?? this.customRemote,
       remote: remote ?? this.remote,
+      formulaNames: formulaNames ?? this.formulaNames,
+      caskTokens: caskTokens ?? this.caskTokens,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3068,6 +3121,16 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     if (remote.present) {
       map['remote'] = Variable<String>(remote.value);
     }
+    if (formulaNames.present) {
+      map['formula_names'] = Variable<String>(
+        $TapsTableTable.$converterformulaNames.toSql(formulaNames.value),
+      );
+    }
+    if (caskTokens.present) {
+      map['cask_tokens'] = Variable<String>(
+        $TapsTableTable.$convertercaskTokens.toSql(caskTokens.value),
+      );
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3085,6 +3148,8 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
           ..write('official: $official, ')
           ..write('customRemote: $customRemote, ')
           ..write('remote: $remote, ')
+          ..write('formulaNames: $formulaNames, ')
+          ..write('caskTokens: $caskTokens, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3105,6 +3170,8 @@ class _$TapModelInsertable implements Insertable<TapModel> {
       official: Value(_object.official),
       customRemote: Value(_object.customRemote),
       remote: Value(_object.remote),
+      formulaNames: Value(_object.formulaNames),
+      caskTokens: Value(_object.caskTokens),
     ).toColumns(false);
   }
 }
@@ -4882,6 +4949,8 @@ typedef $$TapsTableTableCreateCompanionBuilder =
       Value<bool> official,
       Value<bool?> customRemote,
       Value<String?> remote,
+      Value<List<String>> formulaNames,
+      Value<List<String>> caskTokens,
       Value<int> rowid,
     });
 typedef $$TapsTableTableUpdateCompanionBuilder =
@@ -4894,6 +4963,8 @@ typedef $$TapsTableTableUpdateCompanionBuilder =
       Value<bool> official,
       Value<bool?> customRemote,
       Value<String?> remote,
+      Value<List<String>> formulaNames,
+      Value<List<String>> caskTokens,
       Value<int> rowid,
     });
 
@@ -4945,6 +5016,18 @@ class $$TapsTableTableFilterComposer
     column: $table.remote,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get formulaNames => $composableBuilder(
+    column: $table.formulaNames,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get caskTokens => $composableBuilder(
+    column: $table.caskTokens,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
 }
 
 class $$TapsTableTableOrderingComposer
@@ -4995,6 +5078,16 @@ class $$TapsTableTableOrderingComposer
     column: $table.remote,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get formulaNames => $composableBuilder(
+    column: $table.formulaNames,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get caskTokens => $composableBuilder(
+    column: $table.caskTokens,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TapsTableTableAnnotationComposer
@@ -5031,6 +5124,18 @@ class $$TapsTableTableAnnotationComposer
 
   GeneratedColumn<String> get remote =>
       $composableBuilder(column: $table.remote, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get formulaNames =>
+      $composableBuilder(
+        column: $table.formulaNames,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get caskTokens =>
+      $composableBuilder(
+        column: $table.caskTokens,
+        builder: (column) => column,
+      );
 }
 
 class $$TapsTableTableTableManager
@@ -5069,6 +5174,8 @@ class $$TapsTableTableTableManager
                 Value<bool> official = const Value.absent(),
                 Value<bool?> customRemote = const Value.absent(),
                 Value<String?> remote = const Value.absent(),
+                Value<List<String>> formulaNames = const Value.absent(),
+                Value<List<String>> caskTokens = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TapsTableCompanion(
                 name: name,
@@ -5079,6 +5186,8 @@ class $$TapsTableTableTableManager
                 official: official,
                 customRemote: customRemote,
                 remote: remote,
+                formulaNames: formulaNames,
+                caskTokens: caskTokens,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -5091,6 +5200,8 @@ class $$TapsTableTableTableManager
                 Value<bool> official = const Value.absent(),
                 Value<bool?> customRemote = const Value.absent(),
                 Value<String?> remote = const Value.absent(),
+                Value<List<String>> formulaNames = const Value.absent(),
+                Value<List<String>> caskTokens = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TapsTableCompanion.insert(
                 name: name,
@@ -5101,6 +5212,8 @@ class $$TapsTableTableTableManager
                 official: official,
                 customRemote: customRemote,
                 remote: remote,
+                formulaNames: formulaNames,
+                caskTokens: caskTokens,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

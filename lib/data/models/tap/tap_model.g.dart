@@ -15,6 +15,16 @@ _TapModel _$TapModelFromJson(Map<String, dynamic> json) => _TapModel(
   official: json['official'] as bool? ?? false,
   customRemote: json['custom_remote'] as bool?,
   remote: json['remote'] as String?,
+  formulaNames:
+      (json['formula_names'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
+  caskTokens:
+      (json['cask_tokens'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$TapModelToJson(_TapModel instance) => <String, dynamic>{
@@ -26,4 +36,6 @@ Map<String, dynamic> _$TapModelToJson(_TapModel instance) => <String, dynamic>{
   'official': instance.official,
   'custom_remote': instance.customRemote,
   'remote': instance.remote,
+  'formula_names': instance.formulaNames,
+  'cask_tokens': instance.caskTokens,
 };

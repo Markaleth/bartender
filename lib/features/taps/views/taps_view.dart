@@ -182,6 +182,24 @@ class TapsView extends StatelessWidget {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
+                                const SizedBox(height: spacingXs),
+                                Row(
+                                  children: [
+                                    if (tap.formulaNames.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: spacingXs),
+                                        child: _Badge(
+                                          text: '${tap.formulaNames.length} Formulae',
+                                          color: AppColors.secondary,
+                                        ),
+                                      ),
+                                    if (tap.caskTokens.isNotEmpty)
+                                      _Badge(
+                                        text: '${tap.caskTokens.length} Casks',
+                                        color: AppColors.tertiary,
+                                      ),
+                                  ],
+                                ),
                                 const Spacer(),
                                 Row(
                                   mainAxisAlignment:
@@ -258,6 +276,32 @@ class TapsView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  final String text;
+  final Color color;
+
+  const _Badge({required this.text, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
+      ),
+      child: Text(
+        text,
+        style: context.labelS.copyWith(
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }
