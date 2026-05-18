@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -60,7 +61,7 @@ class TapsView extends StatelessWidget {
                   onAddTap: () => _showAddTapDialog(context, viewModel),
                 ),
               ),
-              const Divider(height: 1, color: AppColors.borderNeutral),
+              const HorizontalDivider(),
               Expanded(
                 child: state.tapsState.when(
                   loading: () =>

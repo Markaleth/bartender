@@ -72,11 +72,7 @@ class _TapCardHeader extends StatelessWidget {
       padding: const EdgeInsets.all(spacingM),
       child: Row(
         children: [
-          PackageIcon(
-            name: tap.name,
-            homepage: tap.remote,
-            size: 40,
-          ),
+          PackageIcon(name: tap.name, homepage: tap.remote, size: spacing2Xl),
           const SizedBox(width: spacingM),
           Expanded(
             child: Column(
