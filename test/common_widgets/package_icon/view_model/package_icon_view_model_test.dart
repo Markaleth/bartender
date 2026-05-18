@@ -43,11 +43,11 @@ void main() {
       when(() => mockIconService.getMemoryCachedIcon('test'))
           .thenReturn(cachedIcon);
 
-      viewModel.loadIcon('test', 'http://test.com', true);
+      viewModel.loadIcon('test', 'http://test.com');
 
       expect(viewModel.state, PackageIconState.success(cachedIcon));
       verify(() => mockIconService.getMemoryCachedIcon('test')).called(1);
-      verifyNever(() => mockIconService.getIcon(any(), any(), any()));
+      verifyNever(() => mockIconService.getIcon(any(), any()));
     });
 
     test('Network Debounce: loadIcon should wait before emitting success state', () async {
@@ -59,10 +59,10 @@ void main() {
       );
 
       when(() => mockIconService.getMemoryCachedIcon('test')).thenReturn(null);
-      when(() => mockIconService.getIcon('test', 'http://test.com', true))
+      when(() => mockIconService.getIcon('test', 'http://test.com'))
           .thenAnswer((_) async => fetchedIcon);
 
-      viewModel.loadIcon('test', 'http://test.com', true);
+      viewModel.loadIcon('test', 'http://test.com');
 
       // Should still be loading immediately after call
       expect(viewModel.state, const PackageIconState.loading());
@@ -71,15 +71,15 @@ void main() {
       await Future.delayed(packageIconDebounceDuration + const Duration(milliseconds: 50));
 
       expect(viewModel.state, PackageIconState.success(fetchedIcon));
-      verify(() => mockIconService.getIcon('test', 'http://test.com', true)).called(1);
+      verify(() => mockIconService.getIcon('test', 'http://test.com')).called(1);
     });
 
     test('Fallback: loadIcon should emit fallback state if icon resolution returns null', () async {
       when(() => mockIconService.getMemoryCachedIcon('test')).thenReturn(null);
-      when(() => mockIconService.getIcon('test', 'http://test.com', true))
+      when(() => mockIconService.getIcon('test', 'http://test.com'))
           .thenAnswer((_) async => null);
 
-      viewModel.loadIcon('test', 'http://test.com', true);
+      viewModel.loadIcon('test', 'http://test.com');
 
       await Future.delayed(packageIconDebounceDuration + const Duration(milliseconds: 50));
 
@@ -95,10 +95,10 @@ void main() {
       );
 
       when(() => mockIconService.getMemoryCachedIcon('test')).thenReturn(null);
-      when(() => mockIconService.getIcon('test', 'http://test.com', true))
+      when(() => mockIconService.getIcon('test', 'http://test.com'))
           .thenAnswer((_) async => fetchedIcon);
 
-      viewModel.loadIcon('test', 'http://test.com', true);
+      viewModel.loadIcon('test', 'http://test.com');
 
       viewModel.dispose();
       isDisposed = true;
@@ -108,7 +108,7 @@ void main() {
 
       // Because it was disposed, state should remain loading
       expect(viewModel.state, const PackageIconState.loading());
-      verifyNever(() => mockIconService.getIcon(any(), any(), any()));
+      verifyNever(() => mockIconService.getIcon(any(), any()));
     });
   });
 }
