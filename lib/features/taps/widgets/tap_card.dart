@@ -8,6 +8,7 @@ class TapCard extends StatelessWidget {
   final TapModel tap;
   final bool isSyncing;
   final VoidCallback onViewPackages;
+  final VoidCallback onForceSync;
   final VoidCallback onRemove;
 
   const TapCard({
@@ -15,6 +16,7 @@ class TapCard extends StatelessWidget {
     required this.tap,
     required this.isSyncing,
     required this.onViewPackages,
+    required this.onForceSync,
     required this.onRemove,
   });
 
@@ -31,7 +33,7 @@ class TapCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _TitleWidget(tap: tap),
+            _TitleWidget(tap: tap, isSyncing: isSyncing, onRemove: onRemove),
             if (tap.remote != null)
               Text(
                 tap.remote!,
@@ -57,12 +59,16 @@ class TapCard extends StatelessWidget {
                   ),
               ],
             ),
+            const SizedBox(height: spacingS),
+            Text(
+              'Last Sync: Placeholder',
+              style: context.labelM.copyWith(color: AppColors.textSecondary),
+            ),
             const Spacer(),
             _FooterWidget(
               onViewPackages: onViewPackages,
               isSyncing: isSyncing,
-              tap: tap,
-              onRemove: onRemove,
+              onForceSync: onForceSync,
             ),
           ],
         ),
@@ -72,9 +78,15 @@ class TapCard extends StatelessWidget {
 }
 
 class _TitleWidget extends StatelessWidget {
-  const _TitleWidget({required this.tap});
+  const _TitleWidget({
+    required this.tap,
+    required this.isSyncing,
+    required this.onRemove,
+  });
 
   final TapModel tap;
+  final bool isSyncing;
+  final VoidCallback onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -89,33 +101,6 @@ class _TitleWidget extends StatelessWidget {
             style: context.titleM.copyWith(fontWeight: FontWeight.bold),
             overflow: TextOverflow.ellipsis,
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class _FooterWidget extends StatelessWidget {
-  const _FooterWidget({
-    required this.onViewPackages,
-    required this.isSyncing,
-    required this.tap,
-    required this.onRemove,
-  });
-
-  final VoidCallback onViewPackages;
-  final bool isSyncing;
-  final TapModel tap;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TextButton(
-          onPressed: onViewPackages,
-          child: const Text('View Packages'),
         ),
         IconButton(
           icon: const Icon(Icons.delete_outline, color: AppColors.error),
@@ -148,6 +133,32 @@ class _FooterWidget extends StatelessWidget {
                     ),
                   );
                 },
+        ),
+      ],
+    );
+  }
+}
+
+class _FooterWidget extends StatelessWidget {
+  const _FooterWidget({
+    required this.onViewPackages,
+    required this.isSyncing,
+    required this.onForceSync,
+  });
+
+  final VoidCallback onViewPackages;
+  final bool isSyncing;
+  final VoidCallback onForceSync;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextButton(onPressed: onViewPackages, child: const Text('Browse')),
+        TextButton(
+          onPressed: isSyncing ? null : onForceSync,
+          child: const Text('Force Sync'),
         ),
       ],
     );

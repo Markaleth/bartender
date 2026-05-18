@@ -10,7 +10,8 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   final HomebrewRepository _repository;
   final QueueViewModel _queueViewModel;
 
-  TapsViewModel(this._repository, this._queueViewModel) : super(const TapsState());
+  TapsViewModel(this._repository, this._queueViewModel)
+    : super(const TapsState());
 
   Future<void> init() async {
     await fetchTaps();
@@ -35,10 +36,23 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     try {
       await _repository.syncTaps();
       final taps = await _repository.getTaps();
-      emitState(state.copyWith(
-        tapsState: FetchState.success(taps),
-        isSyncing: false,
-      ));
+      emitState(
+        state.copyWith(tapsState: FetchState.success(taps), isSyncing: false),
+      );
+    } catch (e) {
+      emitState(state.copyWith(isSyncing: false));
+      emitEffect(ShowToastEffect(e.toString(), isError: true));
+    }
+  }
+
+  Future<void> syncTap(String tapName) async {
+    emitState(state.copyWith(isSyncing: true));
+    try {
+      await _repository.syncTap(tapName);
+      final taps = await _repository.getTaps();
+      emitState(
+        state.copyWith(tapsState: FetchState.success(taps), isSyncing: false),
+      );
     } catch (e) {
       emitState(state.copyWith(isSyncing: false));
       emitEffect(ShowToastEffect(e.toString(), isError: true));

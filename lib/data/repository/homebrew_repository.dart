@@ -44,6 +44,41 @@ class HomebrewRepository {
     }
   }
 
+  Future<void> syncTap(String tapName) async {
+    final result = await _brewService.listTaps();
+    if (result.exitCode != 0) {
+      throw Exception('Failed to list taps: ${result.stderr}');
+    }
+
+    try {
+      final List<dynamic> jsonList = jsonDecode(result.stdout);
+
+      final tapJson = jsonList.firstWhere(
+        (t) => t['name'] == tapName,
+        orElse: () => null,
+      );
+
+      if (tapJson == null) {
+        throw Exception('Tap $tapName not found');
+      }
+
+      final tap = TapModel.fromJson(tapJson);
+      await _database.insertTaps([tap]);
+
+      if (tapName != 'homebrew/core' && tapName != 'homebrew/cask') {
+        final formulaNames = List<String>.from(tapJson['formula_names'] ?? []);
+        final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
+
+        final packagesToFetch = [...formulaNames, ...caskTokens];
+        if (packagesToFetch.isNotEmpty) {
+          await _fetchAndCachePackageChunks(packagesToFetch);
+        }
+      }
+    } catch (e) {
+      throw Exception('Failed to sync tap $tapName: $e');
+    }
+  }
+
   List<String> _extractThirdPartyPackages(String tapsJson) {
     final List<dynamic> jsonList = jsonDecode(tapsJson);
     final packagesToFetch = <String>[];
@@ -93,8 +128,9 @@ class HomebrewRepository {
 
     if (infoJson['formulae'] != null) {
       final List<dynamic> formulaeJson = infoJson['formulae'];
-      final formulae =
-          formulaeJson.map((json) => FormulaModel.fromJson(json)).toList();
+      final formulae = formulaeJson
+          .map((json) => FormulaModel.fromJson(json))
+          .toList();
       if (formulae.isNotEmpty) {
         await _database.cacheNetworkFormulae(formulae);
       }

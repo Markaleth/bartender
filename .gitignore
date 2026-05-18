@@ -47,7 +47,4 @@ app.*.map.json
 .kilo/
 .opencode/
 .vscode/
-stitch_brew_desktop_manager/code.html
-stitch_brew_desktop_manager/DESIGN.md
-stitch_brew_desktop_manager/screen.png
-stitch_brew_desktop_manager/
+# stitch_brew_desktop_manager/
