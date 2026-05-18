@@ -1,8 +1,11 @@
 import 'package:bartender/core/effects/screen_effect.dart';
+import 'package:bartender/core/services/tap_filter_notifier.dart';
 import 'package:bartender/debug/api_tester.dart';
 import 'package:bartender/features/packages/views/packages_view.dart';
 import 'package:bartender/features/library/views/library_view.dart';
+import 'package:bartender/features/taps/views/taps_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'models/home_state.dart';
@@ -15,7 +18,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BaseView<HomeViewModel, HomeState, ScreenEffect>(
-        viewModelBuilder: (_) => HomeViewModel(),
+        viewModelBuilder: (context) => HomeViewModel(context.read<TapFilterNotifier>()),
         builder: (context, viewModel, state) => Scaffold(
           body: SafeArea(
             child: Row(
@@ -27,17 +30,19 @@ class HomeView extends StatelessWidget {
                 Expanded(
                   child: IndexedStack(
                     index: state.selectedTab.index, // Enum index maps perfectly
-                    children: const [
+                    children: [
                       // Index 0: Browse
-                      PackagesView(),
+                      const PackagesView(),
                       // Index 1: Library
-                      LibraryView(),
+                      const LibraryView(),
                       // Index 2: Updates
-                      Center(child: Text(placeholderUpdates)),
-                      // Index 3: Settings
-                      Center(child: Text(placeholderSettings)),
-                      // Index 4: Debug
-                      Center(child: ApiTesterWidget()),
+                      const Center(child: Text(placeholderUpdates)),
+                      // Index 3: Taps
+                      TapsView(homeViewModel: viewModel),
+                      // Index 4: Settings
+                      const Center(child: Text(placeholderSettings)),
+                      // Index 5: Debug
+                      const Center(child: ApiTesterWidget()),
                     ],
                   ),
                 ),

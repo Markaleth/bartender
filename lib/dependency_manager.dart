@@ -8,6 +8,7 @@ import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/services/icon_resolution/icon_resolution_service.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/tap_filter_notifier.dart';
 import 'package:bartender/core/routing/navigation_service.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment)
     ),
     Provider<BrewService>(create: (_) => BrewService()),
     ChangeNotifierProvider<PackageStatusNotifier>(create: (_) => PackageStatusNotifier()),
+    ChangeNotifierProvider<TapFilterNotifier>(create: (_) => TapFilterNotifier()),
     ChangeNotifierProxyProvider3<BrewService, DatabaseInterface, PackageStatusNotifier, QueueViewModel>(
       create: (context) => QueueViewModel(context.read<BrewService>(), context.read<DatabaseInterface>(), context.read<PackageStatusNotifier>()),
       update: (_, brewService, db, packageStatusNotifier, previous) => previous ?? QueueViewModel(brewService, db, packageStatusNotifier),
@@ -38,8 +40,8 @@ List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment)
     ),
 
     // Repositories
-    ProxyProvider2<ApiClientInterface, DatabaseInterface, HomebrewRepository>(
-      update: (_, apiClient, db, _) => HomebrewRepository(apiClient, db),
+    ProxyProvider3<ApiClientInterface, DatabaseInterface, BrewService, HomebrewRepository>(
+      update: (_, apiClient, db, brewService, _) => HomebrewRepository(apiClient, db, brewService),
     ),
     ProxyProvider2<BrewService, DatabaseInterface, PackageRepository>(
       update: (_, brewService, db, _) => PackageRepository(brewService, db),

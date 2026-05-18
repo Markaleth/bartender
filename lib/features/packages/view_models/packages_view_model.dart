@@ -10,10 +10,12 @@ import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/tap_filter_notifier.dart';
 
 class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   final HomebrewRepository _homebrewRepository;
   final PackageStatusNotifier _statusNotifier;
+  final TapFilterNotifier _tapFilterNotifier;
 
   static const AnalyticsPeriod _analyticsPeriod = AnalyticsPeriod.days30;
 
@@ -21,7 +23,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   static const int _paginationChunkSize = 50;
   bool _isLoadingMore = false;
 
-  PackagesViewModel(this._homebrewRepository, this._statusNotifier)
+  PackagesViewModel(this._homebrewRepository, this._statusNotifier, this._tapFilterNotifier)
     : super(
         PackagesState(
           packageType: Platform.isLinux
@@ -30,12 +32,19 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
         ),
       ) {
     _statusNotifier.addListener(_onStatusNotifierUpdated);
+    _tapFilterNotifier.addListener(_onTapFilterUpdated);
   }
 
   @override
   void dispose() {
     _statusNotifier.removeListener(_onStatusNotifierUpdated);
+    _tapFilterNotifier.removeListener(_onTapFilterUpdated);
     super.dispose();
+  }
+
+  void _onTapFilterUpdated() {
+    // Reset and fetch data with the new filter
+    _fetchInitialData();
   }
 
   void _onStatusNotifierUpdated() {
@@ -66,12 +75,14 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
     _currentPaginationOffset = 0;
 
     final chunkedTrending = await _getTrendingData();
+    final taps = await _homebrewRepository.getTaps();
 
     final initialChunk = await _homebrewRepository.getFilteredPackages(
       query: state.searchQuery,
       type: state.packageType,
       limit: _paginationChunkSize,
       offset: _currentPaginationOffset,
+      tapFilter: _tapFilterNotifier.selectedTap,
     );
 
     _currentPaginationOffset += initialChunk.length;
@@ -80,6 +91,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
       state.copyWith(
         trendingData: FetchState.success(chunkedTrending),
         paginatedPackages: initialChunk,
+        taps: taps,
       ),
     );
   }
@@ -96,6 +108,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
         type: state.packageType,
         limit: _paginationChunkSize,
         offset: _currentPaginationOffset,
+        tapFilter: _tapFilterNotifier.selectedTap,
       );
 
       if (nextChunk.isNotEmpty) {

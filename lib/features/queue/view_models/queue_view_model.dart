@@ -77,6 +77,15 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
 
   Future<StreamingShellCommand> _startShellCommand(OperationTask task) async {
     final isCask = task.type == PackageType.cask;
+    
+    if (task.type == PackageType.tap) {
+      if (task.operation == OperationType.install) {
+        return _brewService.runCustomStream(['tap', task.packageId]);
+      } else if (task.operation == OperationType.uninstall) {
+        return _brewService.runCustomStream(['untap', task.packageId]);
+      }
+    }
+    
     switch (task.operation) {
       case OperationType.install:
         return _brewService.installWithStream(task.packageId, isCask: isCask);

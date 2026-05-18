@@ -125,6 +125,18 @@ class BrewService {
 
   // --- Services Commands ---
 
+  Future<ShellCommandResult> listTaps() {
+    return runCommand(['tap-info', '--installed', '--json']);
+  }
+
+  Future<ShellCommandResult> addTap(String name) {
+    return runCommand(['tap', name]);
+  }
+
+  Future<ShellCommandResult> removeTap(String name) {
+    return runCommand(['untap', name]);
+  }
+
   Future<ShellCommandResult> servicesStart(String service) {
     return runCommand(['services', 'start', service]);
   }

@@ -16,6 +16,7 @@ PackageQueryData buildPackageQuery({
   required PackageTypeFilter type,
   required int limit,
   required int offset,
+  String? tapFilter,
 }) {
   if (Platform.isLinux && type == PackageTypeFilter.all) {
     type = PackageTypeFilter.formulae;
@@ -26,6 +27,13 @@ PackageQueryData buildPackageQuery({
 
   String formulaWhere = '1=1';
   String caskWhere = '1=1';
+
+  if (tapFilter != null && tapFilter.isNotEmpty) {
+    formulaWhere += ' AND tap = ?';
+    formulaArgs.add(Variable.withString(tapFilter));
+    caskWhere += ' AND tap = ?';
+    caskArgs.add(Variable.withString(tapFilter));
+  }
 
   if (query.isNotEmpty) {
     final likeQuery = '%$query%';

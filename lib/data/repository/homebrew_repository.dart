@@ -2,6 +2,9 @@ import 'dart:io';
 
 import '../../core/enums/package_type_filter.dart';
 import '../../core/enums/analytics_period.dart';
+import 'dart:convert';
+import '../shell/brew_service.dart';
+import '../models/tap/tap_model.dart';
 import '../api/api_client_interface.dart';
 import '../db/database_interface.dart';
 import '../models/formula/formula_model.dart';
@@ -12,8 +15,22 @@ import '../network_resource.dart';
 class HomebrewRepository {
   final ApiClientInterface _apiClient;
   final DatabaseInterface _database;
+  final BrewService _brewService;
 
-  HomebrewRepository(this._apiClient, this._database);
+  HomebrewRepository(this._apiClient, this._database, this._brewService);
+
+  Future<void> syncTaps() async {
+    final result = await _brewService.listTaps();
+    if (result.exitCode == 0) {
+      final List<dynamic> jsonList = jsonDecode(result.stdout);
+      final taps = jsonList.map((json) => TapModel.fromJson(json)).toList();
+      await _database.insertTaps(taps);
+    } else {
+      throw Exception('Failed to sync taps: ${result.stderr}');
+    }
+  }
+
+  Future<List<TapModel>> getTaps() => _database.getTaps();
 
   Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
     String category,
@@ -177,6 +194,7 @@ class HomebrewRepository {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
+    String? tapFilter,
   }) async {
     return _database.getFilteredPackages(
       query: query,
@@ -184,6 +202,7 @@ class HomebrewRepository {
       type: type,
       limit: limit,
       offset: offset,
+      tapFilter: tapFilter,
     );
   }
 

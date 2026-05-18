@@ -4,6 +4,7 @@ import '../models/analytics/formulae/formulae_analytics_model.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
 import '../models/icon_cache/resolved_icon.dart';
+import '../models/tap/tap_model.dart';
 
 import '../models/analytics/category/category_analytics_model.dart';
 import '../../core/enums/package_type_filter.dart';
@@ -15,6 +16,7 @@ abstract class DatabaseInterface {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
+    String? tapFilter,
   });
 
   Future<void> cacheFormulae(List<FormulaModel> formulae);
@@ -73,4 +75,8 @@ abstract class DatabaseInterface {
 
   Future<void> saveIconCache(String packageName, String? iconUrl, bool isSvg);
   Future<ResolvedIcon?> getIconCache(String packageName);
+
+  Future<List<TapModel>> getTaps();
+  Future<void> insertTaps(List<TapModel> taps);
+  Future<void> deleteTap(String name);
 }

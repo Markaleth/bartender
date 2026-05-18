@@ -1,3 +1,4 @@
+// ignore_for_file: library_private_types_in_public_api
 part of 'database.dart';
 
 mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
@@ -8,6 +9,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
+    String? tapFilter,
   }) async {
     final queryData = buildPackageQuery(
       query: query,
@@ -15,6 +17,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
       type: type,
       limit: limit,
       offset: offset,
+      tapFilter: tapFilter,
     );
 
     final result = await customSelect(
@@ -499,5 +502,26 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     return (select(
       iconCacheTable,
     )..where((t) => t.packageName.equals(packageName))).getSingleOrNull();
+  }
+
+  @override
+  Future<List<TapModel>> getTaps() {
+    return select(tapsTable).get();
+  }
+
+  @override
+  Future<void> insertTaps(List<TapModel> taps) async {
+    await batch((batch) {
+      batch.insertAll(
+        tapsTable,
+        taps.map((model) => model.toInsertable()),
+        mode: InsertMode.insertOrReplace,
+      );
+    });
+  }
+
+  @override
+  Future<void> deleteTap(String name) async {
+    await (delete(tapsTable)..where((t) => t.name.equals(name))).go();
   }
 }

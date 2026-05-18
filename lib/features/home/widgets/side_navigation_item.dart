@@ -6,18 +6,20 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 
 class SideNavigationItem extends StatelessWidget {
-  final String icon;
+  final String? icon;
+  final IconData? iconData;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
   const SideNavigationItem({
     super.key,
-    required this.icon,
+    this.icon,
+    this.iconData,
     required this.label,
     required this.isSelected,
     required this.onTap,
-  });
+  }) : assert(icon != null || iconData != null);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class SideNavigationItem extends StatelessWidget {
               child: Row(
                 children: [
                   _SelectionIndicator(isSelected: isSelected),
-                  _AnimatedIcon(icon: icon, color: color),
+                  _AnimatedIcon(icon: icon, iconData: iconData, color: color),
                   SizedBox(height: spacingM),
                   _AnimatedLabel(
                     label: label,
@@ -88,10 +90,11 @@ class _SelectionIndicator extends StatelessWidget {
 }
 
 class _AnimatedIcon extends StatelessWidget {
-  final String icon;
+  final String? icon;
+  final IconData? iconData;
   final Color color;
 
-  const _AnimatedIcon({required this.icon, required this.color});
+  const _AnimatedIcon({this.icon, this.iconData, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +107,9 @@ class _AnimatedIcon extends StatelessWidget {
         tween: ColorTween(begin: color, end: color),
         duration: defaultAnimationDuration,
         curve: Curves.easeOutCubic,
-        builder: (context, animatedColor, child) =>
-            IconWidget(assetName: icon, color: animatedColor!, size: spacingL),
+        builder: (context, animatedColor, child) => iconData != null
+            ? Icon(iconData, color: animatedColor!, size: spacingL)
+            : IconWidget(assetName: icon!, color: animatedColor!, size: spacingL),
       ),
     );
   }

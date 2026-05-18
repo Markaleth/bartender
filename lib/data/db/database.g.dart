@@ -2731,6 +2731,390 @@ class SyncMetadataTableCompanion
   }
 }
 
+class $TapsTableTable extends TapsTable
+    with TableInfo<$TapsTableTable, TapModel> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TapsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _userMeta = const VerificationMeta('user');
+  @override
+  late final GeneratedColumn<String> user = GeneratedColumn<String>(
+    'user',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _repoMeta = const VerificationMeta('repo');
+  @override
+  late final GeneratedColumn<String> repo = GeneratedColumn<String>(
+    'repo',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _pathMeta = const VerificationMeta('path');
+  @override
+  late final GeneratedColumn<String> path = GeneratedColumn<String>(
+    'path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _installedMeta = const VerificationMeta(
+    'installed',
+  );
+  @override
+  late final GeneratedColumn<bool> installed = GeneratedColumn<bool>(
+    'installed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("installed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _officialMeta = const VerificationMeta(
+    'official',
+  );
+  @override
+  late final GeneratedColumn<bool> official = GeneratedColumn<bool>(
+    'official',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("official" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _customRemoteMeta = const VerificationMeta(
+    'customRemote',
+  );
+  @override
+  late final GeneratedColumn<bool> customRemote = GeneratedColumn<bool>(
+    'custom_remote',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("custom_remote" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _remoteMeta = const VerificationMeta('remote');
+  @override
+  late final GeneratedColumn<String> remote = GeneratedColumn<String>(
+    'remote',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    name,
+    user,
+    repo,
+    path,
+    installed,
+    official,
+    customRemote,
+    remote,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'taps_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TapModel> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('user')) {
+      context.handle(
+        _userMeta,
+        user.isAcceptableOrUnknown(data['user']!, _userMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_userMeta);
+    }
+    if (data.containsKey('repo')) {
+      context.handle(
+        _repoMeta,
+        repo.isAcceptableOrUnknown(data['repo']!, _repoMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_repoMeta);
+    }
+    if (data.containsKey('path')) {
+      context.handle(
+        _pathMeta,
+        path.isAcceptableOrUnknown(data['path']!, _pathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_pathMeta);
+    }
+    if (data.containsKey('installed')) {
+      context.handle(
+        _installedMeta,
+        installed.isAcceptableOrUnknown(data['installed']!, _installedMeta),
+      );
+    }
+    if (data.containsKey('official')) {
+      context.handle(
+        _officialMeta,
+        official.isAcceptableOrUnknown(data['official']!, _officialMeta),
+      );
+    }
+    if (data.containsKey('custom_remote')) {
+      context.handle(
+        _customRemoteMeta,
+        customRemote.isAcceptableOrUnknown(
+          data['custom_remote']!,
+          _customRemoteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('remote')) {
+      context.handle(
+        _remoteMeta,
+        remote.isAcceptableOrUnknown(data['remote']!, _remoteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {name};
+  @override
+  TapModel map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TapModel(
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      user: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user'],
+      )!,
+      repo: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}repo'],
+      )!,
+      path: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}path'],
+      )!,
+      installed: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}installed'],
+      )!,
+      official: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}official'],
+      )!,
+      customRemote: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}custom_remote'],
+      ),
+      remote: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote'],
+      ),
+    );
+  }
+
+  @override
+  $TapsTableTable createAlias(String alias) {
+    return $TapsTableTable(attachedDatabase, alias);
+  }
+}
+
+class TapsTableCompanion extends UpdateCompanion<TapModel> {
+  final Value<String> name;
+  final Value<String> user;
+  final Value<String> repo;
+  final Value<String> path;
+  final Value<bool> installed;
+  final Value<bool> official;
+  final Value<bool?> customRemote;
+  final Value<String?> remote;
+  final Value<int> rowid;
+  const TapsTableCompanion({
+    this.name = const Value.absent(),
+    this.user = const Value.absent(),
+    this.repo = const Value.absent(),
+    this.path = const Value.absent(),
+    this.installed = const Value.absent(),
+    this.official = const Value.absent(),
+    this.customRemote = const Value.absent(),
+    this.remote = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TapsTableCompanion.insert({
+    required String name,
+    required String user,
+    required String repo,
+    required String path,
+    this.installed = const Value.absent(),
+    this.official = const Value.absent(),
+    this.customRemote = const Value.absent(),
+    this.remote = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : name = Value(name),
+       user = Value(user),
+       repo = Value(repo),
+       path = Value(path);
+  static Insertable<TapModel> custom({
+    Expression<String>? name,
+    Expression<String>? user,
+    Expression<String>? repo,
+    Expression<String>? path,
+    Expression<bool>? installed,
+    Expression<bool>? official,
+    Expression<bool>? customRemote,
+    Expression<String>? remote,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (name != null) 'name': name,
+      if (user != null) 'user': user,
+      if (repo != null) 'repo': repo,
+      if (path != null) 'path': path,
+      if (installed != null) 'installed': installed,
+      if (official != null) 'official': official,
+      if (customRemote != null) 'custom_remote': customRemote,
+      if (remote != null) 'remote': remote,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TapsTableCompanion copyWith({
+    Value<String>? name,
+    Value<String>? user,
+    Value<String>? repo,
+    Value<String>? path,
+    Value<bool>? installed,
+    Value<bool>? official,
+    Value<bool?>? customRemote,
+    Value<String?>? remote,
+    Value<int>? rowid,
+  }) {
+    return TapsTableCompanion(
+      name: name ?? this.name,
+      user: user ?? this.user,
+      repo: repo ?? this.repo,
+      path: path ?? this.path,
+      installed: installed ?? this.installed,
+      official: official ?? this.official,
+      customRemote: customRemote ?? this.customRemote,
+      remote: remote ?? this.remote,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (user.present) {
+      map['user'] = Variable<String>(user.value);
+    }
+    if (repo.present) {
+      map['repo'] = Variable<String>(repo.value);
+    }
+    if (path.present) {
+      map['path'] = Variable<String>(path.value);
+    }
+    if (installed.present) {
+      map['installed'] = Variable<bool>(installed.value);
+    }
+    if (official.present) {
+      map['official'] = Variable<bool>(official.value);
+    }
+    if (customRemote.present) {
+      map['custom_remote'] = Variable<bool>(customRemote.value);
+    }
+    if (remote.present) {
+      map['remote'] = Variable<String>(remote.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TapsTableCompanion(')
+          ..write('name: $name, ')
+          ..write('user: $user, ')
+          ..write('repo: $repo, ')
+          ..write('path: $path, ')
+          ..write('installed: $installed, ')
+          ..write('official: $official, ')
+          ..write('customRemote: $customRemote, ')
+          ..write('remote: $remote, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class _$TapModelInsertable implements Insertable<TapModel> {
+  TapModel _object;
+  _$TapModelInsertable(this._object);
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    return TapsTableCompanion(
+      name: Value(_object.name),
+      user: Value(_object.user),
+      repo: Value(_object.repo),
+      path: Value(_object.path),
+      installed: Value(_object.installed),
+      official: Value(_object.official),
+      customRemote: Value(_object.customRemote),
+      remote: Value(_object.remote),
+    ).toColumns(false);
+  }
+}
+
+extension TapModelToInsertable on TapModel {
+  _$TapModelInsertable toInsertable() {
+    return _$TapModelInsertable(this);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2741,6 +3125,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $CategoryAnalyticsTableTable(this);
   late final $SyncMetadataTableTable syncMetadataTable =
       $SyncMetadataTableTable(this);
+  late final $TapsTableTable tapsTable = $TapsTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2751,6 +3136,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     iconCacheTable,
     categoryAnalyticsTable,
     syncMetadataTable,
+    tapsTable,
   ];
 }
 
@@ -4486,6 +4872,259 @@ typedef $$SyncMetadataTableTableProcessedTableManager =
       SyncMetadataTableData,
       PrefetchHooks Function()
     >;
+typedef $$TapsTableTableCreateCompanionBuilder =
+    TapsTableCompanion Function({
+      required String name,
+      required String user,
+      required String repo,
+      required String path,
+      Value<bool> installed,
+      Value<bool> official,
+      Value<bool?> customRemote,
+      Value<String?> remote,
+      Value<int> rowid,
+    });
+typedef $$TapsTableTableUpdateCompanionBuilder =
+    TapsTableCompanion Function({
+      Value<String> name,
+      Value<String> user,
+      Value<String> repo,
+      Value<String> path,
+      Value<bool> installed,
+      Value<bool> official,
+      Value<bool?> customRemote,
+      Value<String?> remote,
+      Value<int> rowid,
+    });
+
+class $$TapsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TapsTableTable> {
+  $$TapsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get user => $composableBuilder(
+    column: $table.user,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get repo => $composableBuilder(
+    column: $table.repo,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get path => $composableBuilder(
+    column: $table.path,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get installed => $composableBuilder(
+    column: $table.installed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get official => $composableBuilder(
+    column: $table.official,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get customRemote => $composableBuilder(
+    column: $table.customRemote,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remote => $composableBuilder(
+    column: $table.remote,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TapsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TapsTableTable> {
+  $$TapsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get user => $composableBuilder(
+    column: $table.user,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get repo => $composableBuilder(
+    column: $table.repo,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get path => $composableBuilder(
+    column: $table.path,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get installed => $composableBuilder(
+    column: $table.installed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get official => $composableBuilder(
+    column: $table.official,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get customRemote => $composableBuilder(
+    column: $table.customRemote,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get remote => $composableBuilder(
+    column: $table.remote,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TapsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TapsTableTable> {
+  $$TapsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get user =>
+      $composableBuilder(column: $table.user, builder: (column) => column);
+
+  GeneratedColumn<String> get repo =>
+      $composableBuilder(column: $table.repo, builder: (column) => column);
+
+  GeneratedColumn<String> get path =>
+      $composableBuilder(column: $table.path, builder: (column) => column);
+
+  GeneratedColumn<bool> get installed =>
+      $composableBuilder(column: $table.installed, builder: (column) => column);
+
+  GeneratedColumn<bool> get official =>
+      $composableBuilder(column: $table.official, builder: (column) => column);
+
+  GeneratedColumn<bool> get customRemote => $composableBuilder(
+    column: $table.customRemote,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get remote =>
+      $composableBuilder(column: $table.remote, builder: (column) => column);
+}
+
+class $$TapsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TapsTableTable,
+          TapModel,
+          $$TapsTableTableFilterComposer,
+          $$TapsTableTableOrderingComposer,
+          $$TapsTableTableAnnotationComposer,
+          $$TapsTableTableCreateCompanionBuilder,
+          $$TapsTableTableUpdateCompanionBuilder,
+          (TapModel, BaseReferences<_$AppDatabase, $TapsTableTable, TapModel>),
+          TapModel,
+          PrefetchHooks Function()
+        > {
+  $$TapsTableTableTableManager(_$AppDatabase db, $TapsTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TapsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TapsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TapsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> name = const Value.absent(),
+                Value<String> user = const Value.absent(),
+                Value<String> repo = const Value.absent(),
+                Value<String> path = const Value.absent(),
+                Value<bool> installed = const Value.absent(),
+                Value<bool> official = const Value.absent(),
+                Value<bool?> customRemote = const Value.absent(),
+                Value<String?> remote = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TapsTableCompanion(
+                name: name,
+                user: user,
+                repo: repo,
+                path: path,
+                installed: installed,
+                official: official,
+                customRemote: customRemote,
+                remote: remote,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String name,
+                required String user,
+                required String repo,
+                required String path,
+                Value<bool> installed = const Value.absent(),
+                Value<bool> official = const Value.absent(),
+                Value<bool?> customRemote = const Value.absent(),
+                Value<String?> remote = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TapsTableCompanion.insert(
+                name: name,
+                user: user,
+                repo: repo,
+                path: path,
+                installed: installed,
+                official: official,
+                customRemote: customRemote,
+                remote: remote,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TapsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TapsTableTable,
+      TapModel,
+      $$TapsTableTableFilterComposer,
+      $$TapsTableTableOrderingComposer,
+      $$TapsTableTableAnnotationComposer,
+      $$TapsTableTableCreateCompanionBuilder,
+      $$TapsTableTableUpdateCompanionBuilder,
+      (TapModel, BaseReferences<_$AppDatabase, $TapsTableTable, TapModel>),
+      TapModel,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4503,4 +5142,6 @@ class $AppDatabaseManager {
       );
   $$SyncMetadataTableTableTableManager get syncMetadataTable =>
       $$SyncMetadataTableTableTableManager(_db, _db.syncMetadataTable);
+  $$TapsTableTableTableManager get tapsTable =>
+      $$TapsTableTableTableManager(_db, _db.tapsTable);
 }

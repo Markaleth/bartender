@@ -1,13 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bartender/features/home/models/home_state.dart';
 import 'package:bartender/features/home/view_models/home_view_model.dart';
+import 'package:bartender/core/services/tap_filter_notifier.dart';
 
 void main() {
   group('HomeViewModel Tests', () {
     late HomeViewModel viewModel;
+    late TapFilterNotifier notifier;
 
     setUp(() {
-      viewModel = HomeViewModel();
+      notifier = TapFilterNotifier();
+      viewModel = HomeViewModel(notifier);
     });
 
     test('Initial State should be HomeTab.browse', () {

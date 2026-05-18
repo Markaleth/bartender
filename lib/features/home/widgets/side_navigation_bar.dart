@@ -51,9 +51,15 @@ class SideNavigationBar extends StatelessWidget {
                 ),
                 SideNavigationItem(
                   icon: updateIcon,
-                  label: navTaps,
+                  label: navUpdates,
                   isSelected: selectedTab == HomeTab.updates,
                   onTap: () => onTabSelected(HomeTab.updates),
+                ),
+                SideNavigationItem(
+                  iconData: Icons.account_tree_outlined,
+                  label: navTaps,
+                  isSelected: selectedTab == HomeTab.taps,
+                  onTap: () => onTabSelected(HomeTab.taps),
                 ),
                 SideNavigationItem(
                   icon: barrelIcon,

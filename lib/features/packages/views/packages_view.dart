@@ -16,6 +16,7 @@ import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/tap_filter_notifier.dart';
 
 import '../widgets/package_list_item.dart';
 
@@ -77,6 +78,7 @@ class _PackagesViewState extends State<PackagesView> {
         viewModelBuilder: (context) => PackagesViewModel(
           context.read<HomebrewRepository>(),
           context.read<PackageStatusNotifier>(),
+          context.read<TapFilterNotifier>(),
         )..init(),
         builder: (context, viewModel, state) => Scaffold(
       floatingActionButton: ValueListenableBuilder<bool>(

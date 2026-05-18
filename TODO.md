@@ -73,3 +73,9 @@ To let users add new taps, we need to handle the standard `user/repo` format and
   - *Drawback:* Clunky UX for the 99% of users just pasting `user/repo`.
 - **Option 2: Single "Smart Input" Field (Recommended)**
   - *Why:* Ask the user for a "Tap Name or Git URL". If they type a standard `user/repo` (e.g., `mongodb/brew`), we just run `brew tap mongodb/brew`. If they paste a full URL (e.g., `https://gitlab.com/...`), our logic parses the string to extract a valid name, and runs `brew tap <extracted_name> <full_url>`. This keeps the UI completely clean while dynamically supporting all use cases.
+
+# Taps Architecture / UX Approach (Option 1)
+- [ ] Create a dedicated "Taps / Sources" screen (e.g. via sidebar/settings) for purely managing subscriptions (adding, removing, viewing health metrics).
+- [ ] Use `packages_view.dart` as an aggregated "Global Search" that dumps everything the user has tapped (both core and custom taps).
+- [ ] Add a prominent "Source" or "Tap" filter to `packages_view.dart` so users can isolate packages from specific taps.
+- [ ] Implement a "Quick Add" bridge: If a search in `packages_view.dart` yields 0 results, show an empty state ("No packages found. Is it in a custom tap? [Add a Tap]") that navigates directly to the dedicated Taps screen.

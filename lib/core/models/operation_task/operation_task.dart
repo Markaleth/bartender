@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'operation_task.freezed.dart';
 
-enum PackageType { cask, formula, system }
+enum PackageType { cask, formula, tap, system }
 
 enum OperationStatus { queued, inProgress, success, error }
 

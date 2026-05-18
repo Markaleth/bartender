@@ -4,11 +4,13 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
+import 'package:bartender/core/services/tap_filter_notifier.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/durations.dart';
 
@@ -71,19 +73,19 @@ class PackageFilters extends StatelessWidget {
                   ),
                 ),
               ),
-              if (Platform.isMacOS) ...[
-                const Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: AppColors.borderNeutral,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(spacingM),
-                  child: Wrap(
-                    spacing: spacingXl,
-                    runSpacing: spacingM,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.borderNeutral,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(spacingM),
+                child: Wrap(
+                  spacing: spacingXl,
+                  runSpacing: spacingM,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    if (Platform.isMacOS)
                       _SegmentedFilterControl<PackageTypeFilter>(
                         selectedValue: state.packageType,
                         onChanged: viewModel.setPackageType,
@@ -104,10 +106,61 @@ class PackageFilters extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    Consumer<TapFilterNotifier>(
+                      builder: (context, tapNotifier, child) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: spacingM,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+                            borderRadius: BorderRadius.circular(radiusXl),
+                            border: Border.all(color: AppColors.borderNeutral),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: tapNotifier.selectedTap,
+                              hint: Text(
+                                'Filter by Tap',
+                                style: context.bodyM.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.arrow_drop_down,
+                                color: AppColors.iconDefault,
+                              ),
+                              dropdownColor: AppColors.surface,
+                              style: context.bodyM.copyWith(
+                                color: AppColors.textPrimary,
+                              ),
+                              items: [
+                                const DropdownMenuItem<String>(
+                                  value: null,
+                                  child: Text('All Taps'),
+                                ),
+                                ...state.taps.map((tap) {
+                                  return DropdownMenuItem<String>(
+                                    value: tap.name,
+                                    child: Text(tap.name),
+                                  );
+                                }),
+                              ],
+                              onChanged: (String? newValue) {
+                                if (newValue == null) {
+                                  tapNotifier.clearFilter();
+                                } else {
+                                  tapNotifier.setFilter(newValue);
+                                }
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ],
           ),
         ),

@@ -8,11 +8,12 @@ import 'package:path/path.dart' as p;
 import 'tables/casks_table.dart';
 import 'tables/formulae_table.dart';
 import 'tables/icon_cache_table.dart';
-
 import 'tables/category_analytics_table.dart';
 import 'tables/sync_metadata_table.dart';
+import 'tables/taps_table.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
+import '../models/tap/tap_model.dart';
 import '../models/analytics/casks/casks_analytics_model.dart';
 import '../models/analytics/formulae/formulae_analytics_model.dart';
 import '../models/analytics/category/category_analytics_model.dart';
@@ -35,6 +36,7 @@ part 'database_queries.dart';
     IconCacheTable,
     CategoryAnalyticsTable,
     SyncMetadataTable,
+    TapsTable,
   ],
 )
 class AppDatabase extends _$AppDatabase with DatabaseQueries implements DatabaseInterface {
