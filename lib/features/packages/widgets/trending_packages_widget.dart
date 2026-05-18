@@ -12,7 +12,6 @@ class TrendingPackagesWidget extends StatelessWidget {
   final String version;
   final String? homepage;
   final String? downloads;
-  final bool isCask;
 
   final VoidCallback? onInstall;
 
@@ -23,7 +22,6 @@ class TrendingPackagesWidget extends StatelessWidget {
     required this.description,
     required this.version,
     this.homepage,
-    this.isCask = false,
     this.downloads,
   });
 
@@ -53,7 +51,6 @@ class TrendingPackagesWidget extends StatelessWidget {
                   PackageIcon(
                     name: title,
                     homepage: homepage,
-                    isCask: isCask,
                     size: spacing2Xl,
                   ),
                   const SizedBox(width: spacingS),

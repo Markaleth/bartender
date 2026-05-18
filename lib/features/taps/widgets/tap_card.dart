@@ -3,6 +3,7 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
+import 'package:bartender/common_widgets/package_icon/package_icon.dart';
 
 class TapCard extends StatelessWidget {
   final TapModel tap;
@@ -22,54 +23,185 @@ class TapCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(radiusM),
-        side: const BorderSide(color: AppColors.borderNeutral),
+        border: Border.all(color: AppColors.borderNeutral),
       ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _TapCardHeader(tap: tap, isSyncing: isSyncing, onRemove: onRemove),
+          const Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.borderNeutral,
+          ),
+          _TapCardBody(tap: tap),
+          const Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.borderNeutral,
+          ),
+          _TapCardFooter(
+            isSyncing: isSyncing,
+            onForceSync: onForceSync,
+            onViewPackages: onViewPackages,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TapCardHeader extends StatelessWidget {
+  final TapModel tap;
+  final bool isSyncing;
+  final VoidCallback onRemove;
+
+  const _TapCardHeader({
+    required this.tap,
+    required this.isSyncing,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(spacingM),
+      child: Row(
+        children: [
+          PackageIcon(
+            name: tap.name,
+            homepage: tap.remote,
+            size: 40,
+          ),
+          const SizedBox(width: spacingM),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  tap.name,
+                  style: context.titleM.copyWith(fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: spacingXs),
+                _Badge(
+                  text: tap.official ? 'Official' : 'Custom',
+                  color: tap.official
+                      ? AppColors.secondary
+                      : AppColors.textSecondary,
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete, color: AppColors.iconDefault),
+            onPressed: isSyncing
+                ? null
+                : () {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('Remove Tap'),
+                        content: Text(
+                          'Are you sure you want to untap ${tap.name}?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                              onRemove();
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppColors.error,
+                            ),
+                            child: const Text('Remove'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TapCardBody extends StatelessWidget {
+  final TapModel tap;
+
+  const _TapCardBody({required this.tap});
+
+  @override
+  Widget build(BuildContext context) {
+    final int totalPackages = tap.formulaNames.length + tap.caskTokens.length;
+
+    return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(spacingM),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _TitleWidget(tap: tap, isSyncing: isSyncing, onRemove: onRemove),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$totalPackages',
+                        style: context.titleM.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        'Packages',
+                        style: context.labelS.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Unknown',
+                        style: context.titleM.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        'Last Sync',
+                        style: context.labelS.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
             if (tap.remote != null)
               Text(
                 tap.remote!,
                 style: context.bodyM.copyWith(color: AppColors.textSecondary),
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-
-            Row(
-              children: [
-                if (tap.formulaNames.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(right: spacingXs),
-                    child: _Badge(
-                      text: '${tap.formulaNames.length} Formulae',
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                if (tap.caskTokens.isNotEmpty)
-                  _Badge(
-                    text: '${tap.caskTokens.length} Casks',
-                    color: AppColors.tertiary,
-                  ),
-              ],
-            ),
-            const SizedBox(height: spacingS),
-            Text(
-              'Last Sync: Placeholder',
-              style: context.labelM.copyWith(color: AppColors.textSecondary),
-            ),
-            const Spacer(),
-            _FooterWidget(
-              onViewPackages: onViewPackages,
-              isSyncing: isSyncing,
-              onForceSync: onForceSync,
-            ),
           ],
         ),
       ),
@@ -77,90 +209,54 @@ class TapCard extends StatelessWidget {
   }
 }
 
-class _TitleWidget extends StatelessWidget {
-  const _TitleWidget({
-    required this.tap,
-    required this.isSyncing,
-    required this.onRemove,
-  });
-
-  final TapModel tap;
-  final bool isSyncing;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      spacing: spacingXs,
-      children: [
-        const Icon(Icons.account_tree_outlined, color: AppColors.primary),
-
-        Expanded(
-          child: Text(
-            tap.name,
-            style: context.titleM.copyWith(fontWeight: FontWeight.bold),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.delete_outline, color: AppColors.error),
-          onPressed: isSyncing
-              ? null
-              : () {
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: const Text('Remove Tap'),
-                      content: Text(
-                        'Are you sure you want to untap ${tap.name}?',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(ctx).pop(),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(ctx).pop();
-                            onRemove();
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppColors.error,
-                          ),
-                          child: const Text('Remove'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-        ),
-      ],
-    );
-  }
-}
-
-class _FooterWidget extends StatelessWidget {
-  const _FooterWidget({
-    required this.onViewPackages,
-    required this.isSyncing,
-    required this.onForceSync,
-  });
-
-  final VoidCallback onViewPackages;
+class _TapCardFooter extends StatelessWidget {
   final bool isSyncing;
   final VoidCallback onForceSync;
+  final VoidCallback onViewPackages;
+
+  const _TapCardFooter({
+    required this.isSyncing,
+    required this.onForceSync,
+    required this.onViewPackages,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TextButton(onPressed: onViewPackages, child: const Text('Browse')),
-        TextButton(
-          onPressed: isSyncing ? null : onForceSync,
-          child: const Text('Force Sync'),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.02),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(radiusM),
+          bottomRight: Radius.circular(radiusM),
         ),
-      ],
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: spacingS,
+        vertical: spacingXs,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextButton.icon(
+            onPressed: isSyncing ? null : onForceSync,
+            icon: const Icon(Icons.sync, size: 18),
+            label: const Text('Force Sync'),
+            style: TextButton.styleFrom(foregroundColor: AppColors.textPrimary),
+          ),
+          TextButton(
+            onPressed: onViewPackages,
+            style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('Browse'),
+                SizedBox(width: spacingXs),
+                Icon(Icons.arrow_forward, size: 18),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -176,7 +272,7 @@ class _Badge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: spacingS,
-        vertical: spacingXs,
+        vertical: spacing2Xs,
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),

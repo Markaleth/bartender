@@ -123,7 +123,7 @@ class _PackageListItemHeader extends StatelessWidget {
         ),
         child: Row(
           children: [
-            PackageIcon(name: id, homepage: homepage, isCask: isCask),
+            PackageIcon(name: id, homepage: homepage),
             const SizedBox(width: spacingM),
             Expanded(
               child: Column(

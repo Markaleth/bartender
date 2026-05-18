@@ -135,7 +135,6 @@ class _CarouselPage extends StatelessWidget {
                       homepage: item is FormulaModel
                           ? item.homepage
                           : (item as CaskModel).homepage,
-                      isCask: item is CaskModel,
                       downloads: item is FormulaModel
                           ? StringUtils.formatDownloads(item.installs30d)
                           : StringUtils.formatDownloads(

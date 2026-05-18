@@ -15,7 +15,7 @@ class PackageIconViewModel
   PackageIconViewModel(this._iconService)
     : super(const PackageIconState.loading());
 
-  Future<void> loadIcon(String name, String? homepage, bool isCask) async {
+  Future<void> loadIcon(String name, String? homepage) async {
     _debounceTimer?.cancel();
     emitState(const PackageIconState.loading());
 
@@ -23,7 +23,7 @@ class PackageIconViewModel
 
     _debounceTimer = Timer(packageIconDebounceDuration, () {
       if (!_isDisposed) {
-        _fetchAndLoadIcon(name, homepage, isCask);
+        _fetchAndLoadIcon(name, homepage);
       }
     });
   }
@@ -40,9 +40,8 @@ class PackageIconViewModel
   Future<void> _fetchAndLoadIcon(
     String name,
     String? homepage,
-    bool isCask,
   ) async {
-    final fetchedIcon = await _iconService.getIcon(name, homepage, isCask);
+    final fetchedIcon = await _iconService.getIcon(name, homepage);
     if (!_isDisposed) {
       _emitIconResult(fetchedIcon);
     }

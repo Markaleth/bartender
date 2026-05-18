@@ -18,20 +18,20 @@ class IconResolutionService {
   }
 
   /// The main entry point to resolve an icon.
-  Future<ResolvedIcon?> getIcon(String packageName, String? homepage, bool isCask) async {
+  Future<ResolvedIcon?> getIcon(String packageName, String? homepage) async {
     if (_memoryCache.containsKey(packageName)) {
       return _memoryCache[packageName];
     }
     
-    return _resolveAndCache(packageName, homepage, isCask);
+    return _resolveAndCache(packageName, homepage);
   }
 
-  Future<ResolvedIcon?> _resolveAndCache(String packageName, String? homepage, bool isCask) {
+  Future<ResolvedIcon?> _resolveAndCache(String packageName, String? homepage) {
     if (_pendingFutures.containsKey(packageName)) {
       return _pendingFutures[packageName]!;
     }
     
-    final future = _performResolution(packageName, homepage, isCask).whenComplete(() {
+    final future = _performResolution(packageName, homepage).whenComplete(() {
       _pendingFutures.remove(packageName);
     });
     
@@ -39,11 +39,11 @@ class IconResolutionService {
     return future;
   }
 
-  Future<ResolvedIcon?> _performResolution(String packageName, String? homepage, bool isCask) async {
+  Future<ResolvedIcon?> _performResolution(String packageName, String? homepage) async {
     final cachedResult = await _checkDatabaseCache(packageName);
     if (cachedResult != null) return cachedResult;
 
-    final resolvedIcon = await _runWaterfall(packageName, homepage, isCask);
+    final resolvedIcon = await _runWaterfall(packageName, homepage);
     if (resolvedIcon != null) return resolvedIcon;
 
     return _cacheNegativeResult(packageName);
@@ -65,11 +65,11 @@ class IconResolutionService {
     return null;
   }
 
-  Future<ResolvedIcon?> _runWaterfall(String packageName, String? homepage, bool isCask) async {
+  Future<ResolvedIcon?> _runWaterfall(String packageName, String? homepage) async {
     final uri = homepage != null ? Uri.tryParse(homepage) : null;
     
     for (final builder in IconUrlBuilders.waterfall) {
-      final url = builder(packageName, uri, isCask);
+      final url = builder(packageName, uri);
       if (url == null) continue;
 
       try {

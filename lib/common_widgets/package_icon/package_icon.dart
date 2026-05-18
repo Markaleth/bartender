@@ -14,14 +14,12 @@ import 'view_model/package_icon_view_model.dart';
 class PackageIcon extends StatefulWidget {
   final String name;
   final String? homepage;
-  final bool isCask;
   final double size;
 
   const PackageIcon({
     super.key,
     required this.name,
     this.homepage,
-    required this.isCask,
     this.size = spacing2Xl,
   });
 
@@ -36,14 +34,14 @@ class _PackageIconState extends State<PackageIcon> {
   void initState() {
     super.initState();
     _viewModel = PackageIconViewModel(context.read<IconResolutionService>());
-    _viewModel.loadIcon(widget.name, widget.homepage, widget.isCask);
+    _viewModel.loadIcon(widget.name, widget.homepage);
   }
 
   @override
   void didUpdateWidget(covariant PackageIcon oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.name != widget.name) {
-      _viewModel.loadIcon(widget.name, widget.homepage, widget.isCask);
+      _viewModel.loadIcon(widget.name, widget.homepage);
     }
   }
 
