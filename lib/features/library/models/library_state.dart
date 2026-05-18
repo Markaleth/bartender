@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
+import 'package:bartender/data/models/tap/tap_model.dart';
 
 part 'library_state.freezed.dart';
 
@@ -12,6 +13,7 @@ abstract class LibraryState with _$LibraryState {
     @Default(true) bool isLoading,
     @Default([]) List<FormulaModel> installedFormulae,
     @Default([]) List<CaskModel> installedCasks,
+    @Default([]) List<TapModel> installedTaps,
     dynamic selectedPackage,
     @Default('0 B') String systemStorageUsed,
     @Default(0) int orphanedDependenciesCount,
@@ -19,8 +21,7 @@ abstract class LibraryState with _$LibraryState {
     @Default('/opt/homebrew') String brewPrefix,
     @Default(false) bool isSyncing,
     @Default('') String filterQuery,
-    @Default(true) bool formulaeExpanded,
-    @Default(true) bool casksExpanded,
+    @Default(<String>{}) Set<String> expandedTaps,
   }) = _LibraryState;
 
   List<FormulaModel> get filteredFormulae {
@@ -33,10 +34,29 @@ abstract class LibraryState with _$LibraryState {
     return installedCasks.where((c) => c.token.toLowerCase().contains(filterQuery.toLowerCase())).toList();
   }
 
+  List<TapModel> get filteredTaps {
+    if (filterQuery.isEmpty) return installedTaps;
+    return installedTaps.where((t) => t.name.toLowerCase().contains(filterQuery.toLowerCase())).toList();
+  }
+
+  Map<String, List<dynamic>> get packagesByTap {
+    final map = <String, List<dynamic>>{};
+    for (final formula in filteredFormulae) {
+      map.putIfAbsent(formula.tap, () => []).add(formula);
+    }
+    for (final cask in filteredCasks) {
+      final tapName = cask.tap ?? 'homebrew/cask';
+      map.putIfAbsent(tapName, () => []).add(cask);
+    }
+    return map;
+  }
+
   bool get isSelectedPackageCask => selectedPackage is CaskModel;
+  bool get isSelectedPackageTap => selectedPackage is TapModel;
   
   String get selectedPackageName {
     if (selectedPackage == null) return '';
+    if (isSelectedPackageTap) return (selectedPackage as TapModel).name;
     return isSelectedPackageCask 
         ? (selectedPackage as CaskModel).token 
         : (selectedPackage as FormulaModel).name;
@@ -44,6 +64,7 @@ abstract class LibraryState with _$LibraryState {
 
   String get selectedPackageVersion {
     if (selectedPackage == null) return '';
+    if (isSelectedPackageTap) return '';
     return isSelectedPackageCask 
         ? (selectedPackage as CaskModel).version 
         : (selectedPackage as FormulaModel).versions.stable;
@@ -51,6 +72,7 @@ abstract class LibraryState with _$LibraryState {
 
   String get selectedPackageDescription {
     if (selectedPackage == null) return '';
+    if (isSelectedPackageTap) return 'Brew Tap';
     return isSelectedPackageCask 
         ? ((selectedPackage as CaskModel).desc ?? 'No description available') 
         : ((selectedPackage as FormulaModel).desc);
@@ -58,13 +80,14 @@ abstract class LibraryState with _$LibraryState {
 
   String get selectedPackageInstallPath {
     if (selectedPackage == null) return '';
+    if (isSelectedPackageTap) return (selectedPackage as TapModel).path;
     return isSelectedPackageCask
         ? '$brewPrefix/Caskroom/$selectedPackageName'
         : '$brewPrefix/Cellar/$selectedPackageName';
   }
 
   List<String> get selectedPackageDependencies {
-    if (selectedPackage == null || isSelectedPackageCask) return [];
+    if (selectedPackage == null || isSelectedPackageCask || isSelectedPackageTap) return [];
     return (selectedPackage as FormulaModel).dependencies;
   }
 }

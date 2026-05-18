@@ -6,6 +6,8 @@ import 'package:bartender/features/library/view_models/library_view_model.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 
+import 'package:bartender/data/models/tap/tap_model.dart';
+
 class InspectorPane extends StatelessWidget {
   const InspectorPane({super.key});
 
@@ -26,6 +28,68 @@ class InspectorPane extends StatelessWidget {
             'Select a package to view details',
             style: TextStyle(color: AppColors.textSecondary),
           ),
+        ),
+      );
+    }
+
+    if (state.isSelectedPackageTap) {
+      final tap = state.selectedPackage as TapModel;
+      return Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(radiusM),
+          border: Border.all(color: AppColors.borderNeutral),
+        ),
+        padding: const EdgeInsets.all(spacingM),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HeaderWidget(
+              name: tap.name,
+              version: tap.official ? 'Official' : 'Custom',
+              description: 'Tap from ${tap.user}/${tap.repo}',
+            ),
+            
+            const Divider(height: spacingL * 2, color: AppColors.borderNeutral),
+            
+            ConfigPathsWidget(
+              installPath: tap.path,
+            ),
+            
+            const SizedBox(height: spacingL),
+            
+            Row(
+              children: [
+                Expanded(
+                  child: _TapStatsWidget(label: 'Formulae', count: tap.formulaNames.length),
+                ),
+                const SizedBox(width: spacingM),
+                Expanded(
+                  child: _TapStatsWidget(label: 'Casks', count: tap.caskTokens.length),
+                ),
+              ],
+            ),
+            
+            const Spacer(),
+            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ActionButtonWidget(
+                  label: 'Untap',
+                  icon: Icons.delete,
+                  color: AppColors.error,
+                  onTap: () {
+                    context.read<QueueViewModel>().queueOperation(
+                      packageId: tap.name,
+                      type: PackageType.tap,
+                      operation: OperationType.uninstall,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
       );
     }
@@ -258,6 +322,48 @@ class ActionButtonWidget extends StatelessWidget {
       onPressed: onTap,
       icon: Icon(icon, size: 18),
       label: Text(label),
+    );
+  }
+}
+
+class _TapStatsWidget extends StatelessWidget {
+  final String label;
+  final int count;
+
+  const _TapStatsWidget({
+    required this.label,
+    required this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(spacingS),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(radiusS),
+        border: Border.all(color: AppColors.borderNeutral),
+      ),
+      child: Column(
+        children: [
+          Text(
+            count.toString(),
+            style: const TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: spacingXs),
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

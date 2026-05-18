@@ -74,9 +74,14 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
     try {
       final formulae = await _db.getInstalledFormulae();
       final casks = await _db.getInstalledCasks();
+      final taps = await _db.getTaps();
 
       emitState(
-        state.copyWith(installedFormulae: formulae, installedCasks: casks),
+        state.copyWith(
+          installedFormulae: formulae,
+          installedCasks: casks,
+          installedTaps: taps,
+        ),
       );
 
       await fetchSystemHealth();
@@ -164,11 +169,13 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
     emitState(state.copyWith(selectedPackage: package));
   }
 
-  void toggleFormulaeExpanded() {
-    emitState(state.copyWith(formulaeExpanded: !state.formulaeExpanded));
-  }
-
-  void toggleCasksExpanded() {
-    emitState(state.copyWith(casksExpanded: !state.casksExpanded));
+  void toggleTapExpanded(String tapName) {
+    final updatedExpandedTaps = Set<String>.from(state.expandedTaps);
+    if (updatedExpandedTaps.contains(tapName)) {
+      updatedExpandedTaps.remove(tapName);
+    } else {
+      updatedExpandedTaps.add(tapName);
+    }
+    emitState(state.copyWith(expandedTaps: updatedExpandedTaps));
   }
 }

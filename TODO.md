@@ -26,7 +26,7 @@
 
 
 # Issues:
-ip
+- [ ] Terminal window clips the edges, so we need to address that
 - [ ] Terminal close icon is not very suggestive (should be an x or something instantly recognizable)
 - [ ] when minimising the termial, we're getting some overflow errors
 - [ ] text in terminal look blurry. play with the styling to improve that

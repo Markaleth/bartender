@@ -6,21 +6,26 @@ class FileSystemFolderHeader extends StatelessWidget {
   final String title;
   final String installPath;
   final bool isExpanded;
-  final VoidCallback onTap;
+  final bool isSelected;
+  final VoidCallback onToggleExpand;
+  final VoidCallback onSelect;
 
   const FileSystemFolderHeader({
     super.key,
     required this.title,
     required this.installPath,
     required this.isExpanded,
-    required this.onTap,
+    required this.isSelected,
+    required this.onToggleExpand,
+    required this.onSelect,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
-      child: Padding(
+      onTap: onSelect,
+      child: Container(
+        color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : Colors.transparent,
         padding: const EdgeInsets.symmetric(
           vertical: spacingS,
           horizontal: spacingXs,
@@ -28,10 +33,13 @@ class FileSystemFolderHeader extends StatelessWidget {
         child: Row(
           spacing: spacingXs,
           children: [
-            Icon(
-              isExpanded ? Icons.arrow_drop_down : Icons.arrow_right,
-              color: AppColors.iconDefault,
-              size: spacingM,
+            GestureDetector(
+              onTap: onToggleExpand,
+              child: Icon(
+                isExpanded ? Icons.arrow_drop_down : Icons.arrow_right,
+                color: AppColors.iconDefault,
+                size: spacingM,
+              ),
             ),
 
             Icon(
@@ -39,6 +47,15 @@ class FileSystemFolderHeader extends StatelessWidget {
               color: isExpanded ? AppColors.primary : AppColors.iconDefault,
               size: spacingM,
             ),
+
+            Text(
+              title,
+              style: TextStyle(
+                color: isSelected ? AppColors.primary : AppColors.textPrimary,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            const SizedBox(width: spacingXs),
 
             Expanded(
               child: Text(
