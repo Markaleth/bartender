@@ -23,9 +23,8 @@ class TapsView extends StatelessWidget {
   void _showAddTapDialog(BuildContext context, TapsViewModel viewModel) {
     showDialog(
       context: context,
-      builder: (context) => AddTapDialog(
-        onAddTap: (tapName) => viewModel.addTap(tapName),
-      ),
+      builder: (context) =>
+          AddTapDialog(onAddTap: (tapName) => viewModel.addTap(tapName)),
     );
   }
 
@@ -55,41 +54,10 @@ class TapsView extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(spacingM),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Taps',
-                      style: context.headM.copyWith(color: AppColors.primary),
-                    ),
-                    Row(
-                      children: [
-                        if (state.isSyncing)
-                          const Padding(
-                            padding: EdgeInsets.only(right: spacingM),
-                            child: SizedBox(
-                              width: spacingM,
-                              height: spacingM,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                          ),
-                        IconButton(
-                          icon: const Icon(Icons.refresh),
-                          onPressed: state.isSyncing
-                              ? null
-                              : viewModel.syncTaps,
-                          tooltip: 'Sync Taps',
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: state.isSyncing
-                              ? null
-                              : () => _showAddTapDialog(context, viewModel),
-                          icon: const Icon(Icons.add),
-                          label: const Text('Add Tap'),
-                        ),
-                      ],
-                    ),
-                  ],
+                child: _HeaderWidget(
+                  isSyncing: state.isSyncing,
+                  onSync: viewModel.syncTaps,
+                  onAddTap: () => _showAddTapDialog(context, viewModel),
                 ),
               ),
               const Divider(height: 1, color: AppColors.borderNeutral),
@@ -111,10 +79,10 @@ class TapsView extends StatelessWidget {
                       padding: const EdgeInsets.all(spacingM),
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 300,
+                            maxCrossAxisExtent: tapCardWidth,
                             crossAxisSpacing: spacingM,
                             mainAxisSpacing: spacingM,
-                            childAspectRatio: 1.2,
+                            childAspectRatio: tapCardAspectRatio,
                           ),
                       itemCount: taps.length,
                       itemBuilder: (context, index) {
@@ -138,4 +106,46 @@ class TapsView extends StatelessWidget {
       },
     );
   }
+}
+
+class _HeaderWidget extends StatelessWidget {
+  final bool isSyncing;
+  final VoidCallback onSync;
+  final VoidCallback onAddTap;
+  const _HeaderWidget({
+    required this.isSyncing,
+    required this.onSync,
+    required this.onAddTap,
+  });
+
+  @override
+  Widget build(BuildContext context) => Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text('Taps', style: context.headM.copyWith(color: AppColors.primary)),
+      Row(
+        children: [
+          if (isSyncing)
+            const Padding(
+              padding: EdgeInsets.only(right: spacingM),
+              child: SizedBox(
+                width: spacingM,
+                height: spacingM,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: isSyncing ? null : onSync,
+            tooltip: 'Sync Taps',
+          ),
+          ElevatedButton.icon(
+            onPressed: isSyncing ? null : onAddTap,
+            icon: const Icon(Icons.add),
+            label: const Text('Add Tap'),
+          ),
+        ],
+      ),
+    ],
+  );
 }

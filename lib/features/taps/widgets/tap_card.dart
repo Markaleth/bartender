@@ -24,44 +24,22 @@ class TapCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radiusM),
-        side: const BorderSide(
-          color: AppColors.borderNeutral,
-        ),
+        side: const BorderSide(color: AppColors.borderNeutral),
       ),
       child: Padding(
         padding: const EdgeInsets.all(spacingM),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.account_tree_outlined,
-                  color: AppColors.primary,
-                ),
-                const SizedBox(width: spacingXs),
-                Expanded(
-                  child: Text(
-                    tap.name,
-                    style: context.titleM.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: spacingXs),
+            _TitleWidget(tap: tap),
             if (tap.remote != null)
               Text(
                 tap.remote!,
-                style: context.bodyM.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+                style: context.bodyM.copyWith(color: AppColors.textSecondary),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-            const SizedBox(height: spacingXs),
+
             Row(
               children: [
                 if (tap.formulaNames.isNotEmpty)
@@ -80,53 +58,98 @@ class TapCard extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: onViewPackages,
-                  child: const Text('View Packages'),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    color: AppColors.error,
-                  ),
-                  onPressed: isSyncing
-                      ? null
-                      : () {
-                          showDialog(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: const Text('Remove Tap'),
-                              content: Text(
-                                'Are you sure you want to untap ${tap.name}?',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(ctx).pop(),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(ctx).pop();
-                                    onRemove();
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: AppColors.error,
-                                  ),
-                                  child: const Text('Remove'),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                ),
-              ],
+            _FooterWidget(
+              onViewPackages: onViewPackages,
+              isSyncing: isSyncing,
+              tap: tap,
+              onRemove: onRemove,
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _TitleWidget extends StatelessWidget {
+  const _TitleWidget({required this.tap});
+
+  final TapModel tap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: spacingXs,
+      children: [
+        const Icon(Icons.account_tree_outlined, color: AppColors.primary),
+
+        Expanded(
+          child: Text(
+            tap.name,
+            style: context.titleM.copyWith(fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FooterWidget extends StatelessWidget {
+  const _FooterWidget({
+    required this.onViewPackages,
+    required this.isSyncing,
+    required this.tap,
+    required this.onRemove,
+  });
+
+  final VoidCallback onViewPackages;
+  final bool isSyncing;
+  final TapModel tap;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextButton(
+          onPressed: onViewPackages,
+          child: const Text('View Packages'),
+        ),
+        IconButton(
+          icon: const Icon(Icons.delete_outline, color: AppColors.error),
+          onPressed: isSyncing
+              ? null
+              : () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Remove Tap'),
+                      content: Text(
+                        'Are you sure you want to untap ${tap.name}?',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                            onRemove();
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.error,
+                          ),
+                          child: const Text('Remove'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+        ),
+      ],
     );
   }
 }
@@ -140,17 +163,20 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: spacingS,
+        vertical: spacingXs,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(radiusL),
         border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Text(
         text,
         style: context.labelS.copyWith(
           color: color,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
