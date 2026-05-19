@@ -48,3 +48,4 @@ app.*.map.json
 .opencode/
 .vscode/
 # stitch_brew_desktop_manager/
+AGENTS.md

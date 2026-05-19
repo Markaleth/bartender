@@ -45,7 +45,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     _lastUpdateTimestamp = timestamp;
 
     if (isInstalled) {
-      fetchTaps(); // Refetch to show newly added tap
+      syncTap(tapName); // Refetch to show newly added tap
     } else {
       // Remove tap from the current state if successful uninstall
       state.tapsState.maybeWhen(
@@ -80,6 +80,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     emitState(state.copyWith(isSyncing: true));
     try {
       await _repository.syncTaps();
+      await _repository.syncThirdPartyTapPackages();
       final taps = await _repository.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), isSyncing: false),

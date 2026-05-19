@@ -210,6 +210,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
       type: state.packageType,
       limit: _paginationChunkSize,
       offset: _currentPaginationOffset,
+      tapFilter: _tapFilterNotifier.selectedTap,
     );
     _currentPaginationOffset += initialChunk.length;
 
