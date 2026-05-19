@@ -15,12 +15,14 @@ class PackageIcon extends StatefulWidget {
   final String name;
   final String? homepage;
   final double size;
+  final double padding;
 
   const PackageIcon({
     super.key,
     required this.name,
     this.homepage,
     this.size = spacing2Xl,
+    this.padding = spacingS,
   });
 
   @override
@@ -56,24 +58,29 @@ class _PackageIconState extends State<PackageIcon> {
     return ListenableBuilder(
       listenable: _viewModel,
       builder: (context, _) {
-        return _viewModel.state.when(
-          loading: () => _LoadingIndicator(widget: widget, context: context),
-          success: (icon) {
-            if (icon.isSvg) {
-              return _SvgIcon(
-                url: icon.iconUrl!,
-                size: widget.size,
-                packageIconWidget: widget,
-              );
-            } else {
-              return _NetworkImageIcon(
-                url: icon.iconUrl!,
-                size: widget.size,
-                packageIconWidget: widget,
-              );
-            }
-          },
-          fallback: () => _PlaceholderWidget(size: widget.size),
+        return Container(
+          width: widget.size,
+          height: widget.size,
+          decoration: BoxDecoration(
+            color: AppColors.borderNeutral,
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
+          padding: EdgeInsets.all(widget.padding),
+          child: _viewModel.state.when(
+            loading: () => OverflowBox(
+              maxWidth: widget.size,
+              maxHeight: widget.size,
+              child: _LoadingIndicator(size: widget.size),
+            ),
+            success: (icon) {
+              if (icon.isSvg) {
+                return _SvgIcon(url: icon.iconUrl!, size: widget.size);
+              } else {
+                return _NetworkImageIcon(url: icon.iconUrl!, size: widget.size);
+              }
+            },
+            fallback: () => const _PlaceholderWidget(),
+          ),
         );
       },
     );
@@ -81,52 +88,28 @@ class _PackageIconState extends State<PackageIcon> {
 }
 
 class _PlaceholderWidget extends StatelessWidget {
-  final double size;
-  const _PlaceholderWidget({required this.size});
+  const _PlaceholderWidget();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: AppColors.borderNeutral,
-        borderRadius: BorderRadius.circular(radiusM),
-      ),
-      padding: const EdgeInsets.all(spacingS),
-      child: const IconWidget(assetName: brewIcon),
-    );
+    return const IconWidget(assetName: brewIcon);
   }
 }
 
 class _SvgIcon extends StatelessWidget {
   final String url;
   final double size;
-  final PackageIcon packageIconWidget;
 
-  const _SvgIcon({
-    required this.url,
-    required this.size,
-    required this.packageIconWidget,
-  });
+  const _SvgIcon({required this.url, required this.size});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: AppColors.borderNeutral,
-        borderRadius: BorderRadius.circular(radiusM),
-      ),
-      padding: const EdgeInsets.all(spacingS),
-      child: SvgPicture.network(
-        url,
-        placeholderBuilder: (_) => OverflowBox(
-          maxWidth: size,
-          maxHeight: size,
-          child: _LoadingIndicator(widget: packageIconWidget, context: context),
-        ),
+    return SvgPicture.network(
+      url,
+      placeholderBuilder: (_) => OverflowBox(
+        maxWidth: size,
+        maxHeight: size,
+        child: _LoadingIndicator(size: size),
       ),
     );
   }
@@ -135,13 +118,8 @@ class _SvgIcon extends StatelessWidget {
 class _NetworkImageIcon extends StatelessWidget {
   final String url;
   final double size;
-  final PackageIcon packageIconWidget;
 
-  const _NetworkImageIcon({
-    required this.url,
-    required this.size,
-    required this.packageIconWidget,
-  });
+  const _NetworkImageIcon({required this.url, required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -150,31 +128,23 @@ class _NetworkImageIcon extends StatelessWidget {
       width: size,
       height: size,
       fit: BoxFit.cover,
-      placeholder: (context, url) =>
-          _LoadingIndicator(widget: packageIconWidget, context: context),
-      errorWidget: (context, url, error) => _PlaceholderWidget(size: size),
-      imageBuilder: (context, imageProvider) => Container(
-        padding: const EdgeInsets.all(spacingS),
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: AppColors.borderNeutral,
-          borderRadius: BorderRadius.circular(radiusM),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(radiusM),
-          child: Image(image: imageProvider, fit: BoxFit.cover),
-        ),
+      placeholder: (context, url) => OverflowBox(
+        maxWidth: size,
+        maxHeight: size,
+        child: _LoadingIndicator(size: size),
+      ),
+      errorWidget: (context, url, error) => const _PlaceholderWidget(),
+      imageBuilder: (context, imageProvider) => ClipRRect(
+        borderRadius: BorderRadius.circular(radiusM),
+        child: Image(image: imageProvider, fit: BoxFit.cover),
       ),
     );
   }
 }
 
 class _LoadingIndicator extends StatefulWidget {
-  const _LoadingIndicator({required this.widget, required this.context});
-
-  final PackageIcon widget;
-  final BuildContext context;
+  final double size;
+  const _LoadingIndicator({required this.size});
 
   @override
   State<_LoadingIndicator> createState() => _LoadingIndicatorState();
@@ -203,8 +173,8 @@ class _LoadingIndicatorState extends State<_LoadingIndicator>
       animation: _shimmerController,
       builder: (context, child) {
         return Container(
-          width: widget.widget.size,
-          height: widget.widget.size,
+          width: widget.size,
+          height: widget.size,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radiusM),
             gradient: LinearGradient(
