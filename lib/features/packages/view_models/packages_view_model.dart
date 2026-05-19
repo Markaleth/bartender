@@ -9,7 +9,7 @@ import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/features/packages/models/packages_effect.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
-import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 
 class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
@@ -23,8 +23,11 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   static const int _paginationChunkSize = 50;
   bool _isLoadingMore = false;
 
-  PackagesViewModel(this._homebrewRepository, this._statusNotifier, this._tapFilterNotifier)
-    : super(
+  PackagesViewModel(
+    this._homebrewRepository,
+    this._statusNotifier,
+    this._tapFilterNotifier,
+  ) : super(
         PackagesState(
           packageType: Platform.isLinux
               ? PackageTypeFilter.formulae
@@ -50,8 +53,8 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   void _onStatusNotifierUpdated() {
     final update = _statusNotifier.value;
     if (update != null) {
-      onPackageStatusChanged(
-        update.packageId,
+      _onPackageStatusChanged(
+        update.itemId,
         update.isInstalled,
         update.timestamp,
       );
@@ -230,7 +233,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, PackagesEffect> {
   // --- UI State & Helpers ---
   DateTime? _lastUpdateTimestamp;
 
-  void onPackageStatusChanged(
+  void _onPackageStatusChanged(
     String packageId,
     bool isInstalled,
     DateTime timestamp,

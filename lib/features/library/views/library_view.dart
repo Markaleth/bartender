@@ -9,7 +9,7 @@ import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 
-import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/features/library/models/library_effect.dart';
 import 'package:bartender/features/library/models/library_state.dart';

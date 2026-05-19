@@ -15,7 +15,7 @@ import 'package:bartender/features/packages/widgets/trending_packages_carousel.d
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 
 import '../widgets/package_list_item.dart';

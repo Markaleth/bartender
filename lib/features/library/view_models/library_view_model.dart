@@ -5,7 +5,7 @@ import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/features/library/models/library_effect.dart';
 import 'package:bartender/features/library/models/library_state.dart';
-import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 
 class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
   final DatabaseInterface _db;
@@ -36,7 +36,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
     final update = _statusNotifier.value;
     if (update != null) {
       onPackageStatusChanged(
-        update.packageId,
+        update.itemId,
         update.isInstalled,
         update.timestamp,
       );

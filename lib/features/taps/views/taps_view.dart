@@ -7,6 +7,7 @@ import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 
 import '../../home/view_models/home_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
@@ -46,6 +47,7 @@ class TapsView extends StatelessWidget {
       viewModelBuilder: (context) => TapsViewModel(
         context.read<HomebrewRepository>(),
         context.read<QueueViewModel>(),
+        context.read<TapStatusNotifier>(),
       )..init(),
       onEffect: _handleEffect,
       builder: (context, viewModel, state) {

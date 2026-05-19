@@ -7,7 +7,7 @@ import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/services/icon_resolution/icon_resolution_service.dart';
 import 'package:bartender/data/shell/brew_service.dart';
-import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 import 'package:bartender/core/routing/navigation_service.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
@@ -30,10 +30,11 @@ List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment)
     ),
     Provider<BrewService>(create: (_) => BrewService()),
     ChangeNotifierProvider<PackageStatusNotifier>(create: (_) => PackageStatusNotifier()),
+    ChangeNotifierProvider<TapStatusNotifier>(create: (_) => TapStatusNotifier()),
     ChangeNotifierProvider<TapFilterNotifier>(create: (_) => TapFilterNotifier()),
-    ChangeNotifierProxyProvider3<BrewService, DatabaseInterface, PackageStatusNotifier, QueueViewModel>(
-      create: (context) => QueueViewModel(context.read<BrewService>(), context.read<DatabaseInterface>(), context.read<PackageStatusNotifier>()),
-      update: (_, brewService, db, packageStatusNotifier, previous) => previous ?? QueueViewModel(brewService, db, packageStatusNotifier),
+    ChangeNotifierProxyProvider4<BrewService, DatabaseInterface, PackageStatusNotifier, TapStatusNotifier, QueueViewModel>(
+      create: (context) => QueueViewModel(context.read<BrewService>(), context.read<DatabaseInterface>(), context.read<PackageStatusNotifier>(), context.read<TapStatusNotifier>()),
+      update: (_, brewService, db, packageStatusNotifier, tapStatusNotifier, previous) => previous ?? QueueViewModel(brewService, db, packageStatusNotifier, tapStatusNotifier),
     ),
     ProxyProvider<DatabaseInterface, IconResolutionService>(
       update: (_, db, _) => IconResolutionService(db),

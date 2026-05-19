@@ -5,15 +5,16 @@ import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/data/shell/streaming_shell_command.dart';
 import 'package:bartender/features/queue/models/queue_state.dart';
 import 'package:bartender/data/db/database_interface.dart';
-import 'package:bartender/core/services/package_status_notifier.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 
 class QueueViewModel extends BaseViewModel<QueueState, void> {
   final BrewService _brewService;
   final DatabaseInterface _database;
-  final PackageStatusNotifier _notifier;
+  final PackageStatusNotifier _packageNotifier;
+  final TapStatusNotifier _tapNotifier;
   bool _isProcessing = false;
 
-  QueueViewModel(this._brewService, this._database, this._notifier) : super(QueueState());
+  QueueViewModel(this._brewService, this._database, this._packageNotifier, this._tapNotifier) : super(QueueState());
 
   void enqueue(OperationTask task) {
     final updatedTasks = List<OperationTask>.from(state.tasks)..add(task);
@@ -149,6 +150,11 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
 
     final isCask = task.type == PackageType.cask;
 
+    if (task.type == PackageType.tap) {
+      _tapNotifier.markUpdated(task.packageId, isInstall);
+      return;
+    }
+
     if (isCask) {
       await _database.updateCaskInstallationStatus(task.packageId, isInstall);
     } else if (task.type == PackageType.formula) {
@@ -159,7 +165,7 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
     }
 
     // Trigger UI updates
-    _notifier.markUpdated(task.packageId, isInstall);
+    _packageNotifier.markUpdated(task.packageId, task.type, isInstall);
   }
 
   void _handleCommandError(String taskId, String error) {
