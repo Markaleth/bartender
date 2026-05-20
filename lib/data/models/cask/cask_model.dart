@@ -21,6 +21,7 @@ abstract class CaskModel with _$CaskModel {
     @Default(false) bool deprecated,
     @Default(false) bool disabled,
     @Default(false) @JsonKey(name: 'is_installed') bool isInstalled,
+    @Default([]) List<String> missingDeps,
     Map<String, dynamic>? variations,
     Map<String, dynamic>? analytics,
     int? installs30d,

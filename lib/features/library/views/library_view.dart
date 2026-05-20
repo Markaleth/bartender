@@ -11,7 +11,7 @@ import 'package:bartender/data/shell/brew_service.dart';
 
 import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/base_view.dart';
-import 'package:bartender/features/library/models/library_effect.dart';
+import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/features/library/models/library_state.dart';
 
 class LibraryView extends StatelessWidget {
@@ -19,7 +19,7 @@ class LibraryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<LibraryViewModel, LibraryState, LibraryEffect>(
+    return BaseView<LibraryViewModel, LibraryState, ScreenEffect>(
       viewModelBuilder: (context) => LibraryViewModel(
         db: context.read<DatabaseInterface>(),
         brewService: context.read<BrewService>(),

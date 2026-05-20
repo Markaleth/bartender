@@ -20,6 +20,7 @@ abstract class FormulaModel with _$FormulaModel {
     @Default(false) bool deprecated,
     @Default(false) bool disabled,
     @Default(false) @JsonKey(name: 'is_installed') bool isInstalled,
+    @Default([]) List<String> missingDeps,
     List<Map<String, dynamic>>? requirements,
     Map<String, dynamic>? bottle,
     Map<String, dynamic>? variations,

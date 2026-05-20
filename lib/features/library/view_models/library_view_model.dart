@@ -1,13 +1,14 @@
 import 'package:bartender/data/repository/package_repository.dart';
+import 'package:bartender/features/library/models/system_health_state.dart';
 import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/shell/brew_service.dart';
-import 'package:bartender/features/library/models/library_effect.dart';
+import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/features/library/models/library_state.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 
-class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
+class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   final DatabaseInterface _db;
   final BrewService _brewService;
   final PackageStatusNotifier _statusNotifier;
@@ -53,7 +54,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
       await _packageRepository.syncInstalledPackages();
       await refreshData();
     } catch (e) {
-      emitEffect(LibraryEffect.error('Failed to sync data: $e'));
+      emitEffect(ShowToastEffect('Failed to sync data: $e', isError: true));
     } finally {
       emitState(state.copyWith(isSyncing: false));
     }
@@ -66,7 +67,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
       emitState(state.copyWith(isLoading: false));
     } catch (e) {
       emitState(state.copyWith(isLoading: false));
-      emitEffect(LibraryEffect.error('Failed to load library: $e'));
+      emitEffect(ShowToastEffect('Failed to load library: $e', isError: true));
     }
   }
 
@@ -86,7 +87,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
 
       await fetchSystemHealth();
     } catch (e) {
-      emitEffect(LibraryEffect.error('Failed to refresh data: $e'));
+      emitEffect(ShowToastEffect('Failed to refresh data: $e', isError: true));
     }
   }
 
@@ -113,13 +114,24 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
         emitState(state.copyWith(systemStorageUsed: storageUsed));
       }
 
-      final orphans = await _fetchOrphanCount();
-      emitState(state.copyWith(orphanedDependenciesCount: orphans));
+      // Run async tasks concurrently
+      final results = await Future.wait([
+        _brewService.autoremoveDryRun(),
+        _brewService.cleanupDryRun(),
+        _brewService.doctorSync(),
+        _brewService.outdated(),
+      ]);
 
-      final health = _calculateHealthScore(orphans);
-      emitState(state.copyWith(globalHealthScore: health));
+      final healthState = SystemHealthState.fromResults(
+        autoremoveResult: results[0],
+        cleanupResult: results[1],
+        doctorResult: results[2],
+        outdatedResult: results[3],
+      );
+
+      emitState(state.copyWith(healthState: healthState));
     } catch (e) {
-      emitEffect(LibraryEffect.error('Failed to fetch system health: $e'));
+      emitEffect(ShowToastEffect('Failed to fetch system health: $e', isError: true));
     }
   }
 
@@ -139,30 +151,6 @@ class LibraryViewModel extends BaseViewModel<LibraryState, LibraryEffect> {
       return sizeMatch?.group(1);
     }
     return null;
-  }
-
-  Future<int> _fetchOrphanCount() async {
-    final autoremoveResult = await _brewService.runCustom([
-      'autoremove',
-      '--dry-run',
-    ]);
-    if (autoremoveResult.exitCode == 0) {
-      final lines = autoremoveResult.stdout.trim().split('\n');
-      // ignore empty lines or specific header lines
-      final orphanLines = lines
-          .where(
-            (line) =>
-                line.trim().isNotEmpty && !line.startsWith('Would remove:'),
-          )
-          .toList();
-      return orphanLines.length;
-    }
-    return 0;
-  }
-
-  int _calculateHealthScore(int orphans) {
-    int health = 100 - (orphans * 2);
-    return health < 0 ? 0 : health;
   }
 
   void selectPackage(dynamic package) {

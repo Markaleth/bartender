@@ -98,6 +98,10 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
         return _brewService.runCustomStream(['pin', task.packageId]);
       case OperationType.autoremove:
         return _brewService.runCustomStream(['autoremove']);
+      case OperationType.upgrade:
+        return _brewService.runCustomStream(['upgrade']);
+      case OperationType.cleanup:
+        return _brewService.runCustomStream(['cleanup']);
     }
   }
 

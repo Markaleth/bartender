@@ -119,6 +119,22 @@ class BrewService {
     return streamCommand(['doctor']);
   }
 
+  Future<ShellCommandResult> doctorSync() {
+    return runCommand(['doctor']);
+  }
+
+  Future<ShellCommandResult> autoremoveDryRun() {
+    return runCommand(['autoremove', '--dry-run']);
+  }
+
+  Future<ShellCommandResult> cleanupDryRun() {
+    return runCommand(['cleanup', '--dry-run']);
+  }
+
+  Future<ShellCommandResult> missing() {
+    return runCommand(['missing']);
+  }
+
   Future<StreamingShellCommand> cleanup() {
     return streamCommand(['cleanup']);
   }

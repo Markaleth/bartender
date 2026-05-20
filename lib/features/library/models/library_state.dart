@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
+import 'package:bartender/features/library/models/system_health_state.dart';
 
 part 'library_state.freezed.dart';
 
@@ -16,8 +17,7 @@ abstract class LibraryState with _$LibraryState {
     @Default([]) List<TapModel> installedTaps,
     dynamic selectedPackage,
     @Default('0 B') String systemStorageUsed,
-    @Default(0) int orphanedDependenciesCount,
-    @Default(100) int globalHealthScore,
+    @Default(SystemHealthState()) SystemHealthState healthState,
     @Default('/opt/homebrew') String brewPrefix,
     @Default(false) bool isSyncing,
     @Default('') String filterQuery,
@@ -89,5 +89,26 @@ abstract class LibraryState with _$LibraryState {
   List<String> get selectedPackageDependencies {
     if (selectedPackage == null || isSelectedPackageCask || isSelectedPackageTap) return [];
     return (selectedPackage as FormulaModel).dependencies;
+  }
+
+  bool get selectedPackageIsDeprecated {
+    if (selectedPackage == null || isSelectedPackageTap) return false;
+    return isSelectedPackageCask 
+        ? (selectedPackage as CaskModel).deprecated 
+        : (selectedPackage as FormulaModel).deprecated;
+  }
+
+  bool get selectedPackageIsOutdated {
+    if (selectedPackage == null || isSelectedPackageTap) return false;
+    return isSelectedPackageCask 
+        ? (selectedPackage as CaskModel).outdated 
+        : (selectedPackage as FormulaModel).outdated;
+  }
+
+  List<String> get selectedPackageMissingDeps {
+    if (selectedPackage == null || isSelectedPackageTap) return [];
+    return isSelectedPackageCask 
+        ? (selectedPackage as CaskModel).missingDeps 
+        : (selectedPackage as FormulaModel).missingDeps;
   }
 }

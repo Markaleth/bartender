@@ -24,6 +24,11 @@ _CaskModel _$CaskModelFromJson(Map<String, dynamic> json) => _CaskModel(
   deprecated: json['deprecated'] as bool? ?? false,
   disabled: json['disabled'] as bool? ?? false,
   isInstalled: json['is_installed'] as bool? ?? false,
+  missingDeps:
+      (json['missingDeps'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
   variations: json['variations'] as Map<String, dynamic>?,
   analytics: json['analytics'] as Map<String, dynamic>?,
   installs30d: (json['installs30d'] as num?)?.toInt(),
@@ -49,6 +54,7 @@ Map<String, dynamic> _$CaskModelToJson(_CaskModel instance) =>
       'deprecated': instance.deprecated,
       'disabled': instance.disabled,
       'is_installed': instance.isInstalled,
+      'missingDeps': instance.missingDeps,
       'variations': instance.variations,
       'analytics': instance.analytics,
       'installs30d': instance.installs30d,
