@@ -111,7 +111,9 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
 
       final storageUsed = await _fetchSystemStorage(brewPrefix);
       if (storageUsed != null) {
-        emitState(state.copyWith(systemStorageUsed: storageUsed));
+        emitState(state.copyWith(
+          healthState: state.healthState.copyWith(systemStorageUsed: storageUsed),
+        ));
       }
 
       // Run async tasks concurrently
@@ -127,6 +129,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
         cleanupResult: results[1],
         doctorResult: results[2],
         outdatedResult: results[3],
+        systemStorageUsed: state.healthState.systemStorageUsed,
       );
 
       emitState(state.copyWith(healthState: healthState));

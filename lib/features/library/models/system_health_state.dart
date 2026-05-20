@@ -8,6 +8,7 @@ part 'system_health_state.freezed.dart';
 abstract class SystemHealthState with _$SystemHealthState {
   const factory SystemHealthState({
     @Default(100) int globalHealthScore,
+    @Default('0 B') String systemStorageUsed,
     @Default(0) int outdatedCount,
     @Default('') String reclaimableSpace,
     @Default(0) int doctorWarningsCount,
@@ -21,6 +22,7 @@ abstract class SystemHealthState with _$SystemHealthState {
     required ShellCommandResult cleanupResult,
     required ShellCommandResult doctorResult,
     required ShellCommandResult outdatedResult,
+    String systemStorageUsed = '0 B',
   }) {
     final orphansCount = _parseOrphans(autoremoveResult);
     final reclaimableSpace = _parseReclaimableSpace(cleanupResult);
@@ -35,6 +37,7 @@ abstract class SystemHealthState with _$SystemHealthState {
 
     return SystemHealthState(
       globalHealthScore: healthScore,
+      systemStorageUsed: systemStorageUsed,
       outdatedCount: outdatedCount,
       reclaimableSpace: reclaimableSpace,
       doctorWarningsCount: doctorParsed.warnings,

@@ -16,7 +16,6 @@ abstract class LibraryState with _$LibraryState {
     @Default([]) List<CaskModel> installedCasks,
     @Default([]) List<TapModel> installedTaps,
     dynamic selectedPackage,
-    @Default('0 B') String systemStorageUsed,
     @Default(SystemHealthState()) SystemHealthState healthState,
     @Default('/opt/homebrew') String brewPrefix,
     @Default(false) bool isSyncing,

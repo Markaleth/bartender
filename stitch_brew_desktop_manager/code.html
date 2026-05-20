@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#353534",
+                        "surface": "#131313",
+                        "surface-container-highest": "#353534",
+                        "outline-variant": "#4b4452",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-container": "#3b3700",
+                        "tertiary-container": "#aba200",
+                        "on-tertiary-fixed": "#1e1c00",
+                        "background": "#131313",
+                        "tertiary": "#d4ca38",
+                        "secondary-fixed-dim": "#17deca",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-primary-fixed-variant": "#5e289b",
+                        "primary-fixed": "#eedbff",
+                        "outline": "#978d9d",
+                        "on-tertiary-fixed-variant": "#4d4800",
+                        "on-secondary-container": "#005950",
+                        "secondary": "#46f5e0",
+                        "on-secondary": "#003731",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-container": "#00d8c4",
+                        "tertiary-fixed": "#f1e752",
+                        "on-primary": "#460283",
+                        "error-container": "#93000a",
+                        "on-background": "#e5e2e1",
+                        "on-secondary-fixed": "#00201c",
+                        "surface-bright": "#393939",
+                        "surface-tint": "#dab9ff",
+                        "primary-fixed-dim": "#dab9ff",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-container": "#4c0f89",
+                        "tertiary-fixed-dim": "#d4ca38",
+                        "inverse-primary": "#7743b5",
+                        "on-tertiary": "#353200",
+                        "on-surface-variant": "#cdc3d4",
+                        "secondary-fixed": "#4ffbe6",
+                        "surface-container": "#201f1f",
+                        "on-primary-fixed": "#2a0053",
+                        "surface-dim": "#131313",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313030",
+                        "primary-container": "#bb86fc",
+                        "on-surface": "#e5e2e1",
+                        "primary": "#dab9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "display": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="bg-[#121212] dark:bg-neutral-950 flex justify-between items-center px-6 py-3 w-full fixed top-0 z-50 docked full-width top-0 border-b border-neutral-800 dark:border-neutral-800 flat no shadows font-['Inter'] antialiased">
+<div class="flex items-center gap-6">
+<div class="text-xl font-bold tracking-tight text-[#BB86FC]">CyberPackage</div>
+<div class="hidden md:flex items-center gap-1">
+<a class="px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50 transition-colors duration-200 ease-in-out rounded-DEFAULT" href="#">Explorer</a>
+<a class="px-3 py-2 text-[#BB86FC] border-b-2 border-[#BB86FC] pb-1 hover:bg-neutral-800/50 transition-colors duration-200 ease-in-out" href="#">Registry</a>
+<a class="px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50 transition-colors duration-200 ease-in-out rounded-DEFAULT" href="#">Documentation</a>
+<a class="px-3 py-2 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50 transition-colors duration-200 ease-in-out rounded-DEFAULT" href="#">Status</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-high border border-outline-variant text-on-surface text-sm rounded-full pl-9 pr-4 py-1.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64" placeholder="Search..." type="text"/>
+</div>
+<button class="text-[#BB86FC] hover:bg-neutral-800/50 p-2 rounded-full transition-colors duration-200 ease-in-out flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-[#BB86FC] hover:bg-neutral-800/50 p-2 rounded-full transition-colors duration-200 ease-in-out flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A close up portrait of a futuristic cyberpunk character in a dark high tech environment. The lighting features intense neon purple and electric teal accents. The aesthetic is gritty but highly polished and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-UIW0Q-22oB-YSgd_x7IB8HUhRxkKtWi6E8kh4M9jnq8JNQSeyL2ixub2v3cFMoGkrqHEtRfLcYIfrsnZHGnT7I-W9l7BsS6eUqISsIin8H17wcsll8PpCZEyUUCvy6P5jLoMfwXLPPVoS4HsWeDQAIV15gq8BpZO4gtRsXqRKC2mPqITagHyDxVdBJb6NR_gDlhKVfLPm6HBqJWbMn98PVYWoiGsVnhC1FGU_VmkGpvhtvM1BEyWvHFFtmBNAp6vBLUzkE323W8"/>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="bg-[#121212] dark:bg-neutral-950 fixed left-0 top-14 h-[calc(100vh-3.5rem)] flex flex-col p-4 w-64 border-r border-neutral-800 dark:border-neutral-800 flat no shadows font-['Inter'] text-sm z-40 hidden md:flex">
+<div class="mb-6 px-2">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center border border-outline-variant text-[#BB86FC]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div>
+<h2 class="font-bold text-on-surface">Package Manager</h2>
+<p class="text-xs text-on-surface-variant">v4.2.0-stable</p>
+</div>
+</div>
+<button class="w-full mt-4 bg-primary text-on-primary font-semibold py-2 px-4 rounded-DEFAULT flex items-center justify-center gap-2 hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">add</span> Deploy New
+            </button>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-900 rounded-DEFAULT transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">package_2</span> All Packages
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-neutral-800/80 text-[#BB86FC] font-semibold rounded-md transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">library_books</span> My Library
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-900 rounded-DEFAULT transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">terminal</span> Operating Systems
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-900 rounded-DEFAULT transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">layers</span> Architectures
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-900 rounded-DEFAULT transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">monitoring</span> Analytics
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-neutral-800 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-900 rounded-DEFAULT transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span> Help
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-900 rounded-DEFAULT transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span> Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 mt-[60px] p-6 min-h-[calc(100vh-60px)] flex flex-col gap-6">
+<!-- Header -->
+<header>
+<h1 class="text-3xl font-black text-on-surface tracking-tight mb-1">The Command Center</h1>
+<p class="text-on-surface-variant text-sm">Monitor, manage, and optimize your local cyber-environment.</p>
+</header>
+<!-- Global Health Stats (Bento Grid) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-5 relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20 transition-all"></div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-on-surface-variant font-medium text-sm">System Storage</span>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">hard_drive_2</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-black text-on-surface tracking-tighter">42.8</span>
+<span class="text-on-surface-variant font-medium">GB</span>
+</div>
+<div class="mt-4 flex items-center gap-2 text-xs">
+<span class="flex items-center text-secondary bg-secondary/10 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px] mr-0.5">arrow_downward</span> 1.2 GB
+                    </span>
+<span class="text-outline">cleared this week</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-5 relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-error/10 rounded-full blur-xl group-hover:bg-error/20 transition-all"></div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-on-surface-variant font-medium text-sm">Orphaned Dependencies</span>
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-black text-on-surface tracking-tighter">14</span>
+<span class="text-on-surface-variant font-medium">packages</span>
+</div>
+<div class="mt-4 flex items-center gap-2 text-xs">
+<button class="text-error border border-error/30 hover:bg-error/10 px-3 py-1 rounded transition-colors font-medium">
+                        Run Cleanup
+                    </button>
+<span class="text-outline">~340 MB recoverable</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-gradient-to-br from-surface-container to-surface-container-high border border-outline-variant rounded-xl p-5 relative overflow-hidden flex flex-col justify-between">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+<div class="flex items-center justify-between mb-2 relative z-10">
+<span class="text-on-surface-variant font-medium text-sm">Global Health Score</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+</div>
+<div class="flex items-center gap-4 relative z-10">
+<div class="relative w-16 h-16 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-secondary drop-shadow-[0_0_8px_rgba(3,218,198,0.5)]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="92, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute text-lg font-bold text-on-surface">92</span>
+</div>
+<div>
+<p class="text-on-surface font-semibold">Optimal State</p>
+<p class="text-xs text-outline mt-1">All core services running</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Dual Pane Layout -->
+<section class="flex-1 flex flex-col lg:flex-row gap-6 min-h-[500px]">
+<!-- Left Pane: Dense File Tree -->
+<div class="lg:w-1/3 bg-surface-container border border-outline-variant rounded-xl flex flex-col overflow-hidden">
+<div class="p-3 border-b border-outline-variant bg-surface-container-high flex items-center justify-between">
+<h3 class="font-semibold text-on-surface text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">folder_open</span> Local Environment
+                    </h3>
+<div class="flex gap-1">
+<button class="p-1 text-on-surface-variant hover:text-on-surface rounded hover:bg-surface-variant"><span class="material-symbols-outlined text-[16px]">filter_list</span></button>
+<button class="p-1 text-on-surface-variant hover:text-on-surface rounded hover:bg-surface-variant"><span class="material-symbols-outlined text-[16px]">refresh</span></button>
+</div>
+</div>
+<div class="p-2 overflow-y-auto flex-1 text-sm font-mono space-y-0.5">
+<!-- Tree Item (Expanded) -->
+<div class="flex items-center py-1 px-2 hover:bg-surface-variant/50 rounded cursor-pointer text-on-surface">
+<span class="material-symbols-outlined text-[16px] mr-1 text-outline">arrow_drop_down</span>
+<span class="material-symbols-outlined text-[16px] mr-2 text-primary" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>/usr/local/Cellar</span>
+</div>
+<!-- Sub Items -->
+<div class="pl-6 space-y-0.5">
+<div class="flex items-center justify-between py-1 px-2 bg-primary/10 border-l-2 border-primary rounded-r cursor-pointer text-on-surface">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-2 text-secondary">terminal</span>
+<span>node</span>
+</div>
+<span class="text-xs text-outline">v20.9.0</span>
+</div>
+<div class="flex items-center justify-between py-1 px-2 hover:bg-surface-variant/50 border-l-2 border-transparent rounded-r cursor-pointer text-on-surface-variant">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-2 text-outline">terminal</span>
+<span>python</span>
+</div>
+<span class="text-xs text-outline">v3.11.5</span>
+</div>
+<div class="flex items-center justify-between py-1 px-2 hover:bg-surface-variant/50 border-l-2 border-transparent rounded-r cursor-pointer text-on-surface-variant">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-2 text-outline">dns</span>
+<span>redis</span>
+</div>
+<span class="text-xs text-outline">v7.2.3</span>
+</div>
+</div>
+<!-- Tree Item (Collapsed) -->
+<div class="flex items-center py-1 px-2 mt-2 hover:bg-surface-variant/50 rounded cursor-pointer text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] mr-1 text-outline">arrow_right</span>
+<span class="material-symbols-outlined text-[16px] mr-2 text-outline" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>/opt/homebrew/Caskroom</span>
+</div>
+<div class="flex items-center py-1 px-2 hover:bg-surface-variant/50 rounded cursor-pointer text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] mr-1 text-outline">arrow_right</span>
+<span class="material-symbols-outlined text-[16px] mr-2 text-outline" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>/Library/Taps</span>
+</div>
+</div>
+</div>
+<!-- Right Pane: Detail Inspector -->
+<div class="lg:w-2/3 bg-surface-container border border-outline-variant rounded-xl flex flex-col overflow-hidden">
+<div class="p-4 border-b border-outline-variant bg-surface-container-high flex items-start justify-between">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h2 class="text-xl font-bold text-on-surface tracking-tight">node</h2>
+<span class="bg-surface border border-outline-variant text-on-surface-variant text-xs px-2 py-0.5 rounded font-mono">v20.9.0</span>
+<span class="bg-secondary/10 text-secondary border border-secondary/20 text-xs px-2 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">check_circle</span> Active
+                            </span>
+</div>
+<p class="text-sm text-outline">Platform built on V8 to build network applications</p>
+</div>
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-variant text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="p-6 flex-1 overflow-y-auto space-y-8">
+<!-- Path Info -->
+<div>
+<h4 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">data_object</span> Configuration Paths
+                        </h4>
+<div class="bg-surface border border-outline-variant rounded-lg p-3 space-y-3 font-mono text-sm">
+<div class="flex justify-between items-center group">
+<div class="flex flex-col">
+<span class="text-xs text-outline mb-0.5 font-sans">Install Path</span>
+<span class="text-on-surface break-all">/usr/local/Cellar/node/20.9.0</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 text-outline hover:text-primary transition-all p-1"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+</div>
+<div class="h-px bg-outline-variant/50 w-full"></div>
+<div class="flex justify-between items-center group">
+<div class="flex flex-col">
+<span class="text-xs text-outline mb-0.5 font-sans">Symlink Path</span>
+<span class="text-on-surface break-all">/usr/local/bin/node</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 text-outline hover:text-primary transition-all p-1"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+</div>
+</div>
+</div>
+<!-- Dependencies -->
+<div>
+<h4 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">account_tree</span> Dependency Graph
+                        </h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface border border-outline-variant text-on-surface-variant text-xs px-2.5 py-1 rounded-full cursor-pointer hover:border-primary transition-colors">icu4c</span>
+<span class="bg-surface border border-outline-variant text-on-surface-variant text-xs px-2.5 py-1 rounded-full cursor-pointer hover:border-primary transition-colors">brotli</span>
+<span class="bg-surface border border-outline-variant text-on-surface-variant text-xs px-2.5 py-1 rounded-full cursor-pointer hover:border-primary transition-colors">c-ares</span>
+<span class="bg-surface border border-outline-variant text-on-surface-variant text-xs px-2.5 py-1 rounded-full cursor-pointer hover:border-primary transition-colors">libuv</span>
+</div>
+</div>
+<!-- Management Actions (Glassmorphism card) -->
+<div class="bg-gradient-to-r from-surface-variant/40 to-surface-container/40 backdrop-blur-md border border-outline-variant/50 rounded-lg p-5">
+<h4 class="text-sm font-semibold text-on-surface mb-4">Management Actions</h4>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center p-3 border border-outline-variant bg-surface-container hover:bg-surface-variant hover:border-primary/50 rounded-lg transition-all text-on-surface gap-2 group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">push_pin</span>
+<span class="text-sm font-medium">Pin Version</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 border border-outline-variant bg-surface-container hover:bg-surface-variant hover:border-secondary/50 rounded-lg transition-all text-on-surface gap-2 group">
+<span class="material-symbols-outlined text-outline group-hover:text-secondary transition-colors">update</span>
+<span class="text-sm font-medium">Force Upgrade</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 border border-error/30 bg-error/5 hover:bg-error/10 rounded-lg transition-all text-error gap-2 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">delete</span>
+<span class="text-sm font-medium">Uninstall</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LibraryState {
 
- bool get isLoading; List<FormulaModel> get installedFormulae; List<CaskModel> get installedCasks; List<TapModel> get installedTaps; dynamic get selectedPackage; String get systemStorageUsed; SystemHealthState get healthState; String get brewPrefix; bool get isSyncing; String get filterQuery; Set<String> get expandedTaps;
+ bool get isLoading; List<FormulaModel> get installedFormulae; List<CaskModel> get installedCasks; List<TapModel> get installedTaps; dynamic get selectedPackage; SystemHealthState get healthState; String get brewPrefix; bool get isSyncing; String get filterQuery; Set<String> get expandedTaps;
 /// Create a copy of LibraryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LibraryStateCopyWith<LibraryState> get copyWith => _$LibraryStateCopyWithImpl<L
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LibraryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.installedFormulae, installedFormulae)&&const DeepCollectionEquality().equals(other.installedCasks, installedCasks)&&const DeepCollectionEquality().equals(other.installedTaps, installedTaps)&&const DeepCollectionEquality().equals(other.selectedPackage, selectedPackage)&&(identical(other.systemStorageUsed, systemStorageUsed) || other.systemStorageUsed == systemStorageUsed)&&(identical(other.healthState, healthState) || other.healthState == healthState)&&(identical(other.brewPrefix, brewPrefix) || other.brewPrefix == brewPrefix)&&(identical(other.isSyncing, isSyncing) || other.isSyncing == isSyncing)&&(identical(other.filterQuery, filterQuery) || other.filterQuery == filterQuery)&&const DeepCollectionEquality().equals(other.expandedTaps, expandedTaps));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LibraryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.installedFormulae, installedFormulae)&&const DeepCollectionEquality().equals(other.installedCasks, installedCasks)&&const DeepCollectionEquality().equals(other.installedTaps, installedTaps)&&const DeepCollectionEquality().equals(other.selectedPackage, selectedPackage)&&(identical(other.healthState, healthState) || other.healthState == healthState)&&(identical(other.brewPrefix, brewPrefix) || other.brewPrefix == brewPrefix)&&(identical(other.isSyncing, isSyncing) || other.isSyncing == isSyncing)&&(identical(other.filterQuery, filterQuery) || other.filterQuery == filterQuery)&&const DeepCollectionEquality().equals(other.expandedTaps, expandedTaps));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(installedFormulae),const DeepCollectionEquality().hash(installedCasks),const DeepCollectionEquality().hash(installedTaps),const DeepCollectionEquality().hash(selectedPackage),systemStorageUsed,healthState,brewPrefix,isSyncing,filterQuery,const DeepCollectionEquality().hash(expandedTaps));
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(installedFormulae),const DeepCollectionEquality().hash(installedCasks),const DeepCollectionEquality().hash(installedTaps),const DeepCollectionEquality().hash(selectedPackage),healthState,brewPrefix,isSyncing,filterQuery,const DeepCollectionEquality().hash(expandedTaps));
 
 @override
 String toString() {
-  return 'LibraryState(isLoading: $isLoading, installedFormulae: $installedFormulae, installedCasks: $installedCasks, installedTaps: $installedTaps, selectedPackage: $selectedPackage, systemStorageUsed: $systemStorageUsed, healthState: $healthState, brewPrefix: $brewPrefix, isSyncing: $isSyncing, filterQuery: $filterQuery, expandedTaps: $expandedTaps)';
+  return 'LibraryState(isLoading: $isLoading, installedFormulae: $installedFormulae, installedCasks: $installedCasks, installedTaps: $installedTaps, selectedPackage: $selectedPackage, healthState: $healthState, brewPrefix: $brewPrefix, isSyncing: $isSyncing, filterQuery: $filterQuery, expandedTaps: $expandedTaps)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LibraryStateCopyWith<$Res>  {
   factory $LibraryStateCopyWith(LibraryState value, $Res Function(LibraryState) _then) = _$LibraryStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, List<FormulaModel> installedFormulae, List<CaskModel> installedCasks, List<TapModel> installedTaps, dynamic selectedPackage, String systemStorageUsed, SystemHealthState healthState, String brewPrefix, bool isSyncing, String filterQuery, Set<String> expandedTaps
+ bool isLoading, List<FormulaModel> installedFormulae, List<CaskModel> installedCasks, List<TapModel> installedTaps, dynamic selectedPackage, SystemHealthState healthState, String brewPrefix, bool isSyncing, String filterQuery, Set<String> expandedTaps
 });
 
 
@@ -62,15 +62,14 @@ class _$LibraryStateCopyWithImpl<$Res>
 
 /// Create a copy of LibraryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? installedFormulae = null,Object? installedCasks = null,Object? installedTaps = null,Object? selectedPackage = freezed,Object? systemStorageUsed = null,Object? healthState = null,Object? brewPrefix = null,Object? isSyncing = null,Object? filterQuery = null,Object? expandedTaps = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? installedFormulae = null,Object? installedCasks = null,Object? installedTaps = null,Object? selectedPackage = freezed,Object? healthState = null,Object? brewPrefix = null,Object? isSyncing = null,Object? filterQuery = null,Object? expandedTaps = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,installedFormulae: null == installedFormulae ? _self.installedFormulae : installedFormulae // ignore: cast_nullable_to_non_nullable
 as List<FormulaModel>,installedCasks: null == installedCasks ? _self.installedCasks : installedCasks // ignore: cast_nullable_to_non_nullable
 as List<CaskModel>,installedTaps: null == installedTaps ? _self.installedTaps : installedTaps // ignore: cast_nullable_to_non_nullable
 as List<TapModel>,selectedPackage: freezed == selectedPackage ? _self.selectedPackage : selectedPackage // ignore: cast_nullable_to_non_nullable
-as dynamic,systemStorageUsed: null == systemStorageUsed ? _self.systemStorageUsed : systemStorageUsed // ignore: cast_nullable_to_non_nullable
-as String,healthState: null == healthState ? _self.healthState : healthState // ignore: cast_nullable_to_non_nullable
+as dynamic,healthState: null == healthState ? _self.healthState : healthState // ignore: cast_nullable_to_non_nullable
 as SystemHealthState,brewPrefix: null == brewPrefix ? _self.brewPrefix : brewPrefix // ignore: cast_nullable_to_non_nullable
 as String,isSyncing: null == isSyncing ? _self.isSyncing : isSyncing // ignore: cast_nullable_to_non_nullable
 as bool,filterQuery: null == filterQuery ? _self.filterQuery : filterQuery // ignore: cast_nullable_to_non_nullable
@@ -169,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  List<TapModel> installedTaps,  dynamic selectedPackage,  String systemStorageUsed,  SystemHealthState healthState,  String brewPrefix,  bool isSyncing,  String filterQuery,  Set<String> expandedTaps)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  List<TapModel> installedTaps,  dynamic selectedPackage,  SystemHealthState healthState,  String brewPrefix,  bool isSyncing,  String filterQuery,  Set<String> expandedTaps)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LibraryState() when $default != null:
-return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.installedTaps,_that.selectedPackage,_that.systemStorageUsed,_that.healthState,_that.brewPrefix,_that.isSyncing,_that.filterQuery,_that.expandedTaps);case _:
+return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.installedTaps,_that.selectedPackage,_that.healthState,_that.brewPrefix,_that.isSyncing,_that.filterQuery,_that.expandedTaps);case _:
   return orElse();
 
 }
@@ -190,10 +189,10 @@ return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  List<TapModel> installedTaps,  dynamic selectedPackage,  String systemStorageUsed,  SystemHealthState healthState,  String brewPrefix,  bool isSyncing,  String filterQuery,  Set<String> expandedTaps)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  List<TapModel> installedTaps,  dynamic selectedPackage,  SystemHealthState healthState,  String brewPrefix,  bool isSyncing,  String filterQuery,  Set<String> expandedTaps)  $default,) {final _that = this;
 switch (_that) {
 case _LibraryState():
-return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.installedTaps,_that.selectedPackage,_that.systemStorageUsed,_that.healthState,_that.brewPrefix,_that.isSyncing,_that.filterQuery,_that.expandedTaps);case _:
+return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.installedTaps,_that.selectedPackage,_that.healthState,_that.brewPrefix,_that.isSyncing,_that.filterQuery,_that.expandedTaps);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -210,10 +209,10 @@ return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  List<TapModel> installedTaps,  dynamic selectedPackage,  String systemStorageUsed,  SystemHealthState healthState,  String brewPrefix,  bool isSyncing,  String filterQuery,  Set<String> expandedTaps)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  List<FormulaModel> installedFormulae,  List<CaskModel> installedCasks,  List<TapModel> installedTaps,  dynamic selectedPackage,  SystemHealthState healthState,  String brewPrefix,  bool isSyncing,  String filterQuery,  Set<String> expandedTaps)?  $default,) {final _that = this;
 switch (_that) {
 case _LibraryState() when $default != null:
-return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.installedTaps,_that.selectedPackage,_that.systemStorageUsed,_that.healthState,_that.brewPrefix,_that.isSyncing,_that.filterQuery,_that.expandedTaps);case _:
+return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_that.installedTaps,_that.selectedPackage,_that.healthState,_that.brewPrefix,_that.isSyncing,_that.filterQuery,_that.expandedTaps);case _:
   return null;
 
 }
@@ -225,7 +224,7 @@ return $default(_that.isLoading,_that.installedFormulae,_that.installedCasks,_th
 
 
 class _LibraryState extends LibraryState {
-  const _LibraryState({this.isLoading = true, final  List<FormulaModel> installedFormulae = const [], final  List<CaskModel> installedCasks = const [], final  List<TapModel> installedTaps = const [], this.selectedPackage, this.systemStorageUsed = '0 B', this.healthState = const SystemHealthState(), this.brewPrefix = '/opt/homebrew', this.isSyncing = false, this.filterQuery = '', final  Set<String> expandedTaps = const <String>{}}): _installedFormulae = installedFormulae,_installedCasks = installedCasks,_installedTaps = installedTaps,_expandedTaps = expandedTaps,super._();
+  const _LibraryState({this.isLoading = true, final  List<FormulaModel> installedFormulae = const [], final  List<CaskModel> installedCasks = const [], final  List<TapModel> installedTaps = const [], this.selectedPackage, this.healthState = const SystemHealthState(), this.brewPrefix = '/opt/homebrew', this.isSyncing = false, this.filterQuery = '', final  Set<String> expandedTaps = const <String>{}}): _installedFormulae = installedFormulae,_installedCasks = installedCasks,_installedTaps = installedTaps,_expandedTaps = expandedTaps,super._();
   
 
 @override@JsonKey() final  bool isLoading;
@@ -251,7 +250,6 @@ class _LibraryState extends LibraryState {
 }
 
 @override final  dynamic selectedPackage;
-@override@JsonKey() final  String systemStorageUsed;
 @override@JsonKey() final  SystemHealthState healthState;
 @override@JsonKey() final  String brewPrefix;
 @override@JsonKey() final  bool isSyncing;
@@ -274,16 +272,16 @@ _$LibraryStateCopyWith<_LibraryState> get copyWith => __$LibraryStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibraryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._installedFormulae, _installedFormulae)&&const DeepCollectionEquality().equals(other._installedCasks, _installedCasks)&&const DeepCollectionEquality().equals(other._installedTaps, _installedTaps)&&const DeepCollectionEquality().equals(other.selectedPackage, selectedPackage)&&(identical(other.systemStorageUsed, systemStorageUsed) || other.systemStorageUsed == systemStorageUsed)&&(identical(other.healthState, healthState) || other.healthState == healthState)&&(identical(other.brewPrefix, brewPrefix) || other.brewPrefix == brewPrefix)&&(identical(other.isSyncing, isSyncing) || other.isSyncing == isSyncing)&&(identical(other.filterQuery, filterQuery) || other.filterQuery == filterQuery)&&const DeepCollectionEquality().equals(other._expandedTaps, _expandedTaps));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LibraryState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._installedFormulae, _installedFormulae)&&const DeepCollectionEquality().equals(other._installedCasks, _installedCasks)&&const DeepCollectionEquality().equals(other._installedTaps, _installedTaps)&&const DeepCollectionEquality().equals(other.selectedPackage, selectedPackage)&&(identical(other.healthState, healthState) || other.healthState == healthState)&&(identical(other.brewPrefix, brewPrefix) || other.brewPrefix == brewPrefix)&&(identical(other.isSyncing, isSyncing) || other.isSyncing == isSyncing)&&(identical(other.filterQuery, filterQuery) || other.filterQuery == filterQuery)&&const DeepCollectionEquality().equals(other._expandedTaps, _expandedTaps));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_installedFormulae),const DeepCollectionEquality().hash(_installedCasks),const DeepCollectionEquality().hash(_installedTaps),const DeepCollectionEquality().hash(selectedPackage),systemStorageUsed,healthState,brewPrefix,isSyncing,filterQuery,const DeepCollectionEquality().hash(_expandedTaps));
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_installedFormulae),const DeepCollectionEquality().hash(_installedCasks),const DeepCollectionEquality().hash(_installedTaps),const DeepCollectionEquality().hash(selectedPackage),healthState,brewPrefix,isSyncing,filterQuery,const DeepCollectionEquality().hash(_expandedTaps));
 
 @override
 String toString() {
-  return 'LibraryState(isLoading: $isLoading, installedFormulae: $installedFormulae, installedCasks: $installedCasks, installedTaps: $installedTaps, selectedPackage: $selectedPackage, systemStorageUsed: $systemStorageUsed, healthState: $healthState, brewPrefix: $brewPrefix, isSyncing: $isSyncing, filterQuery: $filterQuery, expandedTaps: $expandedTaps)';
+  return 'LibraryState(isLoading: $isLoading, installedFormulae: $installedFormulae, installedCasks: $installedCasks, installedTaps: $installedTaps, selectedPackage: $selectedPackage, healthState: $healthState, brewPrefix: $brewPrefix, isSyncing: $isSyncing, filterQuery: $filterQuery, expandedTaps: $expandedTaps)';
 }
 
 
@@ -294,7 +292,7 @@ abstract mixin class _$LibraryStateCopyWith<$Res> implements $LibraryStateCopyWi
   factory _$LibraryStateCopyWith(_LibraryState value, $Res Function(_LibraryState) _then) = __$LibraryStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, List<FormulaModel> installedFormulae, List<CaskModel> installedCasks, List<TapModel> installedTaps, dynamic selectedPackage, String systemStorageUsed, SystemHealthState healthState, String brewPrefix, bool isSyncing, String filterQuery, Set<String> expandedTaps
+ bool isLoading, List<FormulaModel> installedFormulae, List<CaskModel> installedCasks, List<TapModel> installedTaps, dynamic selectedPackage, SystemHealthState healthState, String brewPrefix, bool isSyncing, String filterQuery, Set<String> expandedTaps
 });
 
 
@@ -311,15 +309,14 @@ class __$LibraryStateCopyWithImpl<$Res>
 
 /// Create a copy of LibraryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? installedFormulae = null,Object? installedCasks = null,Object? installedTaps = null,Object? selectedPackage = freezed,Object? systemStorageUsed = null,Object? healthState = null,Object? brewPrefix = null,Object? isSyncing = null,Object? filterQuery = null,Object? expandedTaps = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? installedFormulae = null,Object? installedCasks = null,Object? installedTaps = null,Object? selectedPackage = freezed,Object? healthState = null,Object? brewPrefix = null,Object? isSyncing = null,Object? filterQuery = null,Object? expandedTaps = null,}) {
   return _then(_LibraryState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,installedFormulae: null == installedFormulae ? _self._installedFormulae : installedFormulae // ignore: cast_nullable_to_non_nullable
 as List<FormulaModel>,installedCasks: null == installedCasks ? _self._installedCasks : installedCasks // ignore: cast_nullable_to_non_nullable
 as List<CaskModel>,installedTaps: null == installedTaps ? _self._installedTaps : installedTaps // ignore: cast_nullable_to_non_nullable
 as List<TapModel>,selectedPackage: freezed == selectedPackage ? _self.selectedPackage : selectedPackage // ignore: cast_nullable_to_non_nullable
-as dynamic,systemStorageUsed: null == systemStorageUsed ? _self.systemStorageUsed : systemStorageUsed // ignore: cast_nullable_to_non_nullable
-as String,healthState: null == healthState ? _self.healthState : healthState // ignore: cast_nullable_to_non_nullable
+as dynamic,healthState: null == healthState ? _self.healthState : healthState // ignore: cast_nullable_to_non_nullable
 as SystemHealthState,brewPrefix: null == brewPrefix ? _self.brewPrefix : brewPrefix // ignore: cast_nullable_to_non_nullable
 as String,isSyncing: null == isSyncing ? _self.isSyncing : isSyncing // ignore: cast_nullable_to_non_nullable
 as bool,filterQuery: null == filterQuery ? _self.filterQuery : filterQuery // ignore: cast_nullable_to_non_nullable

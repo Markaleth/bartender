@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SystemHealthState {
 
- int get globalHealthScore; int get outdatedCount; String get reclaimableSpace; int get doctorWarningsCount; int get doctorErrorsCount; List<String> get doctorIssues; int get orphanedDependenciesCount;
+ int get globalHealthScore; String get systemStorageUsed; int get outdatedCount; String get reclaimableSpace; int get doctorWarningsCount; int get doctorErrorsCount; List<String> get doctorIssues; int get orphanedDependenciesCount;
 /// Create a copy of SystemHealthState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SystemHealthStateCopyWith<SystemHealthState> get copyWith => _$SystemHealthStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemHealthState&&(identical(other.globalHealthScore, globalHealthScore) || other.globalHealthScore == globalHealthScore)&&(identical(other.outdatedCount, outdatedCount) || other.outdatedCount == outdatedCount)&&(identical(other.reclaimableSpace, reclaimableSpace) || other.reclaimableSpace == reclaimableSpace)&&(identical(other.doctorWarningsCount, doctorWarningsCount) || other.doctorWarningsCount == doctorWarningsCount)&&(identical(other.doctorErrorsCount, doctorErrorsCount) || other.doctorErrorsCount == doctorErrorsCount)&&const DeepCollectionEquality().equals(other.doctorIssues, doctorIssues)&&(identical(other.orphanedDependenciesCount, orphanedDependenciesCount) || other.orphanedDependenciesCount == orphanedDependenciesCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemHealthState&&(identical(other.globalHealthScore, globalHealthScore) || other.globalHealthScore == globalHealthScore)&&(identical(other.systemStorageUsed, systemStorageUsed) || other.systemStorageUsed == systemStorageUsed)&&(identical(other.outdatedCount, outdatedCount) || other.outdatedCount == outdatedCount)&&(identical(other.reclaimableSpace, reclaimableSpace) || other.reclaimableSpace == reclaimableSpace)&&(identical(other.doctorWarningsCount, doctorWarningsCount) || other.doctorWarningsCount == doctorWarningsCount)&&(identical(other.doctorErrorsCount, doctorErrorsCount) || other.doctorErrorsCount == doctorErrorsCount)&&const DeepCollectionEquality().equals(other.doctorIssues, doctorIssues)&&(identical(other.orphanedDependenciesCount, orphanedDependenciesCount) || other.orphanedDependenciesCount == orphanedDependenciesCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,globalHealthScore,outdatedCount,reclaimableSpace,doctorWarningsCount,doctorErrorsCount,const DeepCollectionEquality().hash(doctorIssues),orphanedDependenciesCount);
+int get hashCode => Object.hash(runtimeType,globalHealthScore,systemStorageUsed,outdatedCount,reclaimableSpace,doctorWarningsCount,doctorErrorsCount,const DeepCollectionEquality().hash(doctorIssues),orphanedDependenciesCount);
 
 @override
 String toString() {
-  return 'SystemHealthState(globalHealthScore: $globalHealthScore, outdatedCount: $outdatedCount, reclaimableSpace: $reclaimableSpace, doctorWarningsCount: $doctorWarningsCount, doctorErrorsCount: $doctorErrorsCount, doctorIssues: $doctorIssues, orphanedDependenciesCount: $orphanedDependenciesCount)';
+  return 'SystemHealthState(globalHealthScore: $globalHealthScore, systemStorageUsed: $systemStorageUsed, outdatedCount: $outdatedCount, reclaimableSpace: $reclaimableSpace, doctorWarningsCount: $doctorWarningsCount, doctorErrorsCount: $doctorErrorsCount, doctorIssues: $doctorIssues, orphanedDependenciesCount: $orphanedDependenciesCount)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SystemHealthStateCopyWith<$Res>  {
   factory $SystemHealthStateCopyWith(SystemHealthState value, $Res Function(SystemHealthState) _then) = _$SystemHealthStateCopyWithImpl;
 @useResult
 $Res call({
- int globalHealthScore, int outdatedCount, String reclaimableSpace, int doctorWarningsCount, int doctorErrorsCount, List<String> doctorIssues, int orphanedDependenciesCount
+ int globalHealthScore, String systemStorageUsed, int outdatedCount, String reclaimableSpace, int doctorWarningsCount, int doctorErrorsCount, List<String> doctorIssues, int orphanedDependenciesCount
 });
 
 
@@ -62,10 +62,11 @@ class _$SystemHealthStateCopyWithImpl<$Res>
 
 /// Create a copy of SystemHealthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? globalHealthScore = null,Object? outdatedCount = null,Object? reclaimableSpace = null,Object? doctorWarningsCount = null,Object? doctorErrorsCount = null,Object? doctorIssues = null,Object? orphanedDependenciesCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? globalHealthScore = null,Object? systemStorageUsed = null,Object? outdatedCount = null,Object? reclaimableSpace = null,Object? doctorWarningsCount = null,Object? doctorErrorsCount = null,Object? doctorIssues = null,Object? orphanedDependenciesCount = null,}) {
   return _then(_self.copyWith(
 globalHealthScore: null == globalHealthScore ? _self.globalHealthScore : globalHealthScore // ignore: cast_nullable_to_non_nullable
-as int,outdatedCount: null == outdatedCount ? _self.outdatedCount : outdatedCount // ignore: cast_nullable_to_non_nullable
+as int,systemStorageUsed: null == systemStorageUsed ? _self.systemStorageUsed : systemStorageUsed // ignore: cast_nullable_to_non_nullable
+as String,outdatedCount: null == outdatedCount ? _self.outdatedCount : outdatedCount // ignore: cast_nullable_to_non_nullable
 as int,reclaimableSpace: null == reclaimableSpace ? _self.reclaimableSpace : reclaimableSpace // ignore: cast_nullable_to_non_nullable
 as String,doctorWarningsCount: null == doctorWarningsCount ? _self.doctorWarningsCount : doctorWarningsCount // ignore: cast_nullable_to_non_nullable
 as int,doctorErrorsCount: null == doctorErrorsCount ? _self.doctorErrorsCount : doctorErrorsCount // ignore: cast_nullable_to_non_nullable
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int globalHealthScore,  int outdatedCount,  String reclaimableSpace,  int doctorWarningsCount,  int doctorErrorsCount,  List<String> doctorIssues,  int orphanedDependenciesCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int globalHealthScore,  String systemStorageUsed,  int outdatedCount,  String reclaimableSpace,  int doctorWarningsCount,  int doctorErrorsCount,  List<String> doctorIssues,  int orphanedDependenciesCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SystemHealthState() when $default != null:
-return $default(_that.globalHealthScore,_that.outdatedCount,_that.reclaimableSpace,_that.doctorWarningsCount,_that.doctorErrorsCount,_that.doctorIssues,_that.orphanedDependenciesCount);case _:
+return $default(_that.globalHealthScore,_that.systemStorageUsed,_that.outdatedCount,_that.reclaimableSpace,_that.doctorWarningsCount,_that.doctorErrorsCount,_that.doctorIssues,_that.orphanedDependenciesCount);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.globalHealthScore,_that.outdatedCount,_that.reclaimableSpa
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int globalHealthScore,  int outdatedCount,  String reclaimableSpace,  int doctorWarningsCount,  int doctorErrorsCount,  List<String> doctorIssues,  int orphanedDependenciesCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int globalHealthScore,  String systemStorageUsed,  int outdatedCount,  String reclaimableSpace,  int doctorWarningsCount,  int doctorErrorsCount,  List<String> doctorIssues,  int orphanedDependenciesCount)  $default,) {final _that = this;
 switch (_that) {
 case _SystemHealthState():
-return $default(_that.globalHealthScore,_that.outdatedCount,_that.reclaimableSpace,_that.doctorWarningsCount,_that.doctorErrorsCount,_that.doctorIssues,_that.orphanedDependenciesCount);case _:
+return $default(_that.globalHealthScore,_that.systemStorageUsed,_that.outdatedCount,_that.reclaimableSpace,_that.doctorWarningsCount,_that.doctorErrorsCount,_that.doctorIssues,_that.orphanedDependenciesCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.globalHealthScore,_that.outdatedCount,_that.reclaimableSpa
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int globalHealthScore,  int outdatedCount,  String reclaimableSpace,  int doctorWarningsCount,  int doctorErrorsCount,  List<String> doctorIssues,  int orphanedDependenciesCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int globalHealthScore,  String systemStorageUsed,  int outdatedCount,  String reclaimableSpace,  int doctorWarningsCount,  int doctorErrorsCount,  List<String> doctorIssues,  int orphanedDependenciesCount)?  $default,) {final _that = this;
 switch (_that) {
 case _SystemHealthState() when $default != null:
-return $default(_that.globalHealthScore,_that.outdatedCount,_that.reclaimableSpace,_that.doctorWarningsCount,_that.doctorErrorsCount,_that.doctorIssues,_that.orphanedDependenciesCount);case _:
+return $default(_that.globalHealthScore,_that.systemStorageUsed,_that.outdatedCount,_that.reclaimableSpace,_that.doctorWarningsCount,_that.doctorErrorsCount,_that.doctorIssues,_that.orphanedDependenciesCount);case _:
   return null;
 
 }
@@ -212,10 +213,11 @@ return $default(_that.globalHealthScore,_that.outdatedCount,_that.reclaimableSpa
 
 
 class _SystemHealthState implements SystemHealthState {
-  const _SystemHealthState({this.globalHealthScore = 100, this.outdatedCount = 0, this.reclaimableSpace = '', this.doctorWarningsCount = 0, this.doctorErrorsCount = 0, final  List<String> doctorIssues = const [], this.orphanedDependenciesCount = 0}): _doctorIssues = doctorIssues;
+  const _SystemHealthState({this.globalHealthScore = 100, this.systemStorageUsed = '0 B', this.outdatedCount = 0, this.reclaimableSpace = '', this.doctorWarningsCount = 0, this.doctorErrorsCount = 0, final  List<String> doctorIssues = const [], this.orphanedDependenciesCount = 0}): _doctorIssues = doctorIssues;
   
 
 @override@JsonKey() final  int globalHealthScore;
+@override@JsonKey() final  String systemStorageUsed;
 @override@JsonKey() final  int outdatedCount;
 @override@JsonKey() final  String reclaimableSpace;
 @override@JsonKey() final  int doctorWarningsCount;
@@ -239,16 +241,16 @@ _$SystemHealthStateCopyWith<_SystemHealthState> get copyWith => __$SystemHealthS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SystemHealthState&&(identical(other.globalHealthScore, globalHealthScore) || other.globalHealthScore == globalHealthScore)&&(identical(other.outdatedCount, outdatedCount) || other.outdatedCount == outdatedCount)&&(identical(other.reclaimableSpace, reclaimableSpace) || other.reclaimableSpace == reclaimableSpace)&&(identical(other.doctorWarningsCount, doctorWarningsCount) || other.doctorWarningsCount == doctorWarningsCount)&&(identical(other.doctorErrorsCount, doctorErrorsCount) || other.doctorErrorsCount == doctorErrorsCount)&&const DeepCollectionEquality().equals(other._doctorIssues, _doctorIssues)&&(identical(other.orphanedDependenciesCount, orphanedDependenciesCount) || other.orphanedDependenciesCount == orphanedDependenciesCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SystemHealthState&&(identical(other.globalHealthScore, globalHealthScore) || other.globalHealthScore == globalHealthScore)&&(identical(other.systemStorageUsed, systemStorageUsed) || other.systemStorageUsed == systemStorageUsed)&&(identical(other.outdatedCount, outdatedCount) || other.outdatedCount == outdatedCount)&&(identical(other.reclaimableSpace, reclaimableSpace) || other.reclaimableSpace == reclaimableSpace)&&(identical(other.doctorWarningsCount, doctorWarningsCount) || other.doctorWarningsCount == doctorWarningsCount)&&(identical(other.doctorErrorsCount, doctorErrorsCount) || other.doctorErrorsCount == doctorErrorsCount)&&const DeepCollectionEquality().equals(other._doctorIssues, _doctorIssues)&&(identical(other.orphanedDependenciesCount, orphanedDependenciesCount) || other.orphanedDependenciesCount == orphanedDependenciesCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,globalHealthScore,outdatedCount,reclaimableSpace,doctorWarningsCount,doctorErrorsCount,const DeepCollectionEquality().hash(_doctorIssues),orphanedDependenciesCount);
+int get hashCode => Object.hash(runtimeType,globalHealthScore,systemStorageUsed,outdatedCount,reclaimableSpace,doctorWarningsCount,doctorErrorsCount,const DeepCollectionEquality().hash(_doctorIssues),orphanedDependenciesCount);
 
 @override
 String toString() {
-  return 'SystemHealthState(globalHealthScore: $globalHealthScore, outdatedCount: $outdatedCount, reclaimableSpace: $reclaimableSpace, doctorWarningsCount: $doctorWarningsCount, doctorErrorsCount: $doctorErrorsCount, doctorIssues: $doctorIssues, orphanedDependenciesCount: $orphanedDependenciesCount)';
+  return 'SystemHealthState(globalHealthScore: $globalHealthScore, systemStorageUsed: $systemStorageUsed, outdatedCount: $outdatedCount, reclaimableSpace: $reclaimableSpace, doctorWarningsCount: $doctorWarningsCount, doctorErrorsCount: $doctorErrorsCount, doctorIssues: $doctorIssues, orphanedDependenciesCount: $orphanedDependenciesCount)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$SystemHealthStateCopyWith<$Res> implements $SystemHealthS
   factory _$SystemHealthStateCopyWith(_SystemHealthState value, $Res Function(_SystemHealthState) _then) = __$SystemHealthStateCopyWithImpl;
 @override @useResult
 $Res call({
- int globalHealthScore, int outdatedCount, String reclaimableSpace, int doctorWarningsCount, int doctorErrorsCount, List<String> doctorIssues, int orphanedDependenciesCount
+ int globalHealthScore, String systemStorageUsed, int outdatedCount, String reclaimableSpace, int doctorWarningsCount, int doctorErrorsCount, List<String> doctorIssues, int orphanedDependenciesCount
 });
 
 
@@ -276,10 +278,11 @@ class __$SystemHealthStateCopyWithImpl<$Res>
 
 /// Create a copy of SystemHealthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? globalHealthScore = null,Object? outdatedCount = null,Object? reclaimableSpace = null,Object? doctorWarningsCount = null,Object? doctorErrorsCount = null,Object? doctorIssues = null,Object? orphanedDependenciesCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? globalHealthScore = null,Object? systemStorageUsed = null,Object? outdatedCount = null,Object? reclaimableSpace = null,Object? doctorWarningsCount = null,Object? doctorErrorsCount = null,Object? doctorIssues = null,Object? orphanedDependenciesCount = null,}) {
   return _then(_SystemHealthState(
 globalHealthScore: null == globalHealthScore ? _self.globalHealthScore : globalHealthScore // ignore: cast_nullable_to_non_nullable
-as int,outdatedCount: null == outdatedCount ? _self.outdatedCount : outdatedCount // ignore: cast_nullable_to_non_nullable
+as int,systemStorageUsed: null == systemStorageUsed ? _self.systemStorageUsed : systemStorageUsed // ignore: cast_nullable_to_non_nullable
+as String,outdatedCount: null == outdatedCount ? _self.outdatedCount : outdatedCount // ignore: cast_nullable_to_non_nullable
 as int,reclaimableSpace: null == reclaimableSpace ? _self.reclaimableSpace : reclaimableSpace // ignore: cast_nullable_to_non_nullable
 as String,doctorWarningsCount: null == doctorWarningsCount ? _self.doctorWarningsCount : doctorWarningsCount // ignore: cast_nullable_to_non_nullable
 as int,doctorErrorsCount: null == doctorErrorsCount ? _self.doctorErrorsCount : doctorErrorsCount // ignore: cast_nullable_to_non_nullable

@@ -13,6 +13,9 @@ import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/features/library/models/library_state.dart';
+import 'package:bartender/features/queue/view_models/queue_view_model.dart';
+import 'package:bartender/core/models/operation_task/operation_task.dart';
+import 'package:bartender/features/library/widgets/health_dashboard_modal.dart';
 
 class LibraryView extends StatelessWidget {
   const LibraryView({super.key});
@@ -27,13 +30,15 @@ class LibraryView extends StatelessWidget {
         packageRepository: context.read<PackageRepository>(),
       )..init(),
       builder: (context, viewModel, state) =>
-          const _LibraryCommandCenterContent(),
+          _LibraryCommandCenterContent(state: state),
     );
   }
 }
 
 class _LibraryCommandCenterContent extends StatelessWidget {
-  const _LibraryCommandCenterContent();
+  final LibraryState state;
+
+  const _LibraryCommandCenterContent({required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +48,45 @@ class _LibraryCommandCenterContent extends StatelessWidget {
         spacing: spacingM,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const GlobalHealthStatusWidget(),
+          GlobalHealthStatusWidget(
+            healthState: state.healthState,
+            onAutoremove: () {
+              context.read<QueueViewModel>().queueOperation(
+                packageId: 'system',
+                type: PackageType.system,
+                operation: OperationType.autoremove,
+              );
+            },
+            onOpenDashboard: () {
+              showDialog(
+                context: context,
+                builder: (dialogContext) => HealthDashboardModal(
+                  healthState: state.healthState,
+                  onUpdateAll: () {
+                    context.read<QueueViewModel>().queueOperation(
+                      packageId: 'all',
+                      type: PackageType.system,
+                      operation: OperationType.upgrade,
+                    );
+                  },
+                  onCleanup: () {
+                    context.read<QueueViewModel>().queueOperation(
+                      packageId: 'system',
+                      type: PackageType.system,
+                      operation: OperationType.cleanup,
+                    );
+                  },
+                  onRemoveOrphans: () {
+                    context.read<QueueViewModel>().queueOperation(
+                      packageId: 'system',
+                      type: PackageType.system,
+                      operation: OperationType.autoremove,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
           // Dual-Pane View
           Expanded(
             child: Row(

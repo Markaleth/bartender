@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
-import 'package:bartender/features/library/view_models/library_view_model.dart';
-import 'package:bartender/features/queue/view_models/queue_view_model.dart';
-import 'package:bartender/core/models/operation_task/operation_task.dart';
+import 'package:bartender/features/library/models/system_health_state.dart';
 
 class HealthDashboardModal extends StatelessWidget {
-  const HealthDashboardModal({super.key});
+  final SystemHealthState healthState;
+  final VoidCallback onUpdateAll;
+  final VoidCallback onCleanup;
+  final VoidCallback onRemoveOrphans;
+
+  const HealthDashboardModal({
+    super.key,
+    required this.healthState,
+    required this.onUpdateAll,
+    required this.onCleanup,
+    required this.onRemoveOrphans,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<LibraryViewModel>();
-    final healthState = viewModel.state.healthState;
-
     return Dialog(
       backgroundColor: AppColors.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusL)),
@@ -45,53 +50,30 @@ class HealthDashboardModal extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  _buildSection(
-                    context,
+                  HealthDashboardSection(
                     title: 'Outdated Packages',
                     value: '${healthState.outdatedCount} updates available',
                     actionLabel: 'Update All',
-                    onAction: healthState.outdatedCount > 0
-                        ? () {
-                            context.read<QueueViewModel>().queueOperation(
-                              packageId: 'all',
-                              type: PackageType.system,
-                              operation: OperationType.upgrade,
-                            );
-                          }
-                        : null,
+                    onAction: healthState.outdatedCount > 0 ? onUpdateAll : null,
                     icon: Icons.system_update,
                   ),
                   const SizedBox(height: spacingM),
-                  _buildSection(
-                    context,
+                  HealthDashboardSection(
                     title: 'Reclaimable Space',
                     value: healthState.reclaimableSpace,
                     actionLabel: 'Run Cleanup',
                     onAction: healthState.reclaimableSpace != '0 B' && healthState.reclaimableSpace.isNotEmpty
-                        ? () {
-                            context.read<QueueViewModel>().queueOperation(
-                              packageId: 'system',
-                              type: PackageType.system,
-                              operation: OperationType.cleanup,
-                            );
-                          }
+                        ? onCleanup
                         : null,
                     icon: Icons.cleaning_services,
                   ),
                   const SizedBox(height: spacingM),
-                  _buildSection(
-                    context,
+                  HealthDashboardSection(
                     title: 'Orphaned Dependencies',
                     value: '${healthState.orphanedDependenciesCount} orphans',
                     actionLabel: 'Remove Orphans',
                     onAction: healthState.orphanedDependenciesCount > 0
-                        ? () {
-                            context.read<QueueViewModel>().queueOperation(
-                              packageId: 'system',
-                              type: PackageType.system,
-                              operation: OperationType.autoremove,
-                            );
-                          }
+                        ? onRemoveOrphans
                         : null,
                     icon: Icons.delete_outline,
                   ),
@@ -131,15 +113,26 @@ class HealthDashboardModal extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildSection(
-    BuildContext context, {
-    required String title,
-    required String value,
-    required String actionLabel,
-    VoidCallback? onAction,
-    required IconData icon,
-  }) {
+class HealthDashboardSection extends StatelessWidget {
+  final String title;
+  final String value;
+  final String actionLabel;
+  final VoidCallback? onAction;
+  final IconData icon;
+
+  const HealthDashboardSection({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.actionLabel,
+    this.onAction,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(spacingM),
       decoration: BoxDecoration(

@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
-import 'package:bartender/features/library/view_models/library_view_model.dart';
-import 'package:bartender/features/queue/view_models/queue_view_model.dart';
-import 'package:bartender/core/models/operation_task/operation_task.dart';
-import 'package:bartender/features/library/widgets/health_dashboard_modal.dart';
+import 'package:bartender/features/library/models/system_health_state.dart';
 
 class GlobalHealthStatusWidget extends StatelessWidget {
-  const GlobalHealthStatusWidget({super.key});
+  final SystemHealthState healthState;
+  final VoidCallback onAutoremove;
+  final VoidCallback onOpenDashboard;
+
+  const GlobalHealthStatusWidget({
+    super.key,
+    required this.healthState,
+    required this.onAutoremove,
+    required this.onOpenDashboard,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<LibraryViewModel>();
-    final state = viewModel.state;
-    final healthState = state.healthState;
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: spacingM),
       child: Column(
@@ -25,7 +26,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
               Expanded(
                 child: StatusCard(
                   title: 'System Storage',
-                  value: state.systemStorageUsed,
+                  value: healthState.systemStorageUsed,
                   icon: Icons.storage,
                   color: AppColors.secondary,
                 ),
@@ -46,13 +47,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                             color: AppColors.textPrimary,
                             size: 20,
                           ),
-                          onPressed: () {
-                            context.read<QueueViewModel>().queueOperation(
-                              packageId: 'system',
-                              type: PackageType.system,
-                              operation: OperationType.autoremove,
-                            );
-                          },
+                          onPressed: onAutoremove,
                         )
                       : null,
                 ),
@@ -70,20 +65,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                       color: AppColors.textPrimary,
                       size: 20,
                     ),
-                    onPressed: () {
-                      final libraryVM = context.read<LibraryViewModel>();
-                      final queueVM = context.read<QueueViewModel>();
-                      showDialog(
-                        context: context,
-                        builder: (_) => MultiProvider(
-                          providers: [
-                            ChangeNotifierProvider.value(value: libraryVM),
-                            ChangeNotifierProvider.value(value: queueVM),
-                          ],
-                          child: const HealthDashboardModal(),
-                        ),
-                      );
-                    },
+                    onPressed: onOpenDashboard,
                   ),
                 ),
               ),
