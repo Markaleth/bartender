@@ -23,8 +23,8 @@ void main() {
 
     tearDown(() {
       if (!isDisposed) {
-      viewModel.dispose();
-      isDisposed = true;
+        viewModel.dispose();
+        isDisposed = true;
       }
     });
 
@@ -40,8 +40,9 @@ void main() {
         resolvedAt: DateTime.now(),
       );
 
-      when(() => mockIconService.getMemoryCachedIcon('test'))
-          .thenReturn(cachedIcon);
+      when(
+        () => mockIconService.getMemoryCachedIcon('test'),
+      ).thenReturn(cachedIcon);
 
       viewModel.loadIcon('test', 'http://test.com');
 
@@ -50,65 +51,91 @@ void main() {
       verifyNever(() => mockIconService.getIcon(any(), any()));
     });
 
-    test('Network Debounce: loadIcon should wait before emitting success state', () async {
-      final fetchedIcon = ResolvedIcon(
-        packageName: 'test',
-        iconUrl: 'http://test.com/icon.png',
-        isSvg: false,
-        resolvedAt: DateTime.now(),
-      );
+    test(
+      'Network Debounce: loadIcon should wait before emitting success state',
+      () async {
+        final fetchedIcon = ResolvedIcon(
+          packageName: 'test',
+          iconUrl: 'http://test.com/icon.png',
+          isSvg: false,
+          resolvedAt: DateTime.now(),
+        );
 
-      when(() => mockIconService.getMemoryCachedIcon('test')).thenReturn(null);
-      when(() => mockIconService.getIcon('test', 'http://test.com'))
-          .thenAnswer((_) async => fetchedIcon);
+        when(
+          () => mockIconService.getMemoryCachedIcon('test'),
+        ).thenReturn(null);
+        when(
+          () => mockIconService.getIcon('test', 'http://test.com'),
+        ).thenAnswer((_) async => fetchedIcon);
 
-      viewModel.loadIcon('test', 'http://test.com');
+        viewModel.loadIcon('test', 'http://test.com');
 
-      // Should still be loading immediately after call
-      expect(viewModel.state, const PackageIconState.loading());
+        // Should still be loading immediately after call
+        expect(viewModel.state, const PackageIconState.loading());
 
-      // Wait for debounce duration
-      await Future.delayed(packageIconDebounceDuration + const Duration(milliseconds: 50));
+        // Wait for debounce duration
+        await Future.delayed(
+          packageIconDebounceDuration + const Duration(milliseconds: 50),
+        );
 
-      expect(viewModel.state, PackageIconState.success(fetchedIcon));
-      verify(() => mockIconService.getIcon('test', 'http://test.com')).called(1);
-    });
+        expect(viewModel.state, PackageIconState.success(fetchedIcon));
+        verify(
+          () => mockIconService.getIcon('test', 'http://test.com'),
+        ).called(1);
+      },
+    );
 
-    test('Fallback: loadIcon should emit fallback state if icon resolution returns null', () async {
-      when(() => mockIconService.getMemoryCachedIcon('test')).thenReturn(null);
-      when(() => mockIconService.getIcon('test', 'http://test.com'))
-          .thenAnswer((_) async => null);
+    test(
+      'Fallback: loadIcon should emit fallback state if icon resolution returns null',
+      () async {
+        when(
+          () => mockIconService.getMemoryCachedIcon('test'),
+        ).thenReturn(null);
+        when(
+          () => mockIconService.getIcon('test', 'http://test.com'),
+        ).thenAnswer((_) async => null);
 
-      viewModel.loadIcon('test', 'http://test.com');
+        viewModel.loadIcon('test', 'http://test.com');
 
-      await Future.delayed(packageIconDebounceDuration + const Duration(milliseconds: 50));
+        await Future.delayed(
+          packageIconDebounceDuration + const Duration(milliseconds: 50),
+        );
 
-      expect(viewModel.state, const PackageIconState.fallback());
-    });
+        expect(viewModel.state, const PackageIconState.fallback());
+      },
+    );
 
-    test('Dispose: ensure calling dispose prevents subsequent states', () async {
-      final fetchedIcon = ResolvedIcon(
-        packageName: 'test',
-        iconUrl: 'http://test.com/icon.png',
-        isSvg: false,
-        resolvedAt: DateTime.now(),
-      );
+    test(
+      'Dispose: ensure calling dispose prevents subsequent states',
+      () async {
+        final fetchedIcon = ResolvedIcon(
+          packageName: 'test',
+          iconUrl: 'http://test.com/icon.png',
+          isSvg: false,
+          resolvedAt: DateTime.now(),
+        );
 
-      when(() => mockIconService.getMemoryCachedIcon('test')).thenReturn(null);
-      when(() => mockIconService.getIcon('test', 'http://test.com'))
-          .thenAnswer((_) async => fetchedIcon);
+        when(
+          () => mockIconService.getMemoryCachedIcon('test'),
+        ).thenReturn(null);
+        when(
+          () => mockIconService.getIcon('test', 'http://test.com'),
+        ).thenAnswer((_) async => fetchedIcon);
 
-      viewModel.loadIcon('test', 'http://test.com');
+        viewModel.loadIcon('test', 'http://test.com');
 
-      viewModel.dispose();
-      isDisposed = true;
+        viewModel.dispose();
+        isDisposed = true;
 
-      // Wait for debounce duration
-      await Future.delayed(packageIconDebounceDuration + const Duration(milliseconds: 50));
+        // Wait for debounce duration
+        await Future.delayed(
+          packageIconDebounceDuration + const Duration(milliseconds: 50),
+        );
 
-      // Because it was disposed, state should remain loading
-      expect(viewModel.state, const PackageIconState.loading());
-      verifyNever(() => mockIconService.getIcon(any(), any()));
-    });
+        // Because it was disposed, state should remain loading
+        expect(viewModel.state, const PackageIconState.loading());
+        verifyNever(() => mockIconService.getIcon(any(), any()));
+      },
+    );
   });
 }

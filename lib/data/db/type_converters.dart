@@ -16,7 +16,8 @@ class StringListConverter extends TypeConverter<List<String>, String> {
   }
 }
 
-class MapListConverter extends TypeConverter<List<Map<String, dynamic>>, String> {
+class MapListConverter
+    extends TypeConverter<List<Map<String, dynamic>>, String> {
   const MapListConverter();
 
   @override

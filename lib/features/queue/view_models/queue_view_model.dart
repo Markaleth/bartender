@@ -14,7 +14,12 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
   final TapStatusNotifier _tapNotifier;
   bool _isProcessing = false;
 
-  QueueViewModel(this._brewService, this._database, this._packageNotifier, this._tapNotifier) : super(QueueState());
+  QueueViewModel(
+    this._brewService,
+    this._database,
+    this._packageNotifier,
+    this._tapNotifier,
+  ) : super(QueueState());
 
   void enqueue(OperationTask task) {
     final updatedTasks = List<OperationTask>.from(state.tasks)..add(task);
@@ -78,7 +83,7 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
 
   Future<StreamingShellCommand> _startShellCommand(OperationTask task) async {
     final isCask = task.type == PackageType.cask;
-    
+
     if (task.type == PackageType.tap) {
       if (task.operation == OperationType.install) {
         return _brewService.runCustomStream(['tap', task.packageId]);
@@ -86,7 +91,7 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
         return _brewService.runCustomStream(['untap', task.packageId]);
       }
     }
-    
+
     switch (task.operation) {
       case OperationType.install:
         return _brewService.installWithStream(task.packageId, isCask: isCask);

@@ -75,7 +75,12 @@ class PackageListItem extends StatelessWidget {
                     version: version,
                     constraints: constraints,
                   ),
-                  if (isExpanded) _PackageListItemDetails(model: model, id: id, isCask: isCask),
+                  if (isExpanded)
+                    _PackageListItemDetails(
+                      model: model,
+                      id: id,
+                      isCask: isCask,
+                    ),
                 ],
               ),
             ),
@@ -193,7 +198,11 @@ class _PackageListItemDetails extends StatelessWidget {
   final String id;
   final bool isCask;
 
-  const _PackageListItemDetails({required this.model, required this.id, required this.isCask});
+  const _PackageListItemDetails({
+    required this.model,
+    required this.id,
+    required this.isCask,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -212,11 +221,7 @@ class _PackageListItemDetails extends StatelessWidget {
           ),
           child: Align(
             alignment: Alignment.centerRight,
-            child: _PackageActionButton(
-              model: model,
-              id: id,
-              isCask: isCask,
-            ),
+            child: _PackageActionButton(model: model, id: id, isCask: isCask),
           ),
         ),
       ],
@@ -237,7 +242,8 @@ class _PackageActionButton extends StatelessWidget {
 
   String _getButtonLabel(bool isQueued, bool isInProgress) {
     if (isQueued) return 'Queued...';
-    if (isInProgress) return model.isInstalled ? 'Uninstalling...' : 'Installing...';
+    if (isInProgress)
+      return model.isInstalled ? 'Uninstalling...' : 'Installing...';
     return model.isInstalled ? 'Uninstall' : 'Install';
   }
 
@@ -273,7 +279,9 @@ class _PackageActionButton extends StatelessWidget {
                   height: 14,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.onPrimary),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.onPrimary,
+                    ),
                   ),
                 ),
                 const SizedBox(width: spacingS),
@@ -281,7 +289,9 @@ class _PackageActionButton extends StatelessWidget {
               Text(
                 _getButtonLabel(isQueued, isInProgress),
                 style: context.labelL.copyWith(
-                  color: (isQueued || isInProgress) ? AppColors.textSecondary : AppColors.onPrimary,
+                  color: (isQueued || isInProgress)
+                      ? AppColors.textSecondary
+                      : AppColors.onPrimary,
                 ),
               ),
             ],
@@ -291,4 +301,3 @@ class _PackageActionButton extends StatelessWidget {
     );
   }
 }
-

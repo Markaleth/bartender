@@ -11,13 +11,9 @@ class AppRouter {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.startup:
-        return MaterialPageRoute(
-          builder: (_) => const StartupView(),
-        );
+        return MaterialPageRoute(builder: (_) => const StartupView());
       case AppRoutes.home:
-        return MaterialPageRoute(
-          builder: (_) => const HomeView(),
-        );
+        return MaterialPageRoute(builder: (_) => const HomeView());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

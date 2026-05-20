@@ -1,6 +1,4 @@
 import 'package:bartender/data/repository/package_repository.dart';
-import 'package:bartender/features/library/models/system_health_state.dart';
-import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/shell/brew_service.dart';
@@ -63,6 +61,9 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   Future<void> init() async {
     emitState(state.copyWith(isLoading: true));
     try {
+      final brewPrefix = await _brewService.getPrefix();
+      emitState(state.copyWith(brewPrefix: brewPrefix));
+
       await refreshData();
       emitState(state.copyWith(isLoading: false));
     } catch (e) {
@@ -84,8 +85,6 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
           installedTaps: taps,
         ),
       );
-
-      await fetchSystemHealth();
     } catch (e) {
       emitEffect(ShowToastEffect('Failed to refresh data: $e', isError: true));
     }
@@ -102,58 +101,6 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
     _lastUpdateTimestamp = timestamp;
 
     await refreshData();
-  }
-
-  Future<void> fetchSystemHealth() async {
-    try {
-      final brewPrefix = await _fetchBrewPrefix();
-      emitState(state.copyWith(brewPrefix: brewPrefix));
-
-      final storageUsed = await _fetchSystemStorage(brewPrefix);
-      if (storageUsed != null) {
-        emitState(state.copyWith(
-          healthState: state.healthState.copyWith(systemStorageUsed: storageUsed),
-        ));
-      }
-
-      // Run async tasks concurrently
-      final results = await Future.wait([
-        _brewService.autoremoveDryRun(),
-        _brewService.cleanupDryRun(),
-        _brewService.doctorSync(),
-        _brewService.outdated(),
-      ]);
-
-      final healthState = SystemHealthState.fromResults(
-        autoremoveResult: results[0],
-        cleanupResult: results[1],
-        doctorResult: results[2],
-        outdatedResult: results[3],
-        systemStorageUsed: state.healthState.systemStorageUsed,
-      );
-
-      emitState(state.copyWith(healthState: healthState));
-    } catch (e) {
-      emitEffect(ShowToastEffect('Failed to fetch system health: $e', isError: true));
-    }
-  }
-
-  Future<String> _fetchBrewPrefix() async {
-    final prefixResult = await _brewService.runCustom(['--prefix']);
-    if (prefixResult.exitCode == 0) {
-      return prefixResult.stdout.trim();
-    }
-    return '/opt/homebrew';
-  }
-
-  Future<String?> _fetchSystemStorage(String brewPrefix) async {
-    final duResult = await ShellUtils.run('du', ['-sh', brewPrefix]);
-    if (duResult.exitCode == 0) {
-      final storageLine = duResult.stdout.toString().trim();
-      final sizeMatch = RegExp(r'^(\S+)').firstMatch(storageLine);
-      return sizeMatch?.group(1);
-    }
-    return null;
   }
 
   void selectPackage(dynamic package) {

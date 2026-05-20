@@ -25,7 +25,9 @@ class FileSystemFolderHeader extends StatelessWidget {
     return InkWell(
       onTap: onSelect,
       child: Container(
-        color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : Colors.transparent,
+        color: isSelected
+            ? AppColors.primary.withValues(alpha: 0.1)
+            : Colors.transparent,
         padding: const EdgeInsets.symmetric(
           vertical: spacingS,
           horizontal: spacingXs,

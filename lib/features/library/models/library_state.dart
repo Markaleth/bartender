@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
-import 'package:bartender/features/library/models/system_health_state.dart';
 
 part 'library_state.freezed.dart';
 
@@ -16,7 +15,6 @@ abstract class LibraryState with _$LibraryState {
     @Default([]) List<CaskModel> installedCasks,
     @Default([]) List<TapModel> installedTaps,
     dynamic selectedPackage,
-    @Default(SystemHealthState()) SystemHealthState healthState,
     @Default('/opt/homebrew') String brewPrefix,
     @Default(false) bool isSyncing,
     @Default('') String filterQuery,
@@ -25,17 +23,23 @@ abstract class LibraryState with _$LibraryState {
 
   List<FormulaModel> get filteredFormulae {
     if (filterQuery.isEmpty) return installedFormulae;
-    return installedFormulae.where((f) => f.name.toLowerCase().contains(filterQuery.toLowerCase())).toList();
+    return installedFormulae
+        .where((f) => f.name.toLowerCase().contains(filterQuery.toLowerCase()))
+        .toList();
   }
 
   List<CaskModel> get filteredCasks {
     if (filterQuery.isEmpty) return installedCasks;
-    return installedCasks.where((c) => c.token.toLowerCase().contains(filterQuery.toLowerCase())).toList();
+    return installedCasks
+        .where((c) => c.token.toLowerCase().contains(filterQuery.toLowerCase()))
+        .toList();
   }
 
   List<TapModel> get filteredTaps {
     if (filterQuery.isEmpty) return installedTaps;
-    return installedTaps.where((t) => t.name.toLowerCase().contains(filterQuery.toLowerCase())).toList();
+    return installedTaps
+        .where((t) => t.name.toLowerCase().contains(filterQuery.toLowerCase()))
+        .toList();
   }
 
   Map<String, List<dynamic>> get packagesByTap {
@@ -52,28 +56,28 @@ abstract class LibraryState with _$LibraryState {
 
   bool get isSelectedPackageCask => selectedPackage is CaskModel;
   bool get isSelectedPackageTap => selectedPackage is TapModel;
-  
+
   String get selectedPackageName {
     if (selectedPackage == null) return '';
     if (isSelectedPackageTap) return (selectedPackage as TapModel).name;
-    return isSelectedPackageCask 
-        ? (selectedPackage as CaskModel).token 
+    return isSelectedPackageCask
+        ? (selectedPackage as CaskModel).token
         : (selectedPackage as FormulaModel).name;
   }
 
   String get selectedPackageVersion {
     if (selectedPackage == null) return '';
     if (isSelectedPackageTap) return '';
-    return isSelectedPackageCask 
-        ? (selectedPackage as CaskModel).version 
+    return isSelectedPackageCask
+        ? (selectedPackage as CaskModel).version
         : (selectedPackage as FormulaModel).versions.stable;
   }
 
   String get selectedPackageDescription {
     if (selectedPackage == null) return '';
     if (isSelectedPackageTap) return 'Brew Tap';
-    return isSelectedPackageCask 
-        ? ((selectedPackage as CaskModel).desc ?? 'No description available') 
+    return isSelectedPackageCask
+        ? ((selectedPackage as CaskModel).desc ?? 'No description available')
         : ((selectedPackage as FormulaModel).desc);
   }
 
@@ -85,29 +89,29 @@ abstract class LibraryState with _$LibraryState {
         : '$brewPrefix/Cellar/$selectedPackageName';
   }
 
-  List<String> get selectedPackageDependencies {
-    if (selectedPackage == null || isSelectedPackageCask || isSelectedPackageTap) return [];
-    return (selectedPackage as FormulaModel).dependencies;
-  }
+  List<String> get selectedPackageDependencies =>
+      (selectedPackage == null || isSelectedPackageCask || isSelectedPackageTap)
+      ? []
+      : (selectedPackage as FormulaModel).dependencies;
 
   bool get selectedPackageIsDeprecated {
     if (selectedPackage == null || isSelectedPackageTap) return false;
-    return isSelectedPackageCask 
-        ? (selectedPackage as CaskModel).deprecated 
+    return isSelectedPackageCask
+        ? (selectedPackage as CaskModel).deprecated
         : (selectedPackage as FormulaModel).deprecated;
   }
 
   bool get selectedPackageIsOutdated {
     if (selectedPackage == null || isSelectedPackageTap) return false;
-    return isSelectedPackageCask 
-        ? (selectedPackage as CaskModel).outdated 
+    return isSelectedPackageCask
+        ? (selectedPackage as CaskModel).outdated
         : (selectedPackage as FormulaModel).outdated;
   }
 
   List<String> get selectedPackageMissingDeps {
     if (selectedPackage == null || isSelectedPackageTap) return [];
-    return isSelectedPackageCask 
-        ? (selectedPackage as CaskModel).missingDeps 
+    return isSelectedPackageCask
+        ? (selectedPackage as CaskModel).missingDeps
         : (selectedPackage as FormulaModel).missingDeps;
   }
 }

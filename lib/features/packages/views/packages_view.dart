@@ -3,11 +3,11 @@ import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
-import 'package:bartender/features/packages/models/packages_effect.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
 import 'package:bartender/features/packages/widgets/package_filters.dart';
@@ -74,13 +74,13 @@ class _PackagesViewState extends State<PackagesView> {
   @override
   Widget build(
     BuildContext context,
-  ) => BaseView<PackagesViewModel, PackagesState, PackagesEffect>(
-        viewModelBuilder: (context) => PackagesViewModel(
-          context.read<HomebrewRepository>(),
-          context.read<PackageStatusNotifier>(),
-          context.read<TapFilterNotifier>(),
-        )..init(),
-        builder: (context, viewModel, state) => Scaffold(
+  ) => BaseView<PackagesViewModel, PackagesState, ScreenEffect>(
+    viewModelBuilder: (context) => PackagesViewModel(
+      context.read<HomebrewRepository>(),
+      context.read<PackageStatusNotifier>(),
+      context.read<TapFilterNotifier>(),
+    )..init(),
+    builder: (context, viewModel, state) => Scaffold(
       floatingActionButton: ValueListenableBuilder<bool>(
         valueListenable: _showScrollToTop,
         builder: (context, show, child) => !show

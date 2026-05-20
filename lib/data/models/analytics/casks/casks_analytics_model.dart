@@ -11,7 +11,8 @@ abstract class CasksAnalyticsResponse with _$CasksAnalyticsResponse {
     @JsonKey(name: 'start_date') required String startDate,
     @JsonKey(name: 'end_date') required String endDate,
     @JsonKey(name: 'total_count') required int totalCount,
-    @JsonKey(name: 'formulae') required Map<String, List<CaskAnalyticsItem>> casks,
+    @JsonKey(name: 'formulae')
+    required Map<String, List<CaskAnalyticsItem>> casks,
   }) = _CasksAnalyticsResponse;
 
   factory CasksAnalyticsResponse.fromJson(Map<String, dynamic> json) =>

@@ -50,21 +50,48 @@ abstract class DatabaseInterface {
   Future<List<FormulaModel>> getFormulaeSortedByDate();
   Future<List<CaskModel>> getCasksSortedByDate();
 
-  Future<void> cacheCategoryAnalytics(String category, AnalyticsPeriod period, List<CategoryAnalyticsItem> items);
+  Future<void> cacheCategoryAnalytics(
+    String category,
+    AnalyticsPeriod period,
+    List<CategoryAnalyticsItem> items,
+  );
 
   Future<void> updateFormulaInstallationStatus(String name, bool isInstalled);
   Future<void> updateCaskInstallationStatus(String token, bool isInstalled);
   Future<void> resetAllInstallationStatuses();
 
-  Future<void> updateFormulaAnalytics(String name, int installs, AnalyticsPeriod period);
-  Future<void> updateCaskAnalytics(String token, int installs, AnalyticsPeriod period);
-  
-  Future<void> updateFormulaeAnalyticsBatch(List<FormulaAnalyticsItem> items, AnalyticsPeriod period);
-  Future<void> updateCasksAnalyticsBatch(List<CaskAnalyticsItem> items, AnalyticsPeriod period);
+  Future<void> updateFormulaAnalytics(
+    String name,
+    int installs,
+    AnalyticsPeriod period,
+  );
+  Future<void> updateCaskAnalytics(
+    String token,
+    int installs,
+    AnalyticsPeriod period,
+  );
 
-  Future<List<FormulaModel>> getMostDownloadedFormulae(AnalyticsPeriod period, {int limit = 10});
-  Future<List<CaskModel>> getMostDownloadedCasks(AnalyticsPeriod period, {int limit = 10});
-  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(String category, AnalyticsPeriod period);
+  Future<void> updateFormulaeAnalyticsBatch(
+    List<FormulaAnalyticsItem> items,
+    AnalyticsPeriod period,
+  );
+  Future<void> updateCasksAnalyticsBatch(
+    List<CaskAnalyticsItem> items,
+    AnalyticsPeriod period,
+  );
+
+  Future<List<FormulaModel>> getMostDownloadedFormulae(
+    AnalyticsPeriod period, {
+    int limit = 10,
+  });
+  Future<List<CaskModel>> getMostDownloadedCasks(
+    AnalyticsPeriod period, {
+    int limit = 10,
+  });
+  Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
+    String category,
+    AnalyticsPeriod period,
+  );
 
   Future<String?> getETag(String endpoint);
   Future<void> saveETag(String endpoint, String etag);

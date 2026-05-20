@@ -119,8 +119,11 @@ class PackageFilters extends StatelessWidget {
                           ),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
-                              value: state.isValidTapSelection(tapNotifier.selectedTap) 
-                                  ? tapNotifier.selectedTap 
+                              value:
+                                  state.isValidTapSelection(
+                                    tapNotifier.selectedTap,
+                                  )
+                                  ? tapNotifier.selectedTap
                                   : null,
                               hint: Text(
                                 'Filter by Tap',

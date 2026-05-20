@@ -1,5 +1,4 @@
-typedef IconUrlBuilder =
-    String? Function(String packageName, Uri? homepageUri);
+typedef IconUrlBuilder = String? Function(String packageName, Uri? homepageUri);
 
 class IconUrlBuilders {
   static String? githubAvatar(String packageName, Uri? uri) {

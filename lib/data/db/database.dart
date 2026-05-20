@@ -39,7 +39,9 @@ part 'database_queries.dart';
     TapsTable,
   ],
 )
-class AppDatabase extends _$AppDatabase with DatabaseQueries implements DatabaseInterface {
+class AppDatabase extends _$AppDatabase
+    with DatabaseQueries
+    implements DatabaseInterface {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override

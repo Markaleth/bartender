@@ -3,7 +3,7 @@ class StringUtils {
   /// Example: name "Discord", token "discord-ptb" -> returns "PTB"
   static String? extractVariantTag(String name, String token) {
     final normalizedName = name.toLowerCase().replaceAll(' ', '-');
-    
+
     // Exact match, no variant
     if (normalizedName == token) {
       return null;
@@ -11,7 +11,7 @@ class StringUtils {
 
     if (token.startsWith(normalizedName)) {
       final suffix = token.substring(normalizedName.length);
-      
+
       if (suffix.startsWith('-')) {
         return suffix.substring(1).toUpperCase();
       } else if (suffix.startsWith('@')) {
@@ -45,8 +45,8 @@ class StringUtils {
   static String formatWithCommas(int? value, {String fallback = 'N/A'}) {
     if (value == null) return fallback;
     return value.toString().replaceAllMapped(
-          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (Match m) => '${m[1]},',
-        );
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]},',
+    );
   }
 }

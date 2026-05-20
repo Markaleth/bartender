@@ -6,7 +6,15 @@ enum PackageType { cask, formula, tap, system }
 
 enum OperationStatus { queued, inProgress, success, error }
 
-enum OperationType { install, uninstall, update, pin, autoremove, upgrade, cleanup }
+enum OperationType {
+  install,
+  uninstall,
+  update,
+  pin,
+  autoremove,
+  upgrade,
+  cleanup,
+}
 
 /// Represents a single package operation in the queue
 @freezed

@@ -30,6 +30,14 @@ class BrewService {
     return runCommand(args);
   }
 
+  Future<String> getPrefix() async {
+    final prefixResult = await runCustom(['--prefix']);
+    if (prefixResult.exitCode == 0) {
+      return prefixResult.stdout.trim();
+    }
+    return '/opt/homebrew';
+  }
+
   /// Run an arbitrary brew command and stream its output.
   Future<StreamingShellCommand> runCustomStream(List<String> args) {
     return streamCommand(args);

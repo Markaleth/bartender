@@ -15,16 +15,16 @@ class StartupViewModel extends BaseViewModel<StartupState, ScreenEffect> {
 
   Future<void> initialize() async {
     try {
-      emitState(
-        state.copyWith(isLoading: true, statusText: 'Initializing...'),
-      );
+      emitState(state.copyWith(isLoading: true, statusText: 'Initializing...'));
 
       // Check if DB is empty to determine our scenario
       final isDbEmpty = await _homebrewRepository.isDatabaseEmpty();
 
       if (isDbEmpty) {
         // Scenario 1: DB is empty. Wait for both API and local sync.
-        emitState(state.copyWith(statusText: 'Syncing network and local data...'));
+        emitState(
+          state.copyWith(statusText: 'Syncing network and local data...'),
+        );
         await Future.wait([
           _homebrewRepository.syncAllData(),
           _packageRepository.syncInstalledPackages(),
@@ -32,10 +32,10 @@ class StartupViewModel extends BaseViewModel<StartupState, ScreenEffect> {
       } else {
         // Scenario 2: DB is populated. Fast local sync, background network sync.
         emitState(state.copyWith(statusText: 'Syncing local packages...'));
-        
+
         // Only await the local sync so the user gets into the app fast
         await _packageRepository.syncInstalledPackages();
-        
+
         // Fire off network sync in the background
         _homebrewRepository.syncAllData().catchError((e) {
           debugPrint('Background network sync error: $e');

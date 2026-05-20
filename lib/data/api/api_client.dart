@@ -66,7 +66,6 @@ class ApiClient implements ApiClientInterface {
   }
 
   static const String _baseUrl = 'https://formulae.brew.sh/api';
-  
 
   static final BaseOptions _defaultOptions = BaseOptions(
     receiveTimeout: defaultTimeoutDuration,

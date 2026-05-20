@@ -26,11 +26,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   void _onStatusUpdated() {
     final update = _statusNotifier.value;
     if (update != null) {
-      _onTapStatusChanged(
-        update.tapName,
-        update.isInstalled,
-        update.timestamp,
-      );
+      _onTapStatusChanged(update.tapName, update.isInstalled, update.timestamp);
     }
   }
 

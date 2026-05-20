@@ -52,14 +52,8 @@ class _AddTapDialogState extends State<AddTapDialog> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const _Header(),
-            _Body(
-              controller: _repoController,
-              onSubmit: _submit,
-            ),
-            _Footer(
-              controller: _repoController,
-              onSubmit: _submit,
-            ),
+            _Body(controller: _repoController, onSubmit: _submit),
+            _Footer(controller: _repoController, onSubmit: _submit),
           ],
         ),
       ),
@@ -80,17 +74,11 @@ class _Header extends StatelessWidget {
           topLeft: Radius.circular(11),
           topRight: Radius.circular(11),
         ),
-        border: Border(
-          bottom: BorderSide(color: AppColors.borderNeutral),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.borderNeutral)),
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.add_circle,
-            color: AppColors.secondary,
-            size: 24,
-          ),
+          const Icon(Icons.add_circle, color: AppColors.secondary, size: 24),
           const SizedBox(width: 8),
           const Expanded(
             child: Text(
@@ -128,10 +116,7 @@ class _Body extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSubmit;
 
-  const _Body({
-    required this.controller,
-    required this.onSubmit,
-  });
+  const _Body({required this.controller, required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -143,10 +128,7 @@ class _Body extends StatelessWidget {
         children: [
           const Text(
             'Enter the repository URL or the shorthand owner/repo format to add a new tap to your local configuration.',
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
           ),
           const SizedBox(height: 24),
           const Text(
@@ -176,9 +158,7 @@ class _Body extends StatelessWidget {
               fillColor: AppColors.background,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.borderNeutral,
-                ),
+                borderSide: const BorderSide(color: AppColors.borderNeutral),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -228,10 +208,7 @@ class _Footer extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSubmit;
 
-  const _Footer({
-    required this.controller,
-    required this.onSubmit,
-  });
+  const _Footer({required this.controller, required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -252,10 +229,7 @@ class _Footer extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
             style: TextButton.styleFrom(
               foregroundColor: AppColors.textPrimary,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
                 side: const BorderSide(color: AppColors.borderNeutral),

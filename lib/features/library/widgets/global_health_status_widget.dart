@@ -90,7 +90,8 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                   title: 'Reclaimable Space',
                   value: healthState.reclaimableSpace,
                   icon: Icons.auto_delete_outlined,
-                  color: healthState.reclaimableSpace != '0 B' &&
+                  color:
+                      healthState.reclaimableSpace != '0 B' &&
                           healthState.reclaimableSpace.isNotEmpty
                       ? AppColors.tertiary
                       : AppColors.secondary,
@@ -100,11 +101,13 @@ class GlobalHealthStatusWidget extends StatelessWidget {
               Expanded(
                 child: StatusCard(
                   title: 'Doctor Warnings',
-                  value: (healthState.doctorWarningsCount +
-                          healthState.doctorErrorsCount)
-                      .toString(),
+                  value:
+                      (healthState.doctorWarningsCount +
+                              healthState.doctorErrorsCount)
+                          .toString(),
                   icon: Icons.warning_amber_rounded,
-                  color: (healthState.doctorWarningsCount > 0 ||
+                  color:
+                      (healthState.doctorWarningsCount > 0 ||
                           healthState.doctorErrorsCount > 0)
                       ? AppColors.error
                       : AppColors.secondary,

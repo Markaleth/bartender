@@ -18,7 +18,8 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BaseView<HomeViewModel, HomeState, ScreenEffect>(
-        viewModelBuilder: (context) => HomeViewModel(context.read<TapFilterNotifier>()),
+        viewModelBuilder: (context) =>
+            HomeViewModel(context.read<TapFilterNotifier>()),
         builder: (context, viewModel, state) => Scaffold(
           body: SafeArea(
             child: Row(

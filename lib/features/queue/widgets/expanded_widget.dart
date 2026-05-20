@@ -27,11 +27,7 @@ class ExpandedWidget extends StatelessWidget {
           toggleDrawer: viewModel.toggleDrawer,
           clearCompleted: viewModel.clearCompleted,
         ),
-        VisualizerWidget(
-          context: context,
-          viewModel: viewModel,
-          state: state,
-        ),
+        VisualizerWidget(context: context, viewModel: viewModel, state: state),
         Expanded(
           child: activeTask != null
               ? LogListViewer(logs: activeTask.logs)

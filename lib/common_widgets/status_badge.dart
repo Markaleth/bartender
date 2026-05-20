@@ -17,9 +17,7 @@ class StatusBadge extends StatelessWidget {
             ? AppColors.secondary.withValues(alpha: 0.2)
             : Colors.grey.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: isActive ? AppColors.secondary : Colors.grey,
-        ),
+        border: Border.all(color: isActive ? AppColors.secondary : Colors.grey),
       ),
       child: Text(
         label,

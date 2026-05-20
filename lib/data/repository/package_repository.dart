@@ -21,16 +21,24 @@ class PackageRepository {
     final casksJson = jsonMap['casks'] as List<dynamic>? ?? [];
 
     final formulae = formulaeJson
-        .map((json) => FormulaModel.fromJson(json as Map<String, dynamic>).copyWith(isInstalled: true))
+        .map(
+          (json) => FormulaModel.fromJson(
+            json as Map<String, dynamic>,
+          ).copyWith(isInstalled: true),
+        )
         .toList();
 
     final casks = casksJson
-        .map((json) => CaskModel.fromJson(json as Map<String, dynamic>).copyWith(isInstalled: true))
+        .map(
+          (json) => CaskModel.fromJson(
+            json as Map<String, dynamic>,
+          ).copyWith(isInstalled: true),
+        )
         .toList();
 
     await _database.resetAllInstallationStatuses();
-    
-    // We insert/update the fetched records. 
+
+    // We insert/update the fetched records.
     // They are fully populated from `brew info --installed --json=v2`.
     if (formulae.isNotEmpty) {
       await _database.cacheFormulae(formulae);
@@ -50,11 +58,13 @@ class PackageRepository {
     final infoResult = await _brewService.info(package);
     if (infoResult.exitCode == 0) {
       final jsonMap = jsonDecode(infoResult.stdout) as Map<String, dynamic>;
-      
+
       if (isCask) {
         final casksJson = jsonMap['casks'] as List<dynamic>? ?? [];
         if (casksJson.isNotEmpty) {
-          final cask = CaskModel.fromJson(casksJson.first as Map<String, dynamic>).copyWith(isInstalled: true);
+          final cask = CaskModel.fromJson(
+            casksJson.first as Map<String, dynamic>,
+          ).copyWith(isInstalled: true);
           await _database.cacheCask(cask);
         } else {
           // Fallback if missing
@@ -63,7 +73,9 @@ class PackageRepository {
       } else {
         final formulaeJson = jsonMap['formulae'] as List<dynamic>? ?? [];
         if (formulaeJson.isNotEmpty) {
-          final formula = FormulaModel.fromJson(formulaeJson.first as Map<String, dynamic>).copyWith(isInstalled: true);
+          final formula = FormulaModel.fromJson(
+            formulaeJson.first as Map<String, dynamic>,
+          ).copyWith(isInstalled: true);
           await _database.cacheFormula(formula);
         } else {
           // Fallback if missing

@@ -37,10 +37,7 @@ class PackageIconViewModel
     return false;
   }
 
-  Future<void> _fetchAndLoadIcon(
-    String name,
-    String? homepage,
-  ) async {
+  Future<void> _fetchAndLoadIcon(String name, String? homepage) async {
     final fetchedIcon = await _iconService.getIcon(name, homepage);
     if (!_isDisposed) {
       _emitIconResult(fetchedIcon);

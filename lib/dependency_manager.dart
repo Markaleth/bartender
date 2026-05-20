@@ -14,7 +14,9 @@ import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment) {
+List<SingleChildWidget> buildDependencyList(
+  DeviceEnvironment deviceEnvironment,
+) {
   return [
     // Hardware
     Provider<DeviceEnvironment>.value(value: deviceEnvironment),
@@ -29,20 +31,58 @@ List<SingleChildWidget> buildDependencyList(DeviceEnvironment deviceEnvironment)
       dispose: (_, db) => (db as AppDatabase).close(),
     ),
     Provider<BrewService>(create: (_) => BrewService()),
-    ChangeNotifierProvider<PackageStatusNotifier>(create: (_) => PackageStatusNotifier()),
-    ChangeNotifierProvider<TapStatusNotifier>(create: (_) => TapStatusNotifier()),
-    ChangeNotifierProvider<TapFilterNotifier>(create: (_) => TapFilterNotifier()),
-    ChangeNotifierProxyProvider4<BrewService, DatabaseInterface, PackageStatusNotifier, TapStatusNotifier, QueueViewModel>(
-      create: (context) => QueueViewModel(context.read<BrewService>(), context.read<DatabaseInterface>(), context.read<PackageStatusNotifier>(), context.read<TapStatusNotifier>()),
-      update: (_, brewService, db, packageStatusNotifier, tapStatusNotifier, previous) => previous ?? QueueViewModel(brewService, db, packageStatusNotifier, tapStatusNotifier),
+    ChangeNotifierProvider<PackageStatusNotifier>(
+      create: (_) => PackageStatusNotifier(),
+    ),
+    ChangeNotifierProvider<TapStatusNotifier>(
+      create: (_) => TapStatusNotifier(),
+    ),
+    ChangeNotifierProvider<TapFilterNotifier>(
+      create: (_) => TapFilterNotifier(),
+    ),
+    ChangeNotifierProxyProvider4<
+      BrewService,
+      DatabaseInterface,
+      PackageStatusNotifier,
+      TapStatusNotifier,
+      QueueViewModel
+    >(
+      create: (context) => QueueViewModel(
+        context.read<BrewService>(),
+        context.read<DatabaseInterface>(),
+        context.read<PackageStatusNotifier>(),
+        context.read<TapStatusNotifier>(),
+      ),
+      update:
+          (
+            _,
+            brewService,
+            db,
+            packageStatusNotifier,
+            tapStatusNotifier,
+            previous,
+          ) =>
+              previous ??
+              QueueViewModel(
+                brewService,
+                db,
+                packageStatusNotifier,
+                tapStatusNotifier,
+              ),
     ),
     ProxyProvider<DatabaseInterface, IconResolutionService>(
       update: (_, db, _) => IconResolutionService(db),
     ),
 
     // Repositories
-    ProxyProvider3<ApiClientInterface, DatabaseInterface, BrewService, HomebrewRepository>(
-      update: (_, apiClient, db, brewService, _) => HomebrewRepository(apiClient, db, brewService),
+    ProxyProvider3<
+      ApiClientInterface,
+      DatabaseInterface,
+      BrewService,
+      HomebrewRepository
+    >(
+      update: (_, apiClient, db, brewService, _) =>
+          HomebrewRepository(apiClient, db, brewService),
     ),
     ProxyProvider2<BrewService, DatabaseInterface, PackageRepository>(
       update: (_, brewService, db, _) => PackageRepository(brewService, db),

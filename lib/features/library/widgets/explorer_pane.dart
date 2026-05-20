@@ -30,7 +30,7 @@ class ExplorerPane extends StatelessWidget {
     for (final entry in tapEntries) {
       final tapName = entry.key;
       final packages = entry.value;
-      
+
       final tapModel = state.installedTaps.firstWhere(
         (t) => t.name == tapName,
         orElse: () => TapModel(
@@ -42,7 +42,9 @@ class ExplorerPane extends StatelessWidget {
       );
 
       final isExpanded = state.expandedTaps.contains(tapName);
-      final isSelected = state.selectedPackage is TapModel && (state.selectedPackage as TapModel).name == tapName;
+      final isSelected =
+          state.selectedPackage is TapModel &&
+          (state.selectedPackage as TapModel).name == tapName;
 
       slivers.add(
         SliverToBoxAdapter(
@@ -110,7 +112,7 @@ class ExplorerPane extends StatelessWidget {
                     state.installedFormulae.isEmpty &&
                     state.installedCasks.isEmpty
                 ? const Center(child: CircularProgressIndicator())
-                  : CustomScrollView(slivers: slivers),
+                : CustomScrollView(slivers: slivers),
           ),
         ],
       ),

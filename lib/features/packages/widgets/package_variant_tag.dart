@@ -39,8 +39,12 @@ class PackageVariantTag extends StatelessWidget {
   Color get _variantColor => switch (variant) {
     PackageVariant.app => AppColors.primary,
     PackageVariant.alpha => AppColors.error,
-    PackageVariant.beta || PackageVariant.canary || PackageVariant.nightly => AppColors.tertiary,
-    PackageVariant.developerEdition || PackageVariant.ptb || PackageVariant.esr => AppColors.secondary,
+    PackageVariant.beta ||
+    PackageVariant.canary ||
+    PackageVariant.nightly => AppColors.tertiary,
+    PackageVariant.developerEdition ||
+    PackageVariant.ptb ||
+    PackageVariant.esr => AppColors.secondary,
     PackageVariant.version => AppColors.textSecondary,
     PackageVariant.unknown => AppColors.textTertiary,
   };

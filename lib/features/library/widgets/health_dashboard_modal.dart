@@ -21,7 +21,9 @@ class HealthDashboardModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.background,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusL)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radiusL),
+      ),
       child: Container(
         width: 600,
         height: 600,
@@ -54,7 +56,9 @@ class HealthDashboardModal extends StatelessWidget {
                     title: 'Outdated Packages',
                     value: '${healthState.outdatedCount} updates available',
                     actionLabel: 'Update All',
-                    onAction: healthState.outdatedCount > 0 ? onUpdateAll : null,
+                    onAction: healthState.outdatedCount > 0
+                        ? onUpdateAll
+                        : null,
                     icon: Icons.system_update,
                   ),
                   const SizedBox(height: spacingM),
@@ -62,7 +66,9 @@ class HealthDashboardModal extends StatelessWidget {
                     title: 'Reclaimable Space',
                     value: healthState.reclaimableSpace,
                     actionLabel: 'Run Cleanup',
-                    onAction: healthState.reclaimableSpace != '0 B' && healthState.reclaimableSpace.isNotEmpty
+                    onAction:
+                        healthState.reclaimableSpace != '0 B' &&
+                            healthState.reclaimableSpace.isNotEmpty
                         ? onCleanup
                         : null,
                     icon: Icons.cleaning_services,
@@ -88,7 +94,10 @@ class HealthDashboardModal extends StatelessWidget {
                   ),
                   const SizedBox(height: spacingS),
                   if (healthState.doctorIssues.isEmpty)
-                    const Text('No issues found.', style: TextStyle(color: AppColors.textSecondary))
+                    const Text(
+                      'No issues found.',
+                      style: TextStyle(color: AppColors.textSecondary),
+                    )
                   else
                     ...healthState.doctorIssues.map(
                       (issue) => Container(

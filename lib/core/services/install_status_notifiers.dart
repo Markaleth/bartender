@@ -44,9 +44,6 @@ class TapStatusNotifier extends ValueNotifier<TapStatusUpdate?> {
   TapStatusNotifier() : super(null);
 
   void markUpdated(String tapName, bool isInstalled) {
-    value = TapStatusUpdate(
-      tapName: tapName,
-      isInstalled: isInstalled,
-    );
+    value = TapStatusUpdate(tapName: tapName, isInstalled: isInstalled);
   }
 }

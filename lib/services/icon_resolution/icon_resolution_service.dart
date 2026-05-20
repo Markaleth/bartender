@@ -6,7 +6,7 @@ import 'icon_url_builders.dart';
 class IconResolutionService {
   final DatabaseInterface _db;
   final DefaultCacheManager _cacheManager = DefaultCacheManager();
-  
+
   final Map<String, ResolvedIcon?> _memoryCache = {};
   final Map<String, Future<ResolvedIcon?>> _pendingFutures = {};
 
@@ -22,7 +22,7 @@ class IconResolutionService {
     if (_memoryCache.containsKey(packageName)) {
       return _memoryCache[packageName];
     }
-    
+
     return _resolveAndCache(packageName, homepage);
   }
 
@@ -30,16 +30,19 @@ class IconResolutionService {
     if (_pendingFutures.containsKey(packageName)) {
       return _pendingFutures[packageName]!;
     }
-    
+
     final future = _performResolution(packageName, homepage).whenComplete(() {
       _pendingFutures.remove(packageName);
     });
-    
+
     _pendingFutures[packageName] = future;
     return future;
   }
 
-  Future<ResolvedIcon?> _performResolution(String packageName, String? homepage) async {
+  Future<ResolvedIcon?> _performResolution(
+    String packageName,
+    String? homepage,
+  ) async {
     final cachedResult = await _checkDatabaseCache(packageName);
     if (cachedResult != null) return cachedResult;
 
@@ -55,7 +58,7 @@ class IconResolutionService {
 
     final isNegativeCache = dbResult.iconUrl == null;
     final now = DateTime.now();
-    
+
     // Return cached result if it's a valid URL, OR if it's a recent negative cache (< 30 days)
     if (!isNegativeCache || now.difference(dbResult.resolvedAt).inDays < 30) {
       _memoryCache[packageName] = dbResult;
@@ -65,9 +68,12 @@ class IconResolutionService {
     return null;
   }
 
-  Future<ResolvedIcon?> _runWaterfall(String packageName, String? homepage) async {
+  Future<ResolvedIcon?> _runWaterfall(
+    String packageName,
+    String? homepage,
+  ) async {
     final uri = homepage != null ? Uri.tryParse(homepage) : null;
-    
+
     for (final builder in IconUrlBuilders.waterfall) {
       final url = builder(packageName, uri);
       if (url == null) continue;
@@ -81,11 +87,14 @@ class IconResolutionService {
         continue;
       }
     }
-    
+
     return null;
   }
 
-  Future<ResolvedIcon> _cacheSuccessfulResult(String packageName, String url) async {
+  Future<ResolvedIcon> _cacheSuccessfulResult(
+    String packageName,
+    String url,
+  ) async {
     final isSvgResolved = url.toLowerCase().endsWith('.svg');
     final resolvedIcon = ResolvedIcon(
       packageName: packageName,
@@ -96,7 +105,7 @@ class IconResolutionService {
 
     await _db.saveIconCache(packageName, url, isSvgResolved);
     _memoryCache[packageName] = resolvedIcon;
-    
+
     return resolvedIcon;
   }
 
@@ -107,10 +116,10 @@ class IconResolutionService {
       isSvg: false,
       resolvedAt: DateTime.now(),
     );
-    
+
     await _db.saveIconCache(packageName, null, false);
     _memoryCache[packageName] = nullIcon;
-    
+
     return nullIcon;
   }
 }

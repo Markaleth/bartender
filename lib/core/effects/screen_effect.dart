@@ -12,8 +12,5 @@ class NavigateToScreenEffect extends ScreenEffect {
   final String routeName;
   final Object? arguments;
 
-  const NavigateToScreenEffect(
-    this.routeName, {
-    this.arguments,
-  });
+  const NavigateToScreenEffect(this.routeName, {this.arguments});
 }

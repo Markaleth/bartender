@@ -109,7 +109,11 @@ class _AnimatedIcon extends StatelessWidget {
         curve: Curves.easeOutCubic,
         builder: (context, animatedColor, child) => iconData != null
             ? Icon(iconData, color: animatedColor!, size: spacingL)
-            : IconWidget(assetName: icon!, color: animatedColor!, size: spacingL),
+            : IconWidget(
+                assetName: icon!,
+                color: animatedColor!,
+                size: spacingL,
+              ),
       ),
     );
   }

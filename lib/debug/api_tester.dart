@@ -167,7 +167,10 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               );
                               try {
                                 final res = await _apiClient
-                                    .getFormulaeAnalytics('install', AnalyticsPeriod.days30);
+                                    .getFormulaeAnalytics(
+                                      'install',
+                                      AnalyticsPeriod.days30,
+                                    );
                                 if (res.status == NetworkStatus.success) {
                                   _updateResult(
                                     'Success: ${res.data?.totalItems} items.',
@@ -184,7 +187,9 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                           const SizedBox(height: 8),
                           ElevatedButton(
                             onPressed: () async {
-                              _updateResult('API: getCasksAnalytics(AnalyticsPeriod.days30)...');
+                              _updateResult(
+                                'API: getCasksAnalytics(AnalyticsPeriod.days30)...',
+                              );
                               try {
                                 final res = await _apiClient.getCasksAnalytics(
                                   AnalyticsPeriod.days30,
@@ -346,7 +351,9 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                     );
                                     try {
                                       final res = await _database
-                                          .getMostDownloadedFormulae(AnalyticsPeriod.days30);
+                                          .getMostDownloadedFormulae(
+                                            AnalyticsPeriod.days30,
+                                          );
                                       _updateResult(
                                         'Success: ${res.length} items.',
                                       );
@@ -475,7 +482,9 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: syncCasksAnalytics()...',
                                 );
                                 try {
-                                  await _repository.syncCasksAnalytics(AnalyticsPeriod.days30);
+                                  await _repository.syncCasksAnalytics(
+                                    AnalyticsPeriod.days30,
+                                  );
                                   _updateResult(
                                     'Success: synced casks analytics.',
                                   );

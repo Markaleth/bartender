@@ -12,9 +12,13 @@ class TapsTable extends Table {
   BoolColumn get official => boolean().withDefault(const Constant(false))();
   BoolColumn get customRemote => boolean().nullable()();
   TextColumn get remote => text().nullable()();
-  
-  TextColumn get formulaNames => text().map(const StringListConverter()).withDefault(const Constant('[]'))();
-  TextColumn get caskTokens => text().map(const StringListConverter()).withDefault(const Constant('[]'))();
+
+  TextColumn get formulaNames => text()
+      .map(const StringListConverter())
+      .withDefault(const Constant('[]'))();
+  TextColumn get caskTokens => text()
+      .map(const StringListConverter())
+      .withDefault(const Constant('[]'))();
 
   @override
   Set<Column> get primaryKey => {name};

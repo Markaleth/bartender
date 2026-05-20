@@ -49,29 +49,33 @@ class InspectorPane extends StatelessWidget {
               version: tap.official ? 'Official' : 'Custom',
               description: 'Tap from ${tap.user}/${tap.repo}',
             ),
-            
+
             const Divider(height: spacingL * 2, color: AppColors.borderNeutral),
-            
-            ConfigPathsWidget(
-              installPath: tap.path,
-            ),
-            
+
+            ConfigPathsWidget(installPath: tap.path),
+
             const SizedBox(height: spacingL),
-            
+
             Row(
               children: [
                 Expanded(
-                  child: _TapStatsWidget(label: 'Formulae', count: tap.formulaNames.length),
+                  child: _TapStatsWidget(
+                    label: 'Formulae',
+                    count: tap.formulaNames.length,
+                  ),
                 ),
                 const SizedBox(width: spacingM),
                 Expanded(
-                  child: _TapStatsWidget(label: 'Casks', count: tap.caskTokens.length),
+                  child: _TapStatsWidget(
+                    label: 'Casks',
+                    count: tap.caskTokens.length,
+                  ),
                 ),
               ],
             ),
-            
+
             const Spacer(),
-            
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -109,7 +113,7 @@ class InspectorPane extends StatelessWidget {
             version: state.selectedPackageVersion,
             description: state.selectedPackageDescription,
           ),
-          
+
           if (state.selectedPackageIsDeprecated)
             Container(
               margin: const EdgeInsets.only(top: spacingM),
@@ -119,11 +123,14 @@ class InspectorPane extends StatelessWidget {
                 children: [
                   Icon(Icons.warning, color: AppColors.tertiary),
                   SizedBox(width: spacingS),
-                  Text('This package is deprecated.', style: TextStyle(color: AppColors.tertiary)),
+                  Text(
+                    'This package is deprecated.',
+                    style: TextStyle(color: AppColors.tertiary),
+                  ),
                 ],
               ),
             ),
-            
+
           if (state.selectedPackageMissingDeps.isNotEmpty)
             Container(
               margin: const EdgeInsets.only(top: spacingM),
@@ -134,39 +141,45 @@ class InspectorPane extends StatelessWidget {
                   const Icon(Icons.error, color: AppColors.error),
                   const SizedBox(width: spacingS),
                   const Expanded(
-                    child: Text('Missing dependencies.', style: TextStyle(color: AppColors.error)),
+                    child: Text(
+                      'Missing dependencies.',
+                      style: TextStyle(color: AppColors.error),
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
                       context.read<QueueViewModel>().queueOperation(
                         packageId: state.selectedPackageName,
-                        type: state.isSelectedPackageCask ? PackageType.cask : PackageType.formula,
+                        type: state.isSelectedPackageCask
+                            ? PackageType.cask
+                            : PackageType.formula,
                         operation: OperationType.install,
                       );
                     },
-                    child: const Text('Fix', style: TextStyle(color: AppColors.error)),
+                    child: const Text(
+                      'Fix',
+                      style: TextStyle(color: AppColors.error),
+                    ),
                   ),
                 ],
               ),
             ),
-          
+
           const Divider(height: spacingL * 2, color: AppColors.borderNeutral),
-          
-          ConfigPathsWidget(
-            installPath: state.selectedPackageInstallPath,
-          ),
-          
+
+          ConfigPathsWidget(installPath: state.selectedPackageInstallPath),
+
           const SizedBox(height: spacingL),
-          
+
           if (state.selectedPackageDependencies.isNotEmpty) ...[
             DependencyGraphWidget(
               dependencies: state.selectedPackageDependencies,
             ),
             const SizedBox(height: spacingL),
           ],
-          
+
           const Spacer(),
-          
+
           ManagementActionsWidget(
             packageName: state.selectedPackageName,
             isCask: state.isSelectedPackageCask,
@@ -196,17 +209,21 @@ class HeaderWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          name, 
-          style: const TextStyle(color: AppColors.textPrimary, fontSize: 24, fontWeight: FontWeight.bold)
+          name,
+          style: const TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Text(
-          'v$version', 
-          style: const TextStyle(color: AppColors.secondary, fontSize: 16)
+          'v$version',
+          style: const TextStyle(color: AppColors.secondary, fontSize: 16),
         ),
         const SizedBox(height: spacingM),
         Text(
-          description, 
-          style: const TextStyle(color: AppColors.textSecondary)
+          description,
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
       ],
     );
@@ -216,10 +233,7 @@ class HeaderWidget extends StatelessWidget {
 class ConfigPathsWidget extends StatelessWidget {
   final String installPath;
 
-  const ConfigPathsWidget({
-    super.key,
-    required this.installPath,
-  });
+  const ConfigPathsWidget({super.key, required this.installPath});
 
   @override
   Widget build(BuildContext context) {
@@ -227,8 +241,11 @@ class ConfigPathsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Install Path', 
-          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)
+          'Install Path',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         const SizedBox(height: spacingXs),
         Container(
@@ -240,8 +257,11 @@ class ConfigPathsWidget extends StatelessWidget {
             border: Border.all(color: AppColors.borderNeutral),
           ),
           child: Text(
-            installPath, 
-            style: const TextStyle(color: AppColors.textSecondary, fontFamily: 'monospace')
+            installPath,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontFamily: 'monospace',
+            ),
           ),
         ),
       ],
@@ -252,10 +272,7 @@ class ConfigPathsWidget extends StatelessWidget {
 class DependencyGraphWidget extends StatelessWidget {
   final List<String> dependencies;
 
-  const DependencyGraphWidget({
-    super.key,
-    required this.dependencies,
-  });
+  const DependencyGraphWidget({super.key, required this.dependencies});
 
   @override
   Widget build(BuildContext context) {
@@ -263,18 +280,31 @@ class DependencyGraphWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Dependencies', 
-          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)
+          'Dependencies',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         const SizedBox(height: spacingS),
         Wrap(
           spacing: spacingS,
           runSpacing: spacingS,
-          children: dependencies.map((dep) => Chip(
-            label: Text(dep, style: const TextStyle(color: AppColors.textPrimary, fontSize: 12)),
-            backgroundColor: AppColors.background,
-            side: const BorderSide(color: AppColors.borderNeutral),
-          )).toList(),
+          children: dependencies
+              .map(
+                (dep) => Chip(
+                  label: Text(
+                    dep,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 12,
+                    ),
+                  ),
+                  backgroundColor: AppColors.background,
+                  side: const BorderSide(color: AppColors.borderNeutral),
+                ),
+              )
+              .toList(),
         ),
       ],
     );
@@ -390,7 +420,10 @@ class ActionButtonWidget extends StatelessWidget {
         backgroundColor: color.withValues(alpha: 0.1),
         foregroundColor: color,
         side: BorderSide(color: color),
-        padding: const EdgeInsets.symmetric(horizontal: spacingM, vertical: spacingS),
+        padding: const EdgeInsets.symmetric(
+          horizontal: spacingM,
+          vertical: spacingS,
+        ),
       ),
       onPressed: onTap,
       icon: Icon(icon, size: 18),
@@ -403,10 +436,7 @@ class _TapStatsWidget extends StatelessWidget {
   final String label;
   final int count;
 
-  const _TapStatsWidget({
-    required this.label,
-    required this.count,
-  });
+  const _TapStatsWidget({required this.label, required this.count});
 
   @override
   Widget build(BuildContext context) {

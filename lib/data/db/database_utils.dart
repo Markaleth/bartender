@@ -137,7 +137,9 @@ Insertable<CaskModel> updateCaskFromExcluded($CasksTableTable ex) {
   );
 }
 
-Insertable<FormulaModel> updateNetworkFormulaFromExcluded($FormulaeTableTable ex) {
+Insertable<FormulaModel> updateNetworkFormulaFromExcluded(
+  $FormulaeTableTable ex,
+) {
   return FormulaeTableCompanion.custom(
     fullName: ex.fullName,
     tap: ex.tap,

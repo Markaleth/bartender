@@ -42,7 +42,9 @@ class LinuxHardwareEnvironment implements DeviceEnvironment {
         '83e1',
       ];
 
-      _isHandheld = handheldStrings.any((s) => vendor.contains(s) || product.contains(s));
+      _isHandheld = handheldStrings.any(
+        (s) => vendor.contains(s) || product.contains(s),
+      );
     } catch (e) {
       // If we can't read the files (e.g., permissions, not existing), default to false
       _isHandheld = false;
