@@ -110,6 +110,46 @@ class InspectorPane extends StatelessWidget {
             description: state.selectedPackageDescription,
           ),
           
+          if (state.selectedPackageIsDeprecated)
+            Container(
+              margin: const EdgeInsets.only(top: spacingM),
+              padding: const EdgeInsets.all(spacingS),
+              color: AppColors.tertiary.withValues(alpha: 0.2),
+              child: const Row(
+                children: [
+                  Icon(Icons.warning, color: AppColors.tertiary),
+                  SizedBox(width: spacingS),
+                  Text('This package is deprecated.', style: TextStyle(color: AppColors.tertiary)),
+                ],
+              ),
+            ),
+            
+          if (state.selectedPackageMissingDeps.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(top: spacingM),
+              padding: const EdgeInsets.all(spacingS),
+              color: AppColors.error.withValues(alpha: 0.2),
+              child: Row(
+                children: [
+                  const Icon(Icons.error, color: AppColors.error),
+                  const SizedBox(width: spacingS),
+                  const Expanded(
+                    child: Text('Missing dependencies.', style: TextStyle(color: AppColors.error)),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<QueueViewModel>().queueOperation(
+                        packageId: state.selectedPackageName,
+                        type: state.isSelectedPackageCask ? PackageType.cask : PackageType.formula,
+                        operation: OperationType.install,
+                      );
+                    },
+                    child: const Text('Fix', style: TextStyle(color: AppColors.error)),
+                  ),
+                ],
+              ),
+            ),
+          
           const Divider(height: spacingL * 2, color: AppColors.borderNeutral),
           
           ConfigPathsWidget(
@@ -130,6 +170,7 @@ class InspectorPane extends StatelessWidget {
           ManagementActionsWidget(
             packageName: state.selectedPackageName,
             isCask: state.isSelectedPackageCask,
+            isOutdated: state.selectedPackageIsOutdated,
           ),
         ],
       ),
@@ -241,32 +282,50 @@ class DependencyGraphWidget extends StatelessWidget {
 }
 
 class ManagementActionsWidget extends StatelessWidget {
-  final String packageName;
-  final bool isCask;
-
   const ManagementActionsWidget({
     super.key,
     required this.packageName,
     required this.isCask,
+    required this.isOutdated,
   });
+
+  final String packageName;
+  final bool isCask;
+  final bool isOutdated;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Wrap(
+      spacing: spacingM,
+      runSpacing: spacingM,
+      alignment: WrapAlignment.spaceEvenly,
       children: [
-        ActionButtonWidget(
-          label: 'Pin Version',
-          icon: Icons.push_pin,
-          color: AppColors.primary,
-          onTap: () {
-            context.read<QueueViewModel>().queueOperation(
-              packageId: packageName,
-              type: isCask ? PackageType.cask : PackageType.formula,
-              operation: OperationType.pin,
-            );
-          },
-        ),
+        if (isOutdated)
+          ActionButtonWidget(
+            label: 'Update',
+            icon: Icons.system_update,
+            color: AppColors.secondary,
+            onTap: () {
+              context.read<QueueViewModel>().queueOperation(
+                packageId: packageName,
+                type: isCask ? PackageType.cask : PackageType.formula,
+                operation: OperationType.upgrade,
+              );
+            },
+          )
+        else
+          ActionButtonWidget(
+            label: 'Pin Version',
+            icon: Icons.push_pin,
+            color: AppColors.primary,
+            onTap: () {
+              context.read<QueueViewModel>().queueOperation(
+                packageId: packageName,
+                type: isCask ? PackageType.cask : PackageType.formula,
+                operation: OperationType.pin,
+              );
+            },
+          ),
         ActionButtonWidget(
           label: 'Force Upgrade',
           icon: Icons.upgrade,
@@ -291,6 +350,20 @@ class ManagementActionsWidget extends StatelessWidget {
             );
           },
         ),
+        if (isCask)
+          ActionButtonWidget(
+            label: 'Zap',
+            icon: Icons.bolt,
+            color: AppColors.error,
+            onTap: () {
+              // Note: Zap might need a specific OperationType if supported, falling back to uninstall here.
+              context.read<QueueViewModel>().queueOperation(
+                packageId: packageName,
+                type: PackageType.cask,
+                operation: OperationType.uninstall,
+              );
+            },
+          ),
       ],
     );
   }

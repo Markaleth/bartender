@@ -5,6 +5,7 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/features/library/view_models/library_view_model.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
+import 'package:bartender/features/library/widgets/health_dashboard_modal.dart';
 
 class GlobalHealthStatusWidget extends StatelessWidget {
   const GlobalHealthStatusWidget({super.key});
@@ -13,53 +14,121 @@ class GlobalHealthStatusWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<LibraryViewModel>();
     final state = viewModel.state;
+    final healthState = state.healthState;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: spacingM),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: StatusCard(
-              title: 'System Storage',
-              value: state.systemStorageUsed,
-              icon: Icons.storage,
-              color: AppColors.secondary,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: StatusCard(
+                  title: 'System Storage',
+                  value: state.systemStorageUsed,
+                  icon: Icons.storage,
+                  color: AppColors.secondary,
+                ),
+              ),
+              const SizedBox(width: spacingM),
+              Expanded(
+                child: StatusCard(
+                  title: 'Orphaned Dependencies',
+                  value: healthState.orphanedDependenciesCount.toString(),
+                  icon: Icons.cleaning_services,
+                  color: healthState.orphanedDependenciesCount > 0
+                      ? AppColors.error
+                      : AppColors.secondary,
+                  action: healthState.orphanedDependenciesCount > 0
+                      ? IconButton(
+                          icon: const Icon(
+                            Icons.autorenew,
+                            color: AppColors.textPrimary,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            context.read<QueueViewModel>().queueOperation(
+                              packageId: 'system',
+                              type: PackageType.system,
+                              operation: OperationType.autoremove,
+                            );
+                          },
+                        )
+                      : null,
+                ),
+              ),
+              const SizedBox(width: spacingM),
+              Expanded(
+                child: StatusCard(
+                  title: 'Global Health Score',
+                  value: '${healthState.globalHealthScore}%',
+                  icon: Icons.favorite,
+                  color: _getHealthColor(healthState.globalHealthScore),
+                  action: IconButton(
+                    icon: const Icon(
+                      Icons.open_in_new,
+                      color: AppColors.textPrimary,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      final libraryVM = context.read<LibraryViewModel>();
+                      final queueVM = context.read<QueueViewModel>();
+                      showDialog(
+                        context: context,
+                        builder: (_) => MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider.value(value: libraryVM),
+                            ChangeNotifierProvider.value(value: queueVM),
+                          ],
+                          child: const HealthDashboardModal(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: spacingM),
-          Expanded(
-            child: StatusCard(
-              title: 'Orphaned Dependencies',
-              value: state.orphanedDependenciesCount.toString(),
-              icon: Icons.cleaning_services,
-              color: state.orphanedDependenciesCount > 0
-                  ? AppColors.error
-                  : AppColors.secondary,
-              action: state.orphanedDependenciesCount > 0
-                  ? IconButton(
-                      icon: const Icon(
-                        Icons.autorenew,
-                        color: AppColors.textPrimary,
-                      ),
-                      onPressed: () {
-                        context.read<QueueViewModel>().queueOperation(
-                          packageId: 'system',
-                          type: PackageType.system,
-                          operation: OperationType.autoremove,
-                        );
-                      },
-                    )
-                  : null,
-            ),
-          ),
-          const SizedBox(width: spacingM),
-          Expanded(
-            child: StatusCard(
-              title: 'Global Health Score',
-              value: '${state.globalHealthScore}%',
-              icon: Icons.favorite,
-              color: _getHealthColor(state.globalHealthScore),
-            ),
+          const SizedBox(height: spacingM),
+          Row(
+            children: [
+              Expanded(
+                child: StatusCard(
+                  title: 'Pending Updates',
+                  value: healthState.outdatedCount.toString(),
+                  icon: Icons.system_update,
+                  color: healthState.outdatedCount > 0
+                      ? AppColors.tertiary
+                      : AppColors.secondary,
+                ),
+              ),
+              const SizedBox(width: spacingM),
+              Expanded(
+                child: StatusCard(
+                  title: 'Reclaimable Space',
+                  value: healthState.reclaimableSpace,
+                  icon: Icons.auto_delete_outlined,
+                  color: healthState.reclaimableSpace != '0 B' &&
+                          healthState.reclaimableSpace.isNotEmpty
+                      ? AppColors.tertiary
+                      : AppColors.secondary,
+                ),
+              ),
+              const SizedBox(width: spacingM),
+              Expanded(
+                child: StatusCard(
+                  title: 'Doctor Warnings',
+                  value: (healthState.doctorWarningsCount +
+                          healthState.doctorErrorsCount)
+                      .toString(),
+                  icon: Icons.warning_amber_rounded,
+                  color: (healthState.doctorWarningsCount > 0 ||
+                          healthState.doctorErrorsCount > 0)
+                      ? AppColors.error
+                      : AppColors.secondary,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -112,9 +181,10 @@ class StatusCard extends StatelessWidget {
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              action ?? const SizedBox.shrink(),
+              if (action != null) action!,
             ],
           ),
           const SizedBox(height: spacingM),
@@ -125,6 +195,7 @@ class StatusCard extends StatelessWidget {
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
