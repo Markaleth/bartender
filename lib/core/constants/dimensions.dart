@@ -2,6 +2,7 @@
 const double spacing2Xs = 2.0;
 const double spacingXs = 4.0;
 const double spacingS = 8.0;
+const double spacingXm = 12.0;
 const double spacingM = 16.0;
 const double spacingL = 24.0;
 const double spacingXl = 32.0;
@@ -43,3 +44,16 @@ const double terminalDrawerQueueVisualizerHeight = 60.0;
 // Taps View
 const double tapCardWidth = 300.0;
 const double tapCardAspectRatio = 1.2;
+const double addTapDialogWidth = 500.0;
+
+// Icon Sizes
+//TODO: i should delete all of this!
+const double iconSizeS = 18.0;
+const double iconSizeM = 20.0;
+const double iconSizeL = 24.0;
+
+// Font Sizes
+//TODO: i should delete all of this too!
+const double fontSizeS = 12.0;
+const double fontSizeM = 14.0;
+const double fontSizeL = 20.0;
