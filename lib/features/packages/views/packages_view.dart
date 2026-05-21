@@ -79,6 +79,7 @@ class _PackagesViewState extends State<PackagesView> {
       context.read<HomebrewRepository>(),
       context.read<PackageStatusNotifier>(),
       context.read<TapFilterNotifier>(),
+      context.read<TapStatusNotifier>(),
     )..init(),
     builder: (context, viewModel, state) => Scaffold(
       floatingActionButton: ValueListenableBuilder<bool>(

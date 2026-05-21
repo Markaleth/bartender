@@ -43,6 +43,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     if (isInstalled) {
       syncTap(tapName); // Refetch to show newly added tap
     } else {
+      _repository.deleteTap(tapName);
       // Remove tap from the current state if successful uninstall
       state.tapsState.maybeWhen(
         success: (taps) {

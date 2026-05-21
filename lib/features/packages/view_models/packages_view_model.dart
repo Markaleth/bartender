@@ -16,6 +16,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
   final HomebrewRepository _homebrewRepository;
   final PackageStatusNotifier _statusNotifier;
   final TapFilterNotifier _tapFilterNotifier;
+  final TapStatusNotifier _tapStatusNotifier;
 
   static const AnalyticsPeriod _analyticsPeriod = AnalyticsPeriod.days30;
 
@@ -27,6 +28,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
     this._homebrewRepository,
     this._statusNotifier,
     this._tapFilterNotifier,
+    this._tapStatusNotifier,
   ) : super(
         PackagesState(
           packageType: Platform.isLinux
@@ -36,13 +38,25 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       ) {
     _statusNotifier.addListener(_onStatusNotifierUpdated);
     _tapFilterNotifier.addListener(_onTapFilterUpdated);
+    _tapStatusNotifier.addListener(_onTapStatusNotifierUpdated);
   }
 
   @override
   void dispose() {
     _statusNotifier.removeListener(_onStatusNotifierUpdated);
     _tapFilterNotifier.removeListener(_onTapFilterUpdated);
+    _tapStatusNotifier.removeListener(_onTapStatusNotifierUpdated);
     super.dispose();
+  }
+
+  void _onTapStatusNotifierUpdated() {
+    final update = _tapStatusNotifier.value;
+    if (update != null && !update.isInstalled) {
+      if (_tapFilterNotifier.selectedTap == update.tapName) {
+        _tapFilterNotifier.clearFilter();
+      }
+      _fetchInitialData();
+    }
   }
 
   void _onTapFilterUpdated() {

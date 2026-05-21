@@ -522,6 +522,10 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
 
   @override
   Future<void> deleteTap(String name) async {
-    await (delete(tapsTable)..where((t) => t.name.equals(name))).go();
+    await transaction(() async {
+      await (delete(tapsTable)..where((t) => t.name.equals(name))).go();
+      await (delete(formulaeTable)..where((t) => t.tap.equals(name))).go();
+      await (delete(casksTable)..where((t) => t.tap.equals(name))).go();
+    });
   }
 }

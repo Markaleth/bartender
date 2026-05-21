@@ -69,7 +69,11 @@ class HomebrewRepository {
         final formulaNames = List<String>.from(tapJson['formula_names'] ?? []);
         final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
 
-        final packagesToFetch = [...formulaNames, ...caskTokens];
+        final packagesToFetch = [...formulaNames];
+        if (!Platform.isLinux) {
+          packagesToFetch.addAll(caskTokens);
+        }
+
         if (packagesToFetch.isNotEmpty) {
           await _fetchAndCachePackageChunks(packagesToFetch);
         }
@@ -90,10 +94,12 @@ class HomebrewRepository {
       }
 
       final formulaNames = List<String>.from(tapJson['formula_names'] ?? []);
-      final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
-
       packagesToFetch.addAll(formulaNames);
-      packagesToFetch.addAll(caskTokens);
+
+      if (!Platform.isLinux) {
+        final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
+        packagesToFetch.addAll(caskTokens);
+      }
     }
 
     return packagesToFetch;
@@ -113,7 +119,7 @@ class HomebrewRepository {
         ...chunk,
       ]);
 
-      if (infoResult.exitCode == 0) {
+      if (infoResult.stdout.isNotEmpty) {
         try {
           await _parseAndCacheInfo(infoResult.stdout);
         } catch (e) {
@@ -146,6 +152,7 @@ class HomebrewRepository {
   }
 
   Future<List<TapModel>> getTaps() => _database.getTaps();
+  Future<void> deleteTap(String name) => _database.deleteTap(name);
 
   Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
     String category,
