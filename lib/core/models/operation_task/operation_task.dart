@@ -28,5 +28,6 @@ abstract class OperationTask with _$OperationTask {
     @Default([]) List<String> logs,
     @Default(false) bool isArchived,
     String? errorMessage,
+    String? customUrl,
   }) = _OperationTask;
 }

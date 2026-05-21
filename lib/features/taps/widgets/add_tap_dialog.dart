@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/utils/string_utils.dart';
 
 class AddTapDialog extends StatefulWidget {
-  final ValueChanged<String> onAddTap;
+  final void Function(String name, String? customUrl) onAddTap;
 
   const AddTapDialog({super.key, required this.onAddTap});
 
@@ -20,9 +21,15 @@ class _AddTapDialogState extends State<AddTapDialog> {
   }
 
   void _submit() {
-    final repo = _repoController.text.trim();
-    if (repo.isEmpty) return;
-    widget.onAddTap(repo);
+    final input = _repoController.text.trim();
+    if (input.isEmpty) return;
+
+    final parsedName = StringUtils.parseTapName(input);
+    final isCustomUrl = input.startsWith('http') || input.startsWith('git@');
+    final customUrl = isCustomUrl ? input : null;
+
+    widget.onAddTap(parsedName, customUrl);
+
     if (mounted) {
       Navigator.of(context).pop();
     }
@@ -127,7 +134,7 @@ class _Body extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Enter the repository URL or the shorthand owner/repo format to add a new tap to your local configuration.',
+            'Enter the shorthand owner/repo (defaults to GitHub) or a full repository URL for custom taps (GitLab, Bitbucket, etc.).',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
           ),
           const SizedBox(height: 24),
@@ -145,7 +152,7 @@ class _Body extends StatelessWidget {
             controller: controller,
             style: const TextStyle(color: AppColors.textPrimary),
             decoration: InputDecoration(
-              hintText: 'e.g., user/repo or https://github.com/...',
+              hintText: 'e.g., user/repo or https://gitlab.com/...',
               hintStyle: TextStyle(
                 color: AppColors.textTertiary.withValues(alpha: 0.5),
               ),
@@ -171,6 +178,74 @@ class _Body extends StatelessWidget {
             ),
             autofocus: true,
             onSubmitted: (_) => onSubmit(),
+          ),
+          const SizedBox(height: 12),
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: controller,
+            builder: (context, value, child) {
+              final text = value.text.trim();
+              if (text.isEmpty) return const SizedBox.shrink();
+
+              final parsedName = StringUtils.parseTapName(text);
+              final isCustomUrl =
+                  text.startsWith('http') || text.startsWith('git@');
+
+              return Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.borderNeutral.withValues(alpha: 0.5),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        text: 'Tap Name: ',
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: parsedName,
+                            style: const TextStyle(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (isCustomUrl) ...[
+                      const SizedBox(height: 4),
+                      Text.rich(
+                        TextSpan(
+                          text: 'Custom URL: ',
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: text,
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            },
           ),
           const SizedBox(height: 24),
           Container(

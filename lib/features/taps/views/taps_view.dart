@@ -25,8 +25,10 @@ class TapsView extends StatelessWidget {
   void _showAddTapDialog(BuildContext context, TapsViewModel viewModel) {
     showDialog(
       context: context,
-      builder: (context) =>
-          AddTapDialog(onAddTap: (tapName) => viewModel.addTap(tapName)),
+      builder: (context) => AddTapDialog(
+        onAddTap: (tapName, customUrl) =>
+            viewModel.addTap(tapName, customUrl: customUrl),
+      ),
     );
   }
 

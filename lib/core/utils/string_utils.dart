@@ -49,4 +49,31 @@ class StringUtils {
       (Match m) => '${m[1]},',
     );
   }
+
+  static String parseTapName(String input) {
+    var s = input.trim();
+
+    // Drop .git
+    s = s.replaceAll(RegExp(r'\.git$'), '');
+
+    // Get path from git@ or http
+    if (s.startsWith('git@')) {
+      s = s.split(':').last;
+    } else if (s.startsWith('http')) {
+      s = Uri.tryParse(s)?.path.replaceAll(RegExp(r'^/'), '') ?? s;
+    }
+
+    // Get user/repo, strip homebrew-
+    final parts = s.split('/');
+    if (parts.length >= 2) {
+      final user = parts[parts.length - 2];
+      var repo = parts.last;
+      if (repo.startsWith('homebrew-')) {
+        repo = repo.replaceFirst('homebrew-', '');
+      }
+      return '$user/$repo';
+    }
+
+    return s;
+  }
 }

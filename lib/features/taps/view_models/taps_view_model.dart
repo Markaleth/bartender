@@ -101,11 +101,12 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     }
   }
 
-  void addTap(String name) {
+  void addTap(String name, {String? customUrl}) {
     _queueViewModel.queueOperation(
       packageId: name,
       type: PackageType.tap,
       operation: OperationType.install,
+      customUrl: customUrl,
     );
   }
 

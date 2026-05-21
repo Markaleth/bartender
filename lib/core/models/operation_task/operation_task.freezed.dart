@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 mixin _$OperationTask {
 
  String get id; String get packageId;// e.g., 'google-chrome' or 'wget'
- PackageType get type; OperationType get operation; OperationStatus get status; List<String> get logs; bool get isArchived; String? get errorMessage;
+ PackageType get type; OperationType get operation; OperationStatus get status; List<String> get logs; bool get isArchived; String? get errorMessage; String? get customUrl;
 /// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $OperationTaskCopyWith<OperationTask> get copyWith => _$OperationTaskCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OperationTask&&(identical(other.id, id) || other.id == id)&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.logs, logs)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OperationTask&&(identical(other.id, id) || other.id == id)&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.logs, logs)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.customUrl, customUrl) || other.customUrl == customUrl));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,packageId,type,operation,status,const DeepCollectionEquality().hash(logs),isArchived,errorMessage);
+int get hashCode => Object.hash(runtimeType,id,packageId,type,operation,status,const DeepCollectionEquality().hash(logs),isArchived,errorMessage,customUrl);
 
 @override
 String toString() {
-  return 'OperationTask(id: $id, packageId: $packageId, type: $type, operation: $operation, status: $status, logs: $logs, isArchived: $isArchived, errorMessage: $errorMessage)';
+  return 'OperationTask(id: $id, packageId: $packageId, type: $type, operation: $operation, status: $status, logs: $logs, isArchived: $isArchived, errorMessage: $errorMessage, customUrl: $customUrl)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $OperationTaskCopyWith<$Res>  {
   factory $OperationTaskCopyWith(OperationTask value, $Res Function(OperationTask) _then) = _$OperationTaskCopyWithImpl;
 @useResult
 $Res call({
- String id, String packageId, PackageType type, OperationType operation, OperationStatus status, List<String> logs, bool isArchived, String? errorMessage
+ String id, String packageId, PackageType type, OperationType operation, OperationStatus status, List<String> logs, bool isArchived, String? errorMessage, String? customUrl
 });
 
 
@@ -63,7 +63,7 @@ class _$OperationTaskCopyWithImpl<$Res>
 
 /// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? packageId = null,Object? type = null,Object? operation = null,Object? status = null,Object? logs = null,Object? isArchived = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? packageId = null,Object? type = null,Object? operation = null,Object? status = null,Object? logs = null,Object? isArchived = null,Object? errorMessage = freezed,Object? customUrl = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,packageId: null == packageId ? _self.packageId : packageId // ignore: cast_nullable_to_non_nullable
@@ -73,6 +73,7 @@ as OperationType,status: null == status ? _self.status : status // ignore: cast_
 as OperationStatus,logs: null == logs ? _self.logs : logs // ignore: cast_nullable_to_non_nullable
 as List<String>,isArchived: null == isArchived ? _self.isArchived : isArchived // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,customUrl: freezed == customUrl ? _self.customUrl : customUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -158,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage,  String? customUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OperationTask() when $default != null:
-return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage);case _:
+return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage,_that.customUrl);case _:
   return orElse();
 
 }
@@ -179,10 +180,10 @@ return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage,  String? customUrl)  $default,) {final _that = this;
 switch (_that) {
 case _OperationTask():
-return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage);case _:
+return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage,_that.customUrl);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +200,10 @@ return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String packageId,  PackageType type,  OperationType operation,  OperationStatus status,  List<String> logs,  bool isArchived,  String? errorMessage,  String? customUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _OperationTask() when $default != null:
-return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage);case _:
+return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status,_that.logs,_that.isArchived,_that.errorMessage,_that.customUrl);case _:
   return null;
 
 }
@@ -214,7 +215,7 @@ return $default(_that.id,_that.packageId,_that.type,_that.operation,_that.status
 
 
 class _OperationTask implements OperationTask {
-  const _OperationTask({required this.id, required this.packageId, required this.type, required this.operation, this.status = OperationStatus.queued, final  List<String> logs = const [], this.isArchived = false, this.errorMessage}): _logs = logs;
+  const _OperationTask({required this.id, required this.packageId, required this.type, required this.operation, this.status = OperationStatus.queued, final  List<String> logs = const [], this.isArchived = false, this.errorMessage, this.customUrl}): _logs = logs;
   
 
 @override final  String id;
@@ -232,6 +233,7 @@ class _OperationTask implements OperationTask {
 
 @override@JsonKey() final  bool isArchived;
 @override final  String? errorMessage;
+@override final  String? customUrl;
 
 /// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
@@ -243,16 +245,16 @@ _$OperationTaskCopyWith<_OperationTask> get copyWith => __$OperationTaskCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OperationTask&&(identical(other.id, id) || other.id == id)&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OperationTask&&(identical(other.id, id) || other.id == id)&&(identical(other.packageId, packageId) || other.packageId == packageId)&&(identical(other.type, type) || other.type == type)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.customUrl, customUrl) || other.customUrl == customUrl));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,packageId,type,operation,status,const DeepCollectionEquality().hash(_logs),isArchived,errorMessage);
+int get hashCode => Object.hash(runtimeType,id,packageId,type,operation,status,const DeepCollectionEquality().hash(_logs),isArchived,errorMessage,customUrl);
 
 @override
 String toString() {
-  return 'OperationTask(id: $id, packageId: $packageId, type: $type, operation: $operation, status: $status, logs: $logs, isArchived: $isArchived, errorMessage: $errorMessage)';
+  return 'OperationTask(id: $id, packageId: $packageId, type: $type, operation: $operation, status: $status, logs: $logs, isArchived: $isArchived, errorMessage: $errorMessage, customUrl: $customUrl)';
 }
 
 
@@ -263,7 +265,7 @@ abstract mixin class _$OperationTaskCopyWith<$Res> implements $OperationTaskCopy
   factory _$OperationTaskCopyWith(_OperationTask value, $Res Function(_OperationTask) _then) = __$OperationTaskCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String packageId, PackageType type, OperationType operation, OperationStatus status, List<String> logs, bool isArchived, String? errorMessage
+ String id, String packageId, PackageType type, OperationType operation, OperationStatus status, List<String> logs, bool isArchived, String? errorMessage, String? customUrl
 });
 
 
@@ -280,7 +282,7 @@ class __$OperationTaskCopyWithImpl<$Res>
 
 /// Create a copy of OperationTask
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? packageId = null,Object? type = null,Object? operation = null,Object? status = null,Object? logs = null,Object? isArchived = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? packageId = null,Object? type = null,Object? operation = null,Object? status = null,Object? logs = null,Object? isArchived = null,Object? errorMessage = freezed,Object? customUrl = freezed,}) {
   return _then(_OperationTask(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,packageId: null == packageId ? _self.packageId : packageId // ignore: cast_nullable_to_non_nullable
@@ -290,6 +292,7 @@ as OperationType,status: null == status ? _self.status : status // ignore: cast_
 as OperationStatus,logs: null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
 as List<String>,isArchived: null == isArchived ? _self.isArchived : isArchived // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,customUrl: freezed == customUrl ? _self.customUrl : customUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

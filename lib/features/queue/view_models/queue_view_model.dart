@@ -45,12 +45,14 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
     required String packageId,
     required PackageType type,
     required OperationType operation,
+    String? customUrl,
   }) {
     final task = OperationTask(
       id: '${packageId}_${DateTime.now().millisecondsSinceEpoch}',
       packageId: packageId,
       type: type,
       operation: operation,
+      customUrl: customUrl,
     );
     enqueue(task);
   }
@@ -86,7 +88,9 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
 
     if (task.type == PackageType.tap) {
       if (task.operation == OperationType.install) {
-        return _brewService.runCustomStream(['tap', task.packageId]);
+        final args = ['tap', task.packageId];
+        if (task.customUrl != null) args.add(task.customUrl!);
+        return _brewService.runCustomStream(args);
       } else if (task.operation == OperationType.uninstall) {
         return _brewService.runCustomStream(['untap', task.packageId]);
       }
