@@ -24,6 +24,7 @@
 - [ ] Consider renaming "library" to "Installed".
 - [ ] Think about if the "updates" tab is actually necessary
 - [ ] State is not updated once you take actions from the "global health" dialog. You need to hot reload to make the changes propagate.
+- [ ] Add "deprecated" tag or UI element to packages (in library or packages) for "at-a-glance" information
 
 # Issues:
 
