@@ -81,6 +81,7 @@ class ExplorerPane extends StatelessWidget {
             return SizeTransition(
               sizeFactor: animation,
               child: FileSystemItem(
+                isDeprecated: package.deprecated,
                 title: title,
                 version: version,
                 isSelected: state.selectedPackage == package,

@@ -14,6 +14,7 @@
 - [x] Add animations to expanding and collapsing folders in the "explorer" pane
 - [x] Add animation to item selection in the library explorer pannel
 - [x] Add tap support.
+- [x] Add "deprecated" tag or UI element to packages (in library or packages) for "at-a-glance" information
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
@@ -24,7 +25,8 @@
 - [ ] Consider renaming "library" to "Installed".
 - [ ] Think about if the "updates" tab is actually necessary
 - [ ] State is not updated once you take actions from the "global health" dialog. You need to hot reload to make the changes propagate.
-- [ ] Add "deprecated" tag or UI element to packages (in library or packages) for "at-a-glance" information
+- [ ] You should also probably add some new filters for precompiled or deprecated packages
+- [ ] Consider doing somethign more suggestive for the "precompiled" description. "Build from source and "Precompiled (Bottle)" is not exactly stelar description
 
 # Issues:
 

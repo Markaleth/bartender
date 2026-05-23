@@ -7,6 +7,7 @@ class FileSystemItem extends StatefulWidget {
   final String version;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool isDeprecated;
   final bool isCask;
 
   const FileSystemItem({
@@ -16,6 +17,7 @@ class FileSystemItem extends StatefulWidget {
     required this.isSelected,
     required this.onTap,
     this.isCask = false,
+    required this.isDeprecated,
   });
 
   @override
@@ -106,15 +108,28 @@ class _FileSystemItemState extends State<FileSystemItem>
                     ),
                   ),
                 ),
-                Text(
-                  widget.version,
-                  style: TextStyle(
-                    color: widget.isSelected
-                        ? AppColors.primary
-                        : AppColors.textSecondary,
-                    fontFamily: 'monospace',
-                    fontSize: 11,
-                  ),
+                Row(
+                  children: [
+                    if (widget.isDeprecated)
+                      Padding(
+                        padding: const EdgeInsets.only(right: spacingXs),
+                        child: Icon(
+                          Icons.circle,
+                          color: AppColors.tertiary,
+                          size: spacingM,
+                        ),
+                      ),
+                    Text(
+                      widget.version,
+                      style: TextStyle(
+                        color: widget.isSelected
+                            ? AppColors.primary
+                            : AppColors.textSecondary,
+                        fontFamily: 'monospace',
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

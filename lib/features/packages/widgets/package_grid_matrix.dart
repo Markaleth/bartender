@@ -2,6 +2,7 @@ import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/core/extensions/string_extensions.dart';
 import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/core/utils/url_launcer_utils.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -60,9 +61,9 @@ class PackageGridMatrix extends StatelessWidget {
             subtitle: formula.license ?? 'Unknown',
           ),
           PackageDetailGridItem(
-            icon: bottleIcon,
-            title: 'Has Bottle',
-            subtitle: formula.versions.bottle
+            icon:
+                bottleIcon, // TODO:  should replace with somethign that's more suggestive or "precompiled"
+            title: formula.versions.bottle
                 ? 'Precompiled (Bottle)'
                 : 'Build from Source',
           ),
@@ -160,14 +161,14 @@ class PackageDetailGridItem extends StatelessWidget {
   final void Function()? onTap;
   final String icon;
   final String title;
-  final String subtitle;
+  final String? subtitle;
 
   const PackageDetailGridItem({
     super.key,
     this.onTap,
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
   });
 
   @override
@@ -203,14 +204,16 @@ class PackageDetailGridItem extends StatelessWidget {
               ),
             ],
           ),
-          onTap != null
-              ? _ClickableHomepageWidget(onTap: onTap, subtitle: subtitle)
-              : Text(
-                  subtitle,
-                  style: context.bodyM.copyWith(fontWeight: FontWeight.bold),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+          if (subtitle case final text? when !text.isNullOrEmpty)
+            if (onTap != null)
+              _ClickableHomepageWidget(onTap: onTap, subtitle: text)
+            else
+              Text(
+                text,
+                style: context.bodyM.copyWith(fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
         ],
       ),
     );

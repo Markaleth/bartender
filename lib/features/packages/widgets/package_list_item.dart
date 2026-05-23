@@ -70,6 +70,7 @@ class PackageListItem extends StatelessWidget {
                     homepage: homepage,
                     isCask: isCask,
                     isExpanded: isExpanded,
+                    isDeprecated: model.deprecated,
                     onExpand: onExpand,
                     description: description,
                     version: version,
@@ -100,6 +101,7 @@ class _PackageListItemHeader extends StatelessWidget {
   final VoidCallback onExpand;
   final String? description;
   final String? version;
+  final bool isDeprecated;
   final BoxConstraints constraints;
 
   const _PackageListItemHeader({
@@ -112,6 +114,7 @@ class _PackageListItemHeader extends StatelessWidget {
     this.description,
     this.version,
     required this.constraints,
+    required this.isDeprecated,
   });
 
   @override
@@ -150,11 +153,25 @@ class _PackageListItemHeader extends StatelessWidget {
             if (isLargeScreen)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: spacingM),
-                child: Text(
-                  version ?? id,
-                  style: context.labelM.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+                child: Row(
+                  children: [
+                    if (isDeprecated)
+                      Padding(
+                        padding: const EdgeInsets.only(right: spacingM),
+                        child: Icon(
+                          Icons.circle,
+                          color: AppColors.tertiary,
+                          size: spacingM,
+                        ),
+                      ),
+
+                    Text(
+                      version ?? id,
+                      style: context.labelM.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             Icon(
@@ -221,7 +238,32 @@ class _PackageListItemDetails extends StatelessWidget {
           ),
           child: Align(
             alignment: Alignment.centerRight,
-            child: _PackageActionButton(model: model, id: id, isCask: isCask),
+            child: Row(
+              spacing: spacingM,
+              children: [
+                if (model.deprecated)
+                  Row(
+                    spacing: spacingS,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        color: AppColors.tertiary,
+                        size: spacingL,
+                      ),
+                      Text(
+                        'This package is no longer maintained.',
+                        style: context.bodyM.copyWith(
+                          color: AppColors.tertiary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                Spacer(),
+                _PackageActionButton(model: model, id: id, isCask: isCask),
+              ],
+            ),
           ),
         ),
       ],
