@@ -4,6 +4,7 @@ import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:flutter/widgets.dart';
 
+//todo: extend component to handle all health related notices (deprecated, missing deps, etc)
 class PackageHealthWidget extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   const PackageHealthWidget({
