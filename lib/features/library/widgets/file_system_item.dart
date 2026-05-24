@@ -1,3 +1,5 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -113,10 +115,10 @@ class _FileSystemItemState extends State<FileSystemItem>
                     if (widget.isDeprecated)
                       Padding(
                         padding: const EdgeInsets.only(right: spacingXs),
-                        child: Icon(
-                          Icons.circle,
+                        child: IconWidget(
+                          assetName: deprecateIcon,
                           color: AppColors.tertiary,
-                          size: spacingM,
+                          size: iconSizeS,
                         ),
                       ),
                     Text(

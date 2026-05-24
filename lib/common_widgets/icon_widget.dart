@@ -11,7 +11,7 @@ class IconWidget extends StatelessWidget {
     super.key,
     required this.assetName,
     this.color = AppColors.iconDefault,
-    this.size = spacingXl,
+    this.size = iconSizeXl,
   });
 
   @override

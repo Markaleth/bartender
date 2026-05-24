@@ -17,3 +17,7 @@ const homeIcon = 'assets/icons/home_icon.svg';
 const linuxIcon = 'assets/icons/linux_icon.svg';
 const appleIcon = 'assets/icons/apple_icon.svg';
 const flaskIcon = 'assets/icons/flask_icon.svg';
+const deprecateIcon = 'assets/icons/deprecate_icon.svg';
+const doctorIcon = 'assets/icons/doctor_icon.svg';
+const pinIcon = 'assets/icons/pin_icon.svg';
+const unpinIcon = 'assets/icons/unpin_icon.svg';

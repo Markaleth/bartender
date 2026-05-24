@@ -1,6 +1,9 @@
+import 'package:bartender/common_widgets/deprecation_notice_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
+import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/common_widgets/package_icon/package_icon.dart';
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
 import 'package:bartender/core/utils/string_utils.dart';
@@ -158,13 +161,12 @@ class _PackageListItemHeader extends StatelessWidget {
                     if (isDeprecated)
                       Padding(
                         padding: const EdgeInsets.only(right: spacingM),
-                        child: Icon(
-                          Icons.circle,
+                        child: IconWidget(
+                          assetName: deprecateIcon,
                           color: AppColors.tertiary,
-                          size: spacingM,
+                          size: iconSizeM,
                         ),
                       ),
-
                     Text(
                       version ?? id,
                       style: context.labelM.copyWith(
@@ -241,25 +243,7 @@ class _PackageListItemDetails extends StatelessWidget {
             child: Row(
               spacing: spacingM,
               children: [
-                if (model.deprecated)
-                  Row(
-                    spacing: spacingS,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.warning_amber_rounded,
-                        color: AppColors.tertiary,
-                        size: spacingL,
-                      ),
-                      Text(
-                        'This package is no longer maintained.',
-                        style: context.bodyM.copyWith(
-                          color: AppColors.tertiary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+                if (model.deprecated) PackageHealthWidget(),
                 Spacer(),
                 _PackageActionButton(model: model, id: id, isCask: isCask),
               ],

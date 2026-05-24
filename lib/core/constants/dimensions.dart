@@ -47,13 +47,13 @@ const double tapCardAspectRatio = 1.2;
 const double addTapDialogWidth = 500.0;
 
 // Icon Sizes
-//TODO: i should delete all of this!
-const double iconSizeS = 18.0;
+const double iconSizeS = 14.0;
 const double iconSizeM = 20.0;
-const double iconSizeL = 24.0;
+const double iconSizeL = 26.0;
+const double iconSizeXl = 32.0;
 
 // Font Sizes
-//TODO: i should delete all of this too!
+//TODO: i should delete all of this!
 const double fontSizeS = 12.0;
 const double fontSizeM = 14.0;
 const double fontSizeL = 20.0;

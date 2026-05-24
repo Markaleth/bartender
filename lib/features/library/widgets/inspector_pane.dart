@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/deprecation_notice_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -115,20 +116,9 @@ class InspectorPane extends StatelessWidget {
           ),
 
           if (state.selectedPackageIsDeprecated)
-            Container(
-              margin: const EdgeInsets.only(top: spacingM),
-              padding: const EdgeInsets.all(spacingS),
-              color: AppColors.tertiary.withValues(alpha: 0.2),
-              child: const Row(
-                children: [
-                  Icon(Icons.warning, color: AppColors.tertiary),
-                  SizedBox(width: spacingS),
-                  Text(
-                    'This package is deprecated.',
-                    style: TextStyle(color: AppColors.tertiary),
-                  ),
-                ],
-              ),
+            Padding(
+              padding: const EdgeInsets.only(top: spacingM),
+              child: PackageHealthWidget(),
             ),
 
           if (state.selectedPackageMissingDeps.isNotEmpty)
