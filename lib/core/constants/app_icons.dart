@@ -21,3 +21,7 @@ const deprecateIcon = 'assets/icons/deprecate_icon.svg';
 const doctorIcon = 'assets/icons/doctor_icon.svg';
 const pinIcon = 'assets/icons/pin_icon.svg';
 const unpinIcon = 'assets/icons/unpin_icon.svg';
+const warningIcon = 'assets/icons/warning_icon.svg';
+const healthIcon = 'assets/icons/health_icon.svg';
+const disabledIcon = 'assets/icons/disabled_icon.svg';
+const checkIcon = 'assets/icons/check_icon.svg';

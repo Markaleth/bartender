@@ -27,6 +27,7 @@
 - [ ] State is not updated once you take actions from the "global health" dialog. You need to hot reload to make the changes propagate.
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
 - [ ] Consider doing somethign more suggestive for the "precompiled" description. "Build from source and "Precompiled (Bottle)" is not exactly stelar description
+- [ ] Update system health descriptions icons and components overall. Especially the dialog.
 
 # Issues:
 

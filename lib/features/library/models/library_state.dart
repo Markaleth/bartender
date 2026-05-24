@@ -114,4 +114,19 @@ abstract class LibraryState with _$LibraryState {
         ? (selectedPackage as CaskModel).missingDeps
         : (selectedPackage as FormulaModel).missingDeps;
   }
+
+  bool get selectedPackageIsMissingDeps {
+    if (selectedPackage == null || isSelectedPackageTap) return false;
+    final missingDeps = isSelectedPackageCask
+        ? (selectedPackage as CaskModel).missingDeps
+        : (selectedPackage as FormulaModel).missingDeps;
+    return missingDeps.isNotEmpty;
+  }
+
+  bool get selectedPackageIsDisabled {
+    if (selectedPackage == null || isSelectedPackageTap) return false;
+    return isSelectedPackageCask
+        ? (selectedPackage as CaskModel).disabled
+        : (selectedPackage as FormulaModel).disabled;
+  }
 }

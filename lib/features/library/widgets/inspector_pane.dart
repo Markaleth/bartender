@@ -1,4 +1,4 @@
-import 'package:bartender/common_widgets/deprecation_notice_widget.dart';
+import 'package:bartender/common_widgets/package_health_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -114,47 +114,15 @@ class InspectorPane extends StatelessWidget {
             version: state.selectedPackageVersion,
             description: state.selectedPackageDescription,
           ),
-
-          if (state.selectedPackageIsDeprecated)
-            Padding(
-              padding: const EdgeInsets.only(top: spacingM),
-              child: PackageHealthWidget(),
+          Padding(
+            padding: const EdgeInsets.only(top: spacingM),
+            child: PackageHealthWidget(
+              isDeprecated: state.selectedPackageIsDeprecated,
+              isOutdated: state.selectedPackageIsOutdated,
+              hasMissingDependencies: state.selectedPackageIsMissingDeps,
+              isDisabled: state.selectedPackageIsMissingDeps,
             ),
-
-          if (state.selectedPackageMissingDeps.isNotEmpty)
-            Container(
-              margin: const EdgeInsets.only(top: spacingM),
-              padding: const EdgeInsets.all(spacingS),
-              color: AppColors.error.withValues(alpha: 0.2),
-              child: Row(
-                children: [
-                  const Icon(Icons.error, color: AppColors.error),
-                  const SizedBox(width: spacingS),
-                  const Expanded(
-                    child: Text(
-                      'Missing dependencies.',
-                      style: TextStyle(color: AppColors.error),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.read<QueueViewModel>().queueOperation(
-                        packageId: state.selectedPackageName,
-                        type: state.isSelectedPackageCask
-                            ? PackageType.cask
-                            : PackageType.formula,
-                        operation: OperationType.install,
-                      );
-                    },
-                    child: const Text(
-                      'Fix',
-                      style: TextStyle(color: AppColors.error),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
+          ),
           const Divider(height: spacingL * 2, color: AppColors.borderNeutral),
 
           ConfigPathsWidget(installPath: state.selectedPackageInstallPath),
@@ -174,6 +142,7 @@ class InspectorPane extends StatelessWidget {
             packageName: state.selectedPackageName,
             isCask: state.isSelectedPackageCask,
             isOutdated: state.selectedPackageIsOutdated,
+            isMissingDependencies: state.selectedPackageIsMissingDeps,
           ),
         ],
       ),
@@ -302,16 +271,17 @@ class DependencyGraphWidget extends StatelessWidget {
 }
 
 class ManagementActionsWidget extends StatelessWidget {
+  final String packageName;
+  final bool isCask;
+  final bool isOutdated;
+  final bool isMissingDependencies;
   const ManagementActionsWidget({
     super.key,
     required this.packageName,
     required this.isCask,
     required this.isOutdated,
+    required this.isMissingDependencies,
   });
-
-  final String packageName;
-  final bool isCask;
-  final bool isOutdated;
 
   @override
   Widget build(BuildContext context) {
@@ -381,6 +351,19 @@ class ManagementActionsWidget extends StatelessWidget {
                 packageId: packageName,
                 type: PackageType.cask,
                 operation: OperationType.uninstall,
+              );
+            },
+          ),
+        if (isMissingDependencies)
+          ActionButtonWidget(
+            label: 'Fix Dependencies',
+            icon: Icons.build,
+            color: AppColors.primary,
+            onTap: () {
+              context.read<QueueViewModel>().queueOperation(
+                packageId: packageName,
+                type: isCask ? PackageType.cask : PackageType.formula,
+                operation: OperationType.install,
               );
             },
           ),

@@ -24,3 +24,9 @@ const String errorNoRoute = 'No route defined for this view';
 const String packagesTitle = 'Browse Packages';
 const String popularPackagesTitle = 'Popular Packages';
 const String popularPackagesSubtitle = 'Trending packages in your environment';
+
+// Package Health Widget
+const String deprecationCopy = 'This package is no longer maintained.';
+const String missingDependencyCopy = 'This package is missing dependencies.';
+const String updateAvailableCopy = 'An update is available for this package.';
+const String disabledCopy = 'This package is disabled.';

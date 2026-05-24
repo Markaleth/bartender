@@ -1,4 +1,4 @@
-import 'package:bartender/common_widgets/deprecation_notice_widget.dart';
+import 'package:bartender/common_widgets/package_health_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/common_widgets/package_icon/package_icon.dart';
@@ -243,7 +243,13 @@ class _PackageListItemDetails extends StatelessWidget {
             child: Row(
               spacing: spacingM,
               children: [
-                if (model.deprecated) PackageHealthWidget(),
+                if (model.deprecated)
+                  PackageHealthWidget(
+                    isDeprecated: model.deprecated,
+                    isOutdated: false,
+                    hasMissingDependencies: false,
+                    isDisabled: false,
+                  ),
                 Spacer(),
                 _PackageActionButton(model: model, id: id, isCask: isCask),
               ],
