@@ -120,7 +120,7 @@ class InspectorPane extends StatelessWidget {
               isDeprecated: state.selectedPackageIsDeprecated,
               isOutdated: state.selectedPackageIsOutdated,
               hasMissingDependencies: state.selectedPackageIsMissingDeps,
-              isDisabled: state.selectedPackageIsMissingDeps,
+              isDisabled: state.selectedPackageIsDisabled,
             ),
           ),
           const Divider(height: spacingL * 2, color: AppColors.borderNeutral),

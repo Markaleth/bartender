@@ -116,7 +116,7 @@ class _FileSystemItemState extends State<FileSystemItem>
                       Padding(
                         padding: const EdgeInsets.only(right: spacingXs),
                         child: IconWidget(
-                          assetName: deprecateIcon,
+                          assetName: warningIcon,
                           color: AppColors.tertiary,
                           size: iconSizeS,
                         ),

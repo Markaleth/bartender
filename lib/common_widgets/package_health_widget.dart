@@ -54,7 +54,7 @@ class PackageHealthWidget extends StatelessWidget {
               if (hasMissingDependencies)
                 _HealthBanner(
                   color: AppColors.error,
-                  iconAsset: warningIcon,
+                  iconAsset: missingDependencyIcon,
                   copy: missingDependencyCopy,
                   padding: padding,
                 ),
