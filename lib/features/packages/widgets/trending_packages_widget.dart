@@ -95,13 +95,11 @@ class TrendingPackagesWidget extends StatelessWidget {
                     onPressed: onInstall,
                     icon: Icon(
                       Icons.chevron_right_rounded,
-                      color: AppColors.secondary,
+                      color: AppColors.primary,
                     ),
                     label: Text(
                       "Install",
-                      style: context.labelM.copyWith(
-                        color: AppColors.secondary,
-                      ),
+                      style: context.labelM.copyWith(color: AppColors.primary),
                     ),
                   ),
                 ],

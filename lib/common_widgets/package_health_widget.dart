@@ -46,7 +46,7 @@ class PackageHealthWidget extends StatelessWidget {
                 ),
               if (isDeprecated)
                 _HealthBanner(
-                  color: AppColors.tertiary,
+                  color: AppColors.warning,
                   iconAsset: deprecateIcon,
                   copy: deprecationCopy,
                   padding: padding,

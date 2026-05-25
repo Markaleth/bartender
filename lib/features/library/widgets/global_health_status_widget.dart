@@ -27,7 +27,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: StatusCard(
-                  title: 'System Storage',
+                  title: 'System Storage Usage',
                   value: healthState.systemStorageUsed,
                   icon: storageIcon,
                   color: AppColors.secondary,
@@ -82,7 +82,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                   value: healthState.outdatedCount.toString(),
                   icon: systemUpdateIcon,
                   color: healthState.outdatedCount > 0
-                      ? AppColors.tertiary
+                      ? AppColors.warning
                       : AppColors.secondary,
                 ),
               ),
@@ -95,7 +95,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                   color:
                       healthState.reclaimableSpace != '0 B' &&
                           healthState.reclaimableSpace.isNotEmpty
-                      ? AppColors.tertiary
+                      ? AppColors.warning
                       : AppColors.secondary,
                 ),
               ),
@@ -124,7 +124,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
 
   Color _getHealthColor(int score) {
     if (score >= 90) return AppColors.secondary;
-    if (score >= 70) return AppColors.tertiary;
+    if (score >= 70) return AppColors.warning;
     return AppColors.error;
   }
 }

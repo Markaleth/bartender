@@ -163,7 +163,7 @@ class _PackageListItemHeader extends StatelessWidget {
                         padding: const EdgeInsets.only(right: spacingM),
                         child: IconWidget(
                           assetName: deprecateIcon,
-                          color: AppColors.tertiary,
+                          color: AppColors.warning,
                           size: iconSizeM,
                         ),
                       ),
@@ -274,9 +274,8 @@ class _PackageActionButton extends StatelessWidget {
 
   String _getButtonLabel(bool isQueued, bool isInProgress) {
     if (isQueued) return 'Queued...';
-    if (isInProgress)
-      return model.isInstalled ? 'Uninstalling...' : 'Installing...';
-    return model.isInstalled ? 'Uninstall' : 'Install';
+    final baseAction = model.isInstalled ? 'Uninstall' : 'Install';
+    return isInProgress ? '${baseAction}ing...' : baseAction;
   }
 
   @override

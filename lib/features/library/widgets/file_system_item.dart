@@ -117,7 +117,7 @@ class _FileSystemItemState extends State<FileSystemItem>
                         padding: const EdgeInsets.only(right: spacingXs),
                         child: IconWidget(
                           assetName: warningIcon,
-                          color: AppColors.tertiary,
+                          color: AppColors.warning,
                           size: iconSizeS,
                         ),
                       ),

@@ -76,4 +76,15 @@ class StringUtils {
 
     return s;
   }
+
+  static String? formatSystemStorage(String? storage) {
+    if (storage == null) return null;
+    final sizeMatch = RegExp(r'^(\S+)').firstMatch(storage);
+
+    if (sizeMatch != null) {
+      final size = sizeMatch.group(1)!.toUpperCase();
+      return size.replaceAllMapped(RegExp(r'([KMGT])$'), (m) => ' ${m[1]}B');
+    }
+    return null;
+  }
 }

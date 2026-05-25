@@ -1,6 +1,7 @@
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/utils/shell_utils.dart';
+import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/features/library/models/system_health_state.dart';
@@ -68,8 +69,7 @@ class HealthViewModel extends BaseViewModel<SystemHealthState, ScreenEffect> {
     final duResult = await ShellUtils.run('du', ['-sh', brewPrefix]);
     if (duResult.exitCode == 0) {
       final storageLine = duResult.stdout.toString().trim();
-      final sizeMatch = RegExp(r'^(\S+)').firstMatch(storageLine);
-      return sizeMatch?.group(1);
+      return StringUtils.formatSystemStorage(storageLine);
     }
     return null;
   }
