@@ -280,11 +280,11 @@ class _PackageActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<QueueViewModel>(
-      builder: (context, queueViewModel, _) {
-        final activeTask = queueViewModel.state.tasks
-            .where((t) => t.packageId == id)
-            .lastOrNull;
+    return Builder(
+      builder: (context) {
+        final activeTask = context.select<QueueViewModel, OperationTask?>(
+          (vm) => vm.state.tasks.where((t) => t.packageId == id).lastOrNull,
+        );
 
         bool isQueued = activeTask?.status == OperationStatus.queued;
         bool isInProgress = activeTask?.status == OperationStatus.inProgress;
@@ -293,7 +293,7 @@ class _PackageActionButton extends StatelessWidget {
           onPressed: (isQueued || isInProgress)
               ? null
               : () {
-                  queueViewModel.queueOperation(
+                  context.read<QueueViewModel>().queueOperation(
                     packageId: id,
                     type: isCask ? PackageType.cask : PackageType.formula,
                     operation: model.isInstalled

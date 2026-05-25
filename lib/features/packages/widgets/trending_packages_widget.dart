@@ -13,6 +13,10 @@ class TrendingPackagesWidget extends StatelessWidget {
   final String? homepage;
   final String? downloads;
 
+  final bool isQueued;
+  final bool isInProgress;
+  final bool isInstalled;
+
   final VoidCallback? onInstall;
 
   const TrendingPackagesWidget({
@@ -23,6 +27,9 @@ class TrendingPackagesWidget extends StatelessWidget {
     required this.version,
     this.homepage,
     this.downloads,
+    this.isQueued = false,
+    this.isInProgress = false,
+    this.isInstalled = false,
   });
 
   @override
@@ -78,29 +85,11 @@ class TrendingPackagesWidget extends StatelessWidget {
                 children: [
                   if (downloads != null)
                     _DownloadsWidget(downloads: downloads!),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.only(
-                        left: spacingS,
-                        top: 0,
-                        bottom: 0,
-                        right: 0,
-                      ),
-                      visualDensity: VisualDensity(
-                        vertical: -4,
-                        horizontal: -4,
-                      ),
-                    ),
-                    iconAlignment: IconAlignment.end,
-                    onPressed: onInstall,
-                    icon: Icon(
-                      Icons.chevron_right_rounded,
-                      color: AppColors.primary,
-                    ),
-                    label: Text(
-                      "Install",
-                      style: context.labelM.copyWith(color: AppColors.primary),
-                    ),
+                  _DownloadButtonWidget(
+                    isQueued: isQueued,
+                    isInProgress: isInProgress,
+                    isInstalled: isInstalled,
+                    onInstall: onInstall,
                   ),
                 ],
               ),
@@ -125,5 +114,62 @@ class _DownloadsWidget extends StatelessWidget {
       IconWidget(assetName: downloadIcon, size: spacingM),
       Text(downloads, style: context.labelM),
     ],
+  );
+}
+
+class _DownloadButtonWidget extends StatelessWidget {
+  final bool isInProgress;
+  final bool isQueued;
+  final bool isInstalled;
+  final VoidCallback? onInstall;
+
+  const _DownloadButtonWidget({
+    required this.isInProgress,
+    required this.isQueued,
+    required this.isInstalled,
+    required this.onInstall,
+  });
+
+  String _getButtonLabel() {
+    if (isQueued) return 'Queued...';
+    final baseAction = isInstalled ? 'Uninstall' : 'Install';
+    return isInProgress ? '${baseAction}ing...' : baseAction;
+  }
+
+  @override
+  Widget build(BuildContext context) => TextButton.icon(
+    style: TextButton.styleFrom(
+      padding: const EdgeInsets.only(
+        left: spacingS,
+        top: 0,
+        bottom: 0,
+        right: 0,
+      ),
+      visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+    ),
+    iconAlignment: IconAlignment.end,
+    onPressed: onInstall,
+    icon: isInProgress
+        ? const SizedBox(
+            width: spacingS,
+            height: spacingS,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            ),
+          )
+        : const Icon(
+            Icons.chevron_right_rounded,
+            color: AppColors.primary,
+            size: spacingM,
+          ),
+    label: Text(
+      _getButtonLabel(),
+      style: context.labelM.copyWith(
+        color: (isQueued || isInProgress)
+            ? AppColors.textSecondary
+            : AppColors.primary,
+      ),
+    ),
   );
 }

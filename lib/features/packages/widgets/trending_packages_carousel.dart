@@ -1,6 +1,6 @@
-import 'dart:developer';
-
+import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/features/packages/widgets/trending_packages_widget.dart';
+import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
@@ -8,6 +8,7 @@ import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/core/utils/string_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TrendingPackagesCarousel extends StatefulWidget {
   final List<List<dynamic>> pages;
@@ -117,34 +118,63 @@ class _CarouselPage extends StatelessWidget {
         children: List.generate(itemsPerPage, (index) {
           final isLastItem = index == itemsPerPage - 1;
           final item = index < items.length ? items[index] : null;
+          final isFormula = item is FormulaModel;
+          final String id = isFormula ? item.name : (item as CaskModel).token;
+          final bool isInstalled = isFormula
+              ? item.isInstalled
+              : (item as CaskModel).isInstalled;
 
           return Expanded(
             child: Padding(
               padding: EdgeInsets.only(right: isLastItem ? 0 : spacingS),
-              child: item != null
-                  ? TrendingPackagesWidget(
-                      title: item is FormulaModel
-                          ? item.name
-                          : (item as CaskModel).token,
-                      description: item is FormulaModel
-                          ? item.desc
-                          : (item as CaskModel).desc,
-                      version: item is FormulaModel
-                          ? item.versions.stable
-                          : (item as CaskModel).version,
-                      homepage: item is FormulaModel
-                          ? item.homepage
-                          : (item as CaskModel).homepage,
-                      downloads: item is FormulaModel
-                          ? StringUtils.formatDownloads(item.installs30d)
-                          : StringUtils.formatDownloads(
-                              (item as CaskModel).installs30d,
-                            ),
-                      onInstall: () => log(
-                        'Install tapped for ${item is FormulaModel ? item.name : item.token}',
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+              child: Builder(
+                builder: (context) {
+                  final activeTask = context
+                      .select<QueueViewModel, OperationTask?>(
+                        (vm) => vm.state.tasks
+                            .where((t) => t.packageId == id)
+                            .lastOrNull,
+                      );
+
+                  bool isQueued = activeTask?.status == OperationStatus.queued;
+                  bool isInProgress =
+                      activeTask?.status == OperationStatus.inProgress;
+
+                  return TrendingPackagesWidget(
+                    title: id,
+                    description: isFormula
+                        ? item.desc
+                        : (item as CaskModel).desc,
+                    version: isFormula
+                        ? item.versions.stable
+                        : (item as CaskModel).version,
+                    homepage: isFormula
+                        ? item.homepage
+                        : (item as CaskModel).homepage,
+                    downloads: isFormula
+                        ? StringUtils.formatDownloads(item.installs30d)
+                        : StringUtils.formatDownloads(
+                            (item as CaskModel).installs30d,
+                          ),
+                    isQueued: isQueued,
+                    isInProgress: isInProgress,
+                    isInstalled: isInstalled,
+                    onInstall: (isQueued || isInProgress)
+                        ? null
+                        : () {
+                            context.read<QueueViewModel>().queueOperation(
+                              packageId: id,
+                              type: isFormula
+                                  ? PackageType.formula
+                                  : PackageType.cask,
+                              operation: isInstalled
+                                  ? OperationType.uninstall
+                                  : OperationType.install,
+                            );
+                          },
+                  );
+                },
+              ),
             ),
           );
         }),

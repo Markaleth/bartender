@@ -262,7 +262,35 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       isInstalled,
     );
 
-    emitState(state.copyWith(paginatedPackages: updatedList));
+    final updatedTrendingData = state.trendingData.maybeMap(
+      success: (value) {
+        return FetchState.success(
+          _updateTrendingDataWithStatus(
+            value.data as List<List<dynamic>>,
+            packageId,
+            isInstalled,
+          ),
+        );
+      },
+      orElse: () => state.trendingData,
+    );
+
+    emitState(
+      state.copyWith(
+        paginatedPackages: updatedList,
+        trendingData: updatedTrendingData,
+      ),
+    );
+  }
+
+  List<dynamic> _updateTrendingDataWithStatus(
+    List<List<dynamic>> trendingData,
+    String packageId,
+    bool isInstalled,
+  ) {
+    return trendingData.map((chunk) {
+      return _updatePackageListWithStatus(chunk, packageId, isInstalled);
+    }).toList();
   }
 
   List<dynamic> _updatePackageListWithStatus(
