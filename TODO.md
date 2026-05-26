@@ -15,6 +15,7 @@
 - [x] Add animation to item selection in the library explorer pannel
 - [x] Add tap support.
 - [x] Add "deprecated" tag or UI element to packages (in library or packages) for "at-a-glance" information
+- [x] Think about if the "updates" tab is actually necessary
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
@@ -23,7 +24,6 @@
 - [ ] Make sure you don't have any magic numbers or magic strings
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [ ] Consider renaming "library" to "Installed".
-- [ ] Think about if the "updates" tab is actually necessary
 - [ ] State is not updated once you take actions from the "global health" dialog. You need to hot reload to make the changes propagate.
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
 - [ ] Consider doing somethign more suggestive for the "precompiled" description. "Build from source and "Precompiled (Bottle)" is not exactly stelar description
@@ -32,9 +32,9 @@
 # Issues:
 
 - [ ] Terminal window clips the edges, so we need to address that
-- [ ] Terminal close icon is not very suggestive (should be an x or something instantly recognizable)
+- [x] Terminal close icon is not very suggestive (should be an x or something instantly recognizable)
 - [ ] when minimising the termial, we're getting some overflow errors
-- [ ] text in terminal look blurry. play with the styling to improve that
+- [x] text in terminal look blurry. play with the styling to improve that
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
 
 # Supported information for "Library"
