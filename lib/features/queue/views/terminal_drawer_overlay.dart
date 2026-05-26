@@ -15,48 +15,51 @@ class TerminalDrawerOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<QueueViewModel, QueueState, void>(
-      viewModel: context.read<QueueViewModel>(),
-      builder: (context, viewModel, state) {
-        if (state.tasks.isEmpty) return const SizedBox.shrink();
+    return Material(
+      type: MaterialType.transparency,
+      child: BaseView<QueueViewModel, QueueState, void>(
+        viewModel: context.read<QueueViewModel>(),
+        builder: (context, viewModel, state) {
+          if (state.tasks.isEmpty) return const SizedBox.shrink();
 
-        final inProgressCount = state.tasks
-            .where((t) => t.status == OperationStatus.inProgress)
-            .length;
+          final inProgressCount = state.tasks
+              .where((t) => t.status == OperationStatus.inProgress)
+              .length;
 
-        return Padding(
-          padding: const EdgeInsets.only(right: spacingL, bottom: spacingL),
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: AnimatedContainer(
-              duration: defaultAnimationDuration,
-              curve: Curves.easeInOut,
-              width: terminalDrawerWidth,
-              height: state.isDrawerExpanded
-                  ? terminalDrawerExpandedHeight
-                  : terminalDrawerCollapsedHeight,
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(radiusL),
-                border: Border.all(color: AppColors.borderNeutral),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.5),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: state.isDrawerExpanded
-                  ? ExpandedWidget(viewModel: viewModel, state: state)
-                  : CollapsedWidget(
-                      inProgressCount: inProgressCount,
-                      toggleDrawer: viewModel.toggleDrawer,
+          return Padding(
+            padding: const EdgeInsets.only(right: spacingL, bottom: spacingL),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: AnimatedContainer(
+                duration: defaultAnimationDuration,
+                curve: Curves.easeInOut,
+                width: terminalDrawerWidth,
+                height: state.isDrawerExpanded
+                    ? terminalDrawerExpandedHeight
+                    : terminalDrawerCollapsedHeight,
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(radiusL),
+                  border: Border.all(color: AppColors.borderNeutral),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.5),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
                     ),
+                  ],
+                ),
+                child: state.isDrawerExpanded
+                    ? ExpandedWidget(viewModel: viewModel, state: state)
+                    : CollapsedWidget(
+                        inProgressCount: inProgressCount,
+                        toggleDrawer: viewModel.toggleDrawer,
+                      ),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

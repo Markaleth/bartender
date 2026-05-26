@@ -48,7 +48,7 @@ class HeaderWidget extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.clear_all, size: spacingM),
+                icon: const Icon(Icons.remove_circle_outline, size: spacingM),
                 onPressed: clearCompleted,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),

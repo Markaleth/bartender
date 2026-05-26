@@ -27,8 +27,8 @@ class VisualizerWidget extends StatelessWidget {
         icon: Icons.download,
       ),
       OperationStatus.success => (
-        borderColor: AppColors.secondary,
-        bgColor: AppColors.secondary.withValues(alpha: 0.1),
+        borderColor: AppColors.success,
+        bgColor: AppColors.success.withValues(alpha: 0.1),
         icon: Icons.check_circle_outline,
       ),
       OperationStatus.error => (

@@ -24,50 +24,44 @@ class PackageHealthWidget extends StatelessWidget {
     required this.isDisabled,
   });
 
-  bool get _isVisible =>
-      isDeprecated || hasMissingDependencies || isOutdated || isDisabled;
-
   @override
-  Widget build(BuildContext context) => Visibility(
-    visible: _isVisible,
-    child:
-        !isDisabled && !isDeprecated && !hasMissingDependencies && !isOutdated
-        ? const SizedBox.shrink()
-        : Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: spacingS,
-            children: [
-              if (isDisabled)
-                _HealthBanner(
-                  color: AppColors.textTertiary,
-                  iconAsset: disabledIcon,
-                  copy: disabledCopy,
-                  padding: padding,
-                ),
-              if (isDeprecated)
-                _HealthBanner(
-                  color: AppColors.warning,
-                  iconAsset: deprecateIcon,
-                  copy: deprecationCopy,
-                  padding: padding,
-                ),
-              if (hasMissingDependencies)
-                _HealthBanner(
-                  color: AppColors.error,
-                  iconAsset: missingDependencyIcon,
-                  copy: missingDependencyCopy,
-                  padding: padding,
-                ),
-              if (isOutdated)
-                _HealthBanner(
-                  color: AppColors.secondary,
-                  iconAsset: updateIcon,
-                  copy: updateAvailableCopy,
-                  padding: padding,
-                ),
-            ],
-          ),
-  );
+  Widget build(BuildContext context) =>
+      !isDisabled && !isDeprecated && !hasMissingDependencies && !isOutdated
+      ? const SizedBox.shrink()
+      : Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: spacingS,
+          children: [
+            if (isDisabled)
+              _HealthBanner(
+                color: AppColors.textTertiary,
+                iconAsset: disabledIcon,
+                copy: disabledCopy,
+                padding: padding,
+              ),
+            if (isDeprecated)
+              _HealthBanner(
+                color: AppColors.warning,
+                iconAsset: deprecateIcon,
+                copy: deprecationCopy,
+                padding: padding,
+              ),
+            if (hasMissingDependencies)
+              _HealthBanner(
+                color: AppColors.error,
+                iconAsset: missingDependencyIcon,
+                copy: missingDependencyCopy,
+                padding: padding,
+              ),
+            if (isOutdated)
+              _HealthBanner(
+                color: AppColors.secondary,
+                iconAsset: updateIcon,
+                copy: updateAvailableCopy,
+                padding: padding,
+              ),
+          ],
+        );
 }
 
 class _HealthBanner extends StatelessWidget {
@@ -85,24 +79,20 @@ class _HealthBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: spacingS),
-      child: Container(
-        padding: padding,
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(radiusM),
-          border: Border.all(color: color),
-        ),
-        child: Row(
-          children: [
-            IconWidget(assetName: iconAsset, color: color, size: iconSizeL),
-            const SizedBox(width: spacingS),
-            Expanded(
-              child: Text(copy, style: TextStyle(color: color)),
-            ),
-          ],
-        ),
+    return Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(radiusM),
+        border: Border.all(color: color),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconWidget(assetName: iconAsset, color: color, size: iconSizeL),
+          const SizedBox(width: spacingS),
+          Text(copy, style: TextStyle(color: color)),
+        ],
       ),
     );
   }

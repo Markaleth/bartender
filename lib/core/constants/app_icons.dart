@@ -1,5 +1,4 @@
 const downloadIcon = 'assets/icons/download_icon.svg';
-const starIcon = 'assets/icons/star_icon.svg';
 const barrelIcon = 'assets/icons/barrel_icon.svg';
 const brewIcon = 'assets/icons/brew_icon.svg';
 const libraryIcon = 'assets/icons/library_icon.svg';
@@ -30,3 +29,4 @@ const cleanupIcon = 'assets/icons/cleanup_icon.svg';
 const systemUpdateIcon = 'assets/icons/system_update_icon.svg';
 const missingDependencyIcon = 'assets/icons/missing_dependency_icon.svg';
 const storageIcon = 'assets/icons/storage_icon.svg';
+const clearIcon = 'assets/icons/close_icon.svg';
