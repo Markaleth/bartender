@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bartender/core/base_view_model.dart';
+import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/data/shell/streaming_shell_command.dart';
@@ -7,7 +8,7 @@ import 'package:bartender/features/queue/models/queue_state.dart';
 import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 
-class QueueViewModel extends BaseViewModel<QueueState, void> {
+class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
   final BrewService _brewService;
   final DatabaseInterface _database;
   final PackageStatusNotifier _packageNotifier;
@@ -35,6 +36,7 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
         tasks: updatedTasks,
         isDrawerExpanded: isDrawerExpanded,
         activeTaskId: activeTaskId,
+        isHidden: false,
       ),
     );
 
@@ -204,6 +206,22 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
     emitState(state.copyWith(isDrawerExpanded: !state.isDrawerExpanded));
   }
 
+  void closeDrawer() {
+    final hasActiveTasks = state.tasks.any(
+      (t) =>
+          t.status == OperationStatus.queued ||
+          t.status == OperationStatus.inProgress,
+    );
+    if (hasActiveTasks) {
+      emitEffect(
+        const ShowToastEffect(
+          'Terminal hidden. Operations running in background.',
+        ),
+      );
+    }
+    emitState(state.copyWith(isHidden: true));
+  }
+
   void selectTask(String id) {
     emitState(state.copyWith(activeTaskId: id));
   }
@@ -218,7 +236,7 @@ class QueueViewModel extends BaseViewModel<QueueState, void> {
     if (remainingTasks.where((t) => t.id == state.activeTaskId).isEmpty) {
       newActiveId = remainingTasks.isNotEmpty ? remainingTasks.last.id : null;
     }
-
+    emitEffect(const ShowToastEffect('Completed tasks cleared.'));
     emitState(
       state.copyWith(
         tasks: remainingTasks,

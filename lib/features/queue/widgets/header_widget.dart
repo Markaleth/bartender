@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 class HeaderWidget extends StatelessWidget {
   final void Function() toggleDrawer;
   final void Function() clearCompleted;
+  final void Function() closeDrawer;
 
   const HeaderWidget({
     super.key,
     required this.toggleDrawer,
     required this.clearCompleted,
+    required this.closeDrawer,
   });
 
   @override
@@ -48,7 +50,7 @@ class HeaderWidget extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.remove_circle_outline, size: spacingM),
+                icon: const Icon(Icons.cleaning_services, size: spacingM),
                 onPressed: clearCompleted,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -58,6 +60,14 @@ class HeaderWidget extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.expand_more, size: spacingM),
                 onPressed: toggleDrawer,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                color: AppColors.textSecondary,
+              ),
+              const SizedBox(width: spacingM),
+              IconButton(
+                icon: const Icon(Icons.close, size: spacingM),
+                onPressed: closeDrawer,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 color: AppColors.textSecondary,

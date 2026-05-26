@@ -26,6 +26,7 @@ class ExpandedWidget extends StatelessWidget {
         HeaderWidget(
           toggleDrawer: viewModel.toggleDrawer,
           clearCompleted: viewModel.clearCompleted,
+          closeDrawer: viewModel.closeDrawer,
         ),
         VisualizerWidget(context: context, viewModel: viewModel, state: state),
         Expanded(

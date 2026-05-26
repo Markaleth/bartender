@@ -2,25 +2,46 @@ import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
+import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/features/queue/models/queue_state.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/features/queue/widgets/collapsed_widget.dart';
 import 'package:bartender/features/queue/widgets/expanded_widget.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TerminalDrawerOverlay extends StatelessWidget {
   const TerminalDrawerOverlay({super.key});
 
+  void _handleEffect(BuildContext context, ScreenEffect effect) {
+    if (effect is ShowToastEffect) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            effect.message,
+            style: context.bodyM.copyWith(
+              color: AppColors.background,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
-      child: BaseView<QueueViewModel, QueueState, void>(
+      child: BaseView<QueueViewModel, QueueState, ScreenEffect>(
         viewModel: context.read<QueueViewModel>(),
+        onEffect: _handleEffect,
         builder: (context, viewModel, state) {
-          if (state.tasks.isEmpty) return const SizedBox.shrink();
+          if (state.tasks.isEmpty || state.isHidden)
+            return const SizedBox.shrink();
 
           final inProgressCount = state.tasks
               .where((t) => t.status == OperationStatus.inProgress)
