@@ -40,8 +40,9 @@ class TerminalDrawerOverlay extends StatelessWidget {
         viewModel: context.read<QueueViewModel>(),
         onEffect: _handleEffect,
         builder: (context, viewModel, state) {
-          if (state.tasks.isEmpty || state.isHidden)
+          if (state.tasks.isEmpty || state.isHidden) {
             return const SizedBox.shrink();
+          }
 
           final inProgressCount = state.tasks
               .where((t) => t.status == OperationStatus.inProgress)

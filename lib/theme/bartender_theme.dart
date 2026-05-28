@@ -26,6 +26,17 @@ class BartenderTheme {
         ),
         elevation: 4,
       ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          return states.contains(WidgetState.selected)
+              ? AppColors.secondary
+              : null;
+        }),
+        checkColor: WidgetStateProperty.all(AppColors.onPrimary),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusS),
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,

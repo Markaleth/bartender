@@ -7,7 +7,6 @@ import 'package:bartender/features/taps/views/taps_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bartender/core/base_view.dart';
-import 'package:bartender/core/constants/app_strings.dart';
 import 'models/home_state.dart';
 import 'view_models/home_view_model.dart';
 import 'widgets/side_navigation_bar.dart';
@@ -38,10 +37,10 @@ class HomeView extends StatelessWidget {
                       const LibraryView(),
                       // Index 2: Taps
                       TapsView(homeViewModel: viewModel),
-                      // Index 3: Settings
-                      const Center(child: Text(placeholderSettings)),
-                      // Index 4: Debug
+                      // Index 3: Debug
                       const Center(child: ApiTesterWidget()),
+                      // Index 4: Settings (placeholder for now)
+                      const Center(child: Text('Settings View Placeholder')),
                     ],
                   ),
                 ),

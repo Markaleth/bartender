@@ -52,8 +52,8 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
   void _onTapStatusNotifierUpdated() {
     final update = _tapStatusNotifier.value;
     if (update != null && !update.isInstalled) {
-      if (_tapFilterNotifier.selectedTap == update.tapName) {
-        _tapFilterNotifier.clearFilter();
+      if (_tapFilterNotifier.selectedTaps.contains(update.tapName)) {
+        _tapFilterNotifier.toggleFilter(update.tapName);
       }
       _fetchInitialData();
     }
@@ -99,7 +99,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       type: state.packageType,
       limit: _paginationChunkSize,
       offset: _currentPaginationOffset,
-      tapFilter: _tapFilterNotifier.selectedTap,
+      tapFilter: _tapFilterNotifier.selectedTaps.firstOrNull,
     );
 
     _currentPaginationOffset += initialChunk.length;
@@ -125,7 +125,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
         type: state.packageType,
         limit: _paginationChunkSize,
         offset: _currentPaginationOffset,
-        tapFilter: _tapFilterNotifier.selectedTap,
+        tapFilter: _tapFilterNotifier.selectedTaps.firstOrNull,
       );
 
       if (nextChunk.isNotEmpty) {
@@ -224,7 +224,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       type: state.packageType,
       limit: _paginationChunkSize,
       offset: _currentPaginationOffset,
-      tapFilter: _tapFilterNotifier.selectedTap,
+      tapFilter: _tapFilterNotifier.selectedTaps.firstOrNull,
     );
     _currentPaginationOffset += initialChunk.length;
 

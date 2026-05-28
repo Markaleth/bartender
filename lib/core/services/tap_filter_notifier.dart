@@ -1,18 +1,38 @@
 import 'package:flutter/foundation.dart';
 
 class TapFilterNotifier extends ChangeNotifier {
-  String? _selectedTap;
+  final Set<String> _selectedTaps = {};
 
-  String? get selectedTap => _selectedTap;
+  Set<String> get selectedTaps => Set.unmodifiable(_selectedTaps);
+
+  void toggleFilter(String tapName) {
+    if (_selectedTaps.contains(tapName)) {
+      _selectedTaps.remove(tapName);
+    } else {
+      _selectedTaps.add(tapName);
+    }
+    notifyListeners();
+  }
 
   void setFilter(String? tapName) {
-    if (_selectedTap != tapName) {
-      _selectedTap = tapName;
-      notifyListeners();
+    if (tapName == null ||
+        (_selectedTaps.length == 1 && _selectedTaps.first == tapName)) {
+      clearFilter();
+      return;
     }
+    _setFilter(tapName);
+    notifyListeners();
+  }
+
+  void _setFilter(String tapName) {
+    _selectedTaps.clear();
+    _selectedTaps.add(tapName);
   }
 
   void clearFilter() {
-    setFilter(null);
+    if (_selectedTaps.isNotEmpty) {
+      _selectedTaps.clear();
+      notifyListeners();
+    }
   }
 }

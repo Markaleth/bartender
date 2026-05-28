@@ -24,7 +24,4 @@ abstract class PackagesState with _$PackagesState {
   }) = _PackagesState;
 
   Set<String> get uniqueTapNames => taps.map((t) => t.name).toSet();
-
-  bool isValidTapSelection(String? selectedTap) =>
-      selectedTap == null || uniqueTapNames.contains(selectedTap);
 }
