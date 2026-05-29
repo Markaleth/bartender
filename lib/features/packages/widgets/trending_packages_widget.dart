@@ -1,5 +1,4 @@
-import 'package:bartender/common_widgets/buttons/button_state.dart';
-import 'package:bartender/common_widgets/buttons/tertiary_button_widget.dart';
+import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
@@ -139,7 +138,7 @@ class _DownloadButtonWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => TextButtonWidget(
+  Widget build(BuildContext context) => ButtonWidget.tertiary(
     label: _getButtonLabel(),
     state: isInProgress
         ? ButtonState.loading
@@ -148,7 +147,7 @@ class _DownloadButtonWidget extends StatelessWidget {
         : ButtonState.enabled,
     onPressed: onInstall,
     iconData: Icons.chevron_right_rounded,
-    isTrailingIcon: true,
+    withTrailingIcon: true,
     isCompact: true,
   );
 }

@@ -47,6 +47,7 @@ const double tapCardAspectRatio = 1.2;
 const double addTapDialogWidth = 500.0;
 
 // Icon Sizes
+const double iconSizeXs = 8.0;
 const double iconSizeS = 14.0;
 const double iconSizeM = 20.0;
 const double iconSizeL = 26.0;

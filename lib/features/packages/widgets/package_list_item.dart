@@ -1,5 +1,4 @@
-import 'package:bartender/common_widgets/buttons/button_state.dart';
-import 'package:bartender/common_widgets/buttons/primary_button_widget.dart';
+import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
@@ -293,7 +292,7 @@ class _PackageActionButton extends StatelessWidget {
 
         return SizedBox(
           width: 200,
-          child: PrimaryButtonWidget(
+          child: ButtonWidget.primary(
             label: _getButtonLabel(isQueued, isInProgress),
             state: (isQueued || isInProgress)
                 ? ButtonState.loading
