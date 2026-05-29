@@ -50,128 +50,88 @@ class ButtonWidget extends StatelessWidget {
     this.isCompact = false,
   }) : _variant = _ButtonVariant.tertiary;
 
-  @override
-  Widget build(BuildContext context) {
-    final isLoading = state == ButtonState.loading;
-    final isDisabled =
-        state == ButtonState.disabled || (onPressed == null && !isLoading);
-    final activeOnPressed = isDisabled ? null : (isLoading ? () {} : onPressed);
-    final spinnerSize = _variant == _ButtonVariant.tertiary
-        ? iconSizeXs
-        : iconSizeS;
-    final spinnerThickness = _variant == _ButtonVariant.tertiary
-        ? thicknessS
-        : thicknessM;
-    // 1. Resolve Colors & Typography based on variant
-    Color contentColor;
-    Color spinnerColor;
-    TextStyle textStyle = context.labelL.copyWith(fontWeight: FontWeight.bold);
-    String displayLabel = label;
+  // --- STATE HELPERS ---
 
+  bool get _isLoading => state == ButtonState.loading;
+
+  bool get _isDisabled =>
+      state == ButtonState.disabled || (onPressed == null && !_isLoading);
+
+  VoidCallback? get _activeOnPressed =>
+      _isDisabled ? null : (_isLoading ? () {} : onPressed);
+
+  // --- STYLE HELPERS ---
+
+  Color get _contentColor {
     switch (_variant) {
       case _ButtonVariant.primary:
-        contentColor = isDisabled
-            ? AppColors.iconDefault
-            : AppColors.background;
-        spinnerColor = AppColors.background;
-        textStyle = textStyle.copyWith(color: contentColor);
-        break;
+        return _isDisabled ? AppColors.iconDefault : AppColors.background;
       case _ButtonVariant.secondary:
-        contentColor = isDisabled || isLoading
+        return _isDisabled || _isLoading
             ? AppColors.textTertiary
             : AppColors.primary;
-        spinnerColor = AppColors.textTertiary;
-        textStyle = textStyle.copyWith(color: contentColor);
-        break;
       case _ButtonVariant.tertiary:
-        contentColor = isDisabled || isLoading
+        return _isDisabled || _isLoading
             ? AppColors.textSecondary
             : AppColors.primary;
-        spinnerColor = contentColor;
-        textStyle = context.labelM.copyWith(
+    }
+  }
+
+  Color get _spinnerColor {
+    switch (_variant) {
+      case _ButtonVariant.primary:
+        return AppColors.background;
+      case _ButtonVariant.secondary:
+        return AppColors.textTertiary;
+      case _ButtonVariant.tertiary:
+        return _contentColor;
+    }
+  }
+
+  TextStyle _getTextStyle(BuildContext context) {
+    final color = _contentColor;
+    switch (_variant) {
+      case _ButtonVariant.primary:
+      case _ButtonVariant.secondary:
+        return context.labelL.copyWith(
           fontWeight: FontWeight.bold,
-          color: contentColor,
+          color: color,
         );
-        break;
+      case _ButtonVariant.tertiary:
+        return context.labelM.copyWith(
+          fontWeight: FontWeight.bold,
+          color: color,
+        );
     }
+  }
 
-    // 2. Resolve Active Icon / Spinner
-    Widget? activeIcon;
-    if (isLoading) {
-      activeIcon = SizedBox(
-        width: spinnerSize,
-        height: spinnerSize,
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(spinnerColor),
-          strokeWidth: spinnerThickness,
-        ),
-      );
-    } else if (iconData != null) {
-      activeIcon = Icon(
-        iconData,
-        size: iconSize ?? iconSizeS,
-        color: contentColor,
-      );
-    }
-
-    final labelWidget = Text(
-      displayLabel,
-      textAlign: TextAlign.center,
-      style: textStyle,
-    );
-    final iconAlignment = withTrailingIcon
+  ButtonStyle get _buttonStyle {
+    final alignment = withTrailingIcon
         ? IconAlignment.end
         : IconAlignment.start;
 
-    // 3. Build the underlying button based on variant
     switch (_variant) {
       case _ButtonVariant.primary:
-        final style = ElevatedButton.styleFrom(
+        return ElevatedButton.styleFrom(
           minimumSize: const Size(double.infinity, defaultButtonHeight),
           backgroundColor: AppColors.primary,
           disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
-          iconAlignment: iconAlignment,
+          iconAlignment: alignment,
         );
-        return activeIcon != null
-            ? ElevatedButton.icon(
-                style: style,
-                onPressed: activeOnPressed,
-                icon: activeIcon,
-                label: labelWidget,
-              )
-            : ElevatedButton(
-                style: style,
-                onPressed: activeOnPressed,
-                child: labelWidget,
-              );
-
       case _ButtonVariant.secondary:
-        final borderColor = isDisabled || isLoading
+        final borderColor = _isDisabled || _isLoading
             ? AppColors.borderNeutral
             : AppColors.primary;
-        final style = OutlinedButton.styleFrom(
+        return OutlinedButton.styleFrom(
           minimumSize: const Size(double.infinity, defaultButtonHeight),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radiusM),
           ),
           side: BorderSide(color: borderColor),
-          iconAlignment: iconAlignment,
+          iconAlignment: alignment,
         );
-        return activeIcon != null
-            ? OutlinedButton.icon(
-                style: style,
-                onPressed: activeOnPressed,
-                icon: activeIcon,
-                label: labelWidget,
-              )
-            : OutlinedButton(
-                style: style,
-                onPressed: activeOnPressed,
-                child: labelWidget,
-              );
-
       case _ButtonVariant.tertiary:
-        final style = TextButton.styleFrom(
+        return TextButton.styleFrom(
           foregroundColor: AppColors.primary,
           padding: isCompact
               ? const EdgeInsets.symmetric(horizontal: spacingS)
@@ -182,18 +142,85 @@ class ButtonWidget extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radiusM),
           ),
-          iconAlignment: iconAlignment,
+          iconAlignment: alignment,
         );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final labelWidget = Text(
+      label,
+      textAlign: TextAlign.center,
+      style: _getTextStyle(context),
+    );
+
+    // Resolve icon or spinner inline
+    Widget? activeIcon;
+    if (_isLoading) {
+      final size = _variant == _ButtonVariant.tertiary ? iconSizeXs : iconSizeS;
+      final thickness = _variant == _ButtonVariant.tertiary
+          ? thicknessS
+          : thicknessM;
+      activeIcon = SizedBox(
+        width: size,
+        height: size,
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(_spinnerColor),
+          strokeWidth: thickness,
+        ),
+      );
+    } else if (iconData != null) {
+      activeIcon = Icon(
+        iconData,
+        size: iconSize ?? iconSizeS,
+        color: _contentColor,
+      );
+    }
+
+    final style = _buttonStyle;
+
+    // Instantiate the final Flutter buttons directly in the build method
+    switch (_variant) {
+      case _ButtonVariant.primary:
+        return activeIcon != null
+            ? ElevatedButton.icon(
+                style: style,
+                onPressed: _activeOnPressed,
+                icon: activeIcon,
+                label: labelWidget,
+              )
+            : ElevatedButton(
+                style: style,
+                onPressed: _activeOnPressed,
+                child: labelWidget,
+              );
+
+      case _ButtonVariant.secondary:
+        return activeIcon != null
+            ? OutlinedButton.icon(
+                style: style,
+                onPressed: _activeOnPressed,
+                icon: activeIcon,
+                label: labelWidget,
+              )
+            : OutlinedButton(
+                style: style,
+                onPressed: _activeOnPressed,
+                child: labelWidget,
+              );
+
+      case _ButtonVariant.tertiary:
         return activeIcon != null
             ? TextButton.icon(
                 style: style,
-                onPressed: activeOnPressed,
+                onPressed: _activeOnPressed,
                 icon: activeIcon,
                 label: labelWidget,
               )
             : TextButton(
                 style: style,
-                onPressed: activeOnPressed,
+                onPressed: _activeOnPressed,
                 child: labelWidget,
               );
     }
