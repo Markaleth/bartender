@@ -1,3 +1,5 @@
+import 'package:bartender/common_widgets/buttons/button_state.dart';
+import 'package:bartender/common_widgets/buttons/primary_button_widget.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
@@ -289,43 +291,24 @@ class _PackageActionButton extends StatelessWidget {
         bool isQueued = activeTask?.status == OperationStatus.queued;
         bool isInProgress = activeTask?.status == OperationStatus.inProgress;
 
-        return ElevatedButton(
-          onPressed: (isQueued || isInProgress)
-              ? null
-              : () {
-                  context.read<QueueViewModel>().queueOperation(
-                    packageId: id,
-                    type: isCask ? PackageType.cask : PackageType.formula,
-                    operation: model.isInstalled
-                        ? OperationType.uninstall
-                        : OperationType.install,
-                  );
-                },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (isInProgress) ...[
-                const SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColors.onPrimary,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: spacingS),
-              ],
-              Text(
-                _getButtonLabel(isQueued, isInProgress),
-                style: context.labelL.copyWith(
-                  color: (isQueued || isInProgress)
-                      ? AppColors.textSecondary
-                      : AppColors.onPrimary,
-                ),
-              ),
-            ],
+        return SizedBox(
+          width: 200,
+          child: PrimaryButtonWidget(
+            label: _getButtonLabel(isQueued, isInProgress),
+            state: (isQueued || isInProgress)
+                ? ButtonState.loading
+                : ButtonState.enabled,
+            onPressed: (isQueued || isInProgress)
+                ? null
+                : () {
+                    context.read<QueueViewModel>().queueOperation(
+                      packageId: id,
+                      type: isCask ? PackageType.cask : PackageType.formula,
+                      operation: model.isInstalled
+                          ? OperationType.uninstall
+                          : OperationType.install,
+                    );
+                  },
           ),
         );
       },

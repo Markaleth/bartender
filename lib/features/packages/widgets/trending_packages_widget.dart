@@ -1,3 +1,5 @@
+import 'package:bartender/common_widgets/buttons/button_state.dart';
+import 'package:bartender/common_widgets/buttons/tertiary_button_widget.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
@@ -137,39 +139,16 @@ class _DownloadButtonWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => TextButton.icon(
-    style: TextButton.styleFrom(
-      padding: const EdgeInsets.only(
-        left: spacingS,
-        top: 0,
-        bottom: 0,
-        right: 0,
-      ),
-      visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-    ),
-    iconAlignment: IconAlignment.end,
+  Widget build(BuildContext context) => TextButtonWidget(
+    label: _getButtonLabel(),
+    state: isInProgress
+        ? ButtonState.loading
+        : isQueued
+        ? ButtonState.disabled
+        : ButtonState.enabled,
     onPressed: onInstall,
-    icon: isInProgress
-        ? const SizedBox(
-            width: spacingS,
-            height: spacingS,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-            ),
-          )
-        : const Icon(
-            Icons.chevron_right_rounded,
-            color: AppColors.primary,
-            size: spacingM,
-          ),
-    label: Text(
-      _getButtonLabel(),
-      style: context.labelM.copyWith(
-        color: (isQueued || isInProgress)
-            ? AppColors.textSecondary
-            : AppColors.primary,
-      ),
-    ),
+    iconData: Icons.chevron_right_rounded,
+    isTrailingIcon: true,
+    isCompact: true,
   );
 }
