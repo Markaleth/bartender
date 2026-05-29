@@ -1,3 +1,5 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -59,7 +61,7 @@ class HealthDashboardModal extends StatelessWidget {
                     onAction: healthState.outdatedCount > 0
                         ? onUpdateAll
                         : null,
-                    icon: Icons.system_update,
+                    iconAssetName: systemUpdateIcon,
                   ),
                   const SizedBox(height: spacingM),
                   HealthDashboardSection(
@@ -71,7 +73,7 @@ class HealthDashboardModal extends StatelessWidget {
                             healthState.reclaimableSpace.isNotEmpty
                         ? onCleanup
                         : null,
-                    icon: Icons.cleaning_services,
+                    iconAssetName: cleanupIcon,
                   ),
                   const SizedBox(height: spacingM),
                   HealthDashboardSection(
@@ -81,7 +83,7 @@ class HealthDashboardModal extends StatelessWidget {
                     onAction: healthState.orphanedDependenciesCount > 0
                         ? onRemoveOrphans
                         : null,
-                    icon: Icons.delete_outline,
+                    iconAssetName: missingDependencyIcon,
                   ),
                   const SizedBox(height: spacingM),
                   const Text(
@@ -108,9 +110,24 @@ class HealthDashboardModal extends StatelessWidget {
                           borderRadius: BorderRadius.circular(radiusM),
                           border: Border.all(color: AppColors.borderNeutral),
                         ),
-                        child: Text(
-                          issue,
-                          style: const TextStyle(color: AppColors.textPrimary),
+                        child: Row(
+                          children: [
+                            if (issue.toLowerCase().contains('warning'))
+                              IconWidget(
+                                assetName: warningIcon,
+                                color: AppColors.warning,
+                                size: iconSizeXl,
+                              ),
+                            const SizedBox(width: spacingM),
+                            Expanded(
+                              child: Text(
+                                issue.replaceAll('Warning:', '').trim(),
+                                style: const TextStyle(
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -129,7 +146,7 @@ class HealthDashboardSection extends StatelessWidget {
   final String value;
   final String actionLabel;
   final VoidCallback? onAction;
-  final IconData icon;
+  final String iconAssetName;
 
   const HealthDashboardSection({
     super.key,
@@ -137,7 +154,7 @@ class HealthDashboardSection extends StatelessWidget {
     required this.value,
     required this.actionLabel,
     this.onAction,
-    required this.icon,
+    required this.iconAssetName,
   });
 
   @override
@@ -151,7 +168,11 @@ class HealthDashboardSection extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.secondary, size: 32),
+          IconWidget(
+            assetName: iconAssetName,
+            color: AppColors.secondary,
+            size: iconSizeXl,
+          ),
           const SizedBox(width: spacingM),
           Expanded(
             child: Column(
@@ -177,12 +198,11 @@ class HealthDashboardSection extends StatelessWidget {
           ),
           if (onAction != null)
             ElevatedButton(
-              onPressed: onAction,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.textPrimary,
+                fixedSize: const Size(150, spacingL),
               ),
-              child: Text(actionLabel),
+              onPressed: onAction,
+              child: Text(actionLabel, textAlign: TextAlign.center),
             ),
         ],
       ),

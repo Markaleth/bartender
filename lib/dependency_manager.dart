@@ -40,11 +40,15 @@ List<SingleChildWidget> buildDependencyList(
     ChangeNotifierProvider<TapFilterNotifier>(
       create: (_) => TapFilterNotifier(),
     ),
-    ChangeNotifierProxyProvider4<
+    ChangeNotifierProvider<SystemStatusNotifier>(
+      create: (_) => SystemStatusNotifier(),
+    ),
+    ChangeNotifierProxyProvider5<
       BrewService,
       DatabaseInterface,
       PackageStatusNotifier,
       TapStatusNotifier,
+      SystemStatusNotifier,
       QueueViewModel
     >(
       create: (context) => QueueViewModel(
@@ -52,6 +56,7 @@ List<SingleChildWidget> buildDependencyList(
         context.read<DatabaseInterface>(),
         context.read<PackageStatusNotifier>(),
         context.read<TapStatusNotifier>(),
+        context.read<SystemStatusNotifier>(),
       ),
       update:
           (
@@ -60,6 +65,7 @@ List<SingleChildWidget> buildDependencyList(
             db,
             packageStatusNotifier,
             tapStatusNotifier,
+            systemStatusNotifier,
             previous,
           ) =>
               previous ??
@@ -68,6 +74,7 @@ List<SingleChildWidget> buildDependencyList(
                 db,
                 packageStatusNotifier,
                 tapStatusNotifier,
+                systemStatusNotifier,
               ),
     ),
     ProxyProvider<DatabaseInterface, IconResolutionService>(

@@ -13,6 +13,7 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
   final DatabaseInterface _database;
   final PackageStatusNotifier _packageNotifier;
   final TapStatusNotifier _tapNotifier;
+  final SystemStatusNotifier _systemNotifier;
   bool _isProcessing = false;
 
   QueueViewModel(
@@ -20,6 +21,7 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
     this._database,
     this._packageNotifier,
     this._tapNotifier,
+    this._systemNotifier,
   ) : super(QueueState());
 
   void enqueue(OperationTask task) {
@@ -156,6 +158,11 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
   }
 
   Future<void> _syncInstallationStatus(OperationTask task) async {
+    if (task.type == PackageType.system) {
+      _systemNotifier.markUpdated(task.operation);
+      return;
+    }
+
     final isInstall =
         task.operation == OperationType.install ||
         task.operation == OperationType.update;

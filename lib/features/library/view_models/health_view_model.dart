@@ -9,24 +9,36 @@ import 'package:bartender/features/library/models/system_health_state.dart';
 class HealthViewModel extends BaseViewModel<SystemHealthState, ScreenEffect> {
   final BrewService _brewService;
   final PackageStatusNotifier _statusNotifier;
+  final SystemStatusNotifier _systemStatusNotifier;
 
   HealthViewModel({
     required BrewService brewService,
     required PackageStatusNotifier statusNotifier,
+    required SystemStatusNotifier systemStatusNotifier,
   }) : _brewService = brewService,
        _statusNotifier = statusNotifier,
+       _systemStatusNotifier = systemStatusNotifier,
        super(const SystemHealthState()) {
     _statusNotifier.addListener(_onStatusNotifierUpdated);
+    _systemStatusNotifier.addListener(_onSystemStatusNotifierUpdated);
   }
 
   @override
   void dispose() {
     _statusNotifier.removeListener(_onStatusNotifierUpdated);
+    _systemStatusNotifier.removeListener(_onSystemStatusNotifierUpdated);
     super.dispose();
   }
 
   void _onStatusNotifierUpdated() {
     final update = _statusNotifier.value;
+    if (update != null) {
+      fetchSystemHealth();
+    }
+  }
+
+  void _onSystemStatusNotifierUpdated() {
+    final update = _systemStatusNotifier.value;
     if (update != null) {
       fetchSystemHealth();
     }

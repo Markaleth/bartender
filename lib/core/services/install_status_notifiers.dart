@@ -27,6 +27,16 @@ class TapStatusUpdate {
   }) : timestamp = timestamp ?? DateTime.now();
 }
 
+class SystemStatusUpdate {
+  final OperationType operation;
+  final DateTime timestamp;
+
+  SystemStatusUpdate({
+    required this.operation,
+    DateTime? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now();
+}
+
 class PackageStatusNotifier extends ValueNotifier<PackageStatusUpdate?> {
   PackageStatusNotifier() : super(null);
 
@@ -45,5 +55,13 @@ class TapStatusNotifier extends ValueNotifier<TapStatusUpdate?> {
 
   void markUpdated(String tapName, bool isInstalled) {
     value = TapStatusUpdate(tapName: tapName, isInstalled: isInstalled);
+  }
+}
+
+class SystemStatusNotifier extends ValueNotifier<SystemStatusUpdate?> {
+  SystemStatusNotifier() : super(null);
+
+  void markUpdated(OperationType operation) {
+    value = SystemStatusUpdate(operation: operation);
   }
 }
