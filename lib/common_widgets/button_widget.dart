@@ -4,6 +4,7 @@ import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 enum _ButtonVariant { primary, secondary, tertiary }
+
 enum ButtonState { enabled, disabled, loading }
 
 class ButtonWidget extends StatelessWidget {
@@ -22,10 +23,10 @@ class ButtonWidget extends StatelessWidget {
     this.state,
     this.onPressed,
     this.iconData,
-    this.iconSize = iconSizeS,
+    this.iconSize,
     this.withTrailingIcon = false,
-  })  : _variant = _ButtonVariant.primary,
-        isCompact = false;
+  }) : _variant = _ButtonVariant.primary,
+       isCompact = false;
 
   const ButtonWidget.secondary({
     super.key,
@@ -33,10 +34,10 @@ class ButtonWidget extends StatelessWidget {
     this.state,
     this.onPressed,
     this.iconData,
-    this.iconSize = iconSizeS,
+    this.iconSize,
     this.withTrailingIcon = false,
-  })  : _variant = _ButtonVariant.secondary,
-        isCompact = false;
+  }) : _variant = _ButtonVariant.secondary,
+       isCompact = false;
 
   const ButtonWidget.tertiary({
     super.key,
@@ -44,17 +45,23 @@ class ButtonWidget extends StatelessWidget {
     this.state,
     this.onPressed,
     this.iconData,
-    this.iconSize = iconSizeXs,
+    this.iconSize,
     this.withTrailingIcon = false,
     this.isCompact = false,
-  })  : _variant = _ButtonVariant.tertiary;
+  }) : _variant = _ButtonVariant.tertiary;
 
   @override
   Widget build(BuildContext context) {
     final isLoading = state == ButtonState.loading;
-    final isDisabled = state == ButtonState.disabled || (onPressed == null && !isLoading);
+    final isDisabled =
+        state == ButtonState.disabled || (onPressed == null && !isLoading);
     final activeOnPressed = isDisabled ? null : (isLoading ? () {} : onPressed);
-
+    final spinnerSize = _variant == _ButtonVariant.tertiary
+        ? iconSizeXs
+        : iconSizeS;
+    final spinnerThickness = _variant == _ButtonVariant.tertiary
+        ? thicknessS
+        : thicknessM;
     // 1. Resolve Colors & Typography based on variant
     Color contentColor;
     Color spinnerColor;
@@ -63,20 +70,28 @@ class ButtonWidget extends StatelessWidget {
 
     switch (_variant) {
       case _ButtonVariant.primary:
-        contentColor = isDisabled ? AppColors.iconDefault : AppColors.background;
+        contentColor = isDisabled
+            ? AppColors.iconDefault
+            : AppColors.background;
         spinnerColor = AppColors.background;
         textStyle = textStyle.copyWith(color: contentColor);
         break;
       case _ButtonVariant.secondary:
-        contentColor = isDisabled || isLoading ? AppColors.textTertiary : AppColors.primary;
+        contentColor = isDisabled || isLoading
+            ? AppColors.textTertiary
+            : AppColors.primary;
         spinnerColor = AppColors.textTertiary;
         textStyle = textStyle.copyWith(color: contentColor);
-        displayLabel = label.toUpperCase(); // Secondary buttons are uppercase
         break;
       case _ButtonVariant.tertiary:
-        contentColor = isDisabled || isLoading ? AppColors.textSecondary : AppColors.primary;
+        contentColor = isDisabled || isLoading
+            ? AppColors.textSecondary
+            : AppColors.primary;
         spinnerColor = contentColor;
-        textStyle = context.labelM.copyWith(fontWeight: FontWeight.bold, color: contentColor);
+        textStyle = context.labelM.copyWith(
+          fontWeight: FontWeight.bold,
+          color: contentColor,
+        );
         break;
     }
 
@@ -84,19 +99,29 @@ class ButtonWidget extends StatelessWidget {
     Widget? activeIcon;
     if (isLoading) {
       activeIcon = SizedBox(
-        width: iconSizeXs,
-        height: iconSizeXs,
+        width: spinnerSize,
+        height: spinnerSize,
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(spinnerColor),
-          strokeWidth: thicknessS,
+          strokeWidth: spinnerThickness,
         ),
       );
     } else if (iconData != null) {
-      activeIcon = Icon(iconData, size: iconSize ?? iconSizeS, color: contentColor);
+      activeIcon = Icon(
+        iconData,
+        size: iconSize ?? iconSizeS,
+        color: contentColor,
+      );
     }
 
-    final labelWidget = Text(displayLabel, textAlign: TextAlign.center, style: textStyle);
-    final iconAlignment = withTrailingIcon ? IconAlignment.end : IconAlignment.start;
+    final labelWidget = Text(
+      displayLabel,
+      textAlign: TextAlign.center,
+      style: textStyle,
+    );
+    final iconAlignment = withTrailingIcon
+        ? IconAlignment.end
+        : IconAlignment.start;
 
     // 3. Build the underlying button based on variant
     switch (_variant) {
@@ -108,32 +133,69 @@ class ButtonWidget extends StatelessWidget {
           iconAlignment: iconAlignment,
         );
         return activeIcon != null
-            ? ElevatedButton.icon(style: style, onPressed: activeOnPressed, icon: activeIcon, label: labelWidget)
-            : ElevatedButton(style: style, onPressed: activeOnPressed, child: labelWidget);
+            ? ElevatedButton.icon(
+                style: style,
+                onPressed: activeOnPressed,
+                icon: activeIcon,
+                label: labelWidget,
+              )
+            : ElevatedButton(
+                style: style,
+                onPressed: activeOnPressed,
+                child: labelWidget,
+              );
 
       case _ButtonVariant.secondary:
-        final borderColor = isDisabled || isLoading ? AppColors.borderNeutral : AppColors.primary;
+        final borderColor = isDisabled || isLoading
+            ? AppColors.borderNeutral
+            : AppColors.primary;
         final style = OutlinedButton.styleFrom(
           minimumSize: const Size(double.infinity, defaultButtonHeight),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusM)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
           side: BorderSide(color: borderColor),
           iconAlignment: iconAlignment,
         );
         return activeIcon != null
-            ? OutlinedButton.icon(style: style, onPressed: activeOnPressed, icon: activeIcon, label: labelWidget)
-            : OutlinedButton(style: style, onPressed: activeOnPressed, child: labelWidget);
+            ? OutlinedButton.icon(
+                style: style,
+                onPressed: activeOnPressed,
+                icon: activeIcon,
+                label: labelWidget,
+              )
+            : OutlinedButton(
+                style: style,
+                onPressed: activeOnPressed,
+                child: labelWidget,
+              );
 
       case _ButtonVariant.tertiary:
         final style = TextButton.styleFrom(
           foregroundColor: AppColors.primary,
-          padding: isCompact ? const EdgeInsets.symmetric(horizontal: spacingS) : null,
-          visualDensity: isCompact ? const VisualDensity(vertical: -4, horizontal: -4) : null,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusM)),
+          padding: isCompact
+              ? const EdgeInsets.symmetric(horizontal: spacingS)
+              : null,
+          visualDensity: isCompact
+              ? const VisualDensity(vertical: -4, horizontal: -4)
+              : null,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
           iconAlignment: iconAlignment,
         );
         return activeIcon != null
-            ? TextButton.icon(style: style, onPressed: activeOnPressed, icon: activeIcon, label: labelWidget)
-            : TextButton(style: style, onPressed: activeOnPressed, child: labelWidget);
+            ? TextButton.icon(
+                style: style,
+                onPressed: activeOnPressed,
+                icon: activeIcon,
+                label: labelWidget,
+              )
+            : TextButton(
+                style: style,
+                onPressed: activeOnPressed,
+                child: labelWidget,
+              );
     }
   }
 }
