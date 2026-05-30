@@ -10,6 +10,7 @@ enum ButtonState { enabled, disabled, loading }
 class ButtonWidget extends StatelessWidget {
   final _ButtonVariant _variant;
   final String label;
+  final Color? color;
   final ButtonState? state;
   final VoidCallback? onPressed;
   final IconData? iconData;
@@ -25,6 +26,7 @@ class ButtonWidget extends StatelessWidget {
     this.iconData,
     this.iconSize,
     this.withTrailingIcon = false,
+    this.color,
   }) : _variant = _ButtonVariant.primary,
        isCompact = false;
 
@@ -36,6 +38,7 @@ class ButtonWidget extends StatelessWidget {
     this.iconData,
     this.iconSize,
     this.withTrailingIcon = false,
+    this.color,
   }) : _variant = _ButtonVariant.secondary,
        isCompact = false;
 
@@ -48,6 +51,7 @@ class ButtonWidget extends StatelessWidget {
     this.iconSize,
     this.withTrailingIcon = false,
     this.isCompact = false,
+    this.color,
   }) : _variant = _ButtonVariant.tertiary;
 
   // --- STATE HELPERS ---
@@ -69,11 +73,11 @@ class ButtonWidget extends StatelessWidget {
       case _ButtonVariant.secondary:
         return _isDisabled || _isLoading
             ? AppColors.textTertiary
-            : AppColors.primary;
+            : color ?? AppColors.primary;
       case _ButtonVariant.tertiary:
         return _isDisabled || _isLoading
             ? AppColors.textSecondary
-            : AppColors.primary;
+            : color ?? AppColors.primary;
     }
   }
 
@@ -114,14 +118,16 @@ class ButtonWidget extends StatelessWidget {
       case _ButtonVariant.primary:
         return ElevatedButton.styleFrom(
           minimumSize: const Size(double.infinity, defaultButtonHeight),
-          backgroundColor: AppColors.primary,
-          disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
+          backgroundColor: color ?? AppColors.primary,
+          disabledBackgroundColor: (color ?? AppColors.primary).withValues(
+            alpha: 0.5,
+          ),
           iconAlignment: alignment,
         );
       case _ButtonVariant.secondary:
         final borderColor = _isDisabled || _isLoading
             ? AppColors.borderNeutral
-            : AppColors.primary;
+            : color ?? AppColors.primary;
         return OutlinedButton.styleFrom(
           minimumSize: const Size(double.infinity, defaultButtonHeight),
           shape: RoundedRectangleBorder(
@@ -132,7 +138,7 @@ class ButtonWidget extends StatelessWidget {
         );
       case _ButtonVariant.tertiary:
         return TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
+          foregroundColor: color ?? AppColors.primary,
           padding: isCompact
               ? const EdgeInsets.symmetric(horizontal: spacingS)
               : null,

@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:flutter/material.dart';
@@ -197,12 +198,12 @@ class HealthDashboardSection extends StatelessWidget {
             ),
           ),
           if (onAction != null)
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: const Size(150, spacingL),
+            SizedBox(
+              width: 150,
+              child: ButtonWidget.primary(
+                label: actionLabel,
+                onPressed: onAction!,
               ),
-              onPressed: onAction,
-              child: Text(actionLabel, textAlign: TextAlign.center),
             ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -228,28 +229,23 @@ class _TapCardFooter extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: spacingS,
-        vertical: spacingXs,
+        vertical: spacingS,
       ),
       child: Row(
+        spacing: spacingM,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextButton.icon(
-            onPressed: isSyncing ? null : onForceSync,
-            icon: const Icon(Icons.sync, size: 18),
-            label: const Text('Force Sync'),
-            style: TextButton.styleFrom(foregroundColor: AppColors.textPrimary),
-          ),
-          TextButton(
-            onPressed: onViewPackages,
-            style: TextButton.styleFrom(foregroundColor: AppColors.primary),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text('Browse'),
-                SizedBox(width: spacingXs),
-                Icon(Icons.arrow_forward, size: 18),
-              ],
+          Expanded(
+            child: ButtonWidget.secondary(
+              onPressed: isSyncing ? null : onForceSync,
+              iconData: Icons.sync,
+              label: 'Force Sync',
             ),
+          ),
+          ButtonWidget.tertiary(
+            iconData: Icons.arrow_forward,
+            label: 'Browse',
+            onPressed: onViewPackages,
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -80,11 +81,11 @@ class InspectorPane extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ActionButtonWidget(
+                ButtonWidget.secondary(
                   label: 'Untap',
-                  icon: Icons.delete,
+                  iconData: Icons.delete,
                   color: AppColors.error,
-                  onTap: () {
+                  onPressed: () {
                     context.read<QueueViewModel>().queueOperation(
                       packageId: tap.name,
                       type: PackageType.tap,
@@ -291,116 +292,101 @@ class ManagementActionsWidget extends StatelessWidget {
       alignment: WrapAlignment.spaceEvenly,
       children: [
         if (isOutdated)
-          ActionButtonWidget(
-            label: 'Update',
-            icon: Icons.system_update,
-            color: AppColors.secondary,
-            onTap: () {
-              context.read<QueueViewModel>().queueOperation(
-                packageId: packageName,
-                type: isCask ? PackageType.cask : PackageType.formula,
-                operation: OperationType.upgrade,
-              );
-            },
+          SizedBox(
+            width: 170,
+            child: ButtonWidget.secondary(
+              label: 'Update',
+              iconData: Icons.system_update,
+              color: AppColors.secondary,
+              onPressed: () {
+                context.read<QueueViewModel>().queueOperation(
+                  packageId: packageName,
+                  type: isCask ? PackageType.cask : PackageType.formula,
+                  operation: OperationType.upgrade,
+                );
+              },
+            ),
           )
         else
-          ActionButtonWidget(
-            label: 'Pin Version',
-            icon: Icons.push_pin,
-            color: AppColors.primary,
-            onTap: () {
+          SizedBox(
+            width: 170,
+            child: ButtonWidget.secondary(
+              label: 'Pin Version',
+              iconData: Icons.push_pin,
+              color: AppColors.primary,
+              onPressed: () {
+                context.read<QueueViewModel>().queueOperation(
+                  packageId: packageName,
+                  type: isCask ? PackageType.cask : PackageType.formula,
+                  operation: OperationType.pin,
+                );
+              },
+            ),
+          ),
+        SizedBox(
+          width: 170,
+          child: ButtonWidget.secondary(
+            label: 'Force Upgrade',
+            iconData: Icons.upgrade,
+            color: AppColors.secondary,
+            onPressed: () {
               context.read<QueueViewModel>().queueOperation(
                 packageId: packageName,
                 type: isCask ? PackageType.cask : PackageType.formula,
-                operation: OperationType.pin,
+                operation: OperationType.update,
               );
             },
           ),
-        ActionButtonWidget(
-          label: 'Force Upgrade',
-          icon: Icons.upgrade,
-          color: AppColors.secondary,
-          onTap: () {
-            context.read<QueueViewModel>().queueOperation(
-              packageId: packageName,
-              type: isCask ? PackageType.cask : PackageType.formula,
-              operation: OperationType.update,
-            );
-          },
         ),
-        ActionButtonWidget(
-          label: 'Uninstall',
-          icon: Icons.delete,
-          color: AppColors.error,
-          onTap: () {
-            context.read<QueueViewModel>().queueOperation(
-              packageId: packageName,
-              type: isCask ? PackageType.cask : PackageType.formula,
-              operation: OperationType.uninstall,
-            );
-          },
-        ),
-        if (isCask)
-          ActionButtonWidget(
-            label: 'Zap',
-            icon: Icons.bolt,
+        SizedBox(
+          width: 170,
+          child: ButtonWidget.secondary(
+            label: 'Uninstall',
+            iconData: Icons.delete,
             color: AppColors.error,
-            onTap: () {
-              // Note: Zap might need a specific OperationType if supported, falling back to uninstall here.
+            onPressed: () {
               context.read<QueueViewModel>().queueOperation(
                 packageId: packageName,
-                type: PackageType.cask,
+                type: isCask ? PackageType.cask : PackageType.formula,
                 operation: OperationType.uninstall,
               );
             },
           ),
+        ),
+        if (isCask)
+          SizedBox(
+            width: 170,
+            child: ButtonWidget.secondary(
+              label: 'Zap',
+              iconData: Icons.bolt,
+              color: AppColors.error,
+              onPressed: () {
+                // Note: Zap might need a specific OperationType if supported, falling back to uninstall here.
+                context.read<QueueViewModel>().queueOperation(
+                  packageId: packageName,
+                  type: PackageType.cask,
+                  operation: OperationType.uninstall,
+                );
+              },
+            ),
+          ),
         if (isMissingDependencies)
-          ActionButtonWidget(
-            label: 'Fix Dependencies',
-            icon: Icons.build,
-            color: AppColors.primary,
-            onTap: () {
-              context.read<QueueViewModel>().queueOperation(
-                packageId: packageName,
-                type: isCask ? PackageType.cask : PackageType.formula,
-                operation: OperationType.install,
-              );
-            },
+          SizedBox(
+            width: 170,
+            child: ButtonWidget.secondary(
+              label: 'Fix Dependencies',
+              iconData: Icons.build,
+              color: AppColors.primary,
+              onPressed: () {
+                context.read<QueueViewModel>().queueOperation(
+                  packageId: packageName,
+                  type: isCask ? PackageType.cask : PackageType.formula,
+                  operation: OperationType.install,
+                );
+              },
+            ),
           ),
       ],
-    );
-  }
-}
-
-class ActionButtonWidget extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const ActionButtonWidget({
-    super.key,
-    required this.label,
-    required this.icon,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color.withValues(alpha: 0.1),
-        foregroundColor: color,
-        side: BorderSide(color: color),
-        padding: const EdgeInsets.symmetric(
-          horizontal: spacingM,
-          vertical: spacingS,
-        ),
-      ),
-      onPressed: onTap,
-      icon: Icon(icon, size: 18),
-      label: Text(label),
     );
   }
 }
