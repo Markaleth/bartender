@@ -19,6 +19,7 @@
 - [x] Update system health descriptions icons and components overall. Especially the dialog.
 - [x] State is not updated once you take actions from the "global health" dialog. You need to hot reload to make the changes propagate.
 - [x] Add loading indicators to the buttons. You que up stuff after you do an install, like a sync and you need to disable the buttons with a "loading" state.
+- [x] Replace buttons in app with the new ButtonWidget variants.
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
@@ -29,7 +30,7 @@
 - [ ] Consider renaming "library" to "Installed".
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
 - [ ] Consider doing somethign more suggestive for the "precompiled" description. "Build from source and "Precompiled (Bottle)" is not exactly stelar description
-- [ ] Replace buttons in app with the new ButtonWidget variants.
+- [ ] Reexamine supported "Library" operations (see if you can maybe add more or something)
 
 # Issues:
 

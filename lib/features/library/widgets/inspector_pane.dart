@@ -78,22 +78,17 @@ class InspectorPane extends StatelessWidget {
 
             const Spacer(),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ButtonWidget.secondary(
-                  label: 'Untap',
-                  iconData: Icons.delete,
-                  color: AppColors.error,
-                  onPressed: () {
-                    context.read<QueueViewModel>().queueOperation(
-                      packageId: tap.name,
-                      type: PackageType.tap,
-                      operation: OperationType.uninstall,
-                    );
-                  },
-                ),
-              ],
+            ButtonWidget.secondary(
+              label: 'Untap',
+              iconData: Icons.delete,
+              color: AppColors.error,
+              onPressed: () {
+                context.read<QueueViewModel>().queueOperation(
+                  packageId: tap.name,
+                  type: PackageType.tap,
+                  operation: OperationType.uninstall,
+                );
+              },
             ),
           ],
         ),
