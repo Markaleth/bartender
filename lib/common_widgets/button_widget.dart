@@ -205,6 +205,12 @@ class ButtonWidget extends StatelessWidget {
 
     final style = _buttonStyle;
 
+    // Ensure that we have at least an icon or a label to display. 
+    assert(
+      !(activeIcon == null && labelWidget == null),
+      'Button must have either an icon or a label.',
+    );
+
     // Instantiate the final Flutter buttons directly in the build method
     switch (_variant) {
       case _ButtonVariant.primary:
