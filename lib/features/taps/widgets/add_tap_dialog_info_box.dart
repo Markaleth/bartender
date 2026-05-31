@@ -18,7 +18,7 @@ class AddTapDialogInfoBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(Icons.info, color: AppColors.secondary, size: iconSizeM),
-          SizedBox(width: spacingXm),
+          SizedBox(width: spacingM),
           Expanded(
             child: Text(
               'Adding a tap will immediately fetch its formula definitions. This may take a few moments depending on network speed.',

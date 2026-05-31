@@ -54,6 +54,18 @@ class ButtonWidget extends StatelessWidget {
     this.color,
   }) : _variant = _ButtonVariant.tertiary;
 
+  const ButtonWidget.iconSecondary({
+    super.key,
+    this.state,
+    this.onPressed,
+    this.iconData,
+    this.iconSize,
+    this.withTrailingIcon = false,
+    this.color,
+  }) : _variant = _ButtonVariant.secondary,
+       label = '',
+       isCompact = false;
+
   // --- STATE HELPERS ---
 
   bool get _isLoading => state == ButtonState.loading;
@@ -69,7 +81,9 @@ class ButtonWidget extends StatelessWidget {
   Color get _contentColor {
     switch (_variant) {
       case _ButtonVariant.primary:
-        return _isDisabled ? AppColors.iconDefault : AppColors.background;
+        return _isDisabled
+            ? AppColors.background.withValues(alpha: 0.5)
+            : AppColors.background;
       case _ButtonVariant.secondary:
         return _isDisabled || _isLoading
             ? AppColors.textTertiary
@@ -119,6 +133,9 @@ class ButtonWidget extends StatelessWidget {
         return ElevatedButton.styleFrom(
           minimumSize: const Size(double.infinity, defaultButtonHeight),
           backgroundColor: color ?? AppColors.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusM),
+          ),
           disabledBackgroundColor: (color ?? AppColors.primary).withValues(
             alpha: 0.5,
           ),
@@ -155,11 +172,13 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelWidget = Text(
-      label,
-      textAlign: TextAlign.center,
-      style: _getTextStyle(context),
-    );
+    final labelWidget = label.isNotEmpty
+        ? Text(
+            label,
+            textAlign: TextAlign.center,
+            style: _getTextStyle(context),
+          )
+        : null;
 
     // Resolve icon or spinner inline
     Widget? activeIcon;
@@ -189,7 +208,7 @@ class ButtonWidget extends StatelessWidget {
     // Instantiate the final Flutter buttons directly in the build method
     switch (_variant) {
       case _ButtonVariant.primary:
-        return activeIcon != null
+        return labelWidget != null
             ? ElevatedButton.icon(
                 style: style,
                 onPressed: _activeOnPressed,
@@ -199,25 +218,26 @@ class ButtonWidget extends StatelessWidget {
             : ElevatedButton(
                 style: style,
                 onPressed: _activeOnPressed,
-                child: labelWidget,
+                child: labelWidget ?? activeIcon!,
               );
 
       case _ButtonVariant.secondary:
-        return activeIcon != null
+        return labelWidget != null
             ? OutlinedButton.icon(
                 style: style,
                 onPressed: _activeOnPressed,
                 icon: activeIcon,
                 label: labelWidget,
               )
-            : OutlinedButton(
+            : IconButton(
+                visualDensity: const VisualDensity(vertical: -2),
                 style: style,
                 onPressed: _activeOnPressed,
-                child: labelWidget,
+                icon: activeIcon!,
               );
 
       case _ButtonVariant.tertiary:
-        return activeIcon != null
+        return labelWidget != null
             ? TextButton.icon(
                 style: style,
                 onPressed: _activeOnPressed,
@@ -227,7 +247,7 @@ class ButtonWidget extends StatelessWidget {
             : TextButton(
                 style: style,
                 onPressed: _activeOnPressed,
-                child: labelWidget,
+                child: labelWidget ?? activeIcon!,
               );
     }
   }

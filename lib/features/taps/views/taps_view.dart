@@ -1,4 +1,5 @@
 import 'package:bartender/common_widgets/horizontal_divider.dart';
+import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -80,26 +81,45 @@ class TapsView extends StatelessWidget {
                     if (taps.isEmpty) {
                       return const Center(child: Text('No taps found.'));
                     }
-                    return GridView.builder(
-                      padding: const EdgeInsets.all(spacingM),
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: tapCardWidth,
-                            crossAxisSpacing: spacingM,
-                            mainAxisSpacing: spacingM,
-                            childAspectRatio: tapCardAspectRatio,
-                          ),
-                      itemCount: taps.length,
-                      itemBuilder: (context, index) {
-                        final tap = taps[index];
-                        return TapCard(
-                          tap: tap,
-                          isSyncing: state.isSyncing,
-                          onViewPackages: () {
-                            homeViewModel.navigateAndFilterByTap(tap.name);
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        final cardWidth = tapCardWidth;
+                        final crossAxisSpacing = spacingM;
+                        // Calculate how many cards can fit in a row
+                        final crossAxisCount =
+                            ((constraints.maxWidth + crossAxisSpacing) /
+                                    (cardWidth + crossAxisSpacing))
+                                .floor()
+                                .clamp(1, double.infinity)
+                                .toInt();
+                        return GridView.builder(
+                          padding: const EdgeInsets.all(spacingM),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: spacingM,
+                                mainAxisSpacing: spacingM,
+                                childAspectRatio: tapCardAspectRatio,
+                              ),
+                          itemCount: taps.length,
+                          itemBuilder: (context, index) {
+                            final tap = taps[index];
+                            return SizedBox(
+                              width: tapCardWidth,
+                              height: tapCardWidth / tapCardAspectRatio,
+                              child: TapCard(
+                                tap: tap,
+                                isSyncing: state.isSyncing,
+                                onViewPackages: () {
+                                  homeViewModel.navigateAndFilterByTap(
+                                    tap.name,
+                                  );
+                                },
+                                onForceSync: () => viewModel.syncTap(tap.name),
+                                onRemove: () => viewModel.removeTap(tap.name),
+                              ),
+                            );
                           },
-                          onForceSync: () => viewModel.syncTap(tap.name),
-                          onRemove: () => viewModel.removeTap(tap.name),
                         );
                       },
                     );
@@ -126,31 +146,33 @@ class _HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    spacing: spacingM,
     children: [
       Text('Taps', style: context.headM.copyWith(color: AppColors.primary)),
-      Row(
-        children: [
-          if (isSyncing)
-            const Padding(
-              padding: EdgeInsets.only(right: spacingM),
-              child: SizedBox(
-                width: spacingM,
-                height: spacingM,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
+      Spacer(),
+      Tooltip(
+        message: 'Sync Taps',
+        child: SizedBox(
+          width: spacing2Xl,
+          child: ButtonWidget.iconSecondary(
+            iconData: Icons.refresh,
             onPressed: isSyncing ? null : onSync,
-            tooltip: 'Sync Taps',
+            iconSize: iconSizeM,
+            state: isSyncing ? ButtonState.loading : ButtonState.enabled,
+            // Make the button more compact when only showing the icon
           ),
-          ElevatedButton.icon(
-            onPressed: isSyncing ? null : onAddTap,
-            icon: const Icon(Icons.add),
-            label: const Text('Add Tap'),
-          ),
-        ],
+        ),
+      ),
+      SizedBox(
+        width: 125,
+        child: ButtonWidget.primary(
+          onPressed: isSyncing ? null : onAddTap,
+          iconData: Icons.add,
+          label: 'Add Tap',
+          state: isSyncing ? ButtonState.loading : ButtonState.enabled,
+        ),
       ),
     ],
   );

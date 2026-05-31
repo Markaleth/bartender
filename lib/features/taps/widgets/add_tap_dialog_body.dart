@@ -71,7 +71,7 @@ class AddTapDialogBody extends StatelessWidget {
             autofocus: true,
             onSubmitted: (_) => onSubmit(),
           ),
-          const SizedBox(height: spacingXm),
+          const SizedBox(height: spacingM),
           AddTapDialogTapNamePreview(controller: controller),
           const SizedBox(height: spacingL),
           const AddTapDialogInfoBox(),

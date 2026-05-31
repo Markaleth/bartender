@@ -2,7 +2,6 @@
 const double spacing2Xs = 2.0;
 const double spacingXs = 4.0;
 const double spacingS = 8.0;
-const double spacingXm = 12.0;
 const double spacingM = 16.0;
 const double spacingL = 24.0;
 const double spacingXl = 32.0;

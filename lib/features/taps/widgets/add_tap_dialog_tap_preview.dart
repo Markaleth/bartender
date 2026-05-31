@@ -21,7 +21,7 @@ class AddTapDialogTapNamePreview extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(spacingXm),
+          padding: const EdgeInsets.all(spacingM),
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(radiusM),

@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -28,52 +29,26 @@ class AddTapDialogFooter extends StatelessWidget {
         border: Border(top: BorderSide(color: AppColors.borderNeutral)),
       ),
       child: Row(
+        spacing: spacingM,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.textPrimary,
-              padding: const EdgeInsets.symmetric(
-                horizontal: spacingL, // previously 20
-                vertical: spacingXm, // 12
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(radiusM),
-                side: const BorderSide(color: AppColors.borderNeutral),
-              ),
-            ),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(fontWeight: FontWeight.w500),
+          Spacer(),
+          SizedBox(
+            width: 125,
+            child: ButtonWidget.secondary(
+              onPressed: () => Navigator.of(context).pop(),
+              label: 'Cancel',
             ),
           ),
-          const SizedBox(width: spacingXm),
           ValueListenableBuilder<TextEditingValue>(
             valueListenable: controller,
             builder: (context, value, child) {
               final canSubmit = value.text.trim().isNotEmpty;
-              return ElevatedButton.icon(
-                onPressed: canSubmit ? onSubmit : null,
-                icon: const Icon(Icons.add, size: iconSizeS),
-                label: const Text(
-                  'Add Tap',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.onPrimary,
-                  disabledBackgroundColor: AppColors.surface,
-                  disabledForegroundColor: AppColors.textTertiary,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: spacingL, // 20
-                    vertical: spacingXm, // 12
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(radiusM),
-                  ),
-                  elevation: canSubmit ? thicknessM : 0,
-                  shadowColor: AppColors.primary.withValues(alpha: 0.5),
+              return SizedBox(
+                width: 125,
+                child: ButtonWidget.primary(
+                  onPressed: canSubmit ? onSubmit : null,
+                  label: 'Add Tap',
                 ),
               );
             },
