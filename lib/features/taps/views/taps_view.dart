@@ -81,45 +81,26 @@ class TapsView extends StatelessWidget {
                     if (taps.isEmpty) {
                       return const Center(child: Text('No taps found.'));
                     }
-                    return LayoutBuilder(
-                      builder: (context, constraints) {
-                        final cardWidth = tapCardWidth;
-                        final crossAxisSpacing = spacingM;
-                        // Calculate how many cards can fit in a row
-                        final crossAxisCount =
-                            ((constraints.maxWidth + crossAxisSpacing) /
-                                    (cardWidth + crossAxisSpacing))
-                                .floor()
-                                .clamp(1, double.infinity)
-                                .toInt();
-                        return GridView.builder(
-                          padding: const EdgeInsets.all(spacingM),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                crossAxisSpacing: spacingM,
-                                mainAxisSpacing: spacingM,
-                                childAspectRatio: tapCardAspectRatio,
-                              ),
-                          itemCount: taps.length,
-                          itemBuilder: (context, index) {
-                            final tap = taps[index];
-                            return SizedBox(
-                              width: tapCardWidth,
-                              height: tapCardWidth / tapCardAspectRatio,
-                              child: TapCard(
-                                tap: tap,
-                                isSyncing: state.isSyncing,
-                                onViewPackages: () {
-                                  homeViewModel.navigateAndFilterByTap(
-                                    tap.name,
-                                  );
-                                },
-                                onForceSync: () => viewModel.syncTap(tap.name),
-                                onRemove: () => viewModel.removeTap(tap.name),
-                              ),
-                            );
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(spacingM),
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: tapCardWidth,
+                            crossAxisSpacing: spacingM,
+                            mainAxisSpacing: spacingM,
+                            childAspectRatio: tapCardAspectRatio,
+                          ),
+                      itemCount: taps.length,
+                      itemBuilder: (context, index) {
+                        final tap = taps[index];
+                        return TapCard(
+                          tap: tap,
+                          isSyncing: state.isSyncing,
+                          onViewPackages: () {
+                            homeViewModel.navigateAndFilterByTap(tap.name);
                           },
+                          onForceSync: () => viewModel.syncTap(tap.name),
+                          onRemove: () => viewModel.removeTap(tap.name),
                         );
                       },
                     );
