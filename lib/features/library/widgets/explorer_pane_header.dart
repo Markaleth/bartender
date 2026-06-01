@@ -81,7 +81,9 @@ class ExplorerPaneHeader extends StatelessWidget {
                 style: context.labelL.copyWith(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   hintText: filterPackagesHintText,
-                  hintStyle: const TextStyle(color: AppColors.textSecondary),
+                  hintStyle: context.bodyM.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: spacingM,
                   ),
