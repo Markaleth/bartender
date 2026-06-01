@@ -1,6 +1,9 @@
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
+import 'package:bartender/common_widgets/icon_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/core/utils/url_launcer_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -38,7 +41,7 @@ class TapCard extends StatelessWidget {
           _TapCardHeader(tap: tap, isSyncing: isSyncing, onRemove: onRemove),
           const HorizontalDivider(),
           _TapCardBody(tap: tap),
-          const HorizontalDivider(),
+          const HorizontalDivider(height: 0),
           _TapCardFooter(
             isSyncing: isSyncing,
             onForceSync: onForceSync,
@@ -83,9 +86,7 @@ class _TapCardHeader extends StatelessWidget {
                   text: tap.official
                       ? headerWidgetOfficialCopy
                       : headerWidgetCommunityCopy,
-                  color: tap.official
-                      ? AppColors.secondary
-                      : AppColors.textSecondary,
+                  color: tap.official ? AppColors.primary : AppColors.secondary,
                 ),
               ],
             ),
@@ -139,6 +140,7 @@ class _TapCardBody extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(spacingM),
         child: Column(
+          spacing: spacingS,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -187,11 +189,19 @@ class _TapCardBody extends StatelessWidget {
             ),
             const Spacer(),
             if (tap.remote != null)
-              Text(
-                tap.remote!,
-                style: context.bodyM.copyWith(color: AppColors.textSecondary),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              Row(
+                spacing: spacingM,
+                children: [
+                  IconWidget(assetName: homeIcon, size: iconSizeM),
+                  Expanded(
+                    child: ButtonWidget.tertiary(
+                      label: tap.remote!,
+                      onPressed: () {
+                        UrlLauncherUtils.launch(tap.remote!);
+                      },
+                    ),
+                  ),
+                ],
               ),
           ],
         ),
@@ -215,7 +225,7 @@ class _TapCardFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
+        color: AppColors.onSurface.withValues(alpha: 0.02),
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(radiusM),
           bottomRight: Radius.circular(radiusM),

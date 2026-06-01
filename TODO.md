@@ -31,7 +31,8 @@
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
 - [ ] Consider doing somethign more suggestive for the "precompiled" description. "Build from source and "Precompiled (Bottle)" is not exactly stelar description
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or something)
-- [ ] Cleanup text styles - WIP
+- [ ] Cleanup text styles -> We need to clean up Monospace and FiraCode.
+- [ ] Revisit Taps and see if we can make the card a bit more expressive and add a bit more content to it.
 
 # Issues:
 

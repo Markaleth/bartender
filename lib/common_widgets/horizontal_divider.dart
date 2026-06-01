@@ -3,9 +3,10 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalDivider extends StatelessWidget {
-  const HorizontalDivider({super.key});
+  final double? height;
+  const HorizontalDivider({super.key, this.height = thicknessM});
 
   @override
   Widget build(BuildContext context) =>
-      const Divider(color: AppColors.borderNeutral, height: thicknessM);
+      Divider(color: AppColors.borderNeutral, height: height);
 }

@@ -187,11 +187,7 @@ class ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final labelWidget = label.isNotEmpty
-        ? Text(
-            label,
-            textAlign: TextAlign.center,
-            style: _getTextStyle(context),
-          )
+        ? Text(label, textAlign: TextAlign.start, style: _getTextStyle(context))
         : null;
 
     // Resolve icon or spinner inline

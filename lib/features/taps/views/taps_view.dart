@@ -58,6 +58,8 @@ class TapsView extends StatelessWidget {
         return Scaffold(
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(spacingM),
@@ -89,7 +91,7 @@ class TapsView extends StatelessWidget {
                             maxCrossAxisExtent: tapCardWidth,
                             crossAxisSpacing: spacingM,
                             mainAxisSpacing: spacingM,
-                            childAspectRatio: tapCardAspectRatio,
+                            childAspectRatio: 1.1,
                           ),
                       itemCount: taps.length,
                       itemBuilder: (context, index) {
@@ -148,7 +150,7 @@ class _HeaderWidget extends StatelessWidget {
         ),
       ),
       SizedBox(
-        width: defaultButtonWidth,
+        width: addTapButtonWidth,
         child: ButtonWidget.primary(
           onPressed: isSyncing ? null : onAddTap,
           iconData: Icons.add,

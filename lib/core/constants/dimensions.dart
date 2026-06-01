@@ -54,6 +54,6 @@ const double iconSizeXl = 32.0;
 
 const double defaultButtonHeight = 45;
 const double defaultButtonWidth = 165.0;
-
+const double addTapButtonWidth = 125;
 
 const double globalHealthStatusDialogSize = 600.0;
