@@ -1,3 +1,5 @@
+import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -14,19 +16,15 @@ class AddTapDialogInfoBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(radiusM),
         border: Border.all(color: AppColors.borderNeutral),
       ),
-      child: const Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info, color: AppColors.secondary, size: iconSizeM),
-          SizedBox(width: spacingM),
+          const Icon(Icons.info, color: AppColors.secondary, size: iconSizeM),
+          const SizedBox(width: spacingM),
           Expanded(
             child: Text(
-              'Adding a tap will immediately fetch its formula definitions. This may take a few moments depending on network speed.',
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: fontSizeS,
-                height: 1.5,
-              ),
+              addTapInfoBoxCopy,
+              style: context.labelL.copyWith(color: AppColors.textSecondary),
             ),
           ),
         ],

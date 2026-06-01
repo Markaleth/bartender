@@ -3,6 +3,7 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class PackageHealthWidget extends StatelessWidget {
@@ -91,7 +92,7 @@ class _HealthBanner extends StatelessWidget {
         children: [
           IconWidget(assetName: iconAsset, color: color, size: iconSizeL),
           const SizedBox(width: spacingS),
-          Text(copy, style: TextStyle(color: color)),
+          Text(copy, style: context.bodyM.copyWith(color: color)),
         ],
       ),
     );

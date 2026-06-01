@@ -1,3 +1,5 @@
+import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -28,12 +30,11 @@ class AddTapDialogHeader extends StatelessWidget {
             size: iconSizeL, // 24
           ),
           const SizedBox(width: spacingS),
-          const Expanded(
+          Expanded(
             child: Text(
-              'Add New Tap',
-              style: TextStyle(
+              addNewTapDialogHeaderTitle,
+              style: context.headM.copyWith(
                 color: AppColors.onSurface,
-                fontSize: fontSizeL, // 20
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -1,6 +1,8 @@
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
+import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -37,11 +39,10 @@ class HealthDashboardModal extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'System Health Dashboard',
-                  style: TextStyle(
+                Text(
+                  systemHealthTitle,
+                  style: context.headM.copyWith(
                     color: AppColors.textPrimary,
-                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -56,9 +57,9 @@ class HealthDashboardModal extends StatelessWidget {
               child: ListView(
                 children: [
                   HealthDashboardSection(
-                    title: 'Outdated Packages',
+                    title: outdatedPackagesTitle,
                     value: '${healthState.outdatedCount} updates available',
-                    actionLabel: 'Update All',
+                    actionLabel: updateAllActionLabel,
                     onAction: healthState.outdatedCount > 0
                         ? onUpdateAll
                         : null,
@@ -66,9 +67,9 @@ class HealthDashboardModal extends StatelessWidget {
                   ),
                   const SizedBox(height: spacingM),
                   HealthDashboardSection(
-                    title: 'Reclaimable Space',
+                    title: reclaimDiskSpaceTitle,
                     value: healthState.reclaimableSpace,
-                    actionLabel: 'Run Cleanup',
+                    actionLabel: runCleanupActionLabel,
                     onAction:
                         healthState.reclaimableSpace != '0 B' &&
                             healthState.reclaimableSpace.isNotEmpty
@@ -78,28 +79,29 @@ class HealthDashboardModal extends StatelessWidget {
                   ),
                   const SizedBox(height: spacingM),
                   HealthDashboardSection(
-                    title: 'Orphaned Dependencies',
+                    title: orphanedDependenciesTitle,
                     value: '${healthState.orphanedDependenciesCount} orphans',
-                    actionLabel: 'Remove Orphans',
+                    actionLabel: removeOrphansActionLabel,
                     onAction: healthState.orphanedDependenciesCount > 0
                         ? onRemoveOrphans
                         : null,
                     iconAssetName: missingDependencyIcon,
                   ),
                   const SizedBox(height: spacingM),
-                  const Text(
-                    'Brew Doctor',
-                    style: TextStyle(
+                  Text(
+                    brewDoctorTitle,
+                    style: context.titleM.copyWith(
                       color: AppColors.textPrimary,
-                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: spacingS),
                   if (healthState.doctorIssues.isEmpty)
-                    const Text(
-                      'No issues found.',
-                      style: TextStyle(color: AppColors.textSecondary),
+                    Text(
+                      noIssuesCopy,
+                      style: context.bodyM.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                     )
                   else
                     ...healthState.doctorIssues.map(
@@ -123,7 +125,7 @@ class HealthDashboardModal extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 issue.replaceAll('Warning:', '').trim(),
-                                style: const TextStyle(
+                                style: context.bodyM.copyWith(
                                   color: AppColors.textPrimary,
                                 ),
                               ),
@@ -181,16 +183,15 @@ class HealthDashboardSection extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: context.bodyM.copyWith(
                     color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   value,
-                  style: const TextStyle(
+                  style: context.bodyL.copyWith(
                     color: AppColors.textPrimary,
-                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -1,3 +1,5 @@
+import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -22,30 +24,24 @@ class AddTapDialogBody extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Enter the shorthand owner/repo (defaults to GitHub) or a full repository URL for custom taps (GitLab, Bitbucket, etc.).',
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: fontSizeM,
-            ),
+          Text(
+            addCustomTapHint,
+            style: context.bodyM.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: spacingL),
-          const Text(
-            'REPOSITORY',
-            style: TextStyle(
+          Text(
+            repositoryLabel,
+            style: context.labelL.copyWith(
               color: AppColors.textSecondary,
-              fontSize: fontSizeS,
               fontWeight: FontWeight.bold,
-              letterSpacing: 1.0,
             ),
           ),
           const SizedBox(height: spacingS),
           TextField(
             controller: controller,
-            style: const TextStyle(color: AppColors.textPrimary),
             decoration: InputDecoration(
-              hintText: 'e.g., user/repo or https://gitlab.com/...',
-              hintStyle: TextStyle(
+              hintText: addCustomTapInputHint,
+              hintStyle: context.bodyM.copyWith(
                 color: AppColors.textTertiary.withValues(alpha: 0.5),
               ),
               prefixIcon: const Icon(

@@ -1,4 +1,5 @@
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class HeaderWidget extends StatelessWidget {
               ),
               const SizedBox(width: spacingS),
               Text(
-                'ACTIVE QUEUE',
+                activeQueueLabel,
                 style: context.labelS.copyWith(
                   color: AppColors.textPrimary,
                   letterSpacing: 1.2,

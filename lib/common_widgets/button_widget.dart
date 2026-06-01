@@ -197,7 +197,7 @@ class ButtonWidget extends StatelessWidget {
     // Resolve icon or spinner inline
     Widget? activeIcon;
     if (_isLoading) {
-      final size = _variant == _ButtonVariant.tertiary ? iconSizeXs : iconSize;
+      final size = iconSize ?? iconSizeS;
       final thickness = _variant == _ButtonVariant.tertiary
           ? thicknessS
           : thicknessM;
@@ -210,7 +210,11 @@ class ButtonWidget extends StatelessWidget {
         ),
       );
     } else if (iconData != null) {
-      activeIcon = Icon(iconData, size: iconSize, color: _contentColor);
+      activeIcon = Icon(
+        iconData,
+        size: iconSize ?? iconSizeS,
+        color: _contentColor,
+      );
     }
 
     final style = _buttonStyle;

@@ -79,7 +79,7 @@ class ExplorerPaneHeader extends StatelessWidget {
                   fontSize: 13,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Filter packages...',
+                  hintText: filterPackagesHintText,
                   hintStyle: const TextStyle(color: AppColors.textSecondary),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: spacingM,

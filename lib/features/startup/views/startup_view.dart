@@ -4,6 +4,7 @@ import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/startup/models/startup_state.dart';
 import 'package:bartender/features/startup/view_models/startup_view_model.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,7 @@ class StartupView extends StatelessWidget {
                 ],
                 Text(
                   state.statusText,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: context.titleM,
                 ),
               ],
             ),

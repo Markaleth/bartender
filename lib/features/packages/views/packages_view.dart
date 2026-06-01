@@ -147,7 +147,7 @@ class _PackagesViewState extends State<PackagesView> {
                       padding: const EdgeInsets.symmetric(
                         horizontal: spacingXl,
                       ),
-                      child: Text('All Packages', style: context.titleM),
+                      child: Text(allPackagesTitle, style: context.titleM),
                     ),
                     const SizedBox(height: spacingM),
                   ],

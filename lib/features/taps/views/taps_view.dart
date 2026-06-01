@@ -2,6 +2,7 @@ import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
@@ -74,12 +75,12 @@ class TapsView extends StatelessWidget {
                   error: (msg) => Center(
                     child: Text(
                       'Error: $msg',
-                      style: const TextStyle(color: AppColors.error),
+                      style: context.bodyM.copyWith(color: AppColors.error),
                     ),
                   ),
                   success: (taps) {
                     if (taps.isEmpty) {
-                      return const Center(child: Text('No taps found.'));
+                      return const Center(child: Text(noTapsFoundCopy));
                     }
                     return GridView.builder(
                       padding: const EdgeInsets.all(spacingM),
@@ -131,10 +132,10 @@ class _HeaderWidget extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.center,
     spacing: spacingM,
     children: [
-      Text('Taps', style: context.headM.copyWith(color: AppColors.primary)),
+      Text(tapsTitle, style: context.headM.copyWith(color: AppColors.primary)),
       Spacer(),
       Tooltip(
-        message: 'Sync Taps',
+        message: syncTapsTooltip,
         child: SizedBox(
           width: spacing2Xl,
           child: ButtonWidget.icon(
@@ -151,7 +152,7 @@ class _HeaderWidget extends StatelessWidget {
         child: ButtonWidget.primary(
           onPressed: isSyncing ? null : onAddTap,
           iconData: Icons.add,
-          label: 'Add Tap',
+          label: addTapButtonLabel,
           state: isSyncing ? ButtonState.loading : ButtonState.enabled,
         ),
       ),

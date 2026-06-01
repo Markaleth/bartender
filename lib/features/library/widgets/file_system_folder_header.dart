@@ -1,3 +1,4 @@
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -52,7 +53,7 @@ class FileSystemFolderHeader extends StatelessWidget {
 
             Text(
               title,
-              style: TextStyle(
+              style: context.bodyM.copyWith(
                 color: isSelected ? AppColors.primary : AppColors.textPrimary,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),

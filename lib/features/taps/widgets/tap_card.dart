@@ -1,4 +1,5 @@
 import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -86,7 +87,9 @@ class _TapCardHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: spacingXs),
                 _Badge(
-                  text: tap.official ? 'Official' : 'Custom',
+                  text: tap.official
+                      ? headerWidgetOfficialCopy
+                      : headerWidgetCommunityCopy,
                   color: tap.official
                       ? AppColors.secondary
                       : AppColors.textSecondary,
@@ -102,14 +105,12 @@ class _TapCardHeader extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                        title: const Text('Remove Tap'),
-                        content: Text(
-                          'Are you sure you want to untap ${tap.name}?',
-                        ),
+                        title: const Text(removeTapDialogTitle),
+                        content: Text('$removeTapDialogContent ${tap.name}?'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(ctx).pop(),
-                            child: const Text('Cancel'),
+                            child: const Text(cancelButtonLabel),
                           ),
                           TextButton(
                             onPressed: () {
@@ -119,7 +120,7 @@ class _TapCardHeader extends StatelessWidget {
                             style: TextButton.styleFrom(
                               foregroundColor: AppColors.error,
                             ),
-                            child: const Text('Remove'),
+                            child: const Text(removeButtonLabel),
                           ),
                         ],
                       ),
@@ -161,7 +162,7 @@ class _TapCardBody extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Packages',
+                        tapCardPackagesTitle,
                         style: context.labelS.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -174,14 +175,14 @@ class _TapCardBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Unknown',
+                        tapCardUnknownTitle,
                         style: context.titleM.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
                         ),
                       ),
                       Text(
-                        'Last Sync',
+                        tapCardLastSyncTitle,
                         style: context.labelS.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -239,12 +240,12 @@ class _TapCardFooter extends StatelessWidget {
             child: ButtonWidget.secondary(
               onPressed: isSyncing ? null : onForceSync,
               iconData: Icons.sync,
-              label: 'Force Sync',
+              label: forceSyncButtonLabel,
             ),
           ),
           ButtonWidget.tertiary(
             iconData: Icons.arrow_forward,
-            label: 'Browse',
+            label: browseButtonLabel,
             onPressed: onViewPackages,
           ),
         ],

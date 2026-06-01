@@ -1,5 +1,6 @@
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -164,9 +165,9 @@ class StatusCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style: context.bodyM.copyWith(
                     color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -177,9 +178,8 @@ class StatusCard extends StatelessWidget {
           const SizedBox(height: spacingM),
           Text(
             value,
-            style: const TextStyle(
+            style: context.headM.copyWith(
               color: AppColors.textPrimary,
-              fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
             overflow: TextOverflow.ellipsis,

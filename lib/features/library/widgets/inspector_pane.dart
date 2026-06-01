@@ -1,5 +1,7 @@
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
+import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -25,10 +27,10 @@ class InspectorPane extends StatelessWidget {
           borderRadius: BorderRadius.circular(radiusM),
           border: Border.all(color: AppColors.borderNeutral),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            'Select a package to view details',
-            style: TextStyle(color: AppColors.textSecondary),
+            inspectorPaneUnselectedTitle,
+            style: context.bodyM.copyWith(color: AppColors.textSecondary),
           ),
         ),
       );
@@ -48,7 +50,9 @@ class InspectorPane extends StatelessWidget {
           children: [
             HeaderWidget(
               name: tap.name,
-              version: tap.official ? 'Official' : 'Custom',
+              version: tap.official
+                  ? headerWidgetOfficialCopy
+                  : headerWidgetCommunityCopy,
               description: 'Tap from ${tap.user}/${tap.repo}',
             ),
 
@@ -62,14 +66,14 @@ class InspectorPane extends StatelessWidget {
               children: [
                 Expanded(
                   child: _TapStatsWidget(
-                    label: 'Formulae',
+                    label: formulaeTitle,
                     count: tap.formulaNames.length,
                   ),
                 ),
                 const SizedBox(width: spacingM),
                 Expanded(
                   child: _TapStatsWidget(
-                    label: 'Casks',
+                    label: casksTitle,
                     count: tap.caskTokens.length,
                   ),
                 ),
@@ -79,7 +83,7 @@ class InspectorPane extends StatelessWidget {
             const Spacer(),
 
             ButtonWidget.secondary(
-              label: 'Untap',
+              label: untapButtonLabel,
               iconData: Icons.delete,
               color: AppColors.error,
               onPressed: () {
@@ -165,20 +169,19 @@ class HeaderWidget extends StatelessWidget {
       children: [
         Text(
           name,
-          style: const TextStyle(
+          style: context.headM.copyWith(
             color: AppColors.textPrimary,
-            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           'v$version',
-          style: const TextStyle(color: AppColors.secondary, fontSize: 16),
+          style: context.bodyL.copyWith(color: AppColors.secondary),
         ),
         const SizedBox(height: spacingM),
         Text(
           description,
-          style: const TextStyle(color: AppColors.textSecondary),
+          style: context.bodyM.copyWith(color: AppColors.textSecondary),
         ),
       ],
     );
@@ -195,11 +198,11 @@ class ConfigPathsWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Install Path',
-          style: TextStyle(
+        Text(
+          installPathLabel,
+          style: context.bodyM.copyWith(
             color: AppColors.textPrimary,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: spacingXs),
@@ -234,11 +237,11 @@ class DependencyGraphWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Dependencies',
-          style: TextStyle(
+        Text(
+          dependenciesTitle,
+          style: context.bodyM.copyWith(
             color: AppColors.textPrimary,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: spacingS),
@@ -250,9 +253,8 @@ class DependencyGraphWidget extends StatelessWidget {
                 (dep) => Chip(
                   label: Text(
                     dep,
-                    style: const TextStyle(
+                    style: context.labelL.copyWith(
                       color: AppColors.textPrimary,
-                      fontSize: 12,
                     ),
                   ),
                   backgroundColor: AppColors.background,
@@ -290,7 +292,7 @@ class ManagementActionsWidget extends StatelessWidget {
           SizedBox(
             width: 170,
             child: ButtonWidget.secondary(
-              label: 'Update',
+              label: updateButtonLabel,
               iconData: Icons.system_update,
               color: AppColors.secondary,
               onPressed: () {
@@ -306,7 +308,7 @@ class ManagementActionsWidget extends StatelessWidget {
           SizedBox(
             width: 170,
             child: ButtonWidget.secondary(
-              label: 'Pin Version',
+              label: pinVersionButtonLabel,
               iconData: Icons.push_pin,
               color: AppColors.primary,
               onPressed: () {
@@ -321,7 +323,7 @@ class ManagementActionsWidget extends StatelessWidget {
         SizedBox(
           width: 170,
           child: ButtonWidget.secondary(
-            label: 'Force Upgrade',
+            label: forceUpgradeButtonLabel,
             iconData: Icons.upgrade,
             color: AppColors.secondary,
             onPressed: () {
@@ -336,7 +338,7 @@ class ManagementActionsWidget extends StatelessWidget {
         SizedBox(
           width: 170,
           child: ButtonWidget.secondary(
-            label: 'Uninstall',
+            label: uninstallButtonLabel,
             iconData: Icons.delete,
             color: AppColors.error,
             onPressed: () {
@@ -352,7 +354,7 @@ class ManagementActionsWidget extends StatelessWidget {
           SizedBox(
             width: 170,
             child: ButtonWidget.secondary(
-              label: 'Zap',
+              label: zapButtonLabel,
               iconData: Icons.bolt,
               color: AppColors.error,
               onPressed: () {
@@ -369,7 +371,7 @@ class ManagementActionsWidget extends StatelessWidget {
           SizedBox(
             width: 170,
             child: ButtonWidget.secondary(
-              label: 'Fix Dependencies',
+              label: fixDependencyIssuesButtonLabel,
               iconData: Icons.build,
               color: AppColors.primary,
               onPressed: () {
@@ -405,19 +407,15 @@ class _TapStatsWidget extends StatelessWidget {
         children: [
           Text(
             count.toString(),
-            style: const TextStyle(
+            style: context.titleM.copyWith(
               color: AppColors.textPrimary,
-              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: spacingXs),
           Text(
             label,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 12,
-            ),
+            style: context.labelL.copyWith(color: AppColors.textSecondary),
           ),
         ],
       ),

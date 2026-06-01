@@ -2,6 +2,7 @@ import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,6 @@ class TrendingPackagesWidget extends StatelessWidget {
               const SizedBox(height: spacingM),
               Text(
                 description ?? '',
-
                 style: context.labelL,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
@@ -133,7 +133,7 @@ class _DownloadButtonWidget extends StatelessWidget {
 
   String _getButtonLabel() {
     if (isQueued) return 'Queued...';
-    final baseAction = isInstalled ? 'Uninstall' : 'Install';
+    final baseAction = isInstalled ? uninstallButtonLabel : installButtonLabel;
     return isInProgress ? '${baseAction}ing...' : baseAction;
   }
 
