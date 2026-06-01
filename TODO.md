@@ -31,6 +31,7 @@
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
 - [ ] Consider doing somethign more suggestive for the "precompiled" description. "Build from source and "Precompiled (Bottle)" is not exactly stelar description
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or something)
+- [ ] Cleanup text styles - WIP
 
 # Issues:
 
