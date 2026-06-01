@@ -1,3 +1,6 @@
+import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -31,13 +34,12 @@ class ExplorerPaneHeader extends StatelessWidget {
             children: [
               const Icon(Icons.folder_open, color: AppColors.primary, size: 18),
               const SizedBox(width: 8),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Local Environment',
-                  style: TextStyle(
+                  explorerPaneHeaderCopy,
+                  style: context.bodyM.copyWith(
                     color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -52,12 +54,18 @@ class ExplorerPaneHeader extends StatelessWidget {
                         ),
                       ),
                     )
-                  : IconButton(
-                      icon: const Icon(Icons.refresh, size: spacingM),
-                      color: AppColors.textSecondary,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: () => viewModel.syncData(),
+                  : SizedBox(
+                      width: spacingXl,
+                      height: spacingXl,
+                      child: Tooltip(
+                        message: explorerPaneHeaderSyncTooltip,
+                        child: ButtonWidget.icon(
+                          iconData: Icons.refresh,
+                          iconSize: iconSizeM,
+                          color: AppColors.primary,
+                          onPressed: () => viewModel.syncData(),
+                        ),
+                      ),
                     ),
             ],
           ),

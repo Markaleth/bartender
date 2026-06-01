@@ -3,7 +3,7 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
-enum _ButtonVariant { primary, secondary, tertiary }
+enum _ButtonVariant { primary, secondary, tertiary, icon }
 
 enum ButtonState { enabled, disabled, loading }
 
@@ -54,7 +54,7 @@ class ButtonWidget extends StatelessWidget {
     this.color,
   }) : _variant = _ButtonVariant.tertiary;
 
-  const ButtonWidget.iconSecondary({
+  const ButtonWidget.icon({
     super.key,
     this.state,
     this.onPressed,
@@ -62,7 +62,7 @@ class ButtonWidget extends StatelessWidget {
     this.iconSize,
     this.withTrailingIcon = false,
     this.color,
-  }) : _variant = _ButtonVariant.secondary,
+  }) : _variant = _ButtonVariant.icon,
        label = '',
        isCompact = false;
 
@@ -92,6 +92,10 @@ class ButtonWidget extends StatelessWidget {
         return _isDisabled || _isLoading
             ? AppColors.textSecondary
             : color ?? AppColors.primary;
+      case _ButtonVariant.icon:
+        return _isDisabled || _isLoading
+            ? AppColors.textSecondary
+            : color ?? AppColors.primary;
     }
   }
 
@@ -103,10 +107,12 @@ class ButtonWidget extends StatelessWidget {
         return AppColors.textTertiary;
       case _ButtonVariant.tertiary:
         return _contentColor;
+      case _ButtonVariant.icon:
+        return _contentColor;
     }
   }
 
-  TextStyle _getTextStyle(BuildContext context) {
+  TextStyle? _getTextStyle(BuildContext context) {
     final color = _contentColor;
     switch (_variant) {
       case _ButtonVariant.primary:
@@ -120,6 +126,8 @@ class ButtonWidget extends StatelessWidget {
           fontWeight: FontWeight.bold,
           color: color,
         );
+      default:
+        return null;
     }
   }
 
@@ -167,6 +175,12 @@ class ButtonWidget extends StatelessWidget {
           ),
           iconAlignment: alignment,
         );
+      case _ButtonVariant.icon:
+        return IconButton.styleFrom(
+          padding: EdgeInsets.zero,
+          foregroundColor: color ?? AppColors.primary,
+          minimumSize: const Size(defaultButtonHeight, defaultButtonHeight),
+        );
     }
   }
 
@@ -183,7 +197,7 @@ class ButtonWidget extends StatelessWidget {
     // Resolve icon or spinner inline
     Widget? activeIcon;
     if (_isLoading) {
-      final size = _variant == _ButtonVariant.tertiary ? iconSizeXs : iconSizeS;
+      final size = _variant == _ButtonVariant.tertiary ? iconSizeXs : iconSize;
       final thickness = _variant == _ButtonVariant.tertiary
           ? thicknessS
           : thicknessM;
@@ -196,16 +210,12 @@ class ButtonWidget extends StatelessWidget {
         ),
       );
     } else if (iconData != null) {
-      activeIcon = Icon(
-        iconData,
-        size: iconSize ?? iconSizeS,
-        color: _contentColor,
-      );
+      activeIcon = Icon(iconData, size: iconSize, color: _contentColor);
     }
 
     final style = _buttonStyle;
 
-    // Ensure that we have at least an icon or a label to display. 
+    // Ensure that we have at least an icon or a label to display.
     assert(
       !(activeIcon == null && labelWidget == null),
       'Button must have either an icon or a label.',
@@ -214,47 +224,34 @@ class ButtonWidget extends StatelessWidget {
     // Instantiate the final Flutter buttons directly in the build method
     switch (_variant) {
       case _ButtonVariant.primary:
-        return labelWidget != null
-            ? ElevatedButton.icon(
-                style: style,
-                onPressed: _activeOnPressed,
-                icon: activeIcon,
-                label: labelWidget,
-              )
-            : ElevatedButton(
-                style: style,
-                onPressed: _activeOnPressed,
-                child: labelWidget ?? activeIcon!,
-              );
+        return ElevatedButton.icon(
+          style: style,
+          onPressed: _activeOnPressed,
+          icon: activeIcon,
+          label: labelWidget!,
+        );
 
       case _ButtonVariant.secondary:
-        return labelWidget != null
-            ? OutlinedButton.icon(
-                style: style,
-                onPressed: _activeOnPressed,
-                icon: activeIcon,
-                label: labelWidget,
-              )
-            : IconButton(
-                visualDensity: const VisualDensity(vertical: -2),
-                style: style,
-                onPressed: _activeOnPressed,
-                icon: activeIcon!,
-              );
+        return OutlinedButton.icon(
+          style: style,
+          onPressed: _activeOnPressed,
+          icon: activeIcon,
+          label: labelWidget!,
+        );
 
       case _ButtonVariant.tertiary:
-        return labelWidget != null
-            ? TextButton.icon(
-                style: style,
-                onPressed: _activeOnPressed,
-                icon: activeIcon,
-                label: labelWidget,
-              )
-            : TextButton(
-                style: style,
-                onPressed: _activeOnPressed,
-                child: labelWidget ?? activeIcon!,
-              );
+        return TextButton.icon(
+          style: style,
+          onPressed: _activeOnPressed,
+          icon: activeIcon,
+          label: labelWidget!,
+        );
+      case _ButtonVariant.icon:
+        return IconButton(
+          style: style,
+          onPressed: _activeOnPressed,
+          icon: activeIcon!,
+        );
     }
   }
 }

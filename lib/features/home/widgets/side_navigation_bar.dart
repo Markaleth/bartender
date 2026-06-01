@@ -57,7 +57,7 @@ class SideNavigationBar extends StatelessWidget {
                 ),
                 SideNavigationItem(
                   icon: barrelIcon,
-                  label: "Debug",
+                  label: "Debug", // TODO: you need to remove this before launch!
                   isSelected: selectedTab == HomeTab.debug,
                   onTap: () => onTabSelected(HomeTab.debug),
                 ),

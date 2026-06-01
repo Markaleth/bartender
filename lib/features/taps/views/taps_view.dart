@@ -137,7 +137,7 @@ class _HeaderWidget extends StatelessWidget {
         message: 'Sync Taps',
         child: SizedBox(
           width: spacing2Xl,
-          child: ButtonWidget.iconSecondary(
+          child: ButtonWidget.icon(
             iconData: Icons.refresh,
             onPressed: isSyncing ? null : onSync,
             iconSize: iconSizeM,

@@ -40,7 +40,9 @@ class HomeView extends StatelessWidget {
                       // Index 3: Debug
                       const Center(child: ApiTesterWidget()),
                       // Index 4: Settings (placeholder for now)
-                      const Center(child: Text('Settings View Placeholder')),
+                      const Center(
+                        child: Text('Settings View Placeholder'),
+                      ), //TODO: you need to update this!
                     ],
                   ),
                 ),

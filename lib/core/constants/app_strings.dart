@@ -30,3 +30,6 @@ const String deprecationCopy = 'This package is no longer maintained.';
 const String missingDependencyCopy = 'This package is missing dependencies.';
 const String updateAvailableCopy = 'An update is available for this package.';
 const String disabledCopy = 'This package is disabled.';
+
+const String explorerPaneHeaderCopy = 'Local Environment';
+const String explorerPaneHeaderSyncTooltip = 'Sync local environment';
