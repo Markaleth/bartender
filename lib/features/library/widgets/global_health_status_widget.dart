@@ -1,5 +1,6 @@
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -28,7 +29,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: StatusCard(
-                  title: 'System Storage Usage',
+                  title: systemStorageUsedLabel,
                   value: healthState.systemStorageUsed,
                   icon: storageIcon,
                   color: AppColors.secondary,
@@ -37,7 +38,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
               const SizedBox(width: spacingM),
               Expanded(
                 child: StatusCard(
-                  title: 'Orphaned Dependencies',
+                  title: orphanedDependenciesLabel,
                   value: healthState.orphanedDependenciesCount.toString(),
                   icon: missingDependencyIcon,
                   color: healthState.orphanedDependenciesCount > 0
@@ -48,7 +49,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                           icon: const Icon(
                             Icons.autorenew,
                             color: AppColors.textPrimary,
-                            size: 20,
+                            size: iconSizeM,
                           ),
                           onPressed: onAutoremove,
                         )
@@ -58,7 +59,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
               const SizedBox(width: spacingM),
               Expanded(
                 child: StatusCard(
-                  title: 'Global Health Score',
+                  title: globalHealthScoreTitle,
                   value: '${healthState.globalHealthScore}%',
                   icon: healthIcon,
                   color: _getHealthColor(healthState.globalHealthScore),
@@ -66,7 +67,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                     icon: const Icon(
                       Icons.open_in_new,
                       color: AppColors.textPrimary,
-                      size: 20,
+                      size: iconSizeM,
                     ),
                     onPressed: onOpenDashboard,
                   ),
@@ -79,7 +80,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: StatusCard(
-                  title: 'Pending Updates',
+                  title: pendingUpdatesLabel,
                   value: healthState.outdatedCount.toString(),
                   icon: systemUpdateIcon,
                   color: healthState.outdatedCount > 0
@@ -90,7 +91,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
               const SizedBox(width: spacingM),
               Expanded(
                 child: StatusCard(
-                  title: 'Reclaimable Space',
+                  title: reclaimableSpaceLabel,
                   value: healthState.reclaimableSpace,
                   icon: cleanupIcon,
                   color:
@@ -103,7 +104,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
               const SizedBox(width: spacingM),
               Expanded(
                 child: StatusCard(
-                  title: 'Doctor Warnings',
+                  title: doctorWarningsLabel,
                   value:
                       (healthState.doctorWarningsCount +
                               healthState.doctorErrorsCount)

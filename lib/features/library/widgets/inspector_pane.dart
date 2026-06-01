@@ -1,4 +1,5 @@
 import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -56,8 +57,9 @@ class InspectorPane extends StatelessWidget {
               description: 'Tap from ${tap.user}/${tap.repo}',
             ),
 
-            const Divider(height: spacingL * 2, color: AppColors.borderNeutral),
-
+            const HorizontalDivider(),
+            const SizedBox(height: spacingM),
+            
             ConfigPathsWidget(installPath: tap.path),
 
             const SizedBox(height: spacingL),
@@ -123,8 +125,8 @@ class InspectorPane extends StatelessWidget {
               isDisabled: state.selectedPackageIsDisabled,
             ),
           ),
-          const Divider(height: spacingL * 2, color: AppColors.borderNeutral),
-
+          const HorizontalDivider(),
+          const SizedBox(height: spacingM),
           ConfigPathsWidget(installPath: state.selectedPackageInstallPath),
 
           const SizedBox(height: spacingL),
@@ -290,7 +292,7 @@ class ManagementActionsWidget extends StatelessWidget {
       children: [
         if (isOutdated)
           SizedBox(
-            width: 170,
+            width: defaultButtonWidth,
             child: ButtonWidget.secondary(
               label: updateButtonLabel,
               iconData: Icons.system_update,
@@ -306,7 +308,7 @@ class ManagementActionsWidget extends StatelessWidget {
           )
         else
           SizedBox(
-            width: 170,
+            width: defaultButtonWidth,
             child: ButtonWidget.secondary(
               label: pinVersionButtonLabel,
               iconData: Icons.push_pin,
@@ -321,7 +323,7 @@ class ManagementActionsWidget extends StatelessWidget {
             ),
           ),
         SizedBox(
-          width: 170,
+          width: defaultButtonWidth,
           child: ButtonWidget.secondary(
             label: forceUpgradeButtonLabel,
             iconData: Icons.upgrade,
@@ -336,7 +338,7 @@ class ManagementActionsWidget extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 170,
+          width: defaultButtonWidth,
           child: ButtonWidget.secondary(
             label: uninstallButtonLabel,
             iconData: Icons.delete,
@@ -352,7 +354,7 @@ class ManagementActionsWidget extends StatelessWidget {
         ),
         if (isCask)
           SizedBox(
-            width: 170,
+            width: defaultButtonWidth,
             child: ButtonWidget.secondary(
               label: zapButtonLabel,
               iconData: Icons.bolt,
@@ -369,7 +371,7 @@ class ManagementActionsWidget extends StatelessWidget {
           ),
         if (isMissingDependencies)
           SizedBox(
-            width: 170,
+            width: defaultButtonWidth,
             child: ButtonWidget.secondary(
               label: fixDependencyIssuesButtonLabel,
               iconData: Icons.build,

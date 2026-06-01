@@ -1,3 +1,5 @@
+import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -34,15 +36,14 @@ class AddTapDialogTapNamePreview extends StatelessWidget {
             children: [
               Text.rich(
                 TextSpan(
-                  text: 'Tap Name: ',
-                  style: const TextStyle(
+                  text: tapNameLabel,
+                  style: context.labelL.copyWith(
                     color: AppColors.textSecondary,
-                    fontSize: fontSizeS,
                   ),
                   children: [
                     TextSpan(
                       text: parsedName,
-                      style: const TextStyle(
+                      style: context.bodyM.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.bold,
                       ),
@@ -54,15 +55,14 @@ class AddTapDialogTapNamePreview extends StatelessWidget {
                 const SizedBox(height: spacingXs),
                 Text.rich(
                   TextSpan(
-                    text: 'Custom URL: ',
-                    style: const TextStyle(
+                    text: customUrlLabel,
+                    style: context.labelL.copyWith(
                       color: AppColors.textSecondary,
-                      fontSize: fontSizeS,
                     ),
                     children: [
                       TextSpan(
                         text: text,
-                        style: const TextStyle(
+                        style: context.labelL.copyWith(
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.bold,
                         ),

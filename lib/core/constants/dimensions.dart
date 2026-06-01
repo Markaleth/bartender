@@ -52,10 +52,8 @@ const double iconSizeM = 20.0;
 const double iconSizeL = 26.0;
 const double iconSizeXl = 32.0;
 
-// Font Sizes
-//TODO: i should delete all of this!
-const double fontSizeS = 12.0;
-const double fontSizeM = 14.0;
-const double fontSizeL = 20.0;
-
 const double defaultButtonHeight = 45;
+const double defaultButtonWidth = 165.0;
+
+
+const double globalHealthStatusDialogSize = 600.0;

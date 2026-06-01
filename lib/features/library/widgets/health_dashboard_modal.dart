@@ -30,8 +30,8 @@ class HealthDashboardModal extends StatelessWidget {
         borderRadius: BorderRadius.circular(radiusL),
       ),
       child: Container(
-        width: 600,
-        height: 600,
+        width: globalHealthStatusDialogSize,
+        height: globalHealthStatusDialogSize,
         padding: const EdgeInsets.all(spacingL),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +200,7 @@ class HealthDashboardSection extends StatelessWidget {
           ),
           if (onAction != null)
             SizedBox(
-              width: 150,
+              width: defaultButtonWidth,
               child: ButtonWidget.primary(
                 label: actionLabel,
                 onPressed: onAction!,

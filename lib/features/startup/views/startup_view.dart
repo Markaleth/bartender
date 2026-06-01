@@ -1,4 +1,5 @@
 import 'package:bartender/core/base_view.dart';
+import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/data/repository/package_repository.dart';
@@ -43,7 +44,7 @@ class StartupView extends StatelessWidget {
               children: [
                 if (state.isLoading) ...[
                   const CircularProgressIndicator(),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: spacingL),
                 ],
                 Text(
                   state.statusText,

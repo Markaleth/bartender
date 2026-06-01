@@ -21,7 +21,7 @@ class ExplorerPaneHeader extends StatelessWidget {
         vertical: spacingS,
       ),
       decoration: const BoxDecoration(
-        color: Color(0xFF2A2A2A),
+        color: AppColors.surface,
         border: Border(bottom: BorderSide(color: AppColors.borderNeutral)),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(radiusM),
@@ -32,8 +32,12 @@ class ExplorerPaneHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.folder_open, color: AppColors.primary, size: 18),
-              const SizedBox(width: 8),
+              const Icon(
+                Icons.folder_open,
+                color: AppColors.primary,
+                size: iconSizeM,
+              ),
+              const SizedBox(width: spacingS),
               Expanded(
                 child: Text(
                   explorerPaneHeaderCopy,
@@ -72,18 +76,14 @@ class ExplorerPaneHeader extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: spacingS),
             child: SizedBox(
-              height: 32,
+              height: spacingXl,
               child: TextField(
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 13,
-                ),
+                style: context.labelL.copyWith(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   hintText: filterPackagesHintText,
                   hintStyle: const TextStyle(color: AppColors.textSecondary),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: spacingM,
-                    vertical: 0,
                   ),
                   filled: true,
                   fillColor: AppColors.background,

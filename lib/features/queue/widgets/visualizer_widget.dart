@@ -58,7 +58,7 @@ class VisualizerWidget extends StatelessWidget {
         itemCount: state.tasks.length,
         separatorBuilder: (_, _) => Container(
           width: spacingM,
-          height: 1,
+          height: thicknessXs,
           color: AppColors.borderNeutral,
           margin: const EdgeInsets.symmetric(horizontal: spacingS),
         ),

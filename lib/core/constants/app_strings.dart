@@ -64,14 +64,17 @@ const String allPackagesTitle = 'All Packages';
 const String activeQueueLabel = 'Active Queue';
 const String noTapsFoundCopy = 'No taps found.';
 
-const String addCustomTapHint = 'Enter the shorthand owner/repo (defaults to GitHub) or a full repository URL for custom taps (GitLab, Bitbucket, etc.).';
+const String addCustomTapHint =
+    'Enter the shorthand owner/repo (defaults to GitHub) or a full repository URL for custom taps (GitLab, Bitbucket, etc.).';
 const String repositoryLabel = 'REPOSITORY';
-const String addCustomTapInputHint = 'e.g., user/repo or https://gitlab.com/...';
+const String addCustomTapInputHint =
+    'e.g., user/repo or https://gitlab.com/...';
 const String tapsTitle = 'Taps';
 const String addTapButtonLabel = 'Add Tap';
 const String syncTapsTooltip = 'Sync Taps';
 const String addNewTapDialogHeaderTitle = 'Add New Tap';
-const String addTapInfoBoxCopy = 'Adding a tap will immediately fetch its formula definitions. This may take a few moments depending on network speed.';
+const String addTapInfoBoxCopy =
+    'Adding a tap will immediately fetch its formula definitions. This may take a few moments depending on network speed.';
 
 const String removeTapDialogTitle = 'Remove Tap';
 const String removeTapDialogContent = 'Are you sure you want to untap ';
@@ -82,3 +85,12 @@ const String tapCardUnknownTitle = 'Unknown';
 const String tapCardLastSyncTitle = 'Last Sync';
 const String forceSyncButtonLabel = 'Force Sync';
 const String browseButtonLabel = 'Browse';
+
+const String pendingUpdatesLabel = 'Pending Updates';
+const String reclaimableSpaceLabel = 'Reclaimable Space';
+const String doctorWarningsLabel = 'Doctor Warnings';
+const String orphanedDependenciesLabel = 'Orphaned Dependencies';
+const String globalHealthScoreTitle = 'Global Health Score';
+const String systemStorageUsedLabel = 'System Storage Used';
+const String tapNameLabel = 'Tap Name: ';
+const String customUrlLabel = 'Custom URL: ';

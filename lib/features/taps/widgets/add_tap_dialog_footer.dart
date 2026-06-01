@@ -1,4 +1,5 @@
 import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -32,23 +33,20 @@ class AddTapDialogFooter extends StatelessWidget {
         spacing: spacingM,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Spacer(),
-          SizedBox(
-            width: 125,
+          Expanded(
             child: ButtonWidget.secondary(
               onPressed: () => Navigator.of(context).pop(),
-              label: 'Cancel',
+              label: cancelButtonLabel,
             ),
           ),
           ValueListenableBuilder<TextEditingValue>(
             valueListenable: controller,
             builder: (context, value, child) {
               final canSubmit = value.text.trim().isNotEmpty;
-              return SizedBox(
-                width: 125,
+              return Expanded(
                 child: ButtonWidget.primary(
                   onPressed: canSubmit ? onSubmit : null,
-                  label: 'Add Tap',
+                  label: addTapButtonLabel,
                 ),
               );
             },

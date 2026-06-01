@@ -148,7 +148,7 @@ class _HeaderWidget extends StatelessWidget {
         ),
       ),
       SizedBox(
-        width: 125,
+        width: defaultButtonWidth,
         child: ButtonWidget.primary(
           onPressed: isSyncing ? null : onAddTap,
           iconData: Icons.add,

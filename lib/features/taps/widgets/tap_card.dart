@@ -1,4 +1,5 @@
 import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -35,17 +36,9 @@ class TapCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _TapCardHeader(tap: tap, isSyncing: isSyncing, onRemove: onRemove),
-          const Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.borderNeutral,
-          ),
+          const HorizontalDivider(),
           _TapCardBody(tap: tap),
-          const Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.borderNeutral,
-          ),
+          const HorizontalDivider(),
           _TapCardFooter(
             isSyncing: isSyncing,
             onForceSync: onForceSync,

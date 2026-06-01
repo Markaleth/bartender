@@ -290,25 +290,22 @@ class _PackageActionButton extends StatelessWidget {
         bool isQueued = activeTask?.status == OperationStatus.queued;
         bool isInProgress = activeTask?.status == OperationStatus.inProgress;
 
-        return SizedBox(
-          width: 200,
-          child: ButtonWidget.primary(
-            label: _getButtonLabel(isQueued, isInProgress),
-            state: (isQueued || isInProgress)
-                ? ButtonState.loading
-                : ButtonState.enabled,
-            onPressed: (isQueued || isInProgress)
-                ? null
-                : () {
-                    context.read<QueueViewModel>().queueOperation(
-                      packageId: id,
-                      type: isCask ? PackageType.cask : PackageType.formula,
-                      operation: model.isInstalled
-                          ? OperationType.uninstall
-                          : OperationType.install,
-                    );
-                  },
-          ),
+        return ButtonWidget.primary(
+          label: _getButtonLabel(isQueued, isInProgress),
+          state: (isQueued || isInProgress)
+              ? ButtonState.loading
+              : ButtonState.enabled,
+          onPressed: (isQueued || isInProgress)
+              ? null
+              : () {
+                  context.read<QueueViewModel>().queueOperation(
+                    packageId: id,
+                    type: isCask ? PackageType.cask : PackageType.formula,
+                    operation: model.isInstalled
+                        ? OperationType.uninstall
+                        : OperationType.install,
+                  );
+                },
         );
       },
     );
