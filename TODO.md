@@ -29,10 +29,10 @@
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [ ] Consider renaming "library" to "Installed".
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
-- [ ] Consider doing somethign more suggestive for the "precompiled" description. "Build from source and "Precompiled (Bottle)" is not exactly stelar description
+- [x] Consider doing somethign more suggestive for the "precompiled" description. - USE ICONS: 📦 Box + "Ready-to-run" for precompiled, 🔨 Hammer + "Build from source" for source; add tooltips for details
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or something)
 - [ ] Cleanup text styles -> We need to clean up Monospace and FiraCode.
-- [ ] Revisit Taps and see if we can make the card a bit more expressive and add a bit more content to it.
+- [x] Revisit Taps and see if we can make the card a bit more expressive and add a bit more content to it. - ADD: Disk size (git repo size), split counts (formulae vs casks), git branch (if not default); REMOVE individual "force sync" button (use global sync instead)
 
 # Issues:
 
@@ -44,19 +44,19 @@
 
 # Supported information for "Library"
 
-- [ ] Version Comparison (Current vs. Latest)
-- [ ] Disk Usage (Package size + cached data)
-- [ ] Installation Path (Where it lives on the system)
-- [ ] Changelogs/Release Notes (Inline or modal before update)
-- [ ] Dependencies (Requires/Required By)
-- [ ] Last Used / Installation Date
-- [ ] Status Indicators (Running, broken, restart required)
+- [x] Version Comparison (Current vs. Latest) - Available via `brew outdated`/`brew info --json`
+- [x] Disk Usage (Package size + cached data) - Available via `brew info --json` (installed_size)
+- [x] Installation Path (Where it lives on the system) - Available via `brew --prefix`
+- [ ] Changelogs/Release Notes (Inline or modal before update) - Not available from Homebrew; requires external API
+- [x] Dependencies (Requires/Required By) - Available via `brew deps`/`brew info --json`
+- [~] Last Used / Installation Date - Installation Date: YES (`brew info --json`); Last Used: NO (not tracked by Homebrew)
+- [~] Status Indicators (Running, broken, restart required) - Only for background services via `brew services list`; not available for regular packages
 
 # Supported actions for "Library"
 
-- [ ] Launch / Open (For executables/CLI tools)
-- [ ] Downgrade / Rollback (Install previous version)
-- [ ] Pin / Lock Version (Exclude from Update All)
-- [ ] Verify / Repair (Check checksum/re-download)
-- [ ] Open Directory (Open OS file explorer to install dir)
-- [ ] Clear Cache / Reset (Wipe local config/cache)
+- [x] Launch / Open (For executables/CLI tools) - KEEP for Casks only (no GUI for CLI formulae)
+- [ ] Downgrade / Rollback (Install previous version) - REMOVE: Homebrew removed `brew switch`; complex to implement
+- [x] Pin / Lock Version (Exclude from Update All) - KEEP: `brew pin <package>` works natively
+- [~] Verify / Repair (Check checksum/re-download) - CHANGE to "Reinstall": `brew reinstall <package>` redownloads and reinstalls
+- [x] Open Directory (Open OS file explorer to install dir) - KEEP: Very useful with `open $(brew --prefix <package>)`
+- [ ] Clear Cache / Reset (Wipe local config/cache) - REMOVE: Use global System Health cleanup instead
