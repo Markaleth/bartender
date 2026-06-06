@@ -44,6 +44,7 @@
 - [ ] filter by casks isn't working correctly. Packages related to taps other than core don't show up
 - [ ] Having an existing filter in place for a tap, going to the taps screen and browsing the same tap again removes the tap filter in the packages view
 - [ ] Exception: Failed to sync taps: Broken Pipe gets thrown on and off when the app starts, or when forcing a tap sync. 
+- [ ] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines. 
 
 # Supported information for "Library"
 
