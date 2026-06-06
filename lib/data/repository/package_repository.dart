@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:bartender/core/utils/shell_utils.dart';
+
 import '../db/database_interface.dart';
 import '../models/cask/cask_model.dart';
 import '../models/formula/formula_model.dart';
@@ -11,28 +12,74 @@ class PackageRepository {
 
   PackageRepository(this._brewService, this._database);
 
-  Future<Map<String, int>> _getDirectorySizes(String basePath) async {
-    final sizes = <String, int>{};
+  Future<int?> _getPackageSize(String path) async {
     try {
-      final dir = Directory(basePath);
-      if (dir.existsSync()) {
-        final result = await Process.run('sh', ['-c', 'du -sk "$basePath"/*']);
-        if (result.exitCode == 0) {
-          final lines = (result.stdout as String).split('\n');
-          for (final line in lines) {
-            if (line.trim().isEmpty) continue;
-            final parts = line.trim().split(RegExp(r'\s+'));
-            if (parts.length >= 2) {
-              final sizeKb = int.tryParse(parts[0]) ?? 0;
-              final path = parts.sublist(1).join(' ');
-              final name = path.split('/').last;
-              sizes[name] = sizeKb * 1024;
-            }
+      final result = await ShellUtils.run('sh', ['-c', 'du -sk "$path"']);
+      if (result.exitCode == 0) {
+        final stdout = result.stdout as String;
+        final parts = stdout.trim().split(RegExp(r'\s+'));
+        if (parts.isNotEmpty) {
+          final sizeKb = int.tryParse(parts[0]);
+          if (sizeKb != null) {
+            return sizeKb * 1024;
           }
         }
       }
     } catch (_) {}
-    return sizes;
+    return null;
+  }
+
+  Future<List<FormulaModel>> _processFormulae(
+    List<dynamic> formulaeJson,
+    String prefix,
+    DateTime now,
+  ) async {
+    final futures = formulaeJson.map((json) async {
+      final map = json as Map<String, dynamic>;
+      int? installedTime;
+      int? installedSize = await _getPackageSize(
+        '$prefix/Cellar/${map['name']}',
+      );
+
+      final installed = map['installed'] as List<dynamic>?;
+      if (installed != null && installed.isNotEmpty) {
+        final first = installed.first as Map<String, dynamic>;
+        installedTime = first['time'] as int?;
+      }
+
+      return FormulaModel.fromJson(map).copyWith(
+        isInstalled: true,
+        installedOnTimestamp: installedTime,
+        installedSize: installedSize,
+        lastSync: now,
+      );
+    });
+
+    return Future.wait(futures);
+  }
+
+  Future<List<CaskModel>> _processCasks(
+    List<dynamic> casksJson,
+    String prefix,
+    DateTime now,
+  ) async {
+    final futures = casksJson.map((json) async {
+      final map = json as Map<String, dynamic>;
+      int? installedTime = map['installed_time'] as int?;
+      int? sizeBytes = await _getPackageSize(
+        '$prefix/Caskroom/${map['token']}',
+      );
+      String? installedSize = sizeBytes?.toString();
+
+      return CaskModel.fromJson(map).copyWith(
+        isInstalled: true,
+        installedOnTimestamp: installedTime,
+        installedSize: installedSize,
+        lastSync: now,
+      );
+    });
+
+    return Future.wait(futures);
   }
 
   Future<void> syncInstalledPackages() async {
@@ -46,47 +93,10 @@ class PackageRepository {
     final casksJson = jsonMap['casks'] as List<dynamic>? ?? [];
 
     final prefix = await _brewService.getPrefix();
-    final cellarSizes = await _getDirectorySizes('$prefix/Cellar');
-    final caskroomSizes = await _getDirectorySizes('$prefix/Caskroom');
-
     final now = DateTime.now();
 
-    final formulae = formulaeJson
-        .map((json) {
-          final map = json as Map<String, dynamic>;
-          int? installedTime;
-          int? installedSize = cellarSizes[map['name'] as String];
-          
-          final installed = map['installed'] as List<dynamic>?;
-          if (installed != null && installed.isNotEmpty) {
-            final first = installed.first as Map<String, dynamic>;
-            installedTime = first['time'] as int?;
-          }
-          
-          return FormulaModel.fromJson(map).copyWith(
-            isInstalled: true,
-            installedOnTimestamp: installedTime,
-            installedSize: installedSize,
-            lastSync: now,
-          );
-        })
-        .toList();
-
-    final casks = casksJson
-        .map((json) {
-          final map = json as Map<String, dynamic>;
-          int? installedTime = map['installed_time'] as int?;
-          int? sizeBytes = caskroomSizes[map['token'] as String];
-          String? installedSize = sizeBytes != null ? sizeBytes.toString() : null;
-          
-          return CaskModel.fromJson(map).copyWith(
-            isInstalled: true,
-            installedOnTimestamp: installedTime,
-            installedSize: installedSize,
-            lastSync: now,
-          );
-        })
-        .toList();
+    final formulae = await _processFormulae(formulaeJson, prefix, now);
+    final casks = await _processCasks(casksJson, prefix, now);
 
     await _database.resetAllInstallationStatuses();
 
@@ -97,6 +107,68 @@ class PackageRepository {
     }
     if (casks.isNotEmpty) {
       await _database.cacheCasks(casks);
+    }
+  }
+
+  Future<void> _handleCaskInstallation(
+    Map<String, dynamic> jsonMap,
+    String prefix,
+    DateTime now,
+    String package,
+  ) async {
+    final casksJson = jsonMap['casks'] as List<dynamic>? ?? [];
+    if (casksJson.isNotEmpty) {
+      final map = casksJson.first as Map<String, dynamic>;
+      int? installedTime = map['installed_time'] as int?;
+
+      int? sizeBytes = await _getPackageSize(
+        '$prefix/Caskroom/${map['token']}',
+      );
+      String? installedSize = sizeBytes?.toString();
+
+      final cask = CaskModel.fromJson(map).copyWith(
+        isInstalled: true,
+        installedOnTimestamp: installedTime,
+        installedSize: installedSize,
+        lastSync: now,
+      );
+      await _database.cacheCask(cask);
+    } else {
+      // Fallback if missing
+      await _database.updateCaskInstallationStatus(package, true);
+    }
+  }
+
+  Future<void> _handleFormulaInstallation(
+    Map<String, dynamic> jsonMap,
+    String prefix,
+    DateTime now,
+    String package,
+  ) async {
+    final formulaeJson = jsonMap['formulae'] as List<dynamic>? ?? [];
+    if (formulaeJson.isNotEmpty) {
+      final map = formulaeJson.first as Map<String, dynamic>;
+      int? installedTime;
+      final installed = map['installed'] as List<dynamic>?;
+      if (installed != null && installed.isNotEmpty) {
+        final first = installed.first as Map<String, dynamic>;
+        installedTime = first['time'] as int?;
+      }
+
+      int? installedSize = await _getPackageSize(
+        '$prefix/Cellar/${map['name']}',
+      );
+
+      final formula = FormulaModel.fromJson(map).copyWith(
+        isInstalled: true,
+        installedOnTimestamp: installedTime,
+        installedSize: installedSize,
+        lastSync: now,
+      );
+      await _database.cacheFormula(formula);
+    } else {
+      // Fallback if missing
+      await _database.updateFormulaInstallationStatus(package, true);
     }
   }
 
@@ -114,51 +186,9 @@ class PackageRepository {
       final now = DateTime.now();
 
       if (isCask) {
-        final casksJson = jsonMap['casks'] as List<dynamic>? ?? [];
-        if (casksJson.isNotEmpty) {
-          final map = casksJson.first as Map<String, dynamic>;
-          int? installedTime = map['installed_time'] as int?;
-          
-          final caskroomSizes = await _getDirectorySizes('$prefix/Caskroom');
-          int? sizeBytes = caskroomSizes[map['token'] as String];
-          String? installedSize = sizeBytes != null ? sizeBytes.toString() : null;
-
-          final cask = CaskModel.fromJson(map).copyWith(
-            isInstalled: true,
-            installedOnTimestamp: installedTime,
-            installedSize: installedSize,
-            lastSync: now,
-          );
-          await _database.cacheCask(cask);
-        } else {
-          // Fallback if missing
-          await _database.updateCaskInstallationStatus(package, true);
-        }
+        await _handleCaskInstallation(jsonMap, prefix, now, package);
       } else {
-        final formulaeJson = jsonMap['formulae'] as List<dynamic>? ?? [];
-        if (formulaeJson.isNotEmpty) {
-          final map = formulaeJson.first as Map<String, dynamic>;
-          int? installedTime;
-          final installed = map['installed'] as List<dynamic>?;
-          if (installed != null && installed.isNotEmpty) {
-            final first = installed.first as Map<String, dynamic>;
-            installedTime = first['time'] as int?;
-          }
-
-          final cellarSizes = await _getDirectorySizes('$prefix/Cellar');
-          int? installedSize = cellarSizes[map['name'] as String];
-
-          final formula = FormulaModel.fromJson(map).copyWith(
-            isInstalled: true,
-            installedOnTimestamp: installedTime,
-            installedSize: installedSize,
-            lastSync: now,
-          );
-          await _database.cacheFormula(formula);
-        } else {
-          // Fallback if missing
-          await _database.updateFormulaInstallationStatus(package, true);
-        }
+        await _handleFormulaInstallation(jsonMap, prefix, now, package);
       }
     } else {
       // Just update the flag
