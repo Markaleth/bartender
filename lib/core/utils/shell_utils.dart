@@ -5,6 +5,20 @@ import 'package:flutter/foundation.dart';
 class ShellUtils {
   static String? _resolvedBrewPath;
 
+  static Map<String, String>? _buildEnv(
+    String executable,
+    Map<String, String>? environment,
+  ) {
+    if (executable != 'brew') return environment;
+
+    return {
+      'HOMEBREW_NO_AUTO_UPDATE': '1',
+      'HOMEBREW_NO_PAGER': '1',
+      'HOMEBREW_NO_ENV_HINTS': '1',
+      if (environment != null) ...environment,
+    };
+  }
+
   static bool get _isInContainer =>
       Platform.isLinux && File('/run/.containerenv').existsSync();
 
@@ -127,10 +141,19 @@ class ShellUtils {
       _getExecutable(executable),
       _buildArgs(executable, arguments),
       workingDirectory: workingDirectory,
-      environment: environment,
+      environment: _buildEnv(executable, environment),
       includeParentEnvironment: includeParentEnvironment,
       runInShell: runInShell,
     );
+  }
+
+  static Future<void> openDirectory(String path) async {
+    final executable = Platform.isLinux ? 'xdg-open' : 'open';
+    try {
+      await run(executable, [path]);
+    } catch (e) {
+      debugPrint('Error opening directory: $e');
+    }
   }
 
   static Future<Process> start(
@@ -146,7 +169,7 @@ class ShellUtils {
       _getExecutable(executable),
       _buildArgs(executable, arguments),
       workingDirectory: workingDirectory,
-      environment: environment,
+      environment: _buildEnv(executable, environment),
       includeParentEnvironment: includeParentEnvironment,
       runInShell: runInShell,
       mode: mode,

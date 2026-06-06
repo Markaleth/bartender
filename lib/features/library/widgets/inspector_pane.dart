@@ -2,6 +2,7 @@ import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
 import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -145,6 +146,7 @@ class InspectorPane extends StatelessWidget {
             isCask: state.isSelectedPackageCask,
             isOutdated: state.selectedPackageIsOutdated,
             isMissingDependencies: state.selectedPackageIsMissingDeps,
+            installPath: state.selectedPackageInstallPath,
           ),
         ],
       ),
@@ -275,12 +277,15 @@ class ManagementActionsWidget extends StatelessWidget {
   final bool isCask;
   final bool isOutdated;
   final bool isMissingDependencies;
+  final String installPath;
+
   const ManagementActionsWidget({
     super.key,
     required this.packageName,
     required this.isCask,
     required this.isOutdated,
     required this.isMissingDependencies,
+    required this.installPath,
   });
 
   @override
@@ -290,6 +295,29 @@ class ManagementActionsWidget extends StatelessWidget {
       runSpacing: spacingM,
       alignment: WrapAlignment.spaceEvenly,
       children: [
+        if (isCask)
+          SizedBox(
+            width: defaultButtonWidth,
+            child: ButtonWidget.secondary(
+              label: launchButtonLabel,
+              iconData: Icons.launch,
+              color: AppColors.primary,
+              onPressed: () {
+                ShellUtils.openDirectory(installPath);
+              },
+            ),
+          ),
+        SizedBox(
+          width: defaultButtonWidth,
+          child: ButtonWidget.secondary(
+            label: openDirectoryButtonLabel,
+            iconData: Icons.folder_open,
+            color: AppColors.secondary,
+            onPressed: () {
+              ShellUtils.openDirectory(installPath);
+            },
+          ),
+        ),
         if (isOutdated)
           SizedBox(
             width: defaultButtonWidth,
@@ -325,14 +353,14 @@ class ManagementActionsWidget extends StatelessWidget {
         SizedBox(
           width: defaultButtonWidth,
           child: ButtonWidget.secondary(
-            label: forceUpgradeButtonLabel,
-            iconData: Icons.upgrade,
+            label: reinstallButtonLabel,
+            iconData: Icons.refresh,
             color: AppColors.secondary,
             onPressed: () {
               context.read<QueueViewModel>().queueOperation(
                 packageId: packageName,
                 type: isCask ? PackageType.cask : PackageType.formula,
-                operation: OperationType.update,
+                operation: OperationType.reinstall,
               );
             },
           ),
@@ -360,11 +388,10 @@ class ManagementActionsWidget extends StatelessWidget {
               iconData: Icons.bolt,
               color: AppColors.error,
               onPressed: () {
-                // Note: Zap might need a specific OperationType if supported, falling back to uninstall here.
                 context.read<QueueViewModel>().queueOperation(
                   packageId: packageName,
                   type: PackageType.cask,
-                  operation: OperationType.uninstall,
+                  operation: OperationType.zap,
                 );
               },
             ),

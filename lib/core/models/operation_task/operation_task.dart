@@ -9,6 +9,8 @@ enum OperationStatus { queued, inProgress, success, error }
 enum OperationType {
   install,
   uninstall,
+  zap,
+  reinstall,
   update,
   pin,
   autoremove,

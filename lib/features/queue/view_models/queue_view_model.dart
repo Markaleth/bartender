@@ -105,6 +105,10 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
         return _brewService.installWithStream(task.packageId, isCask: isCask);
       case OperationType.uninstall:
         return _brewService.uninstallWithStream(task.packageId, isCask: isCask);
+      case OperationType.zap:
+        return _brewService.runCustomStream(['uninstall', '--zap', task.packageId]);
+      case OperationType.reinstall:
+        return _brewService.runCustomStream(['reinstall', task.packageId]);
       case OperationType.update:
         return _brewService.upgrade(package: task.packageId, isCask: isCask);
       case OperationType.pin:
@@ -165,8 +169,10 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
 
     final isInstall =
         task.operation == OperationType.install ||
-        task.operation == OperationType.update;
-    final isUninstall = task.operation == OperationType.uninstall;
+        task.operation == OperationType.update ||
+        task.operation == OperationType.reinstall;
+    final isUninstall = task.operation == OperationType.uninstall ||
+        task.operation == OperationType.zap;
 
     if (!isInstall && !isUninstall) return;
 
