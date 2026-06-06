@@ -106,4 +106,5 @@ abstract class DatabaseInterface {
   Future<List<TapModel>> getTaps();
   Future<void> insertTaps(List<TapModel> taps);
   Future<void> deleteTap(String name);
+  Future<int> getTapInstalledSize(String tapName);
 }

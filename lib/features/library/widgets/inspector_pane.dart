@@ -60,7 +60,7 @@ class InspectorPane extends StatelessWidget {
 
             const HorizontalDivider(),
             const SizedBox(height: spacingM),
-            
+
             ConfigPathsWidget(installPath: tap.path),
 
             const SizedBox(height: spacingL),
@@ -116,6 +116,7 @@ class InspectorPane extends StatelessWidget {
             name: state.selectedPackageName,
             version: state.selectedPackageVersion,
             description: state.selectedPackageDescription,
+            model: state.selectedPackage,
           ),
           Padding(
             padding: const EdgeInsets.only(top: spacingM),
@@ -129,6 +130,11 @@ class InspectorPane extends StatelessWidget {
           const HorizontalDivider(),
           const SizedBox(height: spacingM),
           ConfigPathsWidget(installPath: state.selectedPackageInstallPath),
+
+          if (state.selectedPackage != null && !state.isSelectedPackageTap) ...[
+            const SizedBox(height: spacingM),
+            _PackageDetailsStatsWidget(model: state.selectedPackage),
+          ],
 
           const SizedBox(height: spacingL),
 
@@ -158,12 +164,14 @@ class HeaderWidget extends StatelessWidget {
   final String name;
   final String version;
   final String description;
+  final dynamic model;
 
   const HeaderWidget({
     super.key,
     required this.name,
     required this.version,
     required this.description,
+    this.model,
   });
 
   @override
@@ -171,12 +179,18 @@ class HeaderWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          name,
-          style: context.headM.copyWith(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          children: [
+            Text(
+              name,
+              style: context.headM.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
         Text(
           'v$version',
@@ -388,10 +402,34 @@ class ManagementActionsWidget extends StatelessWidget {
               iconData: Icons.bolt,
               color: AppColors.error,
               onPressed: () {
-                context.read<QueueViewModel>().queueOperation(
-                  packageId: packageName,
-                  type: PackageType.cask,
-                  operation: OperationType.zap,
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('Zap Package?'),
+                    content: Text(
+                      'Are you sure you want to completely remove $packageName and all its related files? This action cannot be undone.',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                          context.read<QueueViewModel>().queueOperation(
+                            packageId: packageName,
+                            type: PackageType.cask,
+                            operation: OperationType.zap,
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.error,
+                        ),
+                        child: const Text('Zap'),
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
@@ -448,6 +486,109 @@ class _TapStatsWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PackageDetailsStatsWidget extends StatelessWidget {
+  final dynamic model;
+
+  const _PackageDetailsStatsWidget({required this.model});
+
+  String _formatSize(dynamic size) {
+    if (size == null) return 'Unknown';
+    int? intSize;
+    if (size is int) {
+      intSize = size;
+    } else if (size is String) {
+      intSize = int.tryParse(size);
+      if (intSize == null) return size;
+    }
+    
+    if (intSize != null) {
+      if (intSize == 0) return '0 B';
+      const suffixes = ["B", "KB", "MB", "GB", "TB"];
+      var i = 0;
+      double s = intSize.toDouble();
+      while (s >= 1024 && i < suffixes.length - 1) {
+        s /= 1024;
+        i++;
+      }
+      return '${s.toStringAsFixed(1)} ${suffixes[i]}';
+    }
+    return 'Unknown';
+  }
+
+  String _formatDate(int? timestamp) {
+    if (timestamp == null) return 'Unknown';
+    final date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+  String _formatLastSync(DateTime? lastSync) {
+    if (lastSync == null) return 'Unknown';
+    final difference = DateTime.now().difference(lastSync);
+    if (difference.inDays > 0) return '${difference.inDays}d ago';
+    if (difference.inHours > 0) return '${difference.inHours}h ago';
+    if (difference.inMinutes > 0) return '${difference.inMinutes}m ago';
+    return 'Just now';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(spacingS),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(radiusS),
+        border: Border.all(color: AppColors.borderNeutral),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _StatRow(
+            label: 'Installed Size',
+            value: _formatSize(model.installedSize),
+          ),
+          const SizedBox(height: spacingXs),
+          _StatRow(
+            label: 'Installation Date',
+            value: _formatDate(model.installedOnTimestamp),
+          ),
+          const SizedBox(height: spacingXs),
+          _StatRow(
+            label: 'Last Synced',
+            value: _formatLastSync(model.lastSync),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _StatRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: context.bodyM.copyWith(color: AppColors.textSecondary),
+        ),
+        Text(
+          value,
+          style: context.bodyM.copyWith(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }

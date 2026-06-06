@@ -5,6 +5,8 @@ import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/utils/url_launcer_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -132,9 +134,37 @@ class _TapCardBody extends StatelessWidget {
 
   const _TapCardBody({required this.tap});
 
+  String _formatSize(int bytes) {
+    if (bytes == 0) return '0 B';
+    const suffixes = ["B", "KB", "MB", "GB", "TB"];
+    var i = 0;
+    double size = bytes.toDouble();
+    while (size >= 1024 && i < suffixes.length - 1) {
+      size /= 1024;
+      i++;
+    }
+    return '${size.toStringAsFixed(1)} ${suffixes[i]}';
+  }
+
   @override
   Widget build(BuildContext context) {
-    final int totalPackages = tap.formulaNames.length + tap.caskTokens.length;
+    final int formulaeCount = tap.formulaNames.length;
+    final int casksCount = tap.caskTokens.length;
+    
+    // Format last synced
+    String lastSyncedText = tapCardUnknownTitle;
+    if (tap.lastSync != null) {
+      final difference = DateTime.now().difference(tap.lastSync!);
+      if (difference.inDays > 0) {
+        lastSyncedText = '${difference.inDays}d ago';
+      } else if (difference.inHours > 0) {
+        lastSyncedText = '${difference.inHours}h ago';
+      } else if (difference.inMinutes > 0) {
+        lastSyncedText = '${difference.inMinutes}m ago';
+      } else {
+        lastSyncedText = 'Just now';
+      }
+    }
 
     return Expanded(
       child: Padding(
@@ -150,7 +180,7 @@ class _TapCardBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '$totalPackages',
+                        '$formulaeCount formulae, $casksCount casks',
                         style: context.titleM.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
@@ -170,7 +200,7 @@ class _TapCardBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        tapCardUnknownTitle,
+                        lastSyncedText,
                         style: context.titleM.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
@@ -178,6 +208,36 @@ class _TapCardBody extends StatelessWidget {
                       ),
                       Text(
                         tapCardLastSyncTitle,
+                        style: context.labelS.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FutureBuilder<int>(
+                        future: context.read<HomebrewRepository>().getTapInstalledSize(tap.name),
+                        builder: (context, snapshot) {
+                          final sizeStr = snapshot.hasData ? _formatSize(snapshot.data!) : '...';
+                          return Text(
+                            sizeStr,
+                            style: context.titleM.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                          );
+                        },
+                      ),
+                      Text(
+                        'Installed Size',
                         style: context.labelS.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -237,15 +297,8 @@ class _TapCardFooter extends StatelessWidget {
       ),
       child: Row(
         spacing: spacingM,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Expanded(
-            child: ButtonWidget.secondary(
-              onPressed: isSyncing ? null : onForceSync,
-              iconData: Icons.sync,
-              label: forceSyncButtonLabel,
-            ),
-          ),
           ButtonWidget.tertiary(
             iconData: Icons.arrow_forward,
             label: browseButtonLabel,

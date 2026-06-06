@@ -45,13 +45,27 @@ class AppDatabase extends _$AppDatabase
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          await m.addColumn(formulaeTable, formulaeTable.installedSize);
+          await m.addColumn(formulaeTable, formulaeTable.installedOnTimestamp);
+          await m.addColumn(formulaeTable, formulaeTable.builtAsBottle);
+          await m.addColumn(formulaeTable, formulaeTable.lastSync);
+          
+          await m.addColumn(casksTable, casksTable.installedSize);
+          await m.addColumn(casksTable, casksTable.installedOnTimestamp);
+          await m.addColumn(casksTable, casksTable.lastSync);
+          
+          await m.addColumn(tapsTable, tapsTable.lastSync);
+        }
       },
     );
   }

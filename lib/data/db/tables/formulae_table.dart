@@ -26,6 +26,10 @@ class FormulaeTable extends Table {
   IntColumn get installs90d => integer().nullable()();
   IntColumn get installs365d => integer().nullable()();
   TextColumn get generatedDate => text().nullable()();
+  IntColumn get installedSize => integer().nullable()();
+  IntColumn get installedOnTimestamp => integer().nullable()();
+  BoolColumn get builtAsBottle => boolean().nullable()();
+  DateTimeColumn get lastSync => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {name};

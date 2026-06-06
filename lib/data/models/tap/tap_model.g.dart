@@ -25,6 +25,9 @@ _TapModel _$TapModelFromJson(Map<String, dynamic> json) => _TapModel(
           ?.map((e) => e as String)
           .toList() ??
       const [],
+  lastSync: json['lastSync'] == null
+      ? null
+      : DateTime.parse(json['lastSync'] as String),
 );
 
 Map<String, dynamic> _$TapModelToJson(_TapModel instance) => <String, dynamic>{
@@ -38,4 +41,5 @@ Map<String, dynamic> _$TapModelToJson(_TapModel instance) => <String, dynamic>{
   'remote': instance.remote,
   'formula_names': instance.formulaNames,
   'cask_tokens': instance.caskTokens,
+  'lastSync': instance.lastSync?.toIso8601String(),
 };

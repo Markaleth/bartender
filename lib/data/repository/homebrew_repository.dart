@@ -23,7 +23,10 @@ class HomebrewRepository {
     final result = await _brewService.listTaps();
     if (result.exitCode == 0) {
       final List<dynamic> jsonList = jsonDecode(result.stdout);
-      final taps = jsonList.map((json) => TapModel.fromJson(json)).toList();
+      final now = DateTime.now();
+      final taps = jsonList.map((json) {
+        return TapModel.fromJson(json).copyWith(lastSync: now);
+      }).toList();
       await _database.insertTaps(taps);
     } else {
       throw Exception('Failed to sync taps: ${result.stderr}');
@@ -62,7 +65,7 @@ class HomebrewRepository {
         throw Exception('Tap $tapName not found');
       }
 
-      final tap = TapModel.fromJson(tapJson);
+      final tap = TapModel.fromJson(tapJson).copyWith(lastSync: DateTime.now());
       await _database.insertTaps([tap]);
 
       if (tapName != 'homebrew/core' && tapName != 'homebrew/cask') {
@@ -153,6 +156,7 @@ class HomebrewRepository {
 
   Future<List<TapModel>> getTaps() => _database.getTaps();
   Future<void> deleteTap(String name) => _database.deleteTap(name);
+  Future<int> getTapInstalledSize(String tapName) => _database.getTapInstalledSize(tapName);
 
   Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
     String category,

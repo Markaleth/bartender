@@ -62,9 +62,12 @@ class BrewService {
     return streamCommand(args);
   }
 
-  Future<ShellCommandResult> uninstall(String package, {bool isCask = false}) {
+  Future<ShellCommandResult> uninstall(String package, {bool isCask = false, bool zap = false}) {
     final args = ['uninstall'];
-    if (isCask) args.add('--cask');
+    if (isCask) {
+      args.add('--cask');
+      if (zap) args.add('--zap');
+    }
     args.add(package);
     return runCommand(args);
   }
@@ -72,11 +75,42 @@ class BrewService {
   Future<StreamingShellCommand> uninstallWithStream(
     String package, {
     bool isCask = false,
+    bool zap = false,
   }) {
     final args = ['uninstall'];
+    if (isCask) {
+      args.add('--cask');
+      if (zap) args.add('--zap');
+    }
+    args.add(package);
+    return streamCommand(args);
+  }
+
+  Future<ShellCommandResult> reinstall(String package, {bool isCask = false}) {
+    final args = ['reinstall'];
+    if (isCask) args.add('--cask');
+    args.add(package);
+    return runCommand(args);
+  }
+
+  Future<StreamingShellCommand> reinstallWithStream(
+    String package, {
+    bool isCask = false,
+  }) {
+    final args = ['reinstall'];
     if (isCask) args.add('--cask');
     args.add(package);
     return streamCommand(args);
+  }
+
+  Future<void> openPackageDirectory(String package) async {
+    final prefixResult = await runCustom(['--prefix', package]);
+    if (prefixResult.exitCode == 0) {
+      final path = prefixResult.stdout.trim();
+      if (path.isNotEmpty) {
+        await ShellUtils.run('open', [path]);
+      }
+    }
   }
 
   Future<StreamingShellCommand> update() {

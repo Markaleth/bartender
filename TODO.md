@@ -41,6 +41,9 @@
 - [ ] when minimising the termial, we're getting some overflow errors
 - [x] text in terminal look blurry. play with the styling to improve that
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
+- [ ] filter by casks isn't working correctly. Packages related to taps other than core don't show up
+- [ ] Having an existing filter in place for a tap, going to the taps screen and browsing the same tap again removes the tap filter in the packages view
+- [ ] Exception: Failed to sync taps: Broken Pipe gets thrown on and off when the app starts, or when forcing a tap sync. 
 
 # Supported information for "Library"
 

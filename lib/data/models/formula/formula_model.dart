@@ -29,6 +29,10 @@ abstract class FormulaModel with _$FormulaModel {
     int? installs90d,
     int? installs365d,
     @JsonKey(name: 'generated_date') String? generatedDate,
+    int? installedSize,
+    int? installedOnTimestamp,
+    bool? builtAsBottle,
+    DateTime? lastSync,
   }) = _FormulaModel;
 
   factory FormulaModel.fromJson(Map<String, dynamic> json) =>

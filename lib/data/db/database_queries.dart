@@ -528,4 +528,22 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
       await (delete(casksTable)..where((t) => t.tap.equals(name))).go();
     });
   }
+
+  @override
+  Future<int> getTapInstalledSize(String tapName) async {
+    final formulaSize = await customSelect(
+      'SELECT SUM(installed_size) AS size FROM formulae_table WHERE tap = ? AND is_installed = 1',
+      variables: [Variable.withString(tapName)],
+    ).getSingle();
+    
+    final caskSize = await customSelect(
+      'SELECT SUM(CAST(installed_size AS INTEGER)) AS size FROM casks_table WHERE tap = ? AND is_installed = 1',
+      variables: [Variable.withString(tapName)],
+    ).getSingle();
+
+    final fSize = formulaSize.read<int?>('size') ?? 0;
+    final cSize = caskSize.read<int?>('size') ?? 0;
+    
+    return fSize + cSize;
+  }
 }
