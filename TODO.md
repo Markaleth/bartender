@@ -41,10 +41,10 @@
 - [ ] when minimising the termial, we're getting some overflow errors
 - [x] text in terminal look blurry. play with the styling to improve that
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
-- [ ] filter by casks isn't working correctly. Packages related to taps other than core don't show up
+- [ ] filter by casks isn't working correctly. Selecring a custom tap AND core will not show the contents of both taps. it will only show the contents of the first selected tap
 - [ ] Having an existing filter in place for a tap, going to the taps screen and browsing the same tap again removes the tap filter in the packages view
-- [ ] Exception: Failed to sync taps: Broken Pipe gets thrown on and off when the app starts, or when forcing a tap sync. 
-- [ ] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines. 
+- [ ] Exception: Failed to sync taps: Broken Pipe gets thrown on and off when the app starts, or when forcing a tap sync.
+- [ ] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines.
 
 # Supported information for "Library"too
 
