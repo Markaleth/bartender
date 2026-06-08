@@ -37,30 +37,11 @@
 # Issues:
 
 - [ ] Terminal window clips the edges, so we need to address that
-- [x] Terminal close icon is not very suggestive (should be an x or something instantly recognizable)
 - [ ] when minimising the termial, we're getting some overflow errors
-- [x] text in terminal look blurry. play with the styling to improve that
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
 - [ ] filter by casks isn't working correctly. Selecring a custom tap AND core will not show the contents of both taps. it will only show the contents of the first selected tap
-- [ ] Having an existing filter in place for a tap, going to the taps screen and browsing the same tap again removes the tap filter in the packages view
-- [ ] Exception: Failed to sync taps: Broken Pipe gets thrown on and off when the app starts, or when forcing a tap sync.
 - [ ] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines.
+- [ ] Information on tap packages does not show up in the inspector pane. 
 
-# Supported information for "Library"too
 
-- [x] Version Comparison (Current vs. Latest) - Available via `brew outdated`/`brew info --json`
-- [x] Disk Usage (Package size + cached data) - Available via `brew info --json` (installed_size)
-- [x] Installation Path (Where it lives on the system) - Available via `brew --prefix`
-- [ ] Changelogs/Release Notes (Inline or modal before update) - Not available from Homebrew; requires external API
-- [x] Dependencies (Requires/Required By) - Available via `brew deps`/`brew info --json`
-- [~] Last Used / Installation Date - Installation Date: YES (`brew info --json`); Last Used: NO (not tracked by Homebrew)
-- [~] Status Indicators (Running, broken, restart required) - Only for background services via `brew services list`; not available for regular packages
 
-# Supported actions for "Library"
-
-- [x] Launch / Open (For executables/CLI tools) - KEEP for Casks only (no GUI for CLI formulae)
-- [ ] Downgrade / Rollback (Install previous version) - REMOVE: Homebrew removed `brew switch`; complex to implement
-- [x] Pin / Lock Version (Exclude from Update All) - KEEP: `brew pin <package>` works natively
-- [~] Verify / Repair (Check checksum/re-download) - CHANGE to "Reinstall": `brew reinstall <package>` redownloads and reinstalls
-- [x] Open Directory (Open OS file explorer to install dir) - KEEP: Very useful with `open $(brew --prefix <package>)`
-- [ ] Clear Cache / Reset (Wipe local config/cache) - REMOVE: Use global System Health cleanup instead
