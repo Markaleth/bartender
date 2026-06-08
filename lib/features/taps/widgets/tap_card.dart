@@ -17,7 +17,6 @@ class TapCard extends StatelessWidget {
   final TapModel tap;
   final bool isSyncing;
   final VoidCallback onViewPackages;
-  final VoidCallback onForceSync;
   final VoidCallback onRemove;
 
   const TapCard({
@@ -25,7 +24,6 @@ class TapCard extends StatelessWidget {
     required this.tap,
     required this.isSyncing,
     required this.onViewPackages,
-    required this.onForceSync,
     required this.onRemove,
   });
 
@@ -46,7 +44,6 @@ class TapCard extends StatelessWidget {
           const HorizontalDivider(height: 0),
           _TapCardFooter(
             isSyncing: isSyncing,
-            onForceSync: onForceSync,
             onViewPackages: onViewPackages,
           ),
         ],
@@ -272,12 +269,10 @@ class _TapCardBody extends StatelessWidget {
 
 class _TapCardFooter extends StatelessWidget {
   final bool isSyncing;
-  final VoidCallback onForceSync;
   final VoidCallback onViewPackages;
 
   const _TapCardFooter({
     required this.isSyncing,
-    required this.onForceSync,
     required this.onViewPackages,
   });
 

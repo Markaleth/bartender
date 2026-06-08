@@ -102,7 +102,6 @@ class TapsView extends StatelessWidget {
                           onViewPackages: () {
                             homeViewModel.navigateAndFilterByTap(tap.name);
                           },
-                          onForceSync: () => viewModel.syncTap(tap.name),
                           onRemove: () => viewModel.removeTap(tap.name),
                         );
                       },

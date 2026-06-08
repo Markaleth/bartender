@@ -15,9 +15,11 @@ class TapFilterNotifier extends ChangeNotifier {
   }
 
   void setFilter(String? tapName) {
-    if (tapName == null ||
-        (_selectedTaps.length == 1 && _selectedTaps.first == tapName)) {
+    if (tapName == null) {
       clearFilter();
+      return;
+    }
+    if (_selectedTaps.length == 1 && _selectedTaps.first == tapName) {
       return;
     }
     _setFilter(tapName);

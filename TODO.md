@@ -46,7 +46,7 @@
 - [ ] Exception: Failed to sync taps: Broken Pipe gets thrown on and off when the app starts, or when forcing a tap sync. 
 - [ ] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines. 
 
-# Supported information for "Library"
+# Supported information for "Library"too
 
 - [x] Version Comparison (Current vs. Latest) - Available via `brew outdated`/`brew info --json`
 - [x] Disk Usage (Package size + cached data) - Available via `brew info --json` (installed_size)
