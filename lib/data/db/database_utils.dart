@@ -18,33 +18,97 @@ PackageQueryData buildPackageQuery({
   required int offset,
   String? tapFilter,
 }) {
-  if (Platform.isLinux && type == PackageTypeFilter.all) {
-    type = PackageTypeFilter.formulae;
+  final actualType = (Platform.isLinux && type == PackageTypeFilter.all)
+      ? PackageTypeFilter.formulae
+      : type;
+
+  final formula = _buildFormulaWhere(
+    query: query,
+    installedOnly: installedOnly,
+    tapFilter: tapFilter,
+  );
+  final cask = _buildCaskWhere(
+    query: query,
+    installedOnly: installedOnly,
+    tapFilter: tapFilter,
+  );
+
+  final String sql;
+  final args = <Variable<Object>>[];
+
+  switch (actualType) {
+    case PackageTypeFilter.all:
+      sql = _PackageQueries.all(formula.where, cask.where);
+      args.addAll([...formula.args, ...cask.args]);
+    case PackageTypeFilter.formulae:
+      sql = _PackageQueries.formulae(formula.where);
+      args.addAll(formula.args);
+    case PackageTypeFilter.casks:
+      sql = _PackageQueries.casks(cask.where);
+      args.addAll(cask.args);
   }
 
-  final formulaArgs = <Variable<Object>>[];
-  final caskArgs = <Variable<Object>>[];
+  args.addAll([Variable.withInt(limit), Variable.withInt(offset)]);
 
-  String formulaWhere = '1=1';
-  String caskWhere = '1=1';
+  return (sql: sql, args: args);
+}
+
+typedef _WhereClause = ({String where, List<Variable<Object>> args});
+
+_WhereClause _buildFormulaWhere({
+  required String query,
+  required bool installedOnly,
+  String? tapFilter,
+}) {
+  String where = '1=1';
+  final args = <Variable<Object>>[];
 
   if (tapFilter != null && tapFilter.isNotEmpty) {
-    formulaWhere += ' AND tap = ?';
-    formulaArgs.add(Variable.withString(tapFilter));
-    caskWhere += ' AND tap = ?';
-    caskArgs.add(Variable.withString(tapFilter));
+    where += ' AND tap = ?';
+    args.add(Variable.withString(tapFilter));
   }
 
   if (query.isNotEmpty) {
+    where += ' AND (name LIKE ? OR desc LIKE ?)';
     final likeQuery = '%$query%';
-    formulaWhere += ' AND (name LIKE ? OR desc LIKE ?)';
-    formulaArgs.addAll([
+    args.addAll([
       Variable.withString(likeQuery),
       Variable.withString(likeQuery),
     ]);
+  }
 
-    caskWhere += ' AND (token LIKE ? OR name LIKE ? OR desc LIKE ?)';
-    caskArgs.addAll([
+  if (installedOnly) {
+    where += ' AND is_installed = 1';
+  }
+
+  if (Platform.isLinux) {
+    where +=
+        " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"macos\"%')";
+  } else if (Platform.isMacOS) {
+    where +=
+        " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"linux\"%')";
+  }
+
+  return (where: where, args: args);
+}
+
+_WhereClause _buildCaskWhere({
+  required String query,
+  required bool installedOnly,
+  String? tapFilter,
+}) {
+  String where = '1=1';
+  final args = <Variable<Object>>[];
+
+  if (tapFilter != null && tapFilter.isNotEmpty) {
+    where += ' AND tap = ?';
+    args.add(Variable.withString(tapFilter));
+  }
+
+  if (query.isNotEmpty) {
+    where += ' AND (token LIKE ? OR name LIKE ? OR desc LIKE ?)';
+    final likeQuery = '%$query%';
+    args.addAll([
       Variable.withString(likeQuery),
       Variable.withString(likeQuery),
       Variable.withString(likeQuery),
@@ -52,53 +116,39 @@ PackageQueryData buildPackageQuery({
   }
 
   if (installedOnly) {
-    formulaWhere += ' AND is_installed = 1';
-    caskWhere += ' AND is_installed = 1';
+    where += ' AND is_installed = 1';
   }
 
   if (Platform.isLinux) {
-    formulaWhere +=
-        " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"macos\"%')";
-    caskWhere += " AND 1=0";
-  } else if (Platform.isMacOS) {
-    formulaWhere +=
-        " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"linux\"%')";
+    where += " AND 1=0";
   }
 
-  String sql = '';
-  final args = <Variable<Object>>[];
+  return (where: where, args: args);
+}
 
-  if (type == PackageTypeFilter.all) {
-    sql =
-        '''
+class _PackageQueries {
+  static String all(String formulaWhere, String caskWhere) =>
+      '''
         SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $formulaWhere
         UNION ALL
         SELECT token AS id, 'cask' AS type FROM casks_table WHERE $caskWhere
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
-    args.addAll([...formulaArgs, ...caskArgs]);
-  } else if (type == PackageTypeFilter.formulae) {
-    sql =
-        '''
-        SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $formulaWhere
+
+  static String formulae(String where) =>
+      '''
+        SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $where
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
-    args.addAll(formulaArgs);
-  } else if (type == PackageTypeFilter.casks) {
-    sql =
-        '''
-        SELECT token AS id, 'cask' AS type FROM casks_table WHERE $caskWhere
+
+  static String casks(String where) =>
+      '''
+        SELECT token AS id, 'cask' AS type FROM casks_table WHERE $where
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
-    args.addAll(caskArgs);
-  }
-
-  args.addAll([Variable.withInt(limit), Variable.withInt(offset)]);
-
-  return (sql: sql, args: args);
 }
 
 Insertable<FormulaModel> updateFormulaFromExcluded($FormulaeTableTable ex) {
