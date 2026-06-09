@@ -38,7 +38,7 @@ class PackageRepository {
       final map = json as Map<String, dynamic>;
       int? installedTime;
       int? installedSize = await _getPackageSize(
-        '$prefix/Cellar/${map['name']}',
+        '$prefix/Cellar/${(map['name'] as String).split('/').last}',
       );
 
       final installed = map['installed'] as List<dynamic>?;
@@ -67,7 +67,7 @@ class PackageRepository {
       final map = json as Map<String, dynamic>;
       int? installedTime = map['installed_time'] as int?;
       int? sizeBytes = await _getPackageSize(
-        '$prefix/Caskroom/${map['token']}',
+        '$prefix/Caskroom/${(map['token'] as String).split('/').last}',
       );
       String? installedSize = sizeBytes?.toString();
 
@@ -122,7 +122,7 @@ class PackageRepository {
       int? installedTime = map['installed_time'] as int?;
 
       int? sizeBytes = await _getPackageSize(
-        '$prefix/Caskroom/${map['token']}',
+        '$prefix/Caskroom/${(map['token'] as String).split('/').last}',
       );
       String? installedSize = sizeBytes?.toString();
 
@@ -156,7 +156,7 @@ class PackageRepository {
       }
 
       int? installedSize = await _getPackageSize(
-        '$prefix/Cellar/${map['name']}',
+        '$prefix/Cellar/${(map['name'] as String).split('/').last}',
       );
 
       final formula = FormulaModel.fromJson(map).copyWith(

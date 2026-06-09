@@ -13,6 +13,7 @@ import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 
 import 'package:bartender/data/models/tap/tap_model.dart';
+import 'package:bartender/features/library/widgets/installed_packages_list.dart';
 
 class InspectorPane extends StatelessWidget {
   const InspectorPane({super.key});
@@ -83,7 +84,11 @@ class InspectorPane extends StatelessWidget {
               ],
             ),
 
-            const Spacer(),
+            InstalledPackagesList(
+              packages: state.packagesByTap[tap.name] ?? [],
+            ),
+
+            const SizedBox(height: spacingM),
 
             ButtonWidget.secondary(
               label: untapButtonLabel,
@@ -495,6 +500,7 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
 
   const _PackageDetailsStatsWidget({required this.model});
 
+  //TODO: clean these up and move them to string utils.
   String _formatSize(dynamic size) {
     if (size == null) return 'Unknown';
     int? intSize;
@@ -504,7 +510,7 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
       intSize = int.tryParse(size);
       if (intSize == null) return size;
     }
-    
+
     if (intSize != null) {
       if (intSize == 0) return '0 B';
       const suffixes = ["B", "KB", "MB", "GB", "TB"];
@@ -546,6 +552,10 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if ((model.tap as String?)?.isNotEmpty == true) ...[
+            _StatRow(label: 'Tap', value: model.tap as String),
+            const SizedBox(height: spacingXs),
+          ],
           _StatRow(
             label: 'Installed Size',
             value: _formatSize(model.installedSize),
