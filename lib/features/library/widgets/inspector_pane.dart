@@ -1,8 +1,10 @@
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/utils/shell_utils.dart';
+import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -124,7 +126,7 @@ class InspectorPane extends StatelessWidget {
             model: state.selectedPackage,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: spacingM),
+            padding: const EdgeInsets.symmetric(vertical: spacingM),
             child: PackageHealthWidget(
               isDeprecated: state.selectedPackageIsDeprecated,
               isOutdated: state.selectedPackageIsOutdated,
@@ -237,12 +239,22 @@ class ConfigPathsWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(radiusS),
             border: Border.all(color: AppColors.borderNeutral),
           ),
-          child: Text(
-            installPath,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontFamily: 'monospace',
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                installPath,
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontFamily: 'monospace',
+                ),
+              ),
+              ButtonWidget.icon(
+                assetName: openFolderIcon,
+                onPressed: () => ShellUtils.openDirectory(installPath),
+                iconSize: iconSizeM,
+              ),
+            ],
           ),
         ),
       ],
@@ -314,29 +326,6 @@ class ManagementActionsWidget extends StatelessWidget {
       runSpacing: spacingM,
       alignment: WrapAlignment.spaceEvenly,
       children: [
-        if (isCask)
-          SizedBox(
-            width: defaultButtonWidth,
-            child: ButtonWidget.secondary(
-              label: launchButtonLabel,
-              iconData: Icons.launch,
-              color: AppColors.primary,
-              onPressed: () {
-                ShellUtils.openDirectory(installPath);
-              },
-            ),
-          ),
-        SizedBox(
-          width: defaultButtonWidth,
-          child: ButtonWidget.secondary(
-            label: openDirectoryButtonLabel,
-            iconData: Icons.folder_open,
-            color: AppColors.secondary,
-            onPressed: () {
-              ShellUtils.openDirectory(installPath);
-            },
-          ),
-        ),
         if (isOutdated)
           SizedBox(
             width: defaultButtonWidth,
@@ -501,35 +490,6 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
   const _PackageDetailsStatsWidget({required this.model});
 
   //TODO: clean these up and move them to string utils.
-  String _formatSize(dynamic size) {
-    if (size == null) return 'Unknown';
-    int? intSize;
-    if (size is int) {
-      intSize = size;
-    } else if (size is String) {
-      intSize = int.tryParse(size);
-      if (intSize == null) return size;
-    }
-
-    if (intSize != null) {
-      if (intSize == 0) return '0 B';
-      const suffixes = ["B", "KB", "MB", "GB", "TB"];
-      var i = 0;
-      double s = intSize.toDouble();
-      while (s >= 1024 && i < suffixes.length - 1) {
-        s /= 1024;
-        i++;
-      }
-      return '${s.toStringAsFixed(1)} ${suffixes[i]}';
-    }
-    return 'Unknown';
-  }
-
-  String _formatDate(int? timestamp) {
-    if (timestamp == null) return 'Unknown';
-    final date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-  }
 
   String _formatLastSync(DateTime? lastSync) {
     if (lastSync == null) return 'Unknown';
@@ -558,12 +518,12 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
           ],
           _StatRow(
             label: 'Installed Size',
-            value: _formatSize(model.installedSize),
+            value: StringUtils.formatSize(model.installedSize),
           ),
           const SizedBox(height: spacingXs),
           _StatRow(
             label: 'Installation Date',
-            value: _formatDate(model.installedOnTimestamp),
+            value: StringUtils.formatDate(model.installedOnTimestamp),
           ),
           const SizedBox(height: spacingXs),
           _StatRow(

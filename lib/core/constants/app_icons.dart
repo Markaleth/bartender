@@ -30,3 +30,4 @@ const systemUpdateIcon = 'assets/icons/system_update_icon.svg';
 const missingDependencyIcon = 'assets/icons/missing_dependency_icon.svg';
 const storageIcon = 'assets/icons/storage_icon.svg';
 const clearIcon = 'assets/icons/close_icon.svg';
+const openFolderIcon = 'assets/icons/open_folder_icon.svg';

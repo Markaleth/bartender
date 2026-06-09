@@ -50,16 +50,31 @@ class StringUtils {
     );
   }
 
-    static String formatSizeFromBytes(int bytes) {
-    if (bytes < 1024) return '$bytes B';
-    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
-    if (bytes < 1024 * 1024 * 1024) {
-      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  static String formatSize(dynamic size) {
+    if (size == null) return 'Unknown';
+
+    int? bytes;
+    if (size is int) {
+      bytes = size;
+    } else if (size is String) {
+      bytes = int.tryParse(size);
+      if (bytes == null) return size; // Return string if not int
     }
-    return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(2)} GB';
+
+    if (bytes == null) return 'Unknown';
+
+    return switch (bytes) {
+      0 => '0 B',
+      < 1024 => '$bytes B',
+      < 1024 * 1024 => '${(bytes / 1024).toStringAsFixed(1)} KB',
+      < 1024 * 1024 * 1024 => '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB',
+      < 1024 * 1024 * 1024 * 1024 => '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(2)} GB',
+      _ => '${(bytes / (1024 * 1024 * 1024 * 1024)).toStringAsFixed(2)} TB',
+    };
   }
 
-  static String formatDate(int timestamp) {
+  static String formatDate(int? timestamp) {
+    if (timestamp == null) return 'Unknown';
     final date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }

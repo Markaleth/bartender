@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -14,6 +15,7 @@ class ButtonWidget extends StatelessWidget {
   final ButtonState? state;
   final VoidCallback? onPressed;
   final IconData? iconData;
+  final String? assetName;
   final double? iconSize;
   final bool withTrailingIcon;
   final bool isCompact;
@@ -27,6 +29,7 @@ class ButtonWidget extends StatelessWidget {
     this.iconSize,
     this.withTrailingIcon = false,
     this.color,
+    this.assetName,
   }) : _variant = _ButtonVariant.primary,
        isCompact = false;
 
@@ -39,6 +42,7 @@ class ButtonWidget extends StatelessWidget {
     this.iconSize,
     this.withTrailingIcon = false,
     this.color,
+    this.assetName,
   }) : _variant = _ButtonVariant.secondary,
        isCompact = false;
 
@@ -52,6 +56,7 @@ class ButtonWidget extends StatelessWidget {
     this.withTrailingIcon = false,
     this.isCompact = false,
     this.color,
+    this.assetName,
   }) : _variant = _ButtonVariant.tertiary;
 
   const ButtonWidget.icon({
@@ -62,6 +67,7 @@ class ButtonWidget extends StatelessWidget {
     this.iconSize,
     this.withTrailingIcon = false,
     this.color,
+    this.assetName,
   }) : _variant = _ButtonVariant.icon,
        label = '',
        isCompact = false;
@@ -208,6 +214,12 @@ class ButtonWidget extends StatelessWidget {
     } else if (iconData != null) {
       activeIcon = Icon(
         iconData,
+        size: iconSize ?? iconSizeS,
+        color: _contentColor,
+      );
+    } else if (assetName != null) {
+      activeIcon = IconWidget(
+        assetName: assetName!,
         size: iconSize ?? iconSizeS,
         color: _contentColor,
       );
