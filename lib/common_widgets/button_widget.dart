@@ -195,7 +195,13 @@ class ButtonWidget extends StatelessWidget {
     final labelWidget = label.isNotEmpty
         ? Text(label, textAlign: TextAlign.start, style: _getTextStyle(context))
         : null;
+    // Ensure that we have at least an icon or a label to display.
 
+    assert(iconData == null || assetName == null, 'Pass only one icon!');
+    assert(
+      !(iconData == null && assetName == null),
+      'Pass an icon or an asset path, not both!',
+    );
     // Resolve icon or spinner inline
     Widget? activeIcon;
     if (_isLoading) {
@@ -226,10 +232,8 @@ class ButtonWidget extends StatelessWidget {
     }
 
     final style = _buttonStyle;
-
-    // Ensure that we have at least an icon or a label to display.
     assert(
-      !(activeIcon == null && labelWidget == null),
+      !(activeIcon == null && labelWidget == null && assetName == null),
       'Button must have either an icon or a label.',
     );
 
