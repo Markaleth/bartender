@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
@@ -501,18 +498,6 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
     required this.installPath,
   });
 
-  DateTime? _getModifiedDate(String path) {
-    try {
-      final stat = FileStat.statSync(path);
-      if (stat.type != FileSystemEntityType.notFound) {
-        return stat.modified;
-      }
-    } catch (e) {
-      log('Error getting modified date for $path: $e');
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -539,9 +524,15 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
             value: StringUtils.formatDate(model.installedOnTimestamp),
           ),
           const SizedBox(height: spacingXs),
-          _StatRow(
-            label: 'Last Modified',
-            value: StringUtils.formatTimeAgo(_getModifiedDate(installPath)),
+          FutureBuilder<DateTime?>(
+            future: ShellUtils.getModifiedDate(installPath),
+            builder: (context, snapshot) {
+              final modifiedDate = snapshot.data;
+              return _StatRow(
+                label: 'Last Modified',
+                value: StringUtils.formatTimeAgo(modifiedDate),
+              );
+            },
           ),
         ],
       ),

@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/core/utils/url_launcer_utils.dart';
 import 'package:flutter/material.dart';
@@ -45,10 +44,7 @@ class TapCard extends StatelessWidget {
           const HorizontalDivider(),
           _TapCardBody(tap: tap),
           const HorizontalDivider(height: 0),
-          _TapCardFooter(
-            isSyncing: isSyncing,
-            onViewPackages: onViewPackages,
-          ),
+          _TapCardFooter(isSyncing: isSyncing, onViewPackages: onViewPackages),
         ],
       ),
     );
@@ -134,39 +130,10 @@ class _TapCardBody extends StatelessWidget {
 
   const _TapCardBody({required this.tap});
 
-  String _formatSize(int bytes) {
-    if (bytes == 0) return '0 B';
-    const suffixes = ["B", "KB", "MB", "GB", "TB"];
-    var i = 0;
-    double size = bytes.toDouble();
-    while (size >= 1024 && i < suffixes.length - 1) {
-      size /= 1024;
-      i++;
-    }
-    return '${size.toStringAsFixed(1)} ${suffixes[i]}';
-  }
-
-  DateTime? _getModifiedDate(String path) {
-    try {
-      final stat = FileStat.statSync(path);
-      if (stat.type != FileSystemEntityType.notFound) {
-        return stat.modified;
-      }
-    } catch (_) {}
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final int formulaeCount = tap.formulaNames.length;
     final int casksCount = tap.caskTokens.length;
-    
-    // Format last synced
-    String lastSyncedText = tapCardUnknownTitle;
-    final modifiedDate = _getModifiedDate(tap.path);
-    if (modifiedDate != null) {
-      lastSyncedText = StringUtils.formatTimeAgo(modifiedDate);
-    }
 
     return Expanded(
       child: Padding(
@@ -176,46 +143,48 @@ class _TapCardBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '$formulaeCount formulae, $casksCount casks',
-                        style: context.titleM.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      tapCardPackagesTitle,
+                      style: context.titleM.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
                       ),
-                      Text(
-                        tapCardPackagesTitle,
-                        style: context.labelS.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                    ),
+                    Text(
+                      '$formulaeCount formulae, $casksCount casks',
+                      style: context.labelS.copyWith(
+                        color: AppColors.textSecondary,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        lastSyncedText,
-                        style: context.titleM.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Last Modified",
+                      style: context.titleM.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
                       ),
-                      Text(
-                        'Last Modified',
-                        style: context.labelS.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    FutureBuilder<DateTime?>(
+                      future: ShellUtils.getModifiedDate(tap.path),
+                      builder: (context, snapshot) {
+                        return Text(
+                          StringUtils.formatTimeAgo(snapshot.data),
+                          style: context.labelS.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -225,24 +194,26 @@ class _TapCardBody extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Installed Size',
+
+                        style: context.titleM.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
                       FutureBuilder<int>(
-                        future: context.read<HomebrewRepository>().getTapInstalledSize(tap.name),
+                        future: context
+                            .read<HomebrewRepository>()
+                            .getTapInstalledSize(tap.name),
                         builder: (context, snapshot) {
-                          final sizeStr = snapshot.hasData ? _formatSize(snapshot.data!) : '...';
                           return Text(
-                            sizeStr,
-                            style: context.titleM.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                            StringUtils.formatSize(snapshot.data),
+                            style: context.labelS.copyWith(
+                              color: AppColors.textSecondary,
                             ),
                           );
                         },
-                      ),
-                      Text(
-                        'Installed Size',
-                        style: context.labelS.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
                       ),
                     ],
                   ),
@@ -276,10 +247,7 @@ class _TapCardFooter extends StatelessWidget {
   final bool isSyncing;
   final VoidCallback onViewPackages;
 
-  const _TapCardFooter({
-    required this.isSyncing,
-    required this.onViewPackages,
-  });
+  const _TapCardFooter({required this.isSyncing, required this.onViewPackages});
 
   @override
   Widget build(BuildContext context) {

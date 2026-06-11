@@ -41,7 +41,7 @@ const double terminalDrawerWidth = 400.0;
 const double terminalDrawerQueueVisualizerHeight = 60.0;
 
 // Taps View
-const double tapCardWidth = 300.0;
+const double tapCardWidth = 350.0;
 const double tapCardAspectRatio = 1.2;
 const double addTapDialogWidth = 500.0;
 
