@@ -51,7 +51,6 @@ class PackageRepository {
         isInstalled: true,
         installedOnTimestamp: installedTime,
         installedSize: installedSize,
-        lastSync: now,
       );
     });
 
@@ -75,7 +74,6 @@ class PackageRepository {
         isInstalled: true,
         installedOnTimestamp: installedTime,
         installedSize: installedSize,
-        lastSync: now,
       );
     });
 
@@ -130,7 +128,6 @@ class PackageRepository {
         isInstalled: true,
         installedOnTimestamp: installedTime,
         installedSize: installedSize,
-        lastSync: now,
       );
       await _database.cacheCask(cask);
     } else {
@@ -163,7 +160,6 @@ class PackageRepository {
         isInstalled: true,
         installedOnTimestamp: installedTime,
         installedSize: installedSize,
-        lastSync: now,
       );
       await _database.cacheFormula(formula);
     } else {

@@ -30,7 +30,6 @@ abstract class CaskModel with _$CaskModel {
     @JsonKey(name: 'generated_date') String? generatedDate,
     String? installedSize,
     int? installedOnTimestamp,
-    DateTime? lastSync,
   }) = _CaskModel;
 
   factory CaskModel.fromJson(Map<String, dynamic> json) =>

@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
@@ -138,9 +141,14 @@ class InspectorPane extends StatelessWidget {
           const SizedBox(height: spacingM),
           ConfigPathsWidget(installPath: state.selectedPackageInstallPath),
 
-          if (state.selectedPackage != null && !state.isSelectedPackageTap) ...[
+          if (state.selectedPackage != null &&
+              !state.isSelectedPackageTap &&
+              state.selectedPackage.isInstalled) ...[
             const SizedBox(height: spacingM),
-            _PackageDetailsStatsWidget(model: state.selectedPackage),
+            _PackageDetailsStatsWidget(
+              model: state.selectedPackage,
+              installPath: state.selectedPackageInstallPath,
+            ),
           ],
 
           const SizedBox(height: spacingL),
@@ -486,18 +494,23 @@ class _TapStatsWidget extends StatelessWidget {
 
 class _PackageDetailsStatsWidget extends StatelessWidget {
   final dynamic model;
+  final String installPath;
 
-  const _PackageDetailsStatsWidget({required this.model});
+  const _PackageDetailsStatsWidget({
+    required this.model,
+    required this.installPath,
+  });
 
-  //TODO: clean these up and move them to string utils.
-
-  String _formatLastSync(DateTime? lastSync) {
-    if (lastSync == null) return 'Unknown';
-    final difference = DateTime.now().difference(lastSync);
-    if (difference.inDays > 0) return '${difference.inDays}d ago';
-    if (difference.inHours > 0) return '${difference.inHours}h ago';
-    if (difference.inMinutes > 0) return '${difference.inMinutes}m ago';
-    return 'Just now';
+  DateTime? _getModifiedDate(String path) {
+    try {
+      final stat = FileStat.statSync(path);
+      if (stat.type != FileSystemEntityType.notFound) {
+        return stat.modified;
+      }
+    } catch (e) {
+      log('Error getting modified date for $path: $e');
+    }
+    return null;
   }
 
   @override
@@ -527,8 +540,8 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
           ),
           const SizedBox(height: spacingXs),
           _StatRow(
-            label: 'Last Synced',
-            value: _formatLastSync(model.lastSync),
+            label: 'Last Modified',
+            value: StringUtils.formatTimeAgo(_getModifiedDate(installPath)),
           ),
         ],
       ),

@@ -23,9 +23,8 @@ class HomebrewRepository {
     final result = await _brewService.listTaps();
     if (result.exitCode == 0) {
       final List<dynamic> jsonList = jsonDecode(result.stdout);
-      final now = DateTime.now();
       final taps = jsonList.map((json) {
-        return TapModel.fromJson(json).copyWith(lastSync: now);
+        return TapModel.fromJson(json);
       }).toList();
       await _database.insertTaps(taps);
     } else {
@@ -65,7 +64,7 @@ class HomebrewRepository {
         throw Exception('Tap $tapName not found');
       }
 
-      final tap = TapModel.fromJson(tapJson).copyWith(lastSync: DateTime.now());
+      final tap = TapModel.fromJson(tapJson);
       await _database.insertTaps([tap]);
 
       if (tapName != 'homebrew/core' && tapName != 'homebrew/cask') {

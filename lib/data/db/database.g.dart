@@ -271,17 +271,6 @@ class $CasksTableTable extends CasksTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _lastSyncMeta = const VerificationMeta(
-    'lastSync',
-  );
-  @override
-  late final GeneratedColumn<DateTime> lastSync = GeneratedColumn<DateTime>(
-    'last_sync',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     token,
@@ -307,7 +296,6 @@ class $CasksTableTable extends CasksTable
     generatedDate,
     installedSize,
     installedOnTimestamp,
-    lastSync,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -457,12 +445,6 @@ class $CasksTableTable extends CasksTable
         ),
       );
     }
-    if (data.containsKey('last_sync')) {
-      context.handle(
-        _lastSyncMeta,
-        lastSync.isAcceptableOrUnknown(data['last_sync']!, _lastSyncMeta),
-      );
-    }
     return context;
   }
 
@@ -574,10 +556,6 @@ class $CasksTableTable extends CasksTable
         DriftSqlType.int,
         data['${effectivePrefix}installed_on_timestamp'],
       ),
-      lastSync: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}last_sync'],
-      ),
     );
   }
 
@@ -630,7 +608,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   final Value<String?> generatedDate;
   final Value<String?> installedSize;
   final Value<int?> installedOnTimestamp;
-  final Value<DateTime?> lastSync;
   final Value<int> rowid;
   const CasksTableCompanion({
     this.token = const Value.absent(),
@@ -656,7 +633,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.generatedDate = const Value.absent(),
     this.installedSize = const Value.absent(),
     this.installedOnTimestamp = const Value.absent(),
-    this.lastSync = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CasksTableCompanion.insert({
@@ -683,7 +659,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.generatedDate = const Value.absent(),
     this.installedSize = const Value.absent(),
     this.installedOnTimestamp = const Value.absent(),
-    this.lastSync = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : token = Value(token),
        name = Value(name),
@@ -712,7 +687,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     Expression<String>? generatedDate,
     Expression<String>? installedSize,
     Expression<int>? installedOnTimestamp,
-    Expression<DateTime>? lastSync,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -740,7 +714,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
       if (installedSize != null) 'installed_size': installedSize,
       if (installedOnTimestamp != null)
         'installed_on_timestamp': installedOnTimestamp,
-      if (lastSync != null) 'last_sync': lastSync,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -769,7 +742,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     Value<String?>? generatedDate,
     Value<String?>? installedSize,
     Value<int?>? installedOnTimestamp,
-    Value<DateTime?>? lastSync,
     Value<int>? rowid,
   }) {
     return CasksTableCompanion(
@@ -796,7 +768,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
       generatedDate: generatedDate ?? this.generatedDate,
       installedSize: installedSize ?? this.installedSize,
       installedOnTimestamp: installedOnTimestamp ?? this.installedOnTimestamp,
-      lastSync: lastSync ?? this.lastSync,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -883,9 +854,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     if (installedOnTimestamp.present) {
       map['installed_on_timestamp'] = Variable<int>(installedOnTimestamp.value);
     }
-    if (lastSync.present) {
-      map['last_sync'] = Variable<DateTime>(lastSync.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -918,7 +886,6 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
           ..write('generatedDate: $generatedDate, ')
           ..write('installedSize: $installedSize, ')
           ..write('installedOnTimestamp: $installedOnTimestamp, ')
-          ..write('lastSync: $lastSync, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -954,7 +921,6 @@ class _$CaskModelInsertable implements Insertable<CaskModel> {
       generatedDate: Value(_object.generatedDate),
       installedSize: Value(_object.installedSize),
       installedOnTimestamp: Value(_object.installedOnTimestamp),
-      lastSync: Value(_object.lastSync),
     ).toColumns(false);
   }
 }
@@ -1248,17 +1214,6 @@ class $FormulaeTableTable extends FormulaeTable
       'CHECK ("built_as_bottle" IN (0, 1))',
     ),
   );
-  static const VerificationMeta _lastSyncMeta = const VerificationMeta(
-    'lastSync',
-  );
-  @override
-  late final GeneratedColumn<DateTime> lastSync = GeneratedColumn<DateTime>(
-    'last_sync',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     name,
@@ -1285,7 +1240,6 @@ class $FormulaeTableTable extends FormulaeTable
     installedSize,
     installedOnTimestamp,
     builtAsBottle,
-    lastSync,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1433,12 +1387,6 @@ class $FormulaeTableTable extends FormulaeTable
         ),
       );
     }
-    if (data.containsKey('last_sync')) {
-      context.handle(
-        _lastSyncMeta,
-        lastSync.isAcceptableOrUnknown(data['last_sync']!, _lastSyncMeta),
-      );
-    }
     return context;
   }
 
@@ -1559,10 +1507,6 @@ class $FormulaeTableTable extends FormulaeTable
         DriftSqlType.bool,
         data['${effectivePrefix}built_as_bottle'],
       ),
-      lastSync: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}last_sync'],
-      ),
     );
   }
 
@@ -1620,7 +1564,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
   final Value<int?> installedSize;
   final Value<int?> installedOnTimestamp;
   final Value<bool?> builtAsBottle;
-  final Value<DateTime?> lastSync;
   final Value<int> rowid;
   const FormulaeTableCompanion({
     this.name = const Value.absent(),
@@ -1647,7 +1590,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.installedSize = const Value.absent(),
     this.installedOnTimestamp = const Value.absent(),
     this.builtAsBottle = const Value.absent(),
-    this.lastSync = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   FormulaeTableCompanion.insert({
@@ -1675,7 +1617,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     this.installedSize = const Value.absent(),
     this.installedOnTimestamp = const Value.absent(),
     this.builtAsBottle = const Value.absent(),
-    this.lastSync = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : name = Value(name),
        fullName = Value(fullName),
@@ -1709,7 +1650,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Expression<int>? installedSize,
     Expression<int>? installedOnTimestamp,
     Expression<bool>? builtAsBottle,
-    Expression<DateTime>? lastSync,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1738,7 +1678,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       if (installedOnTimestamp != null)
         'installed_on_timestamp': installedOnTimestamp,
       if (builtAsBottle != null) 'built_as_bottle': builtAsBottle,
-      if (lastSync != null) 'last_sync': lastSync,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1768,7 +1707,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     Value<int?>? installedSize,
     Value<int?>? installedOnTimestamp,
     Value<bool?>? builtAsBottle,
-    Value<DateTime?>? lastSync,
     Value<int>? rowid,
   }) {
     return FormulaeTableCompanion(
@@ -1796,7 +1734,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
       installedSize: installedSize ?? this.installedSize,
       installedOnTimestamp: installedOnTimestamp ?? this.installedOnTimestamp,
       builtAsBottle: builtAsBottle ?? this.builtAsBottle,
-      lastSync: lastSync ?? this.lastSync,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1892,9 +1829,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
     if (builtAsBottle.present) {
       map['built_as_bottle'] = Variable<bool>(builtAsBottle.value);
     }
-    if (lastSync.present) {
-      map['last_sync'] = Variable<DateTime>(lastSync.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1928,7 +1862,6 @@ class FormulaeTableCompanion extends UpdateCompanion<FormulaModel> {
           ..write('installedSize: $installedSize, ')
           ..write('installedOnTimestamp: $installedOnTimestamp, ')
           ..write('builtAsBottle: $builtAsBottle, ')
-          ..write('lastSync: $lastSync, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1965,7 +1898,6 @@ class _$FormulaModelInsertable implements Insertable<FormulaModel> {
       installedSize: Value(_object.installedSize),
       installedOnTimestamp: Value(_object.installedOnTimestamp),
       builtAsBottle: Value(_object.builtAsBottle),
-      lastSync: Value(_object.lastSync),
     ).toColumns(false);
   }
 }
@@ -3102,17 +3034,6 @@ class $TapsTableTable extends TapsTable
         requiredDuringInsert: false,
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($TapsTableTable.$convertercaskTokens);
-  static const VerificationMeta _lastSyncMeta = const VerificationMeta(
-    'lastSync',
-  );
-  @override
-  late final GeneratedColumn<DateTime> lastSync = GeneratedColumn<DateTime>(
-    'last_sync',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     name,
@@ -3125,7 +3046,6 @@ class $TapsTableTable extends TapsTable
     remote,
     formulaNames,
     caskTokens,
-    lastSync,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3198,12 +3118,6 @@ class $TapsTableTable extends TapsTable
         remote.isAcceptableOrUnknown(data['remote']!, _remoteMeta),
       );
     }
-    if (data.containsKey('last_sync')) {
-      context.handle(
-        _lastSyncMeta,
-        lastSync.isAcceptableOrUnknown(data['last_sync']!, _lastSyncMeta),
-      );
-    }
     return context;
   }
 
@@ -3257,10 +3171,6 @@ class $TapsTableTable extends TapsTable
           data['${effectivePrefix}cask_tokens'],
         )!,
       ),
-      lastSync: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}last_sync'],
-      ),
     );
   }
 
@@ -3286,7 +3196,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
   final Value<String?> remote;
   final Value<List<String>> formulaNames;
   final Value<List<String>> caskTokens;
-  final Value<DateTime?> lastSync;
   final Value<int> rowid;
   const TapsTableCompanion({
     this.name = const Value.absent(),
@@ -3299,7 +3208,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     this.remote = const Value.absent(),
     this.formulaNames = const Value.absent(),
     this.caskTokens = const Value.absent(),
-    this.lastSync = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TapsTableCompanion.insert({
@@ -3313,7 +3221,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     this.remote = const Value.absent(),
     this.formulaNames = const Value.absent(),
     this.caskTokens = const Value.absent(),
-    this.lastSync = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : name = Value(name),
        user = Value(user),
@@ -3330,7 +3237,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     Expression<String>? remote,
     Expression<String>? formulaNames,
     Expression<String>? caskTokens,
-    Expression<DateTime>? lastSync,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3344,7 +3250,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
       if (remote != null) 'remote': remote,
       if (formulaNames != null) 'formula_names': formulaNames,
       if (caskTokens != null) 'cask_tokens': caskTokens,
-      if (lastSync != null) 'last_sync': lastSync,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3360,7 +3265,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     Value<String?>? remote,
     Value<List<String>>? formulaNames,
     Value<List<String>>? caskTokens,
-    Value<DateTime?>? lastSync,
     Value<int>? rowid,
   }) {
     return TapsTableCompanion(
@@ -3374,7 +3278,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
       remote: remote ?? this.remote,
       formulaNames: formulaNames ?? this.formulaNames,
       caskTokens: caskTokens ?? this.caskTokens,
-      lastSync: lastSync ?? this.lastSync,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3416,9 +3319,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
         $TapsTableTable.$convertercaskTokens.toSql(caskTokens.value),
       );
     }
-    if (lastSync.present) {
-      map['last_sync'] = Variable<DateTime>(lastSync.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3438,7 +3338,6 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
           ..write('remote: $remote, ')
           ..write('formulaNames: $formulaNames, ')
           ..write('caskTokens: $caskTokens, ')
-          ..write('lastSync: $lastSync, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3461,7 +3360,6 @@ class _$TapModelInsertable implements Insertable<TapModel> {
       remote: Value(_object.remote),
       formulaNames: Value(_object.formulaNames),
       caskTokens: Value(_object.caskTokens),
-      lastSync: Value(_object.lastSync),
     ).toColumns(false);
   }
 }
@@ -3522,7 +3420,6 @@ typedef $$CasksTableTableCreateCompanionBuilder =
       Value<String?> generatedDate,
       Value<String?> installedSize,
       Value<int?> installedOnTimestamp,
-      Value<DateTime?> lastSync,
       Value<int> rowid,
     });
 typedef $$CasksTableTableUpdateCompanionBuilder =
@@ -3550,7 +3447,6 @@ typedef $$CasksTableTableUpdateCompanionBuilder =
       Value<String?> generatedDate,
       Value<String?> installedSize,
       Value<int?> installedOnTimestamp,
-      Value<DateTime?> lastSync,
       Value<int> rowid,
     });
 
@@ -3698,11 +3594,6 @@ class $$CasksTableTableFilterComposer
     column: $table.installedOnTimestamp,
     builder: (column) => ColumnFilters(column),
   );
-
-  ColumnFilters<DateTime> get lastSync => $composableBuilder(
-    column: $table.lastSync,
-    builder: (column) => ColumnFilters(column),
-  );
 }
 
 class $$CasksTableTableOrderingComposer
@@ -3828,11 +3719,6 @@ class $$CasksTableTableOrderingComposer
     column: $table.installedOnTimestamp,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<DateTime> get lastSync => $composableBuilder(
-    column: $table.lastSync,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$CasksTableTableAnnotationComposer
@@ -3936,9 +3822,6 @@ class $$CasksTableTableAnnotationComposer
     column: $table.installedOnTimestamp,
     builder: (column) => column,
   );
-
-  GeneratedColumn<DateTime> get lastSync =>
-      $composableBuilder(column: $table.lastSync, builder: (column) => column);
 }
 
 class $$CasksTableTableTableManager
@@ -3996,7 +3879,6 @@ class $$CasksTableTableTableManager
                 Value<String?> generatedDate = const Value.absent(),
                 Value<String?> installedSize = const Value.absent(),
                 Value<int?> installedOnTimestamp = const Value.absent(),
-                Value<DateTime?> lastSync = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CasksTableCompanion(
                 token: token,
@@ -4022,7 +3904,6 @@ class $$CasksTableTableTableManager
                 generatedDate: generatedDate,
                 installedSize: installedSize,
                 installedOnTimestamp: installedOnTimestamp,
-                lastSync: lastSync,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -4051,7 +3932,6 @@ class $$CasksTableTableTableManager
                 Value<String?> generatedDate = const Value.absent(),
                 Value<String?> installedSize = const Value.absent(),
                 Value<int?> installedOnTimestamp = const Value.absent(),
-                Value<DateTime?> lastSync = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CasksTableCompanion.insert(
                 token: token,
@@ -4077,7 +3957,6 @@ class $$CasksTableTableTableManager
                 generatedDate: generatedDate,
                 installedSize: installedSize,
                 installedOnTimestamp: installedOnTimestamp,
-                lastSync: lastSync,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -4128,7 +4007,6 @@ typedef $$FormulaeTableTableCreateCompanionBuilder =
       Value<int?> installedSize,
       Value<int?> installedOnTimestamp,
       Value<bool?> builtAsBottle,
-      Value<DateTime?> lastSync,
       Value<int> rowid,
     });
 typedef $$FormulaeTableTableUpdateCompanionBuilder =
@@ -4157,7 +4035,6 @@ typedef $$FormulaeTableTableUpdateCompanionBuilder =
       Value<int?> installedSize,
       Value<int?> installedOnTimestamp,
       Value<bool?> builtAsBottle,
-      Value<DateTime?> lastSync,
       Value<int> rowid,
     });
 
@@ -4312,11 +4189,6 @@ class $$FormulaeTableTableFilterComposer
     column: $table.builtAsBottle,
     builder: (column) => ColumnFilters(column),
   );
-
-  ColumnFilters<DateTime> get lastSync => $composableBuilder(
-    column: $table.lastSync,
-    builder: (column) => ColumnFilters(column),
-  );
 }
 
 class $$FormulaeTableTableOrderingComposer
@@ -4447,11 +4319,6 @@ class $$FormulaeTableTableOrderingComposer
     column: $table.builtAsBottle,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<DateTime> get lastSync => $composableBuilder(
-    column: $table.lastSync,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$FormulaeTableTableAnnotationComposer
@@ -4565,9 +4432,6 @@ class $$FormulaeTableTableAnnotationComposer
     column: $table.builtAsBottle,
     builder: (column) => column,
   );
-
-  GeneratedColumn<DateTime> get lastSync =>
-      $composableBuilder(column: $table.lastSync, builder: (column) => column);
 }
 
 class $$FormulaeTableTableTableManager
@@ -4626,7 +4490,6 @@ class $$FormulaeTableTableTableManager
                 Value<int?> installedSize = const Value.absent(),
                 Value<int?> installedOnTimestamp = const Value.absent(),
                 Value<bool?> builtAsBottle = const Value.absent(),
-                Value<DateTime?> lastSync = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => FormulaeTableCompanion(
                 name: name,
@@ -4653,7 +4516,6 @@ class $$FormulaeTableTableTableManager
                 installedSize: installedSize,
                 installedOnTimestamp: installedOnTimestamp,
                 builtAsBottle: builtAsBottle,
-                lastSync: lastSync,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -4683,7 +4545,6 @@ class $$FormulaeTableTableTableManager
                 Value<int?> installedSize = const Value.absent(),
                 Value<int?> installedOnTimestamp = const Value.absent(),
                 Value<bool?> builtAsBottle = const Value.absent(),
-                Value<DateTime?> lastSync = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => FormulaeTableCompanion.insert(
                 name: name,
@@ -4710,7 +4571,6 @@ class $$FormulaeTableTableTableManager
                 installedSize: installedSize,
                 installedOnTimestamp: installedOnTimestamp,
                 builtAsBottle: builtAsBottle,
-                lastSync: lastSync,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -5384,7 +5244,6 @@ typedef $$TapsTableTableCreateCompanionBuilder =
       Value<String?> remote,
       Value<List<String>> formulaNames,
       Value<List<String>> caskTokens,
-      Value<DateTime?> lastSync,
       Value<int> rowid,
     });
 typedef $$TapsTableTableUpdateCompanionBuilder =
@@ -5399,7 +5258,6 @@ typedef $$TapsTableTableUpdateCompanionBuilder =
       Value<String?> remote,
       Value<List<String>> formulaNames,
       Value<List<String>> caskTokens,
-      Value<DateTime?> lastSync,
       Value<int> rowid,
     });
 
@@ -5463,11 +5321,6 @@ class $$TapsTableTableFilterComposer
     column: $table.caskTokens,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
-
-  ColumnFilters<DateTime> get lastSync => $composableBuilder(
-    column: $table.lastSync,
-    builder: (column) => ColumnFilters(column),
-  );
 }
 
 class $$TapsTableTableOrderingComposer
@@ -5528,11 +5381,6 @@ class $$TapsTableTableOrderingComposer
     column: $table.caskTokens,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<DateTime> get lastSync => $composableBuilder(
-    column: $table.lastSync,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$TapsTableTableAnnotationComposer
@@ -5581,9 +5429,6 @@ class $$TapsTableTableAnnotationComposer
         column: $table.caskTokens,
         builder: (column) => column,
       );
-
-  GeneratedColumn<DateTime> get lastSync =>
-      $composableBuilder(column: $table.lastSync, builder: (column) => column);
 }
 
 class $$TapsTableTableTableManager
@@ -5624,7 +5469,6 @@ class $$TapsTableTableTableManager
                 Value<String?> remote = const Value.absent(),
                 Value<List<String>> formulaNames = const Value.absent(),
                 Value<List<String>> caskTokens = const Value.absent(),
-                Value<DateTime?> lastSync = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TapsTableCompanion(
                 name: name,
@@ -5637,7 +5481,6 @@ class $$TapsTableTableTableManager
                 remote: remote,
                 formulaNames: formulaNames,
                 caskTokens: caskTokens,
-                lastSync: lastSync,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -5652,7 +5495,6 @@ class $$TapsTableTableTableManager
                 Value<String?> remote = const Value.absent(),
                 Value<List<String>> formulaNames = const Value.absent(),
                 Value<List<String>> caskTokens = const Value.absent(),
-                Value<DateTime?> lastSync = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TapsTableCompanion.insert(
                 name: name,
@@ -5665,7 +5507,6 @@ class $$TapsTableTableTableManager
                 remote: remote,
                 formulaNames: formulaNames,
                 caskTokens: caskTokens,
-                lastSync: lastSync,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

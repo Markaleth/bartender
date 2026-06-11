@@ -11,10 +11,7 @@ import 'package:provider/provider.dart';
 class InstalledPackagesList extends StatelessWidget {
   final List<dynamic> packages;
 
-  const InstalledPackagesList({
-    super.key,
-    required this.packages,
-  });
+  const InstalledPackagesList({super.key, required this.packages});
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +33,21 @@ class InstalledPackagesList extends StatelessWidget {
           ),
           const SizedBox(height: spacingS),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(radiusS),
-                border: Border.all(color: AppColors.borderNeutral),
-              ),
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: spacingS),
-                itemCount: packages.length,
-                separatorBuilder: (context, index) => const HorizontalDivider(),
-                itemBuilder: (context, index) {
-                  return _PackageListTile(package: packages[index]);
-                },
+            child: SizedBox(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(radiusS),
+                  border: Border.all(color: AppColors.borderNeutral),
+                ),
+                child: ListView.separated(
+                  itemCount: packages.length,
+                  separatorBuilder: (context, index) =>
+                      const HorizontalDivider(),
+                  itemBuilder: (context, index) {
+                    return _PackageListTile(package: packages[index]);
+                  },
+                ),
               ),
             ),
           ),
@@ -67,27 +66,28 @@ class _PackageListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isCask = package is CaskModel;
     final name = isCask ? package.token : (package as FormulaModel).name;
-    final version =
-        isCask ? package.version : (package as FormulaModel).versions.stable;
+    final version = isCask
+        ? package.version
+        : (package as FormulaModel).versions.stable;
 
-    return ListTile(
-      dense: true,
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        name,
-        style: context.bodyM.copyWith(
-          color: AppColors.textPrimary,
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: spacingM),
+        dense: true,
+
+        title: Text(
+          name,
+          style: context.bodyM.copyWith(color: AppColors.textPrimary),
         ),
-      ),
-      trailing: Text(
-        version,
-        style: context.labelM.copyWith(
-          color: AppColors.textSecondary,
+        trailing: Text(
+          version,
+          style: context.labelM.copyWith(color: AppColors.textSecondary),
         ),
+        onTap: () {
+          context.read<LibraryViewModel>().selectPackage(package);
+        },
       ),
-      onTap: () {
-        context.read<LibraryViewModel>().selectPackage(package);
-      },
     );
   }
 }

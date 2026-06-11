@@ -168,7 +168,6 @@ Insertable<FormulaModel> updateFormulaFromExcluded($FormulaeTableTable ex) {
     isInstalled: ex.isInstalled,
     installedSize: ex.installedSize,
     installedOnTimestamp: ex.installedOnTimestamp,
-    lastSync: ex.lastSync,
   );
 }
 
@@ -189,7 +188,6 @@ Insertable<CaskModel> updateCaskFromExcluded($CasksTableTable ex) {
     generatedDate: ex.generatedDate,
     installedSize: ex.installedSize,
     installedOnTimestamp: ex.installedOnTimestamp,
-    lastSync: ex.lastSync,
   );
 }
 

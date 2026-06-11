@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TapModel {
 
- String get name; String get user; String get repo; String get path; bool get installed; bool get official;@JsonKey(name: 'custom_remote') bool? get customRemote; String? get remote;@JsonKey(name: 'formula_names') List<String> get formulaNames;@JsonKey(name: 'cask_tokens') List<String> get caskTokens; DateTime? get lastSync;
+ String get name; String get user; String get repo; String get path; bool get installed; bool get official;@JsonKey(name: 'custom_remote') bool? get customRemote; String? get remote;@JsonKey(name: 'formula_names') List<String> get formulaNames;@JsonKey(name: 'cask_tokens') List<String> get caskTokens;
 /// Create a copy of TapModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TapModelCopyWith<TapModel> get copyWith => _$TapModelCopyWithImpl<TapModel>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TapModel&&(identical(other.name, name) || other.name == name)&&(identical(other.user, user) || other.user == user)&&(identical(other.repo, repo) || other.repo == repo)&&(identical(other.path, path) || other.path == path)&&(identical(other.installed, installed) || other.installed == installed)&&(identical(other.official, official) || other.official == official)&&(identical(other.customRemote, customRemote) || other.customRemote == customRemote)&&(identical(other.remote, remote) || other.remote == remote)&&const DeepCollectionEquality().equals(other.formulaNames, formulaNames)&&const DeepCollectionEquality().equals(other.caskTokens, caskTokens)&&(identical(other.lastSync, lastSync) || other.lastSync == lastSync));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TapModel&&(identical(other.name, name) || other.name == name)&&(identical(other.user, user) || other.user == user)&&(identical(other.repo, repo) || other.repo == repo)&&(identical(other.path, path) || other.path == path)&&(identical(other.installed, installed) || other.installed == installed)&&(identical(other.official, official) || other.official == official)&&(identical(other.customRemote, customRemote) || other.customRemote == customRemote)&&(identical(other.remote, remote) || other.remote == remote)&&const DeepCollectionEquality().equals(other.formulaNames, formulaNames)&&const DeepCollectionEquality().equals(other.caskTokens, caskTokens));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,user,repo,path,installed,official,customRemote,remote,const DeepCollectionEquality().hash(formulaNames),const DeepCollectionEquality().hash(caskTokens),lastSync);
+int get hashCode => Object.hash(runtimeType,name,user,repo,path,installed,official,customRemote,remote,const DeepCollectionEquality().hash(formulaNames),const DeepCollectionEquality().hash(caskTokens));
 
 @override
 String toString() {
-  return 'TapModel(name: $name, user: $user, repo: $repo, path: $path, installed: $installed, official: $official, customRemote: $customRemote, remote: $remote, formulaNames: $formulaNames, caskTokens: $caskTokens, lastSync: $lastSync)';
+  return 'TapModel(name: $name, user: $user, repo: $repo, path: $path, installed: $installed, official: $official, customRemote: $customRemote, remote: $remote, formulaNames: $formulaNames, caskTokens: $caskTokens)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TapModelCopyWith<$Res>  {
   factory $TapModelCopyWith(TapModel value, $Res Function(TapModel) _then) = _$TapModelCopyWithImpl;
 @useResult
 $Res call({
- String name, String user, String repo, String path, bool installed, bool official,@JsonKey(name: 'custom_remote') bool? customRemote, String? remote,@JsonKey(name: 'formula_names') List<String> formulaNames,@JsonKey(name: 'cask_tokens') List<String> caskTokens, DateTime? lastSync
+ String name, String user, String repo, String path, bool installed, bool official,@JsonKey(name: 'custom_remote') bool? customRemote, String? remote,@JsonKey(name: 'formula_names') List<String> formulaNames,@JsonKey(name: 'cask_tokens') List<String> caskTokens
 });
 
 
@@ -65,7 +65,7 @@ class _$TapModelCopyWithImpl<$Res>
 
 /// Create a copy of TapModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? user = null,Object? repo = null,Object? path = null,Object? installed = null,Object? official = null,Object? customRemote = freezed,Object? remote = freezed,Object? formulaNames = null,Object? caskTokens = null,Object? lastSync = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? user = null,Object? repo = null,Object? path = null,Object? installed = null,Object? official = null,Object? customRemote = freezed,Object? remote = freezed,Object? formulaNames = null,Object? caskTokens = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
@@ -77,8 +77,7 @@ as bool,customRemote: freezed == customRemote ? _self.customRemote : customRemot
 as bool?,remote: freezed == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
 as String?,formulaNames: null == formulaNames ? _self.formulaNames : formulaNames // ignore: cast_nullable_to_non_nullable
 as List<String>,caskTokens: null == caskTokens ? _self.caskTokens : caskTokens // ignore: cast_nullable_to_non_nullable
-as List<String>,lastSync: freezed == lastSync ? _self.lastSync : lastSync // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as List<String>,
   ));
 }
 
@@ -163,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens,  DateTime? lastSync)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TapModel() when $default != null:
-return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.lastSync);case _:
+return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens);case _:
   return orElse();
 
 }
@@ -184,10 +183,10 @@ return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens,  DateTime? lastSync)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens)  $default,) {final _that = this;
 switch (_that) {
 case _TapModel():
-return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.lastSync);case _:
+return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +203,10 @@ return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens,  DateTime? lastSync)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens)?  $default,) {final _that = this;
 switch (_that) {
 case _TapModel() when $default != null:
-return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.lastSync);case _:
+return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens);case _:
   return null;
 
 }
@@ -219,7 +218,7 @@ return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_tha
 @JsonSerializable()
 
 class _TapModel implements TapModel {
-  const _TapModel({required this.name, required this.user, required this.repo, required this.path, this.installed = false, this.official = false, @JsonKey(name: 'custom_remote') this.customRemote, this.remote, @JsonKey(name: 'formula_names') final  List<String> formulaNames = const [], @JsonKey(name: 'cask_tokens') final  List<String> caskTokens = const [], this.lastSync}): _formulaNames = formulaNames,_caskTokens = caskTokens;
+  const _TapModel({required this.name, required this.user, required this.repo, required this.path, this.installed = false, this.official = false, @JsonKey(name: 'custom_remote') this.customRemote, this.remote, @JsonKey(name: 'formula_names') final  List<String> formulaNames = const [], @JsonKey(name: 'cask_tokens') final  List<String> caskTokens = const []}): _formulaNames = formulaNames,_caskTokens = caskTokens;
   factory _TapModel.fromJson(Map<String, dynamic> json) => _$TapModelFromJson(json);
 
 @override final  String name;
@@ -244,7 +243,6 @@ class _TapModel implements TapModel {
   return EqualUnmodifiableListView(_caskTokens);
 }
 
-@override final  DateTime? lastSync;
 
 /// Create a copy of TapModel
 /// with the given fields replaced by the non-null parameter values.
@@ -259,16 +257,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TapModel&&(identical(other.name, name) || other.name == name)&&(identical(other.user, user) || other.user == user)&&(identical(other.repo, repo) || other.repo == repo)&&(identical(other.path, path) || other.path == path)&&(identical(other.installed, installed) || other.installed == installed)&&(identical(other.official, official) || other.official == official)&&(identical(other.customRemote, customRemote) || other.customRemote == customRemote)&&(identical(other.remote, remote) || other.remote == remote)&&const DeepCollectionEquality().equals(other._formulaNames, _formulaNames)&&const DeepCollectionEquality().equals(other._caskTokens, _caskTokens)&&(identical(other.lastSync, lastSync) || other.lastSync == lastSync));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TapModel&&(identical(other.name, name) || other.name == name)&&(identical(other.user, user) || other.user == user)&&(identical(other.repo, repo) || other.repo == repo)&&(identical(other.path, path) || other.path == path)&&(identical(other.installed, installed) || other.installed == installed)&&(identical(other.official, official) || other.official == official)&&(identical(other.customRemote, customRemote) || other.customRemote == customRemote)&&(identical(other.remote, remote) || other.remote == remote)&&const DeepCollectionEquality().equals(other._formulaNames, _formulaNames)&&const DeepCollectionEquality().equals(other._caskTokens, _caskTokens));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,user,repo,path,installed,official,customRemote,remote,const DeepCollectionEquality().hash(_formulaNames),const DeepCollectionEquality().hash(_caskTokens),lastSync);
+int get hashCode => Object.hash(runtimeType,name,user,repo,path,installed,official,customRemote,remote,const DeepCollectionEquality().hash(_formulaNames),const DeepCollectionEquality().hash(_caskTokens));
 
 @override
 String toString() {
-  return 'TapModel(name: $name, user: $user, repo: $repo, path: $path, installed: $installed, official: $official, customRemote: $customRemote, remote: $remote, formulaNames: $formulaNames, caskTokens: $caskTokens, lastSync: $lastSync)';
+  return 'TapModel(name: $name, user: $user, repo: $repo, path: $path, installed: $installed, official: $official, customRemote: $customRemote, remote: $remote, formulaNames: $formulaNames, caskTokens: $caskTokens)';
 }
 
 
@@ -279,7 +277,7 @@ abstract mixin class _$TapModelCopyWith<$Res> implements $TapModelCopyWith<$Res>
   factory _$TapModelCopyWith(_TapModel value, $Res Function(_TapModel) _then) = __$TapModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String user, String repo, String path, bool installed, bool official,@JsonKey(name: 'custom_remote') bool? customRemote, String? remote,@JsonKey(name: 'formula_names') List<String> formulaNames,@JsonKey(name: 'cask_tokens') List<String> caskTokens, DateTime? lastSync
+ String name, String user, String repo, String path, bool installed, bool official,@JsonKey(name: 'custom_remote') bool? customRemote, String? remote,@JsonKey(name: 'formula_names') List<String> formulaNames,@JsonKey(name: 'cask_tokens') List<String> caskTokens
 });
 
 
@@ -296,7 +294,7 @@ class __$TapModelCopyWithImpl<$Res>
 
 /// Create a copy of TapModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? user = null,Object? repo = null,Object? path = null,Object? installed = null,Object? official = null,Object? customRemote = freezed,Object? remote = freezed,Object? formulaNames = null,Object? caskTokens = null,Object? lastSync = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? user = null,Object? repo = null,Object? path = null,Object? installed = null,Object? official = null,Object? customRemote = freezed,Object? remote = freezed,Object? formulaNames = null,Object? caskTokens = null,}) {
   return _then(_TapModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
@@ -308,8 +306,7 @@ as bool,customRemote: freezed == customRemote ? _self.customRemote : customRemot
 as bool?,remote: freezed == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
 as String?,formulaNames: null == formulaNames ? _self._formulaNames : formulaNames // ignore: cast_nullable_to_non_nullable
 as List<String>,caskTokens: null == caskTokens ? _self._caskTokens : caskTokens // ignore: cast_nullable_to_non_nullable
-as List<String>,lastSync: freezed == lastSync ? _self.lastSync : lastSync // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as List<String>,
   ));
 }
 

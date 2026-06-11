@@ -27,7 +27,6 @@ class CasksTable extends Table {
   TextColumn get generatedDate => text().nullable()();
   TextColumn get installedSize => text().nullable()();
   IntColumn get installedOnTimestamp => integer().nullable()();
-  DateTimeColumn get lastSync => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {token};

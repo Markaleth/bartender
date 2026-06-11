@@ -37,9 +37,6 @@ _CaskModel _$CaskModelFromJson(Map<String, dynamic> json) => _CaskModel(
   generatedDate: json['generated_date'] as String?,
   installedSize: json['installedSize'] as String?,
   installedOnTimestamp: (json['installedOnTimestamp'] as num?)?.toInt(),
-  lastSync: json['lastSync'] == null
-      ? null
-      : DateTime.parse(json['lastSync'] as String),
 );
 
 Map<String, dynamic> _$CaskModelToJson(_CaskModel instance) =>
@@ -68,5 +65,4 @@ Map<String, dynamic> _$CaskModelToJson(_CaskModel instance) =>
       'generated_date': instance.generatedDate,
       'installedSize': instance.installedSize,
       'installedOnTimestamp': instance.installedOnTimestamp,
-      'lastSync': instance.lastSync?.toIso8601String(),
     };

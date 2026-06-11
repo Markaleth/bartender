@@ -198,10 +198,6 @@ class ButtonWidget extends StatelessWidget {
     // Ensure that we have at least an icon or a label to display.
 
     assert(iconData == null || assetName == null, 'Pass only one icon!');
-    assert(
-      !(iconData == null && assetName == null),
-      'Pass an icon or an asset path, not both!',
-    );
     // Resolve icon or spinner inline
     Widget? activeIcon;
     if (_isLoading) {

@@ -45,9 +45,6 @@ _FormulaModel _$FormulaModelFromJson(Map<String, dynamic> json) =>
       installedSize: (json['installedSize'] as num?)?.toInt(),
       installedOnTimestamp: (json['installedOnTimestamp'] as num?)?.toInt(),
       builtAsBottle: json['builtAsBottle'] as bool?,
-      lastSync: json['lastSync'] == null
-          ? null
-          : DateTime.parse(json['lastSync'] as String),
     );
 
 Map<String, dynamic> _$FormulaModelToJson(_FormulaModel instance) =>
@@ -77,7 +74,6 @@ Map<String, dynamic> _$FormulaModelToJson(_FormulaModel instance) =>
       'installedSize': instance.installedSize,
       'installedOnTimestamp': instance.installedOnTimestamp,
       'builtAsBottle': instance.builtAsBottle,
-      'lastSync': instance.lastSync?.toIso8601String(),
     };
 
 _FormulaVersions _$FormulaVersionsFromJson(Map<String, dynamic> json) =>

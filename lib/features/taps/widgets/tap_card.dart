@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
+import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/core/utils/url_launcer_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -143,6 +146,16 @@ class _TapCardBody extends StatelessWidget {
     return '${size.toStringAsFixed(1)} ${suffixes[i]}';
   }
 
+  DateTime? _getModifiedDate(String path) {
+    try {
+      final stat = FileStat.statSync(path);
+      if (stat.type != FileSystemEntityType.notFound) {
+        return stat.modified;
+      }
+    } catch (_) {}
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final int formulaeCount = tap.formulaNames.length;
@@ -150,17 +163,9 @@ class _TapCardBody extends StatelessWidget {
     
     // Format last synced
     String lastSyncedText = tapCardUnknownTitle;
-    if (tap.lastSync != null) {
-      final difference = DateTime.now().difference(tap.lastSync!);
-      if (difference.inDays > 0) {
-        lastSyncedText = '${difference.inDays}d ago';
-      } else if (difference.inHours > 0) {
-        lastSyncedText = '${difference.inHours}h ago';
-      } else if (difference.inMinutes > 0) {
-        lastSyncedText = '${difference.inMinutes}m ago';
-      } else {
-        lastSyncedText = 'Just now';
-      }
+    final modifiedDate = _getModifiedDate(tap.path);
+    if (modifiedDate != null) {
+      lastSyncedText = StringUtils.formatTimeAgo(modifiedDate);
     }
 
     return Expanded(
@@ -204,7 +209,7 @@ class _TapCardBody extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        tapCardLastSyncTitle,
+                        'Last Modified',
                         style: context.labelS.copyWith(
                           color: AppColors.textSecondary,
                         ),

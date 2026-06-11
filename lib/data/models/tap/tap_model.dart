@@ -16,7 +16,6 @@ abstract class TapModel with _$TapModel {
     String? remote,
     @JsonKey(name: 'formula_names') @Default([]) List<String> formulaNames,
     @JsonKey(name: 'cask_tokens') @Default([]) List<String> caskTokens,
-    DateTime? lastSync,
   }) = _TapModel;
 
   factory TapModel.fromJson(Map<String, dynamic> json) =>

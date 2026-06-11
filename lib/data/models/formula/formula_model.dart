@@ -32,7 +32,6 @@ abstract class FormulaModel with _$FormulaModel {
     int? installedSize,
     int? installedOnTimestamp,
     bool? builtAsBottle,
-    DateTime? lastSync,
   }) = _FormulaModel;
 
   factory FormulaModel.fromJson(Map<String, dynamic> json) =>

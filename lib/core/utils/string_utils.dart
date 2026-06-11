@@ -106,6 +106,15 @@ class StringUtils {
     return s;
   }
 
+  static String formatTimeAgo(DateTime? date) {
+    if (date == null) return 'Unknown';
+    final difference = DateTime.now().difference(date);
+    if (difference.inDays > 0) return '${difference.inDays}d ago';
+    if (difference.inHours > 0) return '${difference.inHours}h ago';
+    if (difference.inMinutes > 0) return '${difference.inMinutes}m ago';
+    return 'Just now';
+  }
+
   static String? formatSystemStorage(String? storage) {
     if (storage == null) return null;
     final sizeMatch = RegExp(r'^(\S+)').firstMatch(storage);

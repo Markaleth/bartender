@@ -19,7 +19,6 @@ class TapsTable extends Table {
   TextColumn get caskTokens => text()
       .map(const StringListConverter())
       .withDefault(const Constant('[]'))();
-  DateTimeColumn get lastSync => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {name};
