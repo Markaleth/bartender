@@ -1,7 +1,5 @@
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
-import 'package:bartender/common_widgets/icon_widget.dart';
-import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/core/utils/string_utils.dart';
@@ -132,113 +130,157 @@ class _TapCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int formulaeCount = tap.formulaNames.length;
-    final int casksCount = tap.caskTokens.length;
+    final pkgCount =
+        '${tap.formulaNames.length} formulae, ${tap.caskTokens.length} casks';
 
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(spacingM),
-        child: Column(
-          spacing: spacingS,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      tapCardPackagesTitle,
-                      style: context.titleM.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    Text(
-                      '$formulaeCount formulae, $casksCount casks',
-                      style: context.labelS.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Last Modified",
-                      style: context.titleM.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    FutureBuilder<DateTime?>(
-                      future: ShellUtils.getModifiedDate(tap.path),
-                      builder: (context, snapshot) {
-                        return Text(
-                          StringUtils.formatTimeAgo(snapshot.data),
-                          style: context.labelS.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Installed Size',
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final itemWidth = (constraints.maxWidth - spacingM) / 2;
 
-                        style: context.titleM.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      FutureBuilder<int>(
-                        future: context
-                            .read<HomebrewRepository>()
-                            .getTapInstalledSize(tap.name),
-                        builder: (context, snapshot) {
-                          return Text(
-                            StringUtils.formatSize(snapshot.data),
-                            style: context.labelS.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+            return Wrap(
+              spacing: spacingM,
+              runSpacing: spacingM,
+              children: [
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildStat(context, tapCardPackagesTitle, pkgCount),
+                ),
+                SizedBox(width: itemWidth, child: _buildFutureSize(context)),
+                SizedBox(width: itemWidth, child: _buildFutureDate(context)),
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildClickablePath(
+                    context,
+                    'Install Path',
+                    tap.path,
+                    () => ShellUtils.openDirectory(tap.path),
                   ),
                 ),
-              ],
-            ),
-            const Spacer(),
-            if (tap.remote != null)
-              Row(
-                spacing: spacingM,
-                children: [
-                  IconWidget(assetName: homeIcon, size: iconSizeM),
-                  Expanded(
-                    child: ButtonWidget.tertiary(
-                      label: tap.remote!,
-                      onPressed: () {
-                        UrlLauncherUtils.launch(tap.remote!);
-                      },
+                if (tap.remote != null)
+                  SizedBox(
+                    width: itemWidth,
+                    child: _buildClickablePath(
+                      context,
+                      'Source',
+                      tap.remote!,
+                      () => UrlLauncherUtils.launch(tap.remote!),
                     ),
                   ),
-                ],
-              ),
-          ],
+              ],
+            );
+          },
         ),
       ),
+    );
+  }
+
+  Widget _buildStat(BuildContext context, String title, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: context.titleM.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        Text(
+          value,
+          style: context.labelS.copyWith(color: AppColors.textSecondary),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFutureSize(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Installed Size',
+          style: context.titleM.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        FutureBuilder<int>(
+          future: context.read<HomebrewRepository>().getTapInstalledSize(
+            tap.name,
+          ),
+          builder: (context, snapshot) {
+            return Text(
+              StringUtils.formatSize(snapshot.data),
+              style: context.labelS.copyWith(color: AppColors.textSecondary),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFutureDate(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Last Modified',
+          style: context.titleM.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        FutureBuilder<DateTime?>(
+          future: ShellUtils.getModifiedDate(tap.path),
+          builder: (context, snapshot) {
+            return Text(
+              StringUtils.formatTimeAgo(snapshot.data),
+              style: context.labelS.copyWith(color: AppColors.textSecondary),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildClickablePath(
+    BuildContext context,
+    String title,
+    String value,
+    VoidCallback onTap,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: context.titleM.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        Tooltip(
+          message: value,
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: onTap,
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.labelS.copyWith(
+                  color: AppColors.primary,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

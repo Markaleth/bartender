@@ -3,8 +3,8 @@ import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
-import 'package:bartender/features/taps/widgets/add_tap_dialog_info_box.dart';
-import 'package:bartender/features/taps/widgets/add_tap_dialog_tap_preview.dart';
+import 'package:bartender/features/taps/widgets/add_tap_dialog_widgets/add_tap_dialog_info_box.dart';
+import 'package:bartender/features/taps/widgets/add_tap_dialog_widgets/add_tap_dialog_tap_preview.dart';
 
 class AddTapDialogBody extends StatelessWidget {
   final TextEditingController controller;

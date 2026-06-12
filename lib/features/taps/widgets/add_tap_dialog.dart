@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/utils/string_utils.dart';
-import 'package:bartender/features/taps/widgets/add_tap_dialog_header.dart';
-import 'package:bartender/features/taps/widgets/add_tap_dialog_body.dart';
-import 'package:bartender/features/taps/widgets/add_tap_dialog_footer.dart';
+import 'package:bartender/features/taps/widgets/add_tap_dialog_widgets/add_tap_dialog_header.dart';
+import 'package:bartender/features/taps/widgets/add_tap_dialog_widgets/add_tap_dialog_body.dart';
+import 'package:bartender/features/taps/widgets/add_tap_dialog_widgets/add_tap_dialog_footer.dart';
 
 class AddTapDialog extends StatefulWidget {
   final void Function(String name, String? customUrl) onAddTap;
