@@ -49,122 +49,137 @@ class InspectorPane extends StatelessWidget {
           borderRadius: BorderRadius.circular(radiusM),
           border: Border.all(color: AppColors.borderNeutral),
         ),
-        padding: const EdgeInsets.all(spacingM),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            HeaderWidget(
-              name: tap.name,
-              version: tap.official
-                  ? headerWidgetOfficialCopy
-                  : headerWidgetCommunityCopy,
-              description: 'Tap from ${tap.user}/${tap.repo}',
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(spacingM),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  HeaderWidget(
+                    name: tap.name,
+                    version: tap.official
+                        ? headerWidgetOfficialCopy
+                        : headerWidgetCommunityCopy,
+                    description: 'Tap from ${tap.user}/${tap.repo}',
+                  ),
+                  const HorizontalDivider(),
+                  const SizedBox(height: spacingM),
+                  ConfigPathsWidget(installPath: tap.path),
+                  const SizedBox(height: spacingL),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _TapStatsWidget(
+                          label: formulaeTitle,
+                          count: tap.formulaNames.length,
+                        ),
+                      ),
+                      const SizedBox(width: spacingM),
+                      Expanded(
+                        child: _TapStatsWidget(
+                          label: casksTitle,
+                          count: tap.caskTokens.length,
+                        ),
+                      ),
+                    ],
+                  ),
+                  InstalledPackagesList(
+                    packages: state.packagesByTap[tap.name] ?? [],
+                  ),
+                ]),
+              ),
             ),
-
-            const HorizontalDivider(),
-            const SizedBox(height: spacingM),
-
-            ConfigPathsWidget(installPath: tap.path),
-
-            const SizedBox(height: spacingL),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _TapStatsWidget(
-                    label: formulaeTitle,
-                    count: tap.formulaNames.length,
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.all(spacingM),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ButtonWidget.secondary(
+                    label: untapButtonLabel,
+                    iconData: Icons.delete,
+                    color: AppColors.error,
+                    onPressed: () {
+                      context.read<QueueViewModel>().queueOperation(
+                        packageId: tap.name,
+                        type: PackageType.tap,
+                        operation: OperationType.uninstall,
+                      );
+                    },
                   ),
                 ),
-                const SizedBox(width: spacingM),
-                Expanded(
-                  child: _TapStatsWidget(
-                    label: casksTitle,
-                    count: tap.caskTokens.length,
-                  ),
-                ),
-              ],
-            ),
-
-            InstalledPackagesList(
-              packages: state.packagesByTap[tap.name] ?? [],
-            ),
-
-            const SizedBox(height: spacingM),
-
-            ButtonWidget.secondary(
-              label: untapButtonLabel,
-              iconData: Icons.delete,
-              color: AppColors.error,
-              onPressed: () {
-                context.read<QueueViewModel>().queueOperation(
-                  packageId: tap.name,
-                  type: PackageType.tap,
-                  operation: OperationType.uninstall,
-                );
-              },
+              ),
             ),
           ],
         ),
       );
     }
-
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(radiusM),
         border: Border.all(color: AppColors.borderNeutral),
       ),
-      padding: const EdgeInsets.all(spacingM),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          HeaderWidget(
-            name: state.selectedPackageName,
-            version: state.selectedPackageVersion,
-            description: state.selectedPackageDescription,
-            model: state.selectedPackage,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: spacingM),
-            child: PackageHealthWidget(
-              isDeprecated: state.selectedPackageIsDeprecated,
-              isOutdated: state.selectedPackageIsOutdated,
-              hasMissingDependencies: state.selectedPackageIsMissingDeps,
-              isDisabled: state.selectedPackageIsDisabled,
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.all(spacingM),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                HeaderWidget(
+                  name: state.selectedPackageName,
+                  version: state.selectedPackageVersion,
+                  description: state.selectedPackageDescription,
+                  model: state.selectedPackage,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: spacingM),
+                  child: PackageHealthWidget(
+                    isDeprecated: state.selectedPackageIsDeprecated,
+                    isOutdated: state.selectedPackageIsOutdated,
+                    hasMissingDependencies: state.selectedPackageIsMissingDeps,
+                    isDisabled: state.selectedPackageIsDisabled,
+                  ),
+                ),
+                const HorizontalDivider(),
+                const SizedBox(height: spacingM),
+                ConfigPathsWidget(
+                  installPath: state.selectedPackageInstallPath,
+                ),
+                if (state.selectedPackage != null &&
+                    !state.isSelectedPackageTap &&
+                    state.selectedPackage.isInstalled) ...[
+                  const SizedBox(height: spacingM),
+                  _PackageDetailsStatsWidget(
+                    model: state.selectedPackage,
+                    installPath: state.selectedPackageInstallPath,
+                  ),
+                ],
+                const SizedBox(height: spacingL),
+                if (state.selectedPackageDependencies.isNotEmpty) ...[
+                  DependencyGraphWidget(
+                    dependencies: state.selectedPackageDependencies,
+                  ),
+                  const SizedBox(height: spacingL),
+                ],
+              ]),
             ),
           ),
-          const HorizontalDivider(),
-          const SizedBox(height: spacingM),
-          ConfigPathsWidget(installPath: state.selectedPackageInstallPath),
-
-          if (state.selectedPackage != null &&
-              !state.isSelectedPackageTap &&
-              state.selectedPackage.isInstalled) ...[
-            const SizedBox(height: spacingM),
-            _PackageDetailsStatsWidget(
-              model: state.selectedPackage,
-              installPath: state.selectedPackageInstallPath,
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.all(spacingM),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: ManagementActionsWidget(
+                  packageName: state.selectedPackageName,
+                  isCask: state.isSelectedPackageCask,
+                  isOutdated: state.selectedPackageIsOutdated,
+                  isMissingDependencies: state.selectedPackageIsMissingDeps,
+                  installPath: state.selectedPackageInstallPath,
+                ),
+              ),
             ),
-          ],
-
-          const SizedBox(height: spacingL),
-
-          if (state.selectedPackageDependencies.isNotEmpty) ...[
-            DependencyGraphWidget(
-              dependencies: state.selectedPackageDependencies,
-            ),
-            const SizedBox(height: spacingL),
-          ],
-
-          const Spacer(),
-
-          ManagementActionsWidget(
-            packageName: state.selectedPackageName,
-            isCask: state.isSelectedPackageCask,
-            isOutdated: state.selectedPackageIsOutdated,
-            isMissingDependencies: state.selectedPackageIsMissingDeps,
-            installPath: state.selectedPackageInstallPath,
           ),
         ],
       ),
@@ -245,13 +260,16 @@ class ConfigPathsWidget extends StatelessWidget {
             border: Border.all(color: AppColors.borderNeutral),
           ),
           child: Row(
+            spacing: spacingM,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                installPath,
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
-                  fontFamily: 'monospace',
+              Expanded(
+                child: Text(
+                  installPath,
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontFamily: 'monospace',
+                  ),
                 ),
               ),
               ButtonWidget.icon(

@@ -16,8 +16,10 @@ class TapCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pkgCount =
-        '${tap.formulaNames.length} formulae, ${tap.caskTokens.length} casks';
+    final pkgCount = [
+      if (tap.formulaNames.isNotEmpty) '${tap.formulaNames.length} formulae',
+      if (tap.caskTokens.isNotEmpty) '${tap.caskTokens.length} casks',
+    ].join(', ');
 
     return Expanded(
       child: Padding(

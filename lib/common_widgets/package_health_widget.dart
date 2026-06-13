@@ -30,6 +30,7 @@ class PackageHealthWidget extends StatelessWidget {
       !isDisabled && !isDeprecated && !hasMissingDependencies && !isOutdated
       ? const SizedBox.shrink()
       : Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           spacing: spacingS,
           children: [

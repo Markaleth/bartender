@@ -16,43 +16,38 @@ class InstalledPackagesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (packages.isEmpty) {
-      return const Spacer();
+      return const SizedBox.shrink();
     }
 
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: spacingL),
-          Text(
-            'Installed Packages',
-            style: context.bodyM.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.bold,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: spacingL),
+        Text(
+          'Installed Packages',
+          style: context.bodyM.copyWith(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: spacingS),
-          Expanded(
-            child: SizedBox(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(radiusS),
-                  border: Border.all(color: AppColors.borderNeutral),
-                ),
-                child: ListView.separated(
-                  itemCount: packages.length,
-                  separatorBuilder: (context, index) =>
-                      const HorizontalDivider(),
-                  itemBuilder: (context, index) {
-                    return _PackageListTile(package: packages[index]);
-                  },
-                ),
-              ),
-            ),
+        ),
+        const SizedBox(height: spacingS),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.circular(radiusS),
+            border: Border.all(color: AppColors.borderNeutral),
           ),
-        ],
-      ),
+          child: ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: packages.length,
+            separatorBuilder: (context, index) => const HorizontalDivider(),
+            itemBuilder: (context, index) {
+              return _PackageListTile(package: packages[index]);
+            },
+          ),
+        ),
+      ],
     );
   }
 }
