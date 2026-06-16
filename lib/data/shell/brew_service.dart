@@ -195,6 +195,14 @@ class BrewService {
     return runCommand(['untap', name]);
   }
 
+  Future<ShellCommandResult> trustTap(String name) {
+    return runCommand(['trust', name]);
+  }
+
+  Future<ShellCommandResult> untrustTap(String name) {
+    return runCommand(['untrust', name]);
+  }
+
   Future<ShellCommandResult> servicesStart(String service) {
     return runCommand(['services', 'start', service]);
   }

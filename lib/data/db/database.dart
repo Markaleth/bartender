@@ -45,7 +45,7 @@ class AppDatabase extends _$AppDatabase
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -58,7 +58,7 @@ class AppDatabase extends _$AppDatabase
           await m.addColumn(formulaeTable, formulaeTable.installedSize);
           await m.addColumn(formulaeTable, formulaeTable.installedOnTimestamp);
           await m.addColumn(formulaeTable, formulaeTable.builtAsBottle);
-          
+
           await m.addColumn(casksTable, casksTable.installedSize);
           await m.addColumn(casksTable, casksTable.installedOnTimestamp);
         }
@@ -66,6 +66,9 @@ class AppDatabase extends _$AppDatabase
           await m.alterTable(TableMigration(formulaeTable));
           await m.alterTable(TableMigration(casksTable));
           await m.alterTable(TableMigration(tapsTable));
+        }
+        if (from < 4) {
+          await m.addColumn(tapsTable, tapsTable.trusted);
         }
       },
     );

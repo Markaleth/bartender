@@ -12,6 +12,7 @@ class TapsTable extends Table {
   BoolColumn get official => boolean().withDefault(const Constant(false))();
   BoolColumn get customRemote => boolean().nullable()();
   TextColumn get remote => text().nullable()();
+  BoolColumn get trusted => boolean().withDefault(const Constant(false))();
 
   TextColumn get formulaNames => text()
       .map(const StringListConverter())

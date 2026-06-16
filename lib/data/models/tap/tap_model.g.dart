@@ -25,6 +25,7 @@ _TapModel _$TapModelFromJson(Map<String, dynamic> json) => _TapModel(
           ?.map((e) => e as String)
           .toList() ??
       const [],
+  trusted: json['trusted'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$TapModelToJson(_TapModel instance) => <String, dynamic>{
@@ -38,4 +39,5 @@ Map<String, dynamic> _$TapModelToJson(_TapModel instance) => <String, dynamic>{
   'remote': instance.remote,
   'formula_names': instance.formulaNames,
   'cask_tokens': instance.caskTokens,
+  'trusted': instance.trusted,
 };

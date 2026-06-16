@@ -3014,6 +3014,21 @@ class $TapsTableTable extends TapsTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _trustedMeta = const VerificationMeta(
+    'trusted',
+  );
+  @override
+  late final GeneratedColumn<bool> trusted = GeneratedColumn<bool>(
+    'trusted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("trusted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   late final GeneratedColumnWithTypeConverter<List<String>, String>
   formulaNames = GeneratedColumn<String>(
@@ -3044,6 +3059,7 @@ class $TapsTableTable extends TapsTable
     official,
     customRemote,
     remote,
+    trusted,
     formulaNames,
     caskTokens,
   ];
@@ -3118,6 +3134,12 @@ class $TapsTableTable extends TapsTable
         remote.isAcceptableOrUnknown(data['remote']!, _remoteMeta),
       );
     }
+    if (data.containsKey('trusted')) {
+      context.handle(
+        _trustedMeta,
+        trusted.isAcceptableOrUnknown(data['trusted']!, _trustedMeta),
+      );
+    }
     return context;
   }
 
@@ -3171,6 +3193,10 @@ class $TapsTableTable extends TapsTable
           data['${effectivePrefix}cask_tokens'],
         )!,
       ),
+      trusted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}trusted'],
+      )!,
     );
   }
 
@@ -3194,6 +3220,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
   final Value<bool> official;
   final Value<bool?> customRemote;
   final Value<String?> remote;
+  final Value<bool> trusted;
   final Value<List<String>> formulaNames;
   final Value<List<String>> caskTokens;
   final Value<int> rowid;
@@ -3206,6 +3233,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     this.official = const Value.absent(),
     this.customRemote = const Value.absent(),
     this.remote = const Value.absent(),
+    this.trusted = const Value.absent(),
     this.formulaNames = const Value.absent(),
     this.caskTokens = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -3219,6 +3247,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     this.official = const Value.absent(),
     this.customRemote = const Value.absent(),
     this.remote = const Value.absent(),
+    this.trusted = const Value.absent(),
     this.formulaNames = const Value.absent(),
     this.caskTokens = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -3235,6 +3264,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     Expression<bool>? official,
     Expression<bool>? customRemote,
     Expression<String>? remote,
+    Expression<bool>? trusted,
     Expression<String>? formulaNames,
     Expression<String>? caskTokens,
     Expression<int>? rowid,
@@ -3248,6 +3278,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
       if (official != null) 'official': official,
       if (customRemote != null) 'custom_remote': customRemote,
       if (remote != null) 'remote': remote,
+      if (trusted != null) 'trusted': trusted,
       if (formulaNames != null) 'formula_names': formulaNames,
       if (caskTokens != null) 'cask_tokens': caskTokens,
       if (rowid != null) 'rowid': rowid,
@@ -3263,6 +3294,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     Value<bool>? official,
     Value<bool?>? customRemote,
     Value<String?>? remote,
+    Value<bool>? trusted,
     Value<List<String>>? formulaNames,
     Value<List<String>>? caskTokens,
     Value<int>? rowid,
@@ -3276,6 +3308,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
       official: official ?? this.official,
       customRemote: customRemote ?? this.customRemote,
       remote: remote ?? this.remote,
+      trusted: trusted ?? this.trusted,
       formulaNames: formulaNames ?? this.formulaNames,
       caskTokens: caskTokens ?? this.caskTokens,
       rowid: rowid ?? this.rowid,
@@ -3309,6 +3342,9 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     if (remote.present) {
       map['remote'] = Variable<String>(remote.value);
     }
+    if (trusted.present) {
+      map['trusted'] = Variable<bool>(trusted.value);
+    }
     if (formulaNames.present) {
       map['formula_names'] = Variable<String>(
         $TapsTableTable.$converterformulaNames.toSql(formulaNames.value),
@@ -3336,6 +3372,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
           ..write('official: $official, ')
           ..write('customRemote: $customRemote, ')
           ..write('remote: $remote, ')
+          ..write('trusted: $trusted, ')
           ..write('formulaNames: $formulaNames, ')
           ..write('caskTokens: $caskTokens, ')
           ..write('rowid: $rowid')
@@ -3358,6 +3395,7 @@ class _$TapModelInsertable implements Insertable<TapModel> {
       official: Value(_object.official),
       customRemote: Value(_object.customRemote),
       remote: Value(_object.remote),
+      trusted: Value(_object.trusted),
       formulaNames: Value(_object.formulaNames),
       caskTokens: Value(_object.caskTokens),
     ).toColumns(false);
@@ -5242,6 +5280,7 @@ typedef $$TapsTableTableCreateCompanionBuilder =
       Value<bool> official,
       Value<bool?> customRemote,
       Value<String?> remote,
+      Value<bool> trusted,
       Value<List<String>> formulaNames,
       Value<List<String>> caskTokens,
       Value<int> rowid,
@@ -5256,6 +5295,7 @@ typedef $$TapsTableTableUpdateCompanionBuilder =
       Value<bool> official,
       Value<bool?> customRemote,
       Value<String?> remote,
+      Value<bool> trusted,
       Value<List<String>> formulaNames,
       Value<List<String>> caskTokens,
       Value<int> rowid,
@@ -5307,6 +5347,11 @@ class $$TapsTableTableFilterComposer
 
   ColumnFilters<String> get remote => $composableBuilder(
     column: $table.remote,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get trusted => $composableBuilder(
+    column: $table.trusted,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5372,6 +5417,11 @@ class $$TapsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get trusted => $composableBuilder(
+    column: $table.trusted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get formulaNames => $composableBuilder(
     column: $table.formulaNames,
     builder: (column) => ColumnOrderings(column),
@@ -5417,6 +5467,9 @@ class $$TapsTableTableAnnotationComposer
 
   GeneratedColumn<String> get remote =>
       $composableBuilder(column: $table.remote, builder: (column) => column);
+
+  GeneratedColumn<bool> get trusted =>
+      $composableBuilder(column: $table.trusted, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<List<String>, String> get formulaNames =>
       $composableBuilder(
@@ -5467,6 +5520,7 @@ class $$TapsTableTableTableManager
                 Value<bool> official = const Value.absent(),
                 Value<bool?> customRemote = const Value.absent(),
                 Value<String?> remote = const Value.absent(),
+                Value<bool> trusted = const Value.absent(),
                 Value<List<String>> formulaNames = const Value.absent(),
                 Value<List<String>> caskTokens = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -5479,6 +5533,7 @@ class $$TapsTableTableTableManager
                 official: official,
                 customRemote: customRemote,
                 remote: remote,
+                trusted: trusted,
                 formulaNames: formulaNames,
                 caskTokens: caskTokens,
                 rowid: rowid,
@@ -5493,6 +5548,7 @@ class $$TapsTableTableTableManager
                 Value<bool> official = const Value.absent(),
                 Value<bool?> customRemote = const Value.absent(),
                 Value<String?> remote = const Value.absent(),
+                Value<bool> trusted = const Value.absent(),
                 Value<List<String>> formulaNames = const Value.absent(),
                 Value<List<String>> caskTokens = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -5505,6 +5561,7 @@ class $$TapsTableTableTableManager
                 official: official,
                 customRemote: customRemote,
                 remote: remote,
+                trusted: trusted,
                 formulaNames: formulaNames,
                 caskTokens: caskTokens,
                 rowid: rowid,

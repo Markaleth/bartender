@@ -68,6 +68,9 @@ class HomebrewRepository {
       await _database.insertTaps([tap]);
 
       if (tapName != 'homebrew/core' && tapName != 'homebrew/cask') {
+        final trusted = tapJson['trusted'] as bool? ?? false;
+        if (!trusted) return;
+
         final formulaNames = List<String>.from(tapJson['formula_names'] ?? []);
         final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
 
@@ -91,7 +94,12 @@ class HomebrewRepository {
 
     for (final tapJson in jsonList) {
       final name = tapJson['name'] as String?;
-      if (name == null || name == 'homebrew/core' || name == 'homebrew/cask') {
+      final trusted = tapJson['trusted'] as bool? ?? false;
+      
+      if (name == null ||
+          name == 'homebrew/core' ||
+          name == 'homebrew/cask' ||
+          !trusted) {
         continue;
       }
 
@@ -155,7 +163,8 @@ class HomebrewRepository {
 
   Future<List<TapModel>> getTaps() => _database.getTaps();
   Future<void> deleteTap(String name) => _database.deleteTap(name);
-  Future<int> getTapInstalledSize(String tapName) => _database.getTapInstalledSize(tapName);
+  Future<int> getTapInstalledSize(String tapName) =>
+      _database.getTapInstalledSize(tapName);
 
   Future<List<CategoryAnalyticsItem>> getCategoryAnalytics(
     String category,

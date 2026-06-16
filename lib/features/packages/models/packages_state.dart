@@ -23,5 +23,6 @@ abstract class PackagesState with _$PackagesState {
     @Default([]) List<TapModel> taps,
   }) = _PackagesState;
 
-  Set<String> get uniqueTapNames => taps.map((t) => t.name).toSet();
+  Set<String> get uniqueTapNames =>
+      taps.where((t) => t.trusted).map((t) => t.name).toSet();
 }
