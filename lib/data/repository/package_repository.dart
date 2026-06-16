@@ -12,6 +12,11 @@ class PackageRepository {
 
   PackageRepository(this._brewService, this._database);
 
+  Future<List<FormulaModel>> getInstalledFormulae() =>
+      _database.getInstalledFormulae();
+  Future<List<CaskModel>> getInstalledCasks() => _database.getInstalledCasks();
+  Future<String> getPrefix() => _brewService.getPrefix();
+
   Future<int?> _getPackageSize(String path) async {
     try {
       final result = await ShellUtils.run('sh', ['-c', 'du -sk "$path"']);

@@ -23,8 +23,17 @@ class HomebrewRepository {
     final result = await _brewService.listTaps();
     if (result.exitCode == 0) {
       final List<dynamic> jsonList = jsonDecode(result.stdout);
+
+      final oldTaps = await _database.getTaps();
+      final trustedTapNames = oldTaps
+          .where((t) => t.trusted)
+          .map((t) => t.name)
+          .toSet();
+
       final taps = jsonList.map((json) {
-        return TapModel.fromJson(json);
+        final tapName = json['name'] as String;
+        final isTrusted = trustedTapNames.contains(tapName);
+        return TapModel.fromJson(json).copyWith(trusted: isTrusted);
       }).toList();
       await _database.insertTaps(taps);
     } else {
@@ -32,7 +41,23 @@ class HomebrewRepository {
     }
   }
 
-  Future<void> toggleTapTrust({required String tapName, required bool isTrusted}) async {
+  Future<void> toggleTapTrust(String name, bool isTrusted) async {
+    final result = isTrusted
+        ? await _brewService.trustTap(name)
+        : await _brewService.untrustTap(name);
+    if (result.exitCode == 0) {
+      await _updateTapTrust(tapName: name, isTrusted: isTrusted);
+    } else {
+      throw Exception(
+        'Failed to ${isTrusted ? 'trust' : 'untrust'} tap $name: ${result.stderr}',
+      );
+    }
+  }
+
+  Future<void> _updateTapTrust({
+    required String tapName,
+    required bool isTrusted,
+  }) async {
     final taps = await _database.getTaps();
     final tap = taps.firstWhere((t) => t.name == tapName);
     await _database.insertTaps([tap.copyWith(trusted: isTrusted)]);

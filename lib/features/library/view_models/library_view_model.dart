@@ -1,33 +1,34 @@
 import 'package:bartender/data/repository/package_repository.dart';
+import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/core/base_view_model.dart';
-import 'package:bartender/data/db/database_interface.dart';
-import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/features/library/models/library_state.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 
 class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
-  final DatabaseInterface _db;
-  final BrewService _brewService;
   final PackageStatusNotifier _statusNotifier;
   final PackageRepository _packageRepository;
+  final HomebrewRepository _homebrewRepository;
+  final TapStatusNotifier _tapStatusNotifier;
 
   LibraryViewModel({
-    required DatabaseInterface db,
-    required BrewService brewService,
     required PackageStatusNotifier statusNotifier,
     required PackageRepository packageRepository,
-  }) : _db = db,
-       _brewService = brewService,
-       _statusNotifier = statusNotifier,
+    required HomebrewRepository homebrewRepository,
+    required TapStatusNotifier tapStatusNotifier,
+  }) : _statusNotifier = statusNotifier,
        _packageRepository = packageRepository,
+       _homebrewRepository = homebrewRepository,
+       _tapStatusNotifier = tapStatusNotifier,
        super(const LibraryState()) {
     _statusNotifier.addListener(_onStatusNotifierUpdated);
+    _tapStatusNotifier.addListener(_onTapStatusNotifierUpdated);
   }
 
   @override
   void dispose() {
     _statusNotifier.removeListener(_onStatusNotifierUpdated);
+    _tapStatusNotifier.removeListener(_onTapStatusNotifierUpdated);
     super.dispose();
   }
 
@@ -40,6 +41,10 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
         update.timestamp,
       );
     }
+  }
+
+  void _onTapStatusNotifierUpdated() {
+    refreshData();
   }
 
   void setFilterQuery(String query) {
@@ -61,7 +66,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   Future<void> init() async {
     emitState(state.copyWith(isLoading: true));
     try {
-      final brewPrefix = await _brewService.getPrefix();
+      final brewPrefix = await _packageRepository.getPrefix();
       emitState(state.copyWith(brewPrefix: brewPrefix));
 
       await refreshData();
@@ -74,9 +79,9 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
 
   Future<void> refreshData() async {
     try {
-      final formulae = await _db.getInstalledFormulae();
-      final casks = await _db.getInstalledCasks();
-      final taps = await _db.getTaps();
+      final formulae = await _packageRepository.getInstalledFormulae();
+      final casks = await _packageRepository.getInstalledCasks();
+      final taps = await _homebrewRepository.getTaps();
 
       emitState(
         state.copyWith(
@@ -118,8 +123,8 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   }
 
   Future<void> untrustTap(String name) async {
-    await _brewService.untrustTap(name);
-    await fetchTaps(); // Refresh taps to update trust status
-    _statusNotifier.markUpdated(name, false, true); // Mark as untrusted
+    await _homebrewRepository.toggleTapTrust(name, false);
+    await refreshData();
+    _tapStatusNotifier.markUpdated(name, true, false);
   }
 }

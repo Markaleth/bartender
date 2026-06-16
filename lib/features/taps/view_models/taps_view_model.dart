@@ -120,8 +120,8 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   }
 
   Future<void> trustTap(String name) async {
-    await _repository.toggleTapTrust(tapName: name, isTrusted: true);
-    await fetchTaps(); // Refresh taps to update trust status
-    _statusNotifier.markUpdated(name, true, true); // Mark as trusted
+    await _repository.toggleTapTrust(name, true);
+    await fetchTaps();
+    _statusNotifier.markUpdated(name, true, true);
   }
 }

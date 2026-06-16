@@ -179,7 +179,7 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
     final isCask = task.type == PackageType.cask;
 
     if (task.type == PackageType.tap) {
-      _tapNotifier.markUpdated(task.packageId, isInstall);
+      _tapNotifier.markUpdated(task.packageId, isInstall, false);
       return;
     }
 
