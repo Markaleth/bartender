@@ -20,6 +20,8 @@
 - [x] State is not updated once you take actions from the "global health" dialog. You need to hot reload to make the changes propagate.
 - [x] Add loading indicators to the buttons. You que up stuff after you do an install, like a sync and you need to disable the buttons with a "loading" state.
 - [x] Replace buttons in app with the new ButtonWidget variants.
+- [x] Revisit Taps and see if we can make the card a bit more expressive and add a bit more content to it. - ADD: Disk size (git repo size), split counts (formulae vs casks), git 
+- [x] Consider doing somethign more suggestive for the "precompiled" description. - USE ICONS: 📦 Box + "Ready-to-run" for precompiled, 🔨 Hammer + "Build from source" for source; add tooltips for detailsbranch (if not default); REMOVE individual "force sync" button (use global sync instead)
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
@@ -29,10 +31,12 @@
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [ ] Consider renaming "library" to "Installed".
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
-- [x] Consider doing somethign more suggestive for the "precompiled" description. - USE ICONS: 📦 Box + "Ready-to-run" for precompiled, 🔨 Hammer + "Build from source" for source; add tooltips for details
+- [ ] Do another sweep and move strings to app_strings.dart
+- [ ] Some build methods are doing a bit of heavy lifting. We should consider moving that to a separate substate or something to clean them up
+- [ ] Test Trust / Untrust functionaltiy across the app.
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or something)
 - [ ] Cleanup text styles -> We need to clean up Monospace and FiraCode.
-- [x] Revisit Taps and see if we can make the card a bit more expressive and add a bit more content to it. - ADD: Disk size (git repo size), split counts (formulae vs casks), git branch (if not default); REMOVE individual "force sync" button (use global sync instead)
+
 
 # Issues:
 
