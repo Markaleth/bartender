@@ -32,6 +32,13 @@ class HomebrewRepository {
     }
   }
 
+  Future<void> toggleTapTrust({required String tapName, required bool isTrusted}) async {
+    final taps = await _database.getTaps();
+    final tap = taps.firstWhere((t) => t.name == tapName);
+    await _database.insertTaps([tap.copyWith(trusted: isTrusted)]);
+    await syncTap(tapName);
+  }
+
   Future<void> syncThirdPartyTapPackages() async {
     final result = await _brewService.listTaps();
     if (result.exitCode != 0) return;
@@ -64,12 +71,15 @@ class HomebrewRepository {
         throw Exception('Tap $tapName not found');
       }
 
-      final tap = TapModel.fromJson(tapJson);
+      // Preserve existing trusted state from database
+      final oldTaps = await _database.getTaps();
+      final isTrusted = oldTaps.any((t) => t.name == tapName && t.trusted);
+
+      final tap = TapModel.fromJson(tapJson).copyWith(trusted: isTrusted);
       await _database.insertTaps([tap]);
 
       if (tapName != 'homebrew/core' && tapName != 'homebrew/cask') {
-        final trusted = tapJson['trusted'] as bool? ?? false;
-        if (!trusted) return;
+        if (!isTrusted) return;
 
         final formulaNames = List<String>.from(tapJson['formula_names'] ?? []);
         final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
@@ -95,7 +105,7 @@ class HomebrewRepository {
     for (final tapJson in jsonList) {
       final name = tapJson['name'] as String?;
       final trusted = tapJson['trusted'] as bool? ?? false;
-      
+
       if (name == null ||
           name == 'homebrew/core' ||
           name == 'homebrew/cask' ||

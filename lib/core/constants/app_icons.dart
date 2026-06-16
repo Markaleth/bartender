@@ -31,3 +31,7 @@ const missingDependencyIcon = 'assets/icons/missing_dependency_icon.svg';
 const storageIcon = 'assets/icons/storage_icon.svg';
 const clearIcon = 'assets/icons/close_icon.svg';
 const openFolderIcon = 'assets/icons/open_folder_icon.svg';
+const trustedIcon = 'assets/icons/trusted_icon.svg';
+const untrustedIcon = 'assets/icons/untrusted_icon.svg';
+const trustIcon = 'assets/icons/trust_icon.svg';
+const trustAlertIcon = 'assets/icons/trust_alert_icon.svg';

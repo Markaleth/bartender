@@ -1,21 +1,27 @@
 import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class TapCardFooter extends StatelessWidget {
   final String tapName;
+  final bool isTrusted;
   final bool isSyncing;
   final VoidCallback onViewPackages;
   final VoidCallback onUntap;
-
+  final VoidCallback onTrust;
   const TapCardFooter({
     super.key,
     required this.isSyncing,
     required this.onViewPackages,
     required this.onUntap,
+    required this.onTrust,
     required this.tapName,
+    required this.isTrusted,
   });
 
   @override
@@ -68,11 +74,56 @@ class TapCardFooter extends StatelessWidget {
                     );
                   },
           ),
-          ButtonWidget.tertiary(
-            iconData: Icons.arrow_forward,
-            label: browseButtonLabel,
-            onPressed: onViewPackages,
-          ),
+
+          isTrusted
+              ? ButtonWidget.tertiary(
+                  iconData: Icons.arrow_forward,
+                  label: browseButtonLabel,
+                  onPressed: onViewPackages,
+                )
+              : ButtonWidget.tertiary(
+                  assetName: trustIcon,
+                  label: trustCtaLabel,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        buttonPadding: const EdgeInsets.all(spacingM),
+                        icon: const IconWidget(
+                          assetName: trustAlertIcon,
+                          color: AppColors.warning,
+                          size: iconSize2Xl,
+                        ),
+                        title: Text('Trust $tapName?', style: context.headM),
+                        content: Text(trustAlertDialogBodyCopy),
+                        actions: [
+                          SizedBox(
+                            width: defaultButtonWidth,
+                            child: ButtonWidget.secondary(
+                              assetName: untrustedIcon,
+                              iconSize: iconSizeM,
+                              label: cancelButtonLabel,
+                              onPressed: () => Navigator.of(ctx).pop(),
+                            ),
+                          ),
+                          SizedBox(
+                            width: defaultButtonWidth,
+                            child: ButtonWidget.primary(
+                              color: AppColors.warning,
+                              assetName: trustedIcon,
+                              iconSize: iconSizeM,
+                              label: trustCtaLabel,
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                                onTrust();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
         ],
       ),
     );

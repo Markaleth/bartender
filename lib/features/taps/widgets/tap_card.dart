@@ -12,6 +12,7 @@ class TapCard extends StatelessWidget {
   final bool isSyncing;
   final VoidCallback onViewPackages;
   final VoidCallback onRemove;
+  final VoidCallback onTrust;
 
   const TapCard({
     super.key,
@@ -19,6 +20,7 @@ class TapCard extends StatelessWidget {
     required this.isSyncing,
     required this.onViewPackages,
     required this.onRemove,
+    required this.onTrust,
   });
 
   @override
@@ -37,10 +39,12 @@ class TapCard extends StatelessWidget {
           TapCardBody(tap: tap),
           const HorizontalDivider(height: 0),
           TapCardFooter(
+            isTrusted: tap.trusted,
             tapName: tap.name,
             isSyncing: isSyncing,
             onViewPackages: onViewPackages,
             onUntap: onRemove,
+            onTrust: onTrust,
           ),
         ],
       ),

@@ -19,11 +19,13 @@ class TapStatusUpdate {
   final String tapName;
   final bool isInstalled;
   final DateTime timestamp;
+  final bool isTrusted;
 
   TapStatusUpdate({
     required this.tapName,
     required this.isInstalled,
     DateTime? timestamp,
+    required this.isTrusted,
   }) : timestamp = timestamp ?? DateTime.now();
 }
 
@@ -31,10 +33,8 @@ class SystemStatusUpdate {
   final OperationType operation;
   final DateTime timestamp;
 
-  SystemStatusUpdate({
-    required this.operation,
-    DateTime? timestamp,
-  }) : timestamp = timestamp ?? DateTime.now();
+  SystemStatusUpdate({required this.operation, DateTime? timestamp})
+    : timestamp = timestamp ?? DateTime.now();
 }
 
 class PackageStatusNotifier extends ValueNotifier<PackageStatusUpdate?> {
@@ -53,8 +53,8 @@ class PackageStatusNotifier extends ValueNotifier<PackageStatusUpdate?> {
 class TapStatusNotifier extends ValueNotifier<TapStatusUpdate?> {
   TapStatusNotifier() : super(null);
 
-  void markUpdated(String tapName, bool isInstalled) {
-    value = TapStatusUpdate(tapName: tapName, isInstalled: isInstalled);
+  void markUpdated(String tapName, bool isInstalled, bool isTrusted) {
+    value = TapStatusUpdate(tapName: tapName, isInstalled: isInstalled, isTrusted: isTrusted);
   }
 }
 

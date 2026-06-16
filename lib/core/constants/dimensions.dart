@@ -51,6 +51,7 @@ const double iconSizeS = 14.0;
 const double iconSizeM = 20.0;
 const double iconSizeL = 26.0;
 const double iconSizeXl = 32.0;
+const double iconSize2Xl = 64.0;
 
 const double defaultButtonHeight = 45;
 const double defaultButtonWidth = 165.0;

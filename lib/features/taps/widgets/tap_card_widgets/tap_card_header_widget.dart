@@ -1,8 +1,10 @@
 import 'package:bartender/common_widgets/package_icon/package_icon.dart';
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
+import 'package:bartender/features/taps/widgets/tap_card_widgets/tap_badge_widget.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
@@ -30,45 +32,29 @@ class TapCardHeader extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: spacingXs),
-                _Badge(
-                  text: tap.official
-                      ? headerWidgetOfficialCopy
-                      : headerWidgetCommunityCopy,
-                  color: tap.official ? AppColors.primary : AppColors.secondary,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  spacing: spacingM,
+                  children: [
+                    TapBadge(
+                      text: tap.official
+                          ? headerWidgetOfficialCopy
+                          : headerWidgetCommunityCopy,
+                      color: tap.official
+                          ? AppColors.primary
+                          : AppColors.tertiary,
+                    ),
+                    TapBadge(
+                      assetPath: tap.trusted ? trustedIcon : untrustedIcon,
+                      text: tap.trusted ? trustedBadgeLabel : untrustedBadgeLabel,
+                      color: tap.trusted ? AppColors.success : AppColors.error,
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _Badge extends StatelessWidget {
-  final String text;
-  final Color color;
-
-  const _Badge({required this.text, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: spacingS,
-        vertical: spacing2Xs,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(radiusL),
-        border: Border.all(color: color.withValues(alpha: 0.5)),
-      ),
-      child: Text(
-        text,
-        style: context.labelS.copyWith(
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
       ),
     );
   }

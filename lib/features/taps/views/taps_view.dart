@@ -103,6 +103,7 @@ class TapsView extends StatelessWidget {
                             homeViewModel.navigateAndFilterByTap(tap.name);
                           },
                           onRemove: () => viewModel.removeTap(tap.name),
+                          onTrust: () => viewModel.trustTap(tap.name),
                         );
                       },
                     );

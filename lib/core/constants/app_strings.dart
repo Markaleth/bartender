@@ -101,3 +101,9 @@ const String tapInstallSizeLabel = 'Install Size:';
 const String tapLastModifiedLabel = 'Last Modified:';
 const String tapInstallPathLabel = 'Install Path:';
 const String tapSourceLabel = 'Source:';
+
+const String trustedBadgeLabel = 'Trusted';
+const String untrustedBadgeLabel = 'Untrusted';
+const String trustCtaLabel = 'Trust Tap';
+const String trustAlertDialogBodyCopy =
+    'Third-party taps contain code written by external developers. By trusting this tap, you are allowing it to:\n\n• Install custom software on your system.\n• Run background scripts that can modify your system.';

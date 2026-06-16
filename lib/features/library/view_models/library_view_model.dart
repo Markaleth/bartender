@@ -116,4 +116,10 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
     }
     emitState(state.copyWith(expandedTaps: updatedExpandedTaps));
   }
+
+  Future<void> untrustTap(String name) async {
+    await _brewService.untrustTap(name);
+    await fetchTaps(); // Refresh taps to update trust status
+    _statusNotifier.markUpdated(name, false, true); // Mark as untrusted
+  }
 }
