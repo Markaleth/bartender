@@ -38,6 +38,21 @@ class BrewService {
     return '/opt/homebrew';
   }
 
+  Future<String> getVersion() async {
+    final result = await runCustom(['--version']);
+    if (result.exitCode == 0) {
+      // First line is typically "Homebrew x.y.z"
+      final lines = result.stdout.trim().split('\n');
+      if (lines.isNotEmpty) {
+        final match = RegExp(r'Homebrew\s+([\d\.]+)').firstMatch(lines.first);
+        if (match != null && match.groupCount >= 1) {
+          return match.group(1)!;
+        }
+      }
+    }
+    return '';
+  }
+
   /// Run an arbitrary brew command and stream its output.
   Future<StreamingShellCommand> runCustomStream(List<String> args) {
     return streamCommand(args);

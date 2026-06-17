@@ -6,6 +6,10 @@ enum HomeTab { browse, library, taps, debug, settings  }
 
 @freezed
 abstract class HomeState with _$HomeState {
-  const factory HomeState({@Default(HomeTab.browse) HomeTab selectedTab}) =
-      _HomeState;
+  const factory HomeState({
+    @Default(HomeTab.browse) HomeTab selectedTab,
+    String? localVersion,
+    @Default(false) bool updateAvailable,
+    @Default(false) bool isCheckingForUpdates,
+  }) = _HomeState;
 }

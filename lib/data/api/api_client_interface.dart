@@ -46,4 +46,7 @@ abstract interface class ApiClientInterface {
     AnalyticsPeriod days, {
     String? eTag,
   }); // curl https://formulae.brew.sh/api/analytics/cask-install/homebrew-cask/${DAYS}.json
+
+  // Get the latest Homebrew version tag from GitHub API
+  Future<NetworkResource<String>> getLatestHomebrewVersion();
 }

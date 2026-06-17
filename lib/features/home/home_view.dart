@@ -6,6 +6,7 @@ import 'package:bartender/features/library/views/library_view.dart';
 import 'package:bartender/features/taps/views/taps_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/core/base_view.dart';
 import 'models/home_state.dart';
 import 'view_models/home_view_model.dart';
@@ -18,7 +19,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) =>
       BaseView<HomeViewModel, HomeState, ScreenEffect>(
         viewModelBuilder: (context) =>
-            HomeViewModel(context.read<TapFilterNotifier>()),
+            HomeViewModel(context.read<TapFilterNotifier>(), context.read<HomebrewRepository>()),
+        onModelReady: (viewModel) => viewModel.init(),
         builder: (context, viewModel, state) => Scaffold(
           body: SafeArea(
             child: Row(

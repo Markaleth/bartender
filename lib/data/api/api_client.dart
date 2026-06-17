@@ -187,4 +187,25 @@ class ApiClient implements ApiClientInterface {
       _parseCasksAnalytics,
     );
   }
+
+  @override
+  Future<NetworkResource<String>> getLatestHomebrewVersion() async {
+    try {
+      final response = await _dio.get(
+        'https://api.github.com/repos/Homebrew/brew/releases/latest',
+        options: Options(
+          receiveTimeout: defaultTimeoutDuration,
+          validateStatus: (status) =>
+              status != null && (status >= 200 && status < 300),
+        ),
+      );
+      
+      final String tagName = response.data['tag_name'] as String;
+      return NetworkResource.success(tagName, response.statusCode);
+    } on DioException catch (error) {
+      return NetworkResource.errorFrom(error);
+    } catch (error) {
+      return NetworkResource.error(error.toString(), null);
+    }
+  }
 }
