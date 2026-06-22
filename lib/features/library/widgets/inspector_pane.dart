@@ -529,16 +529,16 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if ((model.tap as String?)?.isNotEmpty == true) ...[
-            _StatRow(label: 'Tap', value: model.tap as String),
+            _StatRow(label: tapNameLabel, value: model.tap as String),
             const SizedBox(height: spacingXs),
           ],
           _StatRow(
-            label: 'Installed Size',
+            label: installedSizeStatCopy,
             value: StringUtils.formatSize(model.installedSize),
           ),
           const SizedBox(height: spacingXs),
           _StatRow(
-            label: 'Installation Date',
+            label: installDateStatCopy,
             value: StringUtils.formatDate(model.installedOnTimestamp),
           ),
           const SizedBox(height: spacingXs),
@@ -547,7 +547,7 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
             builder: (context, snapshot) {
               final modifiedDate = snapshot.data;
               return _StatRow(
-                label: 'Last Modified',
+                label: lastModifiedStatCopy,
                 value: StringUtils.formatTimeAgo(modifiedDate),
               );
             },

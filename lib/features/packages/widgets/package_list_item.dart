@@ -5,6 +5,7 @@ import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/common_widgets/package_icon/package_icon.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
 import 'package:bartender/core/utils/string_utils.dart';
@@ -274,8 +275,8 @@ class _PackageActionButton extends StatelessWidget {
   });
 
   String _getButtonLabel(bool isQueued, bool isInProgress) {
-    if (isQueued) return 'Queued...';
-    final baseAction = model.isInstalled ? 'Uninstall' : 'Install';
+    if (isQueued) return queuedCopy;
+    final baseAction = model.isInstalled ? uninstallButtonLabel : installButtonLabel;
     return isInProgress ? '${baseAction}ing...' : baseAction;
   }
 

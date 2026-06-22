@@ -91,7 +91,7 @@ class TapsView extends StatelessWidget {
                             maxCrossAxisExtent: tapCardWidth,
                             crossAxisSpacing: spacingM,
                             mainAxisSpacing: spacingM,
-                            childAspectRatio: 1,
+                            childAspectRatio: 0.8,
                           ),
                       itemCount: taps.length,
                       itemBuilder: (context, index) {

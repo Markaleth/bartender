@@ -1,6 +1,7 @@
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/extensions/string_extensions.dart';
 import 'package:bartender/core/utils/string_utils.dart';
@@ -105,39 +106,39 @@ class _BasePackageGridMatrix extends StatelessWidget {
         final children = [
           PackageDetailGridItem(
             icon: homeIcon,
-            title: 'Homepage',
+            title: homepageCopy,
             subtitle: homepage != null
                 ? (Uri.tryParse(homepage!)?.host.isNotEmpty == true
                       ? Uri.tryParse(homepage!)!.host
                       : homepage!)
-                : 'Unknown',
+                : unknownCopy,
             onTap: homepage != null
                 ? () => UrlLauncherUtils.launch(homepage!)
                 : null,
           ),
           PackageDetailGridItem(
             icon: cpuIcon,
-            title: 'Architecture',
-            subtitle: archs.isEmpty ? 'Unknown' : archs,
+            title: architectureCopy,
+            subtitle: archs.isEmpty ? unknownCopy : archs,
           ),
           PackageDetailGridItem(
             icon: hashIcon,
-            title: 'Version',
+            title: versionCopy,
             subtitle: version,
           ),
           PackageDetailGridItem(
             icon: packagesIcon,
-            title: 'Type & Tap',
+            title: typeAndTapCopy,
             subtitle: typeAndTap,
           ),
           PackageDetailGridItem(
             icon: tagIcon,
-            title: 'Full Tag',
+            title: fullTagCopy,
             subtitle: fullTag,
           ),
           PackageDetailGridItem(
             icon: trendingIcon,
-            title: 'Popularity',
+            title: popularityCopy,
             subtitle: installs30d != null
                 ? '${StringUtils.formatWithCommas(installs30d!)} installs'
                 : 'N/A',

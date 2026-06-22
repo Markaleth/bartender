@@ -11,5 +11,6 @@ abstract class HomeState with _$HomeState {
     String? localVersion,
     @Default(false) bool updateAvailable,
     @Default(false) bool isCheckingForUpdates,
+    @Default(false) bool isSyncingDatabase,
   }) = _HomeState;
 }

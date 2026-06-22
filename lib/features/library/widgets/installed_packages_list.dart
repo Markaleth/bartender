@@ -1,5 +1,6 @@
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
@@ -24,7 +25,7 @@ class InstalledPackagesList extends StatelessWidget {
       children: [
         const SizedBox(height: spacingL),
         Text(
-          'Installed Packages',
+          installedPackagesCopy,
           style: context.bodyM.copyWith(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,

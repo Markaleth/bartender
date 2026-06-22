@@ -17,7 +17,7 @@ class SideNavigationHeader extends StatelessWidget {
     final state = viewModel.state;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: spacingL),
+      padding: const EdgeInsets.only(bottom: spacingM),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -67,42 +67,94 @@ class SideNavigationHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (state.updateAvailable)
-            Padding(
-              padding: const EdgeInsets.only(top: spacingM),
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: AppColors.primary),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: spacingS,
-                    vertical: spacingS,
-                  ),
-                  child: Row(
-                    spacing: spacingS,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'A new version of Brew is available!',
-                          style: context.labelL.copyWith(
-                            color: AppColors.onPrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      ButtonWidget.icon(
-                        assetName: systemUpdateIcon,
-                        onPressed: viewModel.checkForUpdates,
-                        iconSize: iconSizeM,
-                        color: AppColors.onPrimary,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          if (state.isSyncingDatabase)
+            const _BackgroundSyncWidget()
+          else if (state.updateAvailable)
+            _UpdateBannerWidget(onUpdatePressed: viewModel.checkForUpdates),
         ],
       ),
     );
   }
+}
+
+class _UpdateBannerWidget extends StatelessWidget {
+  final void Function() onUpdatePressed;
+
+  const _UpdateBannerWidget({required this.onUpdatePressed});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: spacingM),
+    child: DecoratedBox(
+      decoration: BoxDecoration(color: AppColors.primary),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: spacingS,
+          vertical: spacingS,
+        ),
+        child: Row(
+          spacing: spacingS,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: Text(
+                homebrewUpdateAvailableCopy,
+                style: context.labelL.copyWith(
+                  color: AppColors.onPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ButtonWidget.icon(
+              assetName: systemUpdateIcon,
+              onPressed: onUpdatePressed,
+              iconSize: iconSizeM,
+              color: AppColors.onPrimary,
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+class _BackgroundSyncWidget extends StatelessWidget {
+  const _BackgroundSyncWidget();
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: spacingM),
+    child: DecoratedBox(
+      decoration: BoxDecoration(color: AppColors.surface),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: spacingS,
+          vertical: spacingS,
+        ),
+        child: Row(
+          spacing: spacingS,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(
+              width: iconSizeS,
+              height: iconSizeS,
+              child: CircularProgressIndicator(
+                strokeWidth: thicknessS,
+                color: AppColors.primary,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                syncInProgressCopy,
+                style: context.labelL.copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

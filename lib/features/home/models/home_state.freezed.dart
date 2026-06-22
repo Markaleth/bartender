@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- HomeTab get selectedTab; String? get localVersion; bool get updateAvailable; bool get isCheckingForUpdates;
+ HomeTab get selectedTab; String? get localVersion; bool get updateAvailable; bool get isCheckingForUpdates; bool get isSyncingDatabase;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.selectedTab, selectedTab) || other.selectedTab == selectedTab)&&(identical(other.localVersion, localVersion) || other.localVersion == localVersion)&&(identical(other.updateAvailable, updateAvailable) || other.updateAvailable == updateAvailable)&&(identical(other.isCheckingForUpdates, isCheckingForUpdates) || other.isCheckingForUpdates == isCheckingForUpdates));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.selectedTab, selectedTab) || other.selectedTab == selectedTab)&&(identical(other.localVersion, localVersion) || other.localVersion == localVersion)&&(identical(other.updateAvailable, updateAvailable) || other.updateAvailable == updateAvailable)&&(identical(other.isCheckingForUpdates, isCheckingForUpdates) || other.isCheckingForUpdates == isCheckingForUpdates)&&(identical(other.isSyncingDatabase, isSyncingDatabase) || other.isSyncingDatabase == isSyncingDatabase));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,selectedTab,localVersion,updateAvailable,isCheckingForUpdates);
+int get hashCode => Object.hash(runtimeType,selectedTab,localVersion,updateAvailable,isCheckingForUpdates,isSyncingDatabase);
 
 @override
 String toString() {
-  return 'HomeState(selectedTab: $selectedTab, localVersion: $localVersion, updateAvailable: $updateAvailable, isCheckingForUpdates: $isCheckingForUpdates)';
+  return 'HomeState(selectedTab: $selectedTab, localVersion: $localVersion, updateAvailable: $updateAvailable, isCheckingForUpdates: $isCheckingForUpdates, isSyncingDatabase: $isSyncingDatabase)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- HomeTab selectedTab, String? localVersion, bool updateAvailable, bool isCheckingForUpdates
+ HomeTab selectedTab, String? localVersion, bool updateAvailable, bool isCheckingForUpdates, bool isSyncingDatabase
 });
 
 
@@ -62,12 +62,13 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? selectedTab = null,Object? localVersion = freezed,Object? updateAvailable = null,Object? isCheckingForUpdates = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? selectedTab = null,Object? localVersion = freezed,Object? updateAvailable = null,Object? isCheckingForUpdates = null,Object? isSyncingDatabase = null,}) {
   return _then(_self.copyWith(
 selectedTab: null == selectedTab ? _self.selectedTab : selectedTab // ignore: cast_nullable_to_non_nullable
 as HomeTab,localVersion: freezed == localVersion ? _self.localVersion : localVersion // ignore: cast_nullable_to_non_nullable
 as String?,updateAvailable: null == updateAvailable ? _self.updateAvailable : updateAvailable // ignore: cast_nullable_to_non_nullable
 as bool,isCheckingForUpdates: null == isCheckingForUpdates ? _self.isCheckingForUpdates : isCheckingForUpdates // ignore: cast_nullable_to_non_nullable
+as bool,isSyncingDatabase: null == isSyncingDatabase ? _self.isSyncingDatabase : isSyncingDatabase // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( HomeTab selectedTab,  String? localVersion,  bool updateAvailable,  bool isCheckingForUpdates)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( HomeTab selectedTab,  String? localVersion,  bool updateAvailable,  bool isCheckingForUpdates,  bool isSyncingDatabase)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that.isCheckingForUpdates);case _:
+return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that.isCheckingForUpdates,_that.isSyncingDatabase);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( HomeTab selectedTab,  String? localVersion,  bool updateAvailable,  bool isCheckingForUpdates)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( HomeTab selectedTab,  String? localVersion,  bool updateAvailable,  bool isCheckingForUpdates,  bool isSyncingDatabase)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
-return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that.isCheckingForUpdates);case _:
+return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that.isCheckingForUpdates,_that.isSyncingDatabase);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( HomeTab selectedTab,  String? localVersion,  bool updateAvailable,  bool isCheckingForUpdates)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( HomeTab selectedTab,  String? localVersion,  bool updateAvailable,  bool isCheckingForUpdates,  bool isSyncingDatabase)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that.isCheckingForUpdates);case _:
+return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that.isCheckingForUpdates,_that.isSyncingDatabase);case _:
   return null;
 
 }
@@ -209,13 +210,14 @@ return $default(_that.selectedTab,_that.localVersion,_that.updateAvailable,_that
 
 
 class _HomeState implements HomeState {
-  const _HomeState({this.selectedTab = HomeTab.browse, this.localVersion, this.updateAvailable = false, this.isCheckingForUpdates = false});
+  const _HomeState({this.selectedTab = HomeTab.browse, this.localVersion, this.updateAvailable = false, this.isCheckingForUpdates = false, this.isSyncingDatabase = false});
   
 
 @override@JsonKey() final  HomeTab selectedTab;
 @override final  String? localVersion;
 @override@JsonKey() final  bool updateAvailable;
 @override@JsonKey() final  bool isCheckingForUpdates;
+@override@JsonKey() final  bool isSyncingDatabase;
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +229,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.selectedTab, selectedTab) || other.selectedTab == selectedTab)&&(identical(other.localVersion, localVersion) || other.localVersion == localVersion)&&(identical(other.updateAvailable, updateAvailable) || other.updateAvailable == updateAvailable)&&(identical(other.isCheckingForUpdates, isCheckingForUpdates) || other.isCheckingForUpdates == isCheckingForUpdates));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.selectedTab, selectedTab) || other.selectedTab == selectedTab)&&(identical(other.localVersion, localVersion) || other.localVersion == localVersion)&&(identical(other.updateAvailable, updateAvailable) || other.updateAvailable == updateAvailable)&&(identical(other.isCheckingForUpdates, isCheckingForUpdates) || other.isCheckingForUpdates == isCheckingForUpdates)&&(identical(other.isSyncingDatabase, isSyncingDatabase) || other.isSyncingDatabase == isSyncingDatabase));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,selectedTab,localVersion,updateAvailable,isCheckingForUpdates);
+int get hashCode => Object.hash(runtimeType,selectedTab,localVersion,updateAvailable,isCheckingForUpdates,isSyncingDatabase);
 
 @override
 String toString() {
-  return 'HomeState(selectedTab: $selectedTab, localVersion: $localVersion, updateAvailable: $updateAvailable, isCheckingForUpdates: $isCheckingForUpdates)';
+  return 'HomeState(selectedTab: $selectedTab, localVersion: $localVersion, updateAvailable: $updateAvailable, isCheckingForUpdates: $isCheckingForUpdates, isSyncingDatabase: $isSyncingDatabase)';
 }
 
 
@@ -247,7 +249,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- HomeTab selectedTab, String? localVersion, bool updateAvailable, bool isCheckingForUpdates
+ HomeTab selectedTab, String? localVersion, bool updateAvailable, bool isCheckingForUpdates, bool isSyncingDatabase
 });
 
 
@@ -264,12 +266,13 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? selectedTab = null,Object? localVersion = freezed,Object? updateAvailable = null,Object? isCheckingForUpdates = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? selectedTab = null,Object? localVersion = freezed,Object? updateAvailable = null,Object? isCheckingForUpdates = null,Object? isSyncingDatabase = null,}) {
   return _then(_HomeState(
 selectedTab: null == selectedTab ? _self.selectedTab : selectedTab // ignore: cast_nullable_to_non_nullable
 as HomeTab,localVersion: freezed == localVersion ? _self.localVersion : localVersion // ignore: cast_nullable_to_non_nullable
 as String?,updateAvailable: null == updateAvailable ? _self.updateAvailable : updateAvailable // ignore: cast_nullable_to_non_nullable
 as bool,isCheckingForUpdates: null == isCheckingForUpdates ? _self.isCheckingForUpdates : isCheckingForUpdates // ignore: cast_nullable_to_non_nullable
+as bool,isSyncingDatabase: null == isSyncingDatabase ? _self.isSyncingDatabase : isSyncingDatabase // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

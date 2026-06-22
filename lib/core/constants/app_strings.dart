@@ -1,6 +1,5 @@
 /// Centralized application strings
 const String appName = 'Brewmaster';
-const String appVersion = 'v4.2.3 - Placeholder';
 
 // Navigation
 const String navBrowse = 'Packages';
@@ -84,7 +83,7 @@ const String removeTapDialogContent = 'Are you sure you want to untap ';
 const String removeButtonLabel = 'Remove';
 const String cancelButtonLabel = 'Cancel';
 const String tapCardPackagesTitle = 'Packages:';
-const String tapCardUnknownTitle = 'Unknown';
+const String unknownCopy = 'Unknown';
 const String tapCardLastSyncTitle = 'Last Sync';
 const String forceSyncButtonLabel = 'Force Sync';
 const String browseButtonLabel = 'Browse';
@@ -107,3 +106,25 @@ const String untrustedBadgeLabel = 'Untrusted';
 const String trustCtaLabel = 'Trust Tap';
 const String trustAlertDialogBodyCopy =
     'Third-party taps contain code written by external developers. By trusting this tap, you are allowing it to:\n\n• Install custom software on your system.\n• Run background scripts that can modify your system.';
+
+const String syncInProgressCopy = 'Syncing local packages...';
+const String homebrewUpdateAvailableCopy =
+    'A new version of Brew is available!';
+
+const String lastModifiedStatCopy = 'Last Modified: ';
+const String installDateStatCopy = 'Installation Date: ';
+const String installedSizeStatCopy = 'Installed Size: ';
+
+const String installedPackagesCopy = 'Installed Packages';
+
+const String searchHintText = 'Search for flasks or casks...';
+const String noFiltersCopy = 'All';
+const String filterByTapCopy = 'Filter by Tap';
+
+const String homepageCopy = 'Homepage';
+const String architectureCopy = 'Architecture';
+const String versionCopy = 'Version';
+const String typeAndTapCopy = 'Type & Tap';
+const String fullTagCopy = 'Full Tag';
+const String popularityCopy = 'Full Tag';
+const String queuedCopy = 'Queued...';

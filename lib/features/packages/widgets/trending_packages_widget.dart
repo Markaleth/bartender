@@ -132,7 +132,7 @@ class _DownloadButtonWidget extends StatelessWidget {
   });
 
   String _getButtonLabel() {
-    if (isQueued) return 'Queued...';
+    if (isQueued) return queuedCopy;
     final baseAction = isInstalled ? uninstallButtonLabel : installButtonLabel;
     return isInProgress ? '${baseAction}ing...' : baseAction;
   }

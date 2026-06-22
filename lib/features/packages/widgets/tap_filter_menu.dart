@@ -1,4 +1,5 @@
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -24,7 +25,7 @@ class TapFilterMenu extends StatelessWidget {
       child: MenuAnchor(
         builder: (context, controller, child) {
           final text = tapNotifier.selectedTaps.isEmpty
-              ? 'Filter by Tap'
+              ? filterByTapCopy
               : tapNotifier.selectedTaps.length == 1
               ? tapNotifier.selectedTaps.first
               : '${tapNotifier.selectedTaps.length} Taps';

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
@@ -54,7 +55,7 @@ class PackageFilters extends StatelessWidget {
                   child: TextField(
                     cursorColor: AppColors.textSecondary,
                     decoration: InputDecoration(
-                      hintText: 'Search for flasks or casks...',
+                      hintText: searchHintText,
                       prefixIcon: const Icon(
                         Icons.search,
                         color: AppColors.iconDefault,
@@ -87,16 +88,16 @@ class PackageFilters extends StatelessWidget {
                         onChanged: viewModel.setPackageType,
                         options: const [
                           _FilterOption(
-                            label: 'All',
+                            label: noFiltersCopy,
                             value: PackageTypeFilter.all,
                           ),
                           _FilterOption(
-                            label: 'Formulae',
+                            label: formulaeTitle,
                             value: PackageTypeFilter.formulae,
                             assetName: flaskIcon,
                           ),
                           _FilterOption(
-                            label: 'Casks',
+                            label: casksTitle,
                             value: PackageTypeFilter.casks,
                             assetName: barrelIcon,
                           ),
