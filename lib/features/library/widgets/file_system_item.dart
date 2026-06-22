@@ -9,7 +9,7 @@ class FileSystemItem extends StatefulWidget {
   final String version;
   final bool isSelected;
   final VoidCallback onTap;
-  final bool isDeprecated;
+  final bool isHealthy;
   final bool isCask;
 
   const FileSystemItem({
@@ -19,7 +19,7 @@ class FileSystemItem extends StatefulWidget {
     required this.isSelected,
     required this.onTap,
     this.isCask = false,
-    required this.isDeprecated,
+    required this.isHealthy,
   });
 
   @override
@@ -112,7 +112,7 @@ class _FileSystemItemState extends State<FileSystemItem>
                 ),
                 Row(
                   children: [
-                    if (widget.isDeprecated)
+                    if (widget.isHealthy)
                       Padding(
                         padding: const EdgeInsets.only(right: spacingXs),
                         child: IconWidget(

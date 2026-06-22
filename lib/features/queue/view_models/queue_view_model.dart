@@ -90,6 +90,12 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
   Future<StreamingShellCommand> _startShellCommand(OperationTask task) async {
     final isCask = task.type == PackageType.cask;
 
+    if (task.type == PackageType.system) {
+      if (task.operation == OperationType.update) {
+        return _brewService.update();
+      }
+    }
+    
     if (task.type == PackageType.tap) {
       if (task.operation == OperationType.install) {
         final args = ['tap', task.packageId];

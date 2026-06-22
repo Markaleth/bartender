@@ -386,7 +386,8 @@ class HomebrewRepository {
     }
 
     final remoteResponse = await _apiClient.getLatestHomebrewVersion();
-    if (remoteResponse.status == NetworkStatus.success && remoteResponse.data != null) {
+    if (remoteResponse.status == NetworkStatus.success &&
+        remoteResponse.data != null) {
       final remoteVersion = remoteResponse.data!;
       final hasUpdate = VersionUtils.isRemoteNewer(localVersion, remoteVersion);
       return (localVersion, hasUpdate);

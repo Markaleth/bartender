@@ -1,31 +1,61 @@
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
+import 'package:bartender/core/models/operation_task/operation_task.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
+import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import '../models/home_state.dart';
 
 class HomeViewModel extends BaseViewModel<HomeState, ScreenEffect> {
   final TapFilterNotifier _tapFilterNotifier;
   final HomebrewRepository _repository;
+  final QueueViewModel _queueViewModel;
+  final SystemStatusNotifier _systemNotifier;
 
-  HomeViewModel(this._tapFilterNotifier, this._repository) : super(const HomeState());
+  HomeViewModel(
+    this._tapFilterNotifier,
+    this._repository,
+    this._queueViewModel,
+    this._systemNotifier,
+  ) : super(const HomeState());
 
   void init() {
     checkForUpdates();
+    _systemNotifier.addListener(_onSystemStatusChanged);
   }
 
   Future<void> checkForUpdates() async {
     emitState(state.copyWith(isCheckingForUpdates: true));
     try {
       final (localVersion, hasUpdate) = await _repository.checkUpdateStatus();
-      emitState(state.copyWith(
-        localVersion: localVersion.isEmpty ? null : localVersion,
-        updateAvailable: hasUpdate,
-        isCheckingForUpdates: false,
-      ));
+      emitState(
+        state.copyWith(
+          localVersion: localVersion.isEmpty ? null : localVersion,
+          updateAvailable: hasUpdate,
+          isCheckingForUpdates: false,
+        ),
+      );
     } catch (_) {
       emitState(state.copyWith(isCheckingForUpdates: false));
     }
+  }
+
+  void _onSystemStatusChanged() {
+    final update = _systemNotifier.value;
+    if (update != null && update.operation == OperationType.update) {
+      // The update command finished, re-check versions
+      checkForUpdates();
+    }
+  }
+
+  Future<void> onUpdateBrewTapped() async {
+    _queueViewModel.queueOperation(
+      packageId: 'homebrew',
+      type: PackageType.system,
+      operation: OperationType.update,
+    );
+    emitState(state.copyWith(updateAvailable: false));
   }
 
   void setTab(HomeTab tab) {
@@ -35,5 +65,11 @@ class HomeViewModel extends BaseViewModel<HomeState, ScreenEffect> {
   void navigateAndFilterByTap(String tapName) {
     _tapFilterNotifier.setFilter(tapName);
     setTab(HomeTab.browse);
+  }
+
+  @override
+  void dispose() {
+    _systemNotifier.removeListener(_onSystemStatusChanged);
+    super.dispose();
   }
 }

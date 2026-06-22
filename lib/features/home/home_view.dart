@@ -1,8 +1,10 @@
 import 'package:bartender/core/effects/screen_effect.dart';
+import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 import 'package:bartender/debug/api_tester.dart';
 import 'package:bartender/features/packages/views/packages_view.dart';
 import 'package:bartender/features/library/views/library_view.dart';
+import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/features/taps/views/taps_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +20,12 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BaseView<HomeViewModel, HomeState, ScreenEffect>(
-        viewModelBuilder: (context) =>
-            HomeViewModel(context.read<TapFilterNotifier>(), context.read<HomebrewRepository>()),
+        viewModelBuilder: (context) => HomeViewModel(
+          context.read<TapFilterNotifier>(),
+          context.read<HomebrewRepository>(),
+          context.read<QueueViewModel>(),
+          context.read<SystemStatusNotifier>(),
+        ),
         onModelReady: (viewModel) => viewModel.init(),
         builder: (context, viewModel, state) => Scaffold(
           body: SafeArea(

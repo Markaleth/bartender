@@ -67,11 +67,17 @@ class ExplorerPane extends StatelessWidget {
             String title = '';
             String version = '';
             bool isCask = false;
+            bool isHealthy = true;
 
             if (package is FormulaModel) {
               title = package.name;
               version = package.versions.stable;
               isCask = false;
+              isHealthy =
+                  (package.deprecated ||
+                  package.outdated ||
+                  package.missingDeps.isNotEmpty ||
+                  package.disabled);
             } else if (package is CaskModel) {
               title = package.token;
               version = package.version;
@@ -81,7 +87,7 @@ class ExplorerPane extends StatelessWidget {
             return SizeTransition(
               sizeFactor: animation,
               child: FileSystemItem(
-                isDeprecated: package.deprecated,
+                isHealthy: isHealthy,
                 title: title,
                 version: version,
                 isSelected: state.selectedPackage == package,

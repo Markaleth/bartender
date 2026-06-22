@@ -1,3 +1,5 @@
+import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,62 +17,89 @@ class SideNavigationHeader extends StatelessWidget {
     final state = viewModel.state;
 
     return Padding(
-      padding: const EdgeInsets.all(spacingM),
-      child: Row(
+      padding: const EdgeInsets.only(bottom: spacingL),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const CircleAvatar(
-            backgroundColor: AppColors.primary,
-            child: Icon(Icons.liquor, color: AppColors.onPrimary),
-          ),
-          const SizedBox(width: spacingM),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          SizedBox(height: spacingM),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: spacingS),
+            child: Row(
               children: [
-                Text(
-                  appName,
-                  style: context.titleM,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                const CircleAvatar(
+                  backgroundColor: AppColors.primary,
+                  child: Icon(Icons.liquor, color: AppColors.onPrimary),
                 ),
-                if (state.localVersion != null)
-                  Row(
+                const SizedBox(width: spacingM),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Brew ${state.localVersion}',
-                        style: context.labelL.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                        appName,
+                        style: context.titleM,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      if (state.updateAvailable) ...[
-                        const SizedBox(width: spacingS),
-                        const Tooltip(
-                          message: 'Update Available',
-                          child: Icon(
-                            Icons.warning_amber_rounded,
-                            color: Colors.orange,
-                            size: 16,
+                      if (state.localVersion != null)
+                        Text(
+                          'Brew ${state.localVersion}',
+                          style: context.labelL.copyWith(
+                            color: AppColors.textSecondary,
                           ),
                         ),
-                      ],
                     ],
+                  ),
+                ),
+                if (state.isCheckingForUpdates)
+                  const SizedBox(
+                    width: iconSizeM,
+                    height: iconSizeM,
+                    child: CircularProgressIndicator(strokeWidth: thicknessS),
+                  )
+                else
+                  ButtonWidget.icon(
+                    assetName: updateIcon,
+                    onPressed: viewModel.checkForUpdates,
+                    iconSize: iconSizeM,
                   ),
               ],
             ),
           ),
-          if (state.isCheckingForUpdates)
-            const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          else
-            IconButton(
-              icon: const Icon(Icons.refresh, size: 20),
-              onPressed: viewModel.checkForUpdates,
-              tooltip: 'Check for Brew Updates',
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
+          if (state.updateAvailable)
+            Padding(
+              padding: const EdgeInsets.only(top: spacingM),
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: AppColors.primary),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: spacingS,
+                    vertical: spacingS,
+                  ),
+                  child: Row(
+                    spacing: spacingS,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'A new version of Brew is available!',
+                          style: context.labelL.copyWith(
+                            color: AppColors.onPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      ButtonWidget.icon(
+                        assetName: systemUpdateIcon,
+                        onPressed: viewModel.checkForUpdates,
+                        iconSize: iconSizeM,
+                        color: AppColors.onPrimary,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
         ],
       ),
