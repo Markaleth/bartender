@@ -266,10 +266,7 @@ class ConfigPathsWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   installPath,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontFamily: 'monospace',
-                  ),
+                  style: context.monoM.copyWith(color: AppColors.textSecondary),
                 ),
               ),
               ButtonWidget.icon(

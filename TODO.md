@@ -23,6 +23,9 @@
 - [x] Revisit Taps and see if we can make the card a bit more expressive and add a bit more content to it. - ADD: Disk size (git repo size), split counts (formulae vs casks), git
 - [x] Consider doing somethign more suggestive for the "precompiled" description. - USE ICONS: 📦 Box + "Ready-to-run" for precompiled, 🔨 Hammer + "Build from source" for source; add tooltips for detailsbranch (if not default); REMOVE individual "force sync" button (use global sync instead)
 - [x] Make sure you don't have any magic numbers or magic strings
+- [x] !!! Test Trust / Untrust functionaltiy across the app. -> You're doing some background work with no UI indicator of it. We need to fix that. Repro steps are just "trust" a tap. You'll see everything according to plan, except that once the "trust" confirmation dialog is "confirmed" you don't offer any visual feedback of stuff happening.
+- [x] Do another sweep and move strings to app_strings.dart
+- [x] Cleanup text styles -> We need to clean up Monospace and FiraCode.
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
@@ -31,11 +34,8 @@
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [ ] Consider renaming "library" to "Installed".
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
-- [ ] Do another sweep and move strings to app_strings.dart
 - [ ] Some build methods are doing a bit of heavy lifting. We should consider moving that to a separate substate or something to clean them up
-- [ ] !!! Test Trust / Untrust functionaltiy across the app. -> You're doing some background work with no UI indicator of it. We need to fix that. Repro steps are just "trust" a tap. You'll see everything according to plan, except that once the "trust" confirmation dialog is "confirmed" you don't offer any visual feedback of stuff happening.
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or something)
-- [ ] Cleanup text styles -> We need to clean up Monospace and FiraCode.
 - [ ] clean up how we use repos and shit around here. you're using homebrew_repository AND package_repository. What's the difference between the two if you're doing DB writes and running console commands?
 
 # Issues:

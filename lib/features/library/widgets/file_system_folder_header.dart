@@ -65,11 +65,7 @@ class FileSystemFolderHeader extends StatelessWidget {
                 installPath,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
-                  fontFamily: 'monospace',
-                  fontSize: 11,
-                ),
+                style: context.monoS.copyWith(color: AppColors.textSecondary),
               ),
             ),
           ],

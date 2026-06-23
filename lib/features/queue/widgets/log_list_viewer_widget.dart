@@ -1,6 +1,7 @@
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class LogListViewer extends StatefulWidget {
@@ -48,12 +49,7 @@ class _LogListViewerState extends State<LogListViewer> {
         itemBuilder: (context, index) {
           return Text(
             widget.logs[index],
-            style: const TextStyle(
-              fontFamily: 'Fira Code', // Ensure this or fallback works
-              fontSize: 11,
-              color: AppColors.textSecondary,
-              height: 1.5,
-            ),
+            style: context.monoS.copyWith(color: AppColors.textSecondary),
           );
         },
       ),

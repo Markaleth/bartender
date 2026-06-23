@@ -1,6 +1,7 @@
 import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 
@@ -101,12 +102,10 @@ class _FileSystemItemState extends State<FileSystemItem>
                 Expanded(
                   child: Text(
                     widget.title,
-                    style: TextStyle(
+                    style: context.monoM.copyWith(
                       color: widget.isSelected
                           ? AppColors.primary
-                          : AppColors.textPrimary,
-                      fontFamily: 'monospace',
-                      fontSize: 13,
+                          : AppColors.textSecondary,
                     ),
                   ),
                 ),
@@ -123,12 +122,10 @@ class _FileSystemItemState extends State<FileSystemItem>
                       ),
                     Text(
                       widget.version,
-                      style: TextStyle(
+                      style: context.monoS.copyWith(
                         color: widget.isSelected
                             ? AppColors.primary
                             : AppColors.textSecondary,
-                        fontFamily: 'monospace',
-                        fontSize: 11,
                       ),
                     ),
                   ],

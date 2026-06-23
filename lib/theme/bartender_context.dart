@@ -18,4 +18,16 @@ extension BartenderContext on BuildContext {
   // --- Layout Shorthand ---
   double get windowWidth => MediaQuery.sizeOf(this).width;
   double get windowHeight => MediaQuery.sizeOf(this).height;
+
+  TextStyle get monoM => const TextStyle(
+    fontFamily: 'Fira Code',
+    fontFamilyFallback: ['monospace'],
+    fontSize: 13,
+  );
+
+  TextStyle get monoS => const TextStyle(
+    fontFamily: 'Fira Code',
+    fontFamilyFallback: ['monospace'],
+    fontSize: 11,
+  );
 }
