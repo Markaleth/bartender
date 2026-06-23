@@ -74,30 +74,30 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   }
 
   Future<void> syncTaps() async {
-    emitState(state.copyWith(isSyncing: true));
+    emitState(state.copyWith(syncingTap: 'all'));
     try {
       await _repository.syncTaps();
       await _repository.syncThirdPartyTapPackages();
       final taps = await _repository.getTaps();
       emitState(
-        state.copyWith(tapsState: FetchState.success(taps), isSyncing: false),
+        state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
     } catch (e) {
-      emitState(state.copyWith(isSyncing: false));
+      emitState(state.copyWith(syncingTap: null));
       emitEffect(ShowToastEffect(e.toString(), isError: true));
     }
   }
 
   Future<void> syncTap(String tapName) async {
-    emitState(state.copyWith(isSyncing: true));
+    emitState(state.copyWith(syncingTap: tapName));
     try {
       await _repository.syncTap(tapName);
       final taps = await _repository.getTaps();
       emitState(
-        state.copyWith(tapsState: FetchState.success(taps), isSyncing: false),
+        state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
     } catch (e) {
-      emitState(state.copyWith(isSyncing: false));
+      emitState(state.copyWith(syncingTap: null));
       emitEffect(ShowToastEffect(e.toString(), isError: true));
     }
   }
@@ -120,8 +120,17 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   }
 
   Future<void> trustTap(String name) async {
-    await _repository.toggleTapTrust(name, true);
-    await fetchTaps();
-    _statusNotifier.markUpdated(name, true, true);
+    emitState(state.copyWith(syncingTap: name));
+    try {
+      await _repository.toggleTapTrust(name, true);
+      final taps = await _repository.getTaps();
+      emitState(
+        state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
+      );
+      _statusNotifier.markUpdated(name, true, true);
+    } catch (e) {
+      emitState(state.copyWith(syncingTap: null));
+      emitEffect(ShowToastEffect(e.toString(), isError: true));
+    }
   }
 }

@@ -64,7 +64,7 @@ class TapsView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(spacingM),
                 child: _HeaderWidget(
-                  isSyncing: state.isSyncing,
+                  isSyncing: state.syncingTap != null,
                   onSync: viewModel.syncTaps,
                   onAddTap: () => _showAddTapDialog(context, viewModel),
                 ),
@@ -98,7 +98,9 @@ class TapsView extends StatelessWidget {
                         final tap = taps[index];
                         return TapCard(
                           tap: tap,
-                          isSyncing: state.isSyncing,
+                          isGlobalSyncing: state.syncingTap == 'all',
+                          isItemSyncing: state.syncingTap == tap.name,
+                          isAnySyncing: state.syncingTap != null,
                           onViewPackages: () {
                             homeViewModel.navigateAndFilterByTap(tap.name);
                           },

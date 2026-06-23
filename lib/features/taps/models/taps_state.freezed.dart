@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TapsState {
 
- FetchState<List<TapModel>> get tapsState; bool get isSyncing;
+ FetchState<List<TapModel>> get tapsState; String? get syncingTap;
 /// Create a copy of TapsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TapsStateCopyWith<TapsState> get copyWith => _$TapsStateCopyWithImpl<TapsState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TapsState&&(identical(other.tapsState, tapsState) || other.tapsState == tapsState)&&(identical(other.isSyncing, isSyncing) || other.isSyncing == isSyncing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TapsState&&(identical(other.tapsState, tapsState) || other.tapsState == tapsState)&&(identical(other.syncingTap, syncingTap) || other.syncingTap == syncingTap));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tapsState,isSyncing);
+int get hashCode => Object.hash(runtimeType,tapsState,syncingTap);
 
 @override
 String toString() {
-  return 'TapsState(tapsState: $tapsState, isSyncing: $isSyncing)';
+  return 'TapsState(tapsState: $tapsState, syncingTap: $syncingTap)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TapsStateCopyWith<$Res>  {
   factory $TapsStateCopyWith(TapsState value, $Res Function(TapsState) _then) = _$TapsStateCopyWithImpl;
 @useResult
 $Res call({
- FetchState<List<TapModel>> tapsState, bool isSyncing
+ FetchState<List<TapModel>> tapsState, String? syncingTap
 });
 
 
@@ -62,11 +62,11 @@ class _$TapsStateCopyWithImpl<$Res>
 
 /// Create a copy of TapsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tapsState = null,Object? isSyncing = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? tapsState = null,Object? syncingTap = freezed,}) {
   return _then(_self.copyWith(
 tapsState: null == tapsState ? _self.tapsState : tapsState // ignore: cast_nullable_to_non_nullable
-as FetchState<List<TapModel>>,isSyncing: null == isSyncing ? _self.isSyncing : isSyncing // ignore: cast_nullable_to_non_nullable
-as bool,
+as FetchState<List<TapModel>>,syncingTap: freezed == syncingTap ? _self.syncingTap : syncingTap // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of TapsState
@@ -160,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FetchState<List<TapModel>> tapsState,  bool isSyncing)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FetchState<List<TapModel>> tapsState,  String? syncingTap)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TapsState() when $default != null:
-return $default(_that.tapsState,_that.isSyncing);case _:
+return $default(_that.tapsState,_that.syncingTap);case _:
   return orElse();
 
 }
@@ -181,10 +181,10 @@ return $default(_that.tapsState,_that.isSyncing);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FetchState<List<TapModel>> tapsState,  bool isSyncing)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FetchState<List<TapModel>> tapsState,  String? syncingTap)  $default,) {final _that = this;
 switch (_that) {
 case _TapsState():
-return $default(_that.tapsState,_that.isSyncing);case _:
+return $default(_that.tapsState,_that.syncingTap);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +201,10 @@ return $default(_that.tapsState,_that.isSyncing);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FetchState<List<TapModel>> tapsState,  bool isSyncing)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FetchState<List<TapModel>> tapsState,  String? syncingTap)?  $default,) {final _that = this;
 switch (_that) {
 case _TapsState() when $default != null:
-return $default(_that.tapsState,_that.isSyncing);case _:
+return $default(_that.tapsState,_that.syncingTap);case _:
   return null;
 
 }
@@ -216,11 +216,11 @@ return $default(_that.tapsState,_that.isSyncing);case _:
 
 
 class _TapsState implements TapsState {
-  const _TapsState({this.tapsState = const FetchState.loading(), this.isSyncing = false});
+  const _TapsState({this.tapsState = const FetchState.loading(), this.syncingTap});
   
 
 @override@JsonKey() final  FetchState<List<TapModel>> tapsState;
-@override@JsonKey() final  bool isSyncing;
+@override final  String? syncingTap;
 
 /// Create a copy of TapsState
 /// with the given fields replaced by the non-null parameter values.
@@ -232,16 +232,16 @@ _$TapsStateCopyWith<_TapsState> get copyWith => __$TapsStateCopyWithImpl<_TapsSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TapsState&&(identical(other.tapsState, tapsState) || other.tapsState == tapsState)&&(identical(other.isSyncing, isSyncing) || other.isSyncing == isSyncing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TapsState&&(identical(other.tapsState, tapsState) || other.tapsState == tapsState)&&(identical(other.syncingTap, syncingTap) || other.syncingTap == syncingTap));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tapsState,isSyncing);
+int get hashCode => Object.hash(runtimeType,tapsState,syncingTap);
 
 @override
 String toString() {
-  return 'TapsState(tapsState: $tapsState, isSyncing: $isSyncing)';
+  return 'TapsState(tapsState: $tapsState, syncingTap: $syncingTap)';
 }
 
 
@@ -252,7 +252,7 @@ abstract mixin class _$TapsStateCopyWith<$Res> implements $TapsStateCopyWith<$Re
   factory _$TapsStateCopyWith(_TapsState value, $Res Function(_TapsState) _then) = __$TapsStateCopyWithImpl;
 @override @useResult
 $Res call({
- FetchState<List<TapModel>> tapsState, bool isSyncing
+ FetchState<List<TapModel>> tapsState, String? syncingTap
 });
 
 
@@ -269,11 +269,11 @@ class __$TapsStateCopyWithImpl<$Res>
 
 /// Create a copy of TapsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tapsState = null,Object? isSyncing = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? tapsState = null,Object? syncingTap = freezed,}) {
   return _then(_TapsState(
 tapsState: null == tapsState ? _self.tapsState : tapsState // ignore: cast_nullable_to_non_nullable
-as FetchState<List<TapModel>>,isSyncing: null == isSyncing ? _self.isSyncing : isSyncing // ignore: cast_nullable_to_non_nullable
-as bool,
+as FetchState<List<TapModel>>,syncingTap: freezed == syncingTap ? _self.syncingTap : syncingTap // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

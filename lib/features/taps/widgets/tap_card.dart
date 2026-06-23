@@ -9,7 +9,9 @@ import 'package:bartender/data/models/tap/tap_model.dart';
 
 class TapCard extends StatelessWidget {
   final TapModel tap;
-  final bool isSyncing;
+  final bool isGlobalSyncing;
+  final bool isItemSyncing;
+  final bool isAnySyncing;
   final VoidCallback onViewPackages;
   final VoidCallback onRemove;
   final VoidCallback onTrust;
@@ -17,7 +19,9 @@ class TapCard extends StatelessWidget {
   const TapCard({
     super.key,
     required this.tap,
-    required this.isSyncing,
+    required this.isGlobalSyncing,
+    required this.isItemSyncing,
+    required this.isAnySyncing,
     required this.onViewPackages,
     required this.onRemove,
     required this.onTrust,
@@ -34,14 +38,15 @@ class TapCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TapCardHeader(tap: tap, isSyncing: isSyncing),
+          TapCardHeader(tap: tap, isSyncing: isItemSyncing || isGlobalSyncing),
           const HorizontalDivider(),
           TapCardBody(tap: tap),
           const HorizontalDivider(height: 0),
           TapCardFooter(
             isTrusted: tap.trusted,
             tapName: tap.name,
-            isSyncing: isSyncing,
+            isItemSyncing: isItemSyncing,
+            isAnySyncing: isAnySyncing,
             onViewPackages: onViewPackages,
             onUntap: onRemove,
             onTrust: onTrust,

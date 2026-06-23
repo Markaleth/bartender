@@ -8,6 +8,6 @@ part 'taps_state.freezed.dart';
 abstract class TapsState with _$TapsState {
   const factory TapsState({
     @Default(FetchState.loading()) FetchState<List<TapModel>> tapsState,
-    @Default(false) bool isSyncing,
+    String? syncingTap,
   }) = _TapsState;
 }

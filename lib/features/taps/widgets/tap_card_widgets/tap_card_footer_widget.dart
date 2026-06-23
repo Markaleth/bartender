@@ -10,13 +10,15 @@ import 'package:flutter/material.dart';
 class TapCardFooter extends StatelessWidget {
   final String tapName;
   final bool isTrusted;
-  final bool isSyncing;
+  final bool isItemSyncing;
+  final bool isAnySyncing;
   final VoidCallback onViewPackages;
   final VoidCallback onUntap;
   final VoidCallback onTrust;
   const TapCardFooter({
     super.key,
-    required this.isSyncing,
+    required this.isItemSyncing,
+    required this.isAnySyncing,
     required this.onViewPackages,
     required this.onUntap,
     required this.onTrust,
@@ -26,6 +28,11 @@ class TapCardFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ButtonState getDisabledState() {
+      if (isAnySyncing && !isItemSyncing) return ButtonState.disabled;
+      return ButtonState.enabled;
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.onSurface.withValues(alpha: 0.02),
@@ -45,8 +52,9 @@ class TapCardFooter extends StatelessWidget {
           ButtonWidget.tertiary(
             iconData: Icons.delete,
             label: untapButtonLabel,
+            state: getDisabledState(),
             color: AppColors.error,
-            onPressed: isSyncing
+            onPressed: isAnySyncing
                 ? null
                 : () {
                     showDialog(
@@ -79,50 +87,57 @@ class TapCardFooter extends StatelessWidget {
               ? ButtonWidget.tertiary(
                   iconData: Icons.arrow_forward,
                   label: browseButtonLabel,
-                  onPressed: onViewPackages,
+                  state: getDisabledState(),
+                  onPressed: isAnySyncing ? null : onViewPackages,
                 )
               : ButtonWidget.tertiary(
                   assetName: trustIcon,
                   label: trustCtaLabel,
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        buttonPadding: const EdgeInsets.all(spacingM),
-                        icon: const IconWidget(
-                          assetName: trustAlertIcon,
-                          color: AppColors.warning,
-                          size: iconSize2Xl,
-                        ),
-                        title: Text('Trust $tapName?', style: context.headM),
-                        content: Text(trustAlertDialogBodyCopy),
-                        actions: [
-                          SizedBox(
-                            width: defaultButtonWidth,
-                            child: ButtonWidget.secondary(
-                              assetName: untrustedIcon,
-                              iconSize: iconSizeM,
-                              label: cancelButtonLabel,
-                              onPressed: () => Navigator.of(ctx).pop(),
+                  state: isItemSyncing ? ButtonState.loading : getDisabledState(),
+                  onPressed: isAnySyncing
+                      ? null
+                      : () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              buttonPadding: const EdgeInsets.all(spacingM),
+                              icon: const IconWidget(
+                                assetName: trustAlertIcon,
+                                color: AppColors.warning,
+                                size: iconSize2Xl,
+                              ),
+                              title: Text(
+                                'Trust $tapName?',
+                                style: context.headM,
+                              ),
+                              content: Text(trustAlertDialogBodyCopy),
+                              actions: [
+                                SizedBox(
+                                  width: defaultButtonWidth,
+                                  child: ButtonWidget.secondary(
+                                    assetName: untrustedIcon,
+                                    iconSize: iconSizeM,
+                                    label: cancelButtonLabel,
+                                    onPressed: () => Navigator.of(ctx).pop(),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: defaultButtonWidth,
+                                  child: ButtonWidget.primary(
+                                    color: AppColors.warning,
+                                    assetName: trustedIcon,
+                                    iconSize: iconSizeM,
+                                    label: trustCtaLabel,
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                      onTrust();
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          SizedBox(
-                            width: defaultButtonWidth,
-                            child: ButtonWidget.primary(
-                              color: AppColors.warning,
-                              assetName: trustedIcon,
-                              iconSize: iconSizeM,
-                              label: trustCtaLabel,
-                              onPressed: () {
-                                Navigator.of(ctx).pop();
-                                onTrust();
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                          );
+                        },
                 ),
         ],
       ),
