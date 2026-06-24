@@ -127,7 +127,12 @@ abstract class SystemHealthState with _$SystemHealthState {
     return AppColors.error;
   }
 
-  List<String> get formattedDoctorIssues {
-    return doctorIssues.map((issue) => issue.replaceAll('Warning:', '').trim()).toList();
+  List<({String raw, String formatted})> get parsedDoctorIssues {
+    return doctorIssues
+        .map((issue) => (
+              raw: issue,
+              formatted: issue.replaceAll('Warning:', '').trim(),
+            ))
+        .toList();
   }
 }

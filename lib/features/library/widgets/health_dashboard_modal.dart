@@ -104,9 +104,8 @@ class HealthDashboardModal extends StatelessWidget {
                       ),
                     )
                   else
-                  //TODO: lol, why??? asMap? why the fuckMothertingChrist??
-                    ...healthState.doctorIssues.asMap().entries.map(
-                      (entry) => Container(
+                    for (final issue in healthState.parsedDoctorIssues)
+                      Container(
                         margin: const EdgeInsets.only(bottom: spacingS),
                         padding: const EdgeInsets.all(spacingM),
                         decoration: BoxDecoration(
@@ -116,7 +115,7 @@ class HealthDashboardModal extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-                            if (entry.value.toLowerCase().contains('warning'))
+                            if (issue.raw.toLowerCase().contains('warning'))
                               IconWidget(
                                 assetName: warningIcon,
                                 color: AppColors.warning,
@@ -125,7 +124,7 @@ class HealthDashboardModal extends StatelessWidget {
                             const SizedBox(width: spacingM),
                             Expanded(
                               child: Text(
-                                healthState.formattedDoctorIssues[entry.key],
+                                issue.formatted,
                                 style: context.bodyM.copyWith(
                                   color: AppColors.textPrimary,
                                 ),
@@ -134,7 +133,6 @@ class HealthDashboardModal extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ),
                 ],
               ),
             ),
