@@ -4,74 +4,59 @@ import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/extensions/string_extensions.dart';
-import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/core/utils/url_launcer_utils.dart';
+import 'package:bartender/features/packages/models/package_states.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
-import 'package:bartender/data/models/formula/formula_model.dart';
-import 'package:bartender/data/models/cask/cask_model.dart';
-import 'package:bartender/core/extensions/package_extensions.dart';
 
 class PackageGridMatrix extends StatelessWidget {
-  final dynamic model;
+  final PackageGridMatrixState model;
 
   const PackageGridMatrix({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
-    return switch (model) {
-      CaskModel cask => _BasePackageGridMatrix(
+    return model.map(
+      cask: (cask) => _BasePackageGridMatrix(
         homepage: cask.homepage,
-        archs: cask.compatibility
-            .where((info) => info != CompatibilityInfo.precompiled)
-            .map((info) => info.label)
-            .join(', '),
+        archs: cask.archs,
         version: cask.version,
-        typeAndTap: 'Cask • ${cask.tap ?? 'homebrew/cask'}',
-        fullTag: cask.fullToken ?? cask.token,
-        installs30d: cask.installs30d,
+        typeAndTap: cask.typeAndTap,
+        fullTag: cask.fullTag,
+        formattedInstalls: cask.formattedInstalls,
         extraItems: [
           PackageDetailGridItem(
             icon: updateIcon,
             title: 'Auto-Updates',
-            subtitle: cask.autoUpdates == true
-                ? 'Managed by App'
-                : 'Managed by Brew',
+            subtitle: cask.autoUpdates ? 'Managed by App' : 'Managed by Brew',
           ),
           PackageDetailGridItem(
             icon: unpackIcon,
             title: 'Artifact Type',
-            subtitle: cask.primaryArtifactType,
+            subtitle: cask.artifactType,
           ),
         ],
       ),
-      FormulaModel formula => _BasePackageGridMatrix(
+      formula: (formula) => _BasePackageGridMatrix(
         homepage: formula.homepage,
-        archs: formula.compatibility
-            .where((info) => info != CompatibilityInfo.precompiled)
-            .map((info) => info.label)
-            .join(', '),
-        version: formula.versions.stable,
-        typeAndTap: 'Formula • ${formula.tap}',
-        fullTag: formula.fullName,
-        installs30d: formula.installs30d,
+        archs: formula.archs,
+        version: formula.version,
+        typeAndTap: formula.typeAndTap,
+        fullTag: formula.fullTag,
+        formattedInstalls: formula.formattedInstalls,
         extraItems: [
           PackageDetailGridItem(
             icon: badgeIcon,
             title: 'License',
-            subtitle: formula.license ?? 'Unknown',
+            subtitle: formula.license,
           ),
           PackageDetailGridItem(
-            icon:
-                bottleIcon, // TODO:  should replace with somethign that's more suggestive or "precompiled"
-            title: formula.versions.bottle
-                ? 'Precompiled (Bottle)'
-                : 'Build from Source',
+            icon: bottleIcon,
+            title: formula.isBottle ? 'Precompiled (Bottle)' : 'Build from Source',
           ),
         ],
       ),
-      _ => const SizedBox.shrink(),
-    };
+    );
   }
 }
 
@@ -81,7 +66,7 @@ class _BasePackageGridMatrix extends StatelessWidget {
   final String version;
   final String typeAndTap;
   final String fullTag;
-  final int? installs30d;
+  final String formattedInstalls;
   final List<Widget> extraItems;
 
   const _BasePackageGridMatrix({
@@ -90,7 +75,7 @@ class _BasePackageGridMatrix extends StatelessWidget {
     required this.version,
     required this.typeAndTap,
     required this.fullTag,
-    required this.installs30d,
+    required this.formattedInstalls,
     required this.extraItems,
   });
 
@@ -139,9 +124,7 @@ class _BasePackageGridMatrix extends StatelessWidget {
           PackageDetailGridItem(
             icon: trendingIcon,
             title: popularityCopy,
-            subtitle: installs30d != null
-                ? '${StringUtils.formatWithCommas(installs30d!)} installs'
-                : 'N/A',
+            subtitle: formattedInstalls,
           ),
           ...extraItems,
         ];

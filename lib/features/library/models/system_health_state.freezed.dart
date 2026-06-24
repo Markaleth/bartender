@@ -212,8 +212,8 @@ return $default(_that.globalHealthScore,_that.systemStorageUsed,_that.outdatedCo
 /// @nodoc
 
 
-class _SystemHealthState implements SystemHealthState {
-  const _SystemHealthState({this.globalHealthScore = 100, this.systemStorageUsed = '0 B', this.outdatedCount = 0, this.reclaimableSpace = '', this.doctorWarningsCount = 0, this.doctorErrorsCount = 0, final  List<String> doctorIssues = const [], this.orphanedDependenciesCount = 0}): _doctorIssues = doctorIssues;
+class _SystemHealthState extends SystemHealthState {
+  const _SystemHealthState({this.globalHealthScore = 100, this.systemStorageUsed = '0 B', this.outdatedCount = 0, this.reclaimableSpace = '', this.doctorWarningsCount = 0, this.doctorErrorsCount = 0, final  List<String> doctorIssues = const [], this.orphanedDependenciesCount = 0}): _doctorIssues = doctorIssues,super._();
   
 
 @override@JsonKey() final  int globalHealthScore;

@@ -1,17 +1,15 @@
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/features/packages/widgets/trending_packages_widget.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
+import 'package:bartender/features/packages/models/trending_package_state.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
-import 'package:bartender/data/models/cask/cask_model.dart';
-import 'package:bartender/data/models/formula/formula_model.dart';
-import 'package:bartender/core/utils/string_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TrendingPackagesCarousel extends StatefulWidget {
-  final List<List<dynamic>> pages;
+  final List<List<TrendingPackageState>> pages;
 
   const TrendingPackagesCarousel({super.key, required this.pages});
 
@@ -104,7 +102,7 @@ class _TrendingPackagesCarouselState extends State<TrendingPackagesCarousel> {
 }
 
 class _CarouselPage extends StatelessWidget {
-  final List<dynamic> items;
+  final List<TrendingPackageState> items;
   final int itemsPerPage;
 
   const _CarouselPage({required this.items, required this.itemsPerPage});
@@ -118,11 +116,7 @@ class _CarouselPage extends StatelessWidget {
         children: List.generate(itemsPerPage, (index) {
           final isLastItem = index == itemsPerPage - 1;
           final item = index < items.length ? items[index] : null;
-          final isFormula = item is FormulaModel;
-          final String id = isFormula ? item.name : (item as CaskModel).token;
-          final bool isInstalled = isFormula
-              ? item.isInstalled
-              : (item as CaskModel).isInstalled;
+          if (item == null) return Expanded(child: const SizedBox.shrink());
 
           return Expanded(
             child: Padding(
@@ -132,7 +126,7 @@ class _CarouselPage extends StatelessWidget {
                   final activeTask = context
                       .select<QueueViewModel, OperationTask?>(
                         (vm) => vm.state.tasks
-                            .where((t) => t.packageId == id)
+                            .where((task) => task.packageId == item.id)
                             .lastOrNull,
                       );
 
@@ -141,33 +135,23 @@ class _CarouselPage extends StatelessWidget {
                       activeTask?.status == OperationStatus.inProgress;
 
                   return TrendingPackagesWidget(
-                    title: id,
-                    description: isFormula
-                        ? item.desc
-                        : (item as CaskModel).desc,
-                    version: isFormula
-                        ? item.versions.stable
-                        : (item as CaskModel).version,
-                    homepage: isFormula
-                        ? item.homepage
-                        : (item as CaskModel).homepage,
-                    downloads: isFormula
-                        ? StringUtils.formatDownloads(item.installs30d)
-                        : StringUtils.formatDownloads(
-                            (item as CaskModel).installs30d,
-                          ),
+                    title: item.id,
+                    description: item.description,
+                    version: item.version,
+                    homepage: item.homepage,
+                    downloads: item.formattedDownloads,
                     isQueued: isQueued,
                     isInProgress: isInProgress,
-                    isInstalled: isInstalled,
+                    isInstalled: item.isInstalled,
                     onInstall: (isQueued || isInProgress)
                         ? null
                         : () {
                             context.read<QueueViewModel>().queueOperation(
-                              packageId: id,
-                              type: isFormula
+                              packageId: item.id,
+                              type: item.isFormula
                                   ? PackageType.formula
                                   : PackageType.cask,
-                              operation: isInstalled
+                              operation: item.isInstalled
                                   ? OperationType.uninstall
                                   : OperationType.install,
                             );

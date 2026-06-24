@@ -4,7 +4,7 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/features/library/view_models/library_view_model.dart';
 
-import 'package:bartender/features/library/models/library_ui_models.dart';
+import 'package:bartender/features/library/models/library_section_states.dart';
 
 import 'explorer_pane_header.dart';
 import 'file_system_folder_header.dart';
@@ -40,7 +40,7 @@ class ExplorerPane extends StatelessWidget {
       );
 
       slivers.add(
-        CollapsibleSliverList<PackageItemUiModel>(
+        CollapsibleSliverList<PackageItemState>(
           items: section.packages,
           isExpanded: section.isExpanded,
           itemBuilder: (context, item, animation) {

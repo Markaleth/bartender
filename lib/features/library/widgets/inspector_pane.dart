@@ -1,3 +1,4 @@
+import 'package:bartender/features/library/models/library_state.dart';
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/package_health_widget.dart';
@@ -13,8 +14,6 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/features/library/view_models/library_view_model.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
-
-import 'package:bartender/data/models/tap/tap_model.dart';
 import 'package:bartender/features/library/widgets/installed_packages_list.dart';
 
 class InspectorPane extends StatelessWidget {
@@ -25,25 +24,98 @@ class InspectorPane extends StatelessWidget {
     final viewModel = context.watch<LibraryViewModel>();
     final state = viewModel.state;
 
-    if (state.selectedPackage == null) {
-      return Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(radiusM),
-          border: Border.all(color: AppColors.borderNeutral),
-        ),
-        child: Center(
-          child: Text(
-            inspectorPaneUnselectedTitle,
-            style: context.bodyM.copyWith(color: AppColors.textSecondary),
+    //TODO: i suppose this makes SOME sense but we need to break this shit up
+    return state.inspectorState.map(
+      empty: (_) => Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(radiusM),
+            border: Border.all(color: AppColors.borderNeutral),
+          ),
+          child: Center(
+            child: Text(
+              inspectorPaneUnselectedTitle,
+              style: context.bodyM.copyWith(color: AppColors.textSecondary),
+            ),
           ),
         ),
-      );
-    }
-
-    if (state.isSelectedPackageTap) {
-      final tap = state.selectedPackage as TapModel;
-      return Container(
+      tap: (tapModel) {
+        final tap = tapModel.tap;
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(radiusM),
+            border: Border.all(color: AppColors.borderNeutral),
+          ),
+          child: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(spacingM),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    HeaderWidget(
+                      name: tap.name,
+                      version: tap.official
+                          ? headerWidgetOfficialCopy
+                          : headerWidgetCommunityCopy,
+                      description: 'Tap from ${tap.user}/${tap.repo}',
+                    ),
+                    const HorizontalDivider(),
+                    const SizedBox(height: spacingM),
+                    ConfigPathsWidget(installPath: tap.path),
+                    const SizedBox(height: spacingL),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _TapStatsWidget(
+                            label: formulaeTitle,
+                            count: tap.formulaNames.length,
+                          ),
+                        ),
+                        const SizedBox(width: spacingM),
+                        Expanded(
+                          child: _TapStatsWidget(
+                            label: casksTitle,
+                            count: tap.caskTokens.length,
+                          ),
+                        ),
+                      ],
+                    ),
+                    // We need to pass original dynamic models to InstalledPackagesList or update it to use PackageItemState.
+                    // Actually, InstalledPackagesList expects dynamic. For now we can pass the packages if needed or we change it.
+                    // Wait, packagesByTap is a List<dynamic>. 
+                    InstalledPackagesList(
+                      packages: state.packagesByTap[tap.name] ?? [],
+                    ),
+                  ]),
+                ),
+              ),
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(spacingM),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: ButtonWidget.secondary(
+                      label: untapButtonLabel,
+                      iconData: Icons.delete,
+                      color: AppColors.error,
+                      onPressed: () {
+                        context.read<QueueViewModel>().queueOperation(
+                          packageId: tap.name,
+                          type: PackageType.tap,
+                          operation: OperationType.uninstall,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      package: (pkg) => Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(radiusM),
@@ -56,36 +128,40 @@ class InspectorPane extends StatelessWidget {
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   HeaderWidget(
-                    name: tap.name,
-                    version: tap.official
-                        ? headerWidgetOfficialCopy
-                        : headerWidgetCommunityCopy,
-                    description: 'Tap from ${tap.user}/${tap.repo}',
+                    name: pkg.name,
+                    version: pkg.version,
+                    description: pkg.description,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: spacingM),
+                    child: PackageHealthWidget(
+                      isDeprecated: pkg.isDeprecated,
+                      isOutdated: pkg.isOutdated,
+                      hasMissingDependencies: pkg.isMissingDeps,
+                      isDisabled: pkg.isDisabled,
+                    ),
                   ),
                   const HorizontalDivider(),
                   const SizedBox(height: spacingM),
-                  ConfigPathsWidget(installPath: tap.path),
+                  ConfigPathsWidget(
+                    installPath: pkg.installPath,
+                  ),
+                  if (pkg.isInstalled) ...[
+                    const SizedBox(height: spacingM),
+                    _PackageDetailsStatsWidget(
+                      tapName: pkg.tapName,
+                      formattedInstalledSize: pkg.formattedInstalledSize,
+                      formattedInstallDate: pkg.formattedInstallDate,
+                      installPath: pkg.installPath,
+                    ),
+                  ],
                   const SizedBox(height: spacingL),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _TapStatsWidget(
-                          label: formulaeTitle,
-                          count: tap.formulaNames.length,
-                        ),
-                      ),
-                      const SizedBox(width: spacingM),
-                      Expanded(
-                        child: _TapStatsWidget(
-                          label: casksTitle,
-                          count: tap.caskTokens.length,
-                        ),
-                      ),
-                    ],
-                  ),
-                  InstalledPackagesList(
-                    packages: state.packagesByTap[tap.name] ?? [],
-                  ),
+                  if (pkg.dependencies.isNotEmpty) ...[
+                    DependencyGraphWidget(
+                      dependencies: pkg.dependencies,
+                    ),
+                    const SizedBox(height: spacingL),
+                  ],
                 ]),
               ),
             ),
@@ -95,93 +171,18 @@ class InspectorPane extends StatelessWidget {
                 padding: const EdgeInsets.all(spacingM),
                 child: Align(
                   alignment: Alignment.bottomLeft,
-                  child: ButtonWidget.secondary(
-                    label: untapButtonLabel,
-                    iconData: Icons.delete,
-                    color: AppColors.error,
-                    onPressed: () {
-                      context.read<QueueViewModel>().queueOperation(
-                        packageId: tap.name,
-                        type: PackageType.tap,
-                        operation: OperationType.uninstall,
-                      );
-                    },
+                  child: ManagementActionsWidget(
+                    packageName: pkg.name,
+                    isCask: pkg.isCask,
+                    isOutdated: pkg.isOutdated,
+                    isMissingDependencies: pkg.isMissingDeps,
+                    installPath: pkg.installPath,
                   ),
                 ),
               ),
             ),
           ],
         ),
-      );
-    }
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(radiusM),
-        border: Border.all(color: AppColors.borderNeutral),
-      ),
-      child: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.all(spacingM),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                HeaderWidget(
-                  name: state.selectedPackageName,
-                  version: state.selectedPackageVersion,
-                  description: state.selectedPackageDescription,
-                  model: state.selectedPackage,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: spacingM),
-                  child: PackageHealthWidget(
-                    isDeprecated: state.selectedPackageIsDeprecated,
-                    isOutdated: state.selectedPackageIsOutdated,
-                    hasMissingDependencies: state.selectedPackageIsMissingDeps,
-                    isDisabled: state.selectedPackageIsDisabled,
-                  ),
-                ),
-                const HorizontalDivider(),
-                const SizedBox(height: spacingM),
-                ConfigPathsWidget(
-                  installPath: state.selectedPackageInstallPath,
-                ),
-                if (state.selectedPackage != null &&
-                    !state.isSelectedPackageTap &&
-                    state.selectedPackage.isInstalled) ...[
-                  const SizedBox(height: spacingM),
-                  _PackageDetailsStatsWidget(
-                    model: state.selectedPackage,
-                    installPath: state.selectedPackageInstallPath,
-                  ),
-                ],
-                const SizedBox(height: spacingL),
-                if (state.selectedPackageDependencies.isNotEmpty) ...[
-                  DependencyGraphWidget(
-                    dependencies: state.selectedPackageDependencies,
-                  ),
-                  const SizedBox(height: spacingL),
-                ],
-              ]),
-            ),
-          ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Padding(
-              padding: const EdgeInsets.all(spacingM),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: ManagementActionsWidget(
-                  packageName: state.selectedPackageName,
-                  isCask: state.isSelectedPackageCask,
-                  isOutdated: state.selectedPackageIsOutdated,
-                  isMissingDependencies: state.selectedPackageIsMissingDeps,
-                  installPath: state.selectedPackageInstallPath,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -191,14 +192,12 @@ class HeaderWidget extends StatelessWidget {
   final String name;
   final String version;
   final String description;
-  final dynamic model;
 
   const HeaderWidget({
     super.key,
     required this.name,
     required this.version,
     required this.description,
-    this.model,
   });
 
   @override
@@ -505,11 +504,15 @@ class _TapStatsWidget extends StatelessWidget {
 }
 
 class _PackageDetailsStatsWidget extends StatelessWidget {
-  final dynamic model;
+  final String? tapName;
+  final String formattedInstalledSize;
+  final String formattedInstallDate;
   final String installPath;
 
   const _PackageDetailsStatsWidget({
-    required this.model,
+    required this.tapName,
+    required this.formattedInstalledSize,
+    required this.formattedInstallDate,
     required this.installPath,
   });
 
@@ -525,18 +528,18 @@ class _PackageDetailsStatsWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if ((model.tap as String?)?.isNotEmpty == true) ...[
-            _StatRow(label: tapNameLabel, value: model.tap as String),
+          if (tapName?.isNotEmpty == true) ...[
+            _StatRow(label: tapNameLabel, value: tapName!),
             const SizedBox(height: spacingXs),
           ],
           _StatRow(
             label: installedSizeStatCopy,
-            value: StringUtils.formatSize(model.installedSize),
+            value: formattedInstalledSize,
           ),
           const SizedBox(height: spacingXs),
           _StatRow(
             label: installDateStatCopy,
-            value: StringUtils.formatDate(model.installedOnTimestamp),
+            value: formattedInstallDate,
           ),
           const SizedBox(height: spacingXs),
           FutureBuilder<DateTime?>(

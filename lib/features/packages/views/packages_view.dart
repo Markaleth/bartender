@@ -5,8 +5,6 @@ import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
-import 'package:bartender/data/models/cask/cask_model.dart';
-import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
@@ -135,7 +133,7 @@ class _PackagesViewState extends State<PackagesView> {
                     const SizedBox(height: spacingM),
                     state.trendingData.maybeMap(
                       success: (value) => TrendingPackagesCarousel(
-                        pages: value.data as List<List<dynamic>>,
+                        pages: value.data,
                       ),
                       orElse: () => const SizedBox(
                         height: trendingPackageCarouselHeight,
@@ -169,33 +167,18 @@ class _PackagesViewState extends State<PackagesView> {
                 itemCount: state.paginatedPackages.length,
                 itemBuilder: (context, index) {
                   final item = state.paginatedPackages[index];
-                  final isCask = item is CaskModel;
-                  final id = item is CaskModel
-                      ? item.token
-                      : (item as FormulaModel).name;
-                  final name = item is CaskModel
-                      ? item.name.first
-                      : (item as FormulaModel).fullName;
-                  final homepage = item.homepage;
-
-                  final description = item is CaskModel
-                      ? item.desc
-                      : (item as FormulaModel).desc;
-                  final version = item is CaskModel
-                      ? item.version
-                      : (item as FormulaModel).versions.stable;
-                  final isExpanded = state.expandedPackageId == id;
+                  final isExpanded = state.expandedPackageId == item.id;
 
                   return PackageListItem(
                     model: item,
-                    id: id,
-                    name: name,
-                    homepage: homepage,
-                    isCask: isCask,
+                    id: item.id,
+                    name: item.name,
+                    homepage: item.homepage,
+                    isCask: item.isCask,
                     isExpanded: isExpanded,
-                    onExpand: () => viewModel.togglePackageExpansion(id),
-                    description: description,
-                    version: version,
+                    onExpand: () => viewModel.togglePackageExpansion(item.id),
+                    description: item.description,
+                    version: item.version,
                   );
                 },
               ),

@@ -62,7 +62,7 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                   title: globalHealthScoreTitle,
                   value: '${healthState.globalHealthScore}%',
                   icon: healthIcon,
-                  color: _getHealthColor(healthState.globalHealthScore),
+                  color: healthState.healthScoreColor,
                   action: IconButton(
                     icon: const Icon(
                       Icons.open_in_new,
@@ -122,12 +122,6 @@ class GlobalHealthStatusWidget extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Color _getHealthColor(int score) {
-    if (score >= 90) return AppColors.secondary;
-    if (score >= 70) return AppColors.warning;
-    return AppColors.error;
   }
 }
 

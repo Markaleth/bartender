@@ -9,6 +9,7 @@ import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
 import 'package:bartender/core/utils/string_utils.dart';
+import 'package:bartender/features/packages/models/package_states.dart';
 import 'package:bartender/features/packages/widgets/package_grid_matrix.dart';
 import 'package:bartender/features/packages/widgets/package_variant_tag.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -18,7 +19,7 @@ import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:provider/provider.dart';
 
 class PackageListItem extends StatelessWidget {
-  final dynamic model; // CaskModel or FormulaModel
+  final PackageListItemState model;
   final String id;
   final String name;
   final String? homepage;
@@ -75,7 +76,7 @@ class PackageListItem extends StatelessWidget {
                     homepage: homepage,
                     isCask: isCask,
                     isExpanded: isExpanded,
-                    isDeprecated: model.deprecated,
+                    isDeprecated: model.isDeprecated,
                     onExpand: onExpand,
                     description: description,
                     version: version,
@@ -215,7 +216,7 @@ class _PackageListItemTitle extends StatelessWidget {
 }
 
 class _PackageListItemDetails extends StatelessWidget {
-  final dynamic model;
+  final PackageListItemState model;
   final String id;
   final bool isCask;
 
@@ -232,7 +233,7 @@ class _PackageListItemDetails extends StatelessWidget {
         const HorizontalDivider(),
         Padding(
           padding: const EdgeInsets.all(spacingL),
-          child: PackageGridMatrix(model: model),
+          child: PackageGridMatrix(model: model.gridModel),
         ),
         const HorizontalDivider(),
         Padding(
@@ -245,9 +246,9 @@ class _PackageListItemDetails extends StatelessWidget {
             child: Row(
               spacing: spacingM,
               children: [
-                if (model.deprecated)
+                if (model.isDeprecated)
                   PackageHealthWidget(
-                    isDeprecated: model.deprecated,
+                    isDeprecated: model.isDeprecated,
                     isOutdated: false,
                     hasMissingDependencies: false,
                     isDisabled: false,
@@ -264,7 +265,7 @@ class _PackageListItemDetails extends StatelessWidget {
 }
 
 class _PackageActionButton extends StatelessWidget {
-  final dynamic model;
+  final PackageListItemState model;
   final String id;
   final bool isCask;
 

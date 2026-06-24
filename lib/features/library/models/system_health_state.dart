@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bartender/data/shell/shell_command_result.dart';
+import 'package:bartender/core/constants/app_colors.dart';
 
 part 'system_health_state.freezed.dart';
 
 @freezed
 abstract class SystemHealthState with _$SystemHealthState {
+  const SystemHealthState._();
+
   const factory SystemHealthState({
     @Default(100) int globalHealthScore,
     @Default('0 B') String systemStorageUsed,
@@ -115,5 +119,15 @@ abstract class SystemHealthState with _$SystemHealthState {
   static int _calculateHealthScore(int orphans, int warnings, int errors) {
     int health = 100 - (orphans * 2) - (warnings * 5) - (errors * 15);
     return health < 0 ? 0 : health;
+  }
+
+  Color get healthScoreColor {
+    if (globalHealthScore >= 90) return AppColors.secondary;
+    if (globalHealthScore >= 70) return AppColors.warning;
+    return AppColors.error;
+  }
+
+  List<String> get formattedDoctorIssues {
+    return doctorIssues.map((issue) => issue.replaceAll('Warning:', '').trim()).toList();
   }
 }

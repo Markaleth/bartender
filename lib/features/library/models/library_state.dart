@@ -1,10 +1,38 @@
+import 'package:bartender/features/library/models/library_section_states.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
-import 'library_ui_models.dart';
+import 'package:bartender/core/utils/string_utils.dart';
 
 part 'library_state.freezed.dart';
+
+@freezed
+sealed class InspectorState with _$InspectorState {
+  const factory InspectorState.empty() = InspectorStateEmpty;
+  const factory InspectorState.tap({
+    required TapModel tap,
+    required List<PackageItemState> packages,
+  }) = InspectorStateTap;
+  const factory InspectorState.package({
+    required dynamic packageModel,
+    required String name,
+    required String version,
+    required String description,
+    required String installPath,
+    required List<String> dependencies,
+    required bool isDeprecated,
+    required bool isOutdated,
+    required List<String> missingDeps,
+    required bool isMissingDeps,
+    required bool isDisabled,
+    required bool isCask,
+    required bool isInstalled,
+    required String? tapName,
+    required String formattedInstalledSize,
+    required String formattedInstallDate,
+  }) = InspectorStatePackage;
+}
 
 @freezed
 abstract class LibraryState with _$LibraryState {
@@ -55,14 +83,14 @@ abstract class LibraryState with _$LibraryState {
     return map;
   }
 
-  List<TapSectionUiModel> get uiSections {
+  List<TapSectionState> get uiSections {
     final tapEntries = packagesByTap.entries.toList()
       ..sort((a, b) => a.key.compareTo(b.key));
 
     return tapEntries.map(_createTapSection).toList();
   }
 
-  TapSectionUiModel _createTapSection(MapEntry<String, List<dynamic>> entry) {
+  TapSectionState _createTapSection(MapEntry<String, List<dynamic>> entry) {
     final tapName = entry.key;
     final packages = entry.value;
 
@@ -75,7 +103,7 @@ abstract class LibraryState with _$LibraryState {
 
     final packageItems = packages.map(_createPackageItem).toList();
 
-    return TapSectionUiModel(
+    return TapSectionState(
       tapModel: tapModel,
       tapName: tapName,
       installPath: tapModel.path,
@@ -97,7 +125,7 @@ abstract class LibraryState with _$LibraryState {
     );
   }
 
-  PackageItemUiModel _createPackageItem(dynamic package) {
+  PackageItemState _createPackageItem(dynamic package) {
     String title = '';
     String version = '';
     bool isCask = false;
@@ -118,13 +146,50 @@ abstract class LibraryState with _$LibraryState {
       isCask = true;
     }
 
-    return PackageItemUiModel(
+    return PackageItemState(
       package: package,
       title: title,
       version: version,
       isCask: isCask,
       isHealthy: isHealthy,
       isSelected: selectedPackage == package,
+    );
+  }
+
+  InspectorState get inspectorState {
+    if (selectedPackage == null) {
+      return const InspectorState.empty();
+    }
+    if (isSelectedPackageTap) {
+      final tap = selectedPackage as TapModel;
+      final packages = packagesByTap[tap.name] ?? [];
+      return InspectorState.tap(
+        tap: tap,
+        packages: packages.map(_createPackageItem).toList(),
+      );
+    }
+
+    return InspectorState.package(
+      packageModel: selectedPackage,
+      name: selectedPackageName,
+      version: selectedPackageVersion,
+      description: selectedPackageDescription,
+      installPath: selectedPackageInstallPath,
+      dependencies: selectedPackageDependencies,
+      isDeprecated: selectedPackageIsDeprecated,
+      isOutdated: selectedPackageIsOutdated,
+      missingDeps: selectedPackageMissingDeps,
+      isMissingDeps: selectedPackageIsMissingDeps,
+      isDisabled: selectedPackageIsDisabled,
+      isCask: isSelectedPackageCask,
+      isInstalled: selectedPackage.isInstalled,
+      tapName: selectedPackage.tap as String?,
+      formattedInstalledSize: StringUtils.formatSize(
+        selectedPackage.installedSize,
+      ),
+      formattedInstallDate: StringUtils.formatDate(
+        selectedPackage.installedOnTimestamp,
+      ),
     );
   }
 
