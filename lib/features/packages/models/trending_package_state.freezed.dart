@@ -211,8 +211,8 @@ return $default(_that.id,_that.description,_that.version,_that.homepage,_that.fo
 /// @nodoc
 
 
-class _TrendingPackageState implements TrendingPackageState {
-  const _TrendingPackageState({required this.id, required this.description, required this.version, required this.homepage, required this.formattedDownloads, required this.isInstalled, required this.isFormula});
+class _TrendingPackageState extends TrendingPackageState {
+  const _TrendingPackageState({required this.id, required this.description, required this.version, required this.homepage, required this.formattedDownloads, required this.isInstalled, required this.isFormula}): super._();
   
 
 @override final  String id;

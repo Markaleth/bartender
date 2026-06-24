@@ -11,8 +11,6 @@ import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/models/package_states.dart';
 import 'package:bartender/features/packages/models/trending_package_state.dart';
-import 'package:bartender/core/extensions/package_extensions.dart';
-import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 
@@ -117,62 +115,13 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
     );
   }
 
-//TODO: why??? this doesn't look good at all. 
   PackageListItemState _mapToPackageListItemState(dynamic item) {
     if (item is FormulaModel) {
-      return PackageListItemState(
-        id: item.name,
-        name: item.fullName,
-        description: item.desc,
-        version: item.versions.stable,
-        homepage: item.homepage,
-        isInstalled: item.isInstalled,
-        isCask: false,
-        isDeprecated: item.deprecated,
-        gridModel: PackageGridMatrixState.formula(
-          homepage: item.homepage,
-          archs: item.compatibility
-              .where((info) => info != CompatibilityInfo.precompiled)
-              .map((info) => info.label)
-              .join(', '),
-          version: item.versions.stable,
-          typeAndTap: 'Formula • ${item.tap}',
-          fullTag: item.fullName,
-          formattedInstalls: item.installs30d != null
-              ? '${StringUtils.formatWithCommas(item.installs30d!)} installs'
-              : 'N/A',
-          license: item.license ?? 'Unknown',
-          isBottle: item.versions.bottle,
-        ),
-      );
-    } else {
-      final cask = item as CaskModel;
-      return PackageListItemState(
-        id: cask.token,
-        name: cask.name.first,
-        description: cask.desc,
-        version: cask.version,
-        homepage: cask.homepage,
-        isInstalled: cask.isInstalled,
-        isCask: true,
-        isDeprecated: cask.deprecated,
-        gridModel: PackageGridMatrixState.cask(
-          homepage: cask.homepage,
-          archs: cask.compatibility
-              .where((info) => info != CompatibilityInfo.precompiled)
-              .map((info) => info.label)
-              .join(', '),
-          version: cask.version,
-          typeAndTap: 'Cask • ${cask.tap ?? 'homebrew/cask'}',
-          fullTag: cask.fullToken ?? cask.token,
-          formattedInstalls: cask.installs30d != null
-              ? '${StringUtils.formatWithCommas(cask.installs30d!)} installs'
-              : 'N/A',
-          autoUpdates: cask.autoUpdates == true,
-          artifactType: cask.primaryArtifactType,
-        ),
-      );
+      return PackageListItemState.fromFormula(item);
+    } else if (item is CaskModel) {
+      return PackageListItemState.fromCask(item);
     }
+    throw ArgumentError('Unsupported package type: ${item.runtimeType}');
   }
 
   // --- Pagination ---
@@ -260,27 +209,11 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
 
   TrendingPackageState _mapToTrendingPackageState(dynamic item) {
     if (item is FormulaModel) {
-      return TrendingPackageState(
-        id: item.name,
-        description: item.desc,
-        version: item.versions.stable,
-        homepage: item.homepage,
-        formattedDownloads: StringUtils.formatDownloads(item.installs30d),
-        isInstalled: item.isInstalled,
-        isFormula: true,
-      );
-    } else {
-      final cask = item as CaskModel;
-      return TrendingPackageState(
-        id: cask.token,
-        description: cask.desc,
-        version: cask.version,
-        homepage: cask.homepage,
-        formattedDownloads: StringUtils.formatDownloads(cask.installs30d),
-        isInstalled: cask.isInstalled,
-        isFormula: false,
-      );
+      return TrendingPackageState.fromFormula(item);
+    } else if (item is CaskModel) {
+      return TrendingPackageState.fromCask(item);
     }
+    throw ArgumentError('Unsupported package type: ${item.runtimeType}');
   }
 
   int _getInstalls(dynamic item) {

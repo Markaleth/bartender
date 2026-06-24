@@ -222,8 +222,8 @@ return $default(_that.id,_that.name,_that.description,_that.version,_that.homepa
 /// @nodoc
 
 
-class _PackageListItemState implements PackageListItemState {
-  const _PackageListItemState({required this.id, required this.name, required this.description, required this.version, required this.homepage, required this.isInstalled, required this.isCask, required this.isDeprecated, required this.gridModel});
+class _PackageListItemState extends PackageListItemState {
+  const _PackageListItemState({required this.id, required this.name, required this.description, required this.version, required this.homepage, required this.isInstalled, required this.isCask, required this.isDeprecated, required this.gridModel}): super._();
   
 
 @override final  String id;
@@ -509,8 +509,8 @@ return formula(_that.homepage,_that.archs,_that.version,_that.typeAndTap,_that.f
 /// @nodoc
 
 
-class _CaskGrid implements PackageGridMatrixState {
-  const _CaskGrid({required this.homepage, required this.archs, required this.version, required this.typeAndTap, required this.fullTag, required this.formattedInstalls, required this.autoUpdates, required this.artifactType});
+class _CaskGrid extends PackageGridMatrixState {
+  const _CaskGrid({required this.homepage, required this.archs, required this.version, required this.typeAndTap, required this.fullTag, required this.formattedInstalls, required this.autoUpdates, required this.artifactType}): super._();
   
 
 @override final  String? homepage;
@@ -589,8 +589,8 @@ as String,
 /// @nodoc
 
 
-class _FormulaGrid implements PackageGridMatrixState {
-  const _FormulaGrid({required this.homepage, required this.archs, required this.version, required this.typeAndTap, required this.fullTag, required this.formattedInstalls, required this.license, required this.isBottle});
+class _FormulaGrid extends PackageGridMatrixState {
+  const _FormulaGrid({required this.homepage, required this.archs, required this.version, required this.typeAndTap, required this.fullTag, required this.formattedInstalls, required this.license, required this.isBottle}): super._();
   
 
 @override final  String? homepage;
