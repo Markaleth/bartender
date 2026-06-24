@@ -59,65 +59,73 @@ abstract class LibraryState with _$LibraryState {
     final tapEntries = packagesByTap.entries.toList()
       ..sort((a, b) => a.key.compareTo(b.key));
 
-    return tapEntries.map((entry) {
-      final tapName = entry.key;
-      final packages = entry.value;
+    return tapEntries.map(_createTapSection).toList();
+  }
 
-      final tapModel = installedTaps.firstWhere(
-        (t) => t.name == tapName,
-        orElse: () => TapModel(
-          name: tapName,
-          user: tapName.split('/').firstOrNull ?? '',
-          repo: tapName.split('/').skip(1).firstOrNull ?? '',
-          path: '$brewPrefix/Library/Taps/$tapName',
-        ),
-      );
+  TapSectionUiModel _createTapSection(MapEntry<String, List<dynamic>> entry) {
+    final tapName = entry.key;
+    final packages = entry.value;
 
-      final isExpanded = expandedTaps.contains(tapName);
-      final isSelected =
-          selectedPackage is TapModel &&
-          (selectedPackage as TapModel).name == tapName;
+    final tapModel = _getOrCreateTapModel(tapName);
 
-      final packageItems = packages.map((package) {
-        String title = '';
-        String version = '';
-        bool isCask = false;
-        bool isHealthy = true;
+    final isExpanded = expandedTaps.contains(tapName);
+    final isSelected =
+        selectedPackage is TapModel &&
+        (selectedPackage as TapModel).name == tapName;
 
-        if (package is FormulaModel) {
-          title = package.name;
-          version = package.versions.stable;
-          isCask = false;
-          isHealthy =
-              (package.deprecated ||
-              package.outdated ||
-              package.missingDeps.isNotEmpty ||
-              package.disabled);
-        } else if (package is CaskModel) {
-          title = package.token;
-          version = package.version;
-          isCask = true;
-        }
+    final packageItems = packages.map(_createPackageItem).toList();
 
-        return PackageItemUiModel(
-          package: package,
-          title: title,
-          version: version,
-          isCask: isCask,
-          isHealthy: isHealthy,
-          isSelected: selectedPackage == package,
-        );
-      }).toList();
+    return TapSectionUiModel(
+      tapModel: tapModel,
+      tapName: tapName,
+      installPath: tapModel.path,
+      isExpanded: isExpanded,
+      isSelected: isSelected,
+      packages: packageItems,
+    );
+  }
 
-      return TapSectionUiModel(
-        tapModel: tapModel,
-        tapName: tapName,
-        installPath: tapModel.path,
-        isExpanded: isExpanded,
-        isSelected: isSelected,
-        packages: packageItems,
-      );
-    }).toList();
+  TapModel _getOrCreateTapModel(String tapName) {
+    return installedTaps.firstWhere(
+      (t) => t.name == tapName,
+      orElse: () => TapModel(
+        name: tapName,
+        user: tapName.split('/').firstOrNull ?? '',
+        repo: tapName.split('/').skip(1).firstOrNull ?? '',
+        path: '$brewPrefix/Library/Taps/$tapName',
+      ),
+    );
+  }
+
+  PackageItemUiModel _createPackageItem(dynamic package) {
+    String title = '';
+    String version = '';
+    bool isCask = false;
+    bool isHealthy = true;
+
+    if (package is FormulaModel) {
+      title = package.name;
+      version = package.versions.stable;
+      isCask = false;
+      isHealthy =
+          (package.deprecated ||
+          package.outdated ||
+          package.missingDeps.isNotEmpty ||
+          package.disabled);
+    } else if (package is CaskModel) {
+      title = package.token;
+      version = package.version;
+      isCask = true;
+    }
+
+    return PackageItemUiModel(
+      package: package,
+      title: title,
+      version: version,
+      isCask: isCask,
+      isHealthy: isHealthy,
+      isSelected: selectedPackage == package,
+    );
   }
 
   bool get isSelectedPackageCask => selectedPackage is CaskModel;
