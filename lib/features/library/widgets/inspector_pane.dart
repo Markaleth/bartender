@@ -382,7 +382,7 @@ class ManagementActionsWidget extends StatelessWidget {
           width: defaultButtonWidth,
           child: ButtonWidget.secondary(
             label: reinstallButtonLabel,
-            iconData: Icons.refresh,
+            assetName: systemUpdateIcon,
             color: AppColors.secondary,
             onPressed: () {
               context.read<QueueViewModel>().queueOperation(

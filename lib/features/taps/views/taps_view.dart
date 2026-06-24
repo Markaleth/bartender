@@ -2,6 +2,7 @@ import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
@@ -143,7 +144,7 @@ class _HeaderWidget extends StatelessWidget {
         child: SizedBox(
           width: spacing2Xl,
           child: ButtonWidget.icon(
-            iconData: Icons.refresh,
+            assetName: systemUpdateIcon,
             onPressed: isSyncing ? null : onSync,
             iconSize: iconSizeM,
             state: isSyncing ? ButtonState.loading : ButtonState.enabled,

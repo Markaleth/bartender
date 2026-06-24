@@ -1,4 +1,5 @@
 import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class ExplorerPaneHeader extends StatelessWidget {
                       child: Tooltip(
                         message: explorerPaneHeaderSyncTooltip,
                         child: ButtonWidget.icon(
-                          iconData: Icons.refresh,
+                          assetName: systemUpdateIcon,
                           iconSize: iconSizeM,
                           color: AppColors.primary,
                           onPressed: () => viewModel.syncData(),
