@@ -148,7 +148,6 @@ class _HeaderWidget extends StatelessWidget {
             onPressed: isSyncing ? null : onSync,
             iconSize: iconSizeM,
             state: isSyncing ? ButtonState.loading : ButtonState.enabled,
-            // Make the button more compact when only showing the icon
           ),
         ),
       ),

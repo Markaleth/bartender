@@ -1,5 +1,6 @@
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/core/constants/app_icons.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -55,12 +56,13 @@ class SideNavigationBar extends StatelessWidget {
                   isSelected: selectedTab == HomeTab.taps,
                   onTap: () => onTabSelected(HomeTab.taps),
                 ),
-                SideNavigationItem(
-                  icon: barrelIcon,
-                  label: "Debug", // TODO: you need to remove this before launch!
-                  isSelected: selectedTab == HomeTab.debug,
-                  onTap: () => onTabSelected(HomeTab.debug),
-                ),
+                if (kDebugMode)
+                  SideNavigationItem(
+                    icon: barrelIcon,
+                    label: "Debug",
+                    isSelected: selectedTab == HomeTab.debug,
+                    onTap: () => onTabSelected(HomeTab.debug),
+                  ),
               ],
             ),
           ),
