@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
+import 'library_ui_models.dart';
 
 part 'library_state.freezed.dart';
 
@@ -52,6 +53,71 @@ abstract class LibraryState with _$LibraryState {
       map.putIfAbsent(tapName, () => []).add(cask);
     }
     return map;
+  }
+
+  List<TapSectionUiModel> get uiSections {
+    final tapEntries = packagesByTap.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+
+    return tapEntries.map((entry) {
+      final tapName = entry.key;
+      final packages = entry.value;
+
+      final tapModel = installedTaps.firstWhere(
+        (t) => t.name == tapName,
+        orElse: () => TapModel(
+          name: tapName,
+          user: tapName.split('/').firstOrNull ?? '',
+          repo: tapName.split('/').skip(1).firstOrNull ?? '',
+          path: '$brewPrefix/Library/Taps/$tapName',
+        ),
+      );
+
+      final isExpanded = expandedTaps.contains(tapName);
+      final isSelected =
+          selectedPackage is TapModel &&
+          (selectedPackage as TapModel).name == tapName;
+
+      final packageItems = packages.map((package) {
+        String title = '';
+        String version = '';
+        bool isCask = false;
+        bool isHealthy = true;
+
+        if (package is FormulaModel) {
+          title = package.name;
+          version = package.versions.stable;
+          isCask = false;
+          isHealthy =
+              (package.deprecated ||
+              package.outdated ||
+              package.missingDeps.isNotEmpty ||
+              package.disabled);
+        } else if (package is CaskModel) {
+          title = package.token;
+          version = package.version;
+          isCask = true;
+        }
+
+        return PackageItemUiModel(
+          package: package,
+          title: title,
+          version: version,
+          isCask: isCask,
+          isHealthy: isHealthy,
+          isSelected: selectedPackage == package,
+        );
+      }).toList();
+
+      return TapSectionUiModel(
+        tapModel: tapModel,
+        tapName: tapName,
+        installPath: tapModel.path,
+        isExpanded: isExpanded,
+        isSelected: isSelected,
+        packages: packageItems,
+      );
+    }).toList();
   }
 
   bool get isSelectedPackageCask => selectedPackage is CaskModel;

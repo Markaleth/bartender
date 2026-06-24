@@ -29,14 +29,8 @@ enum PackageVariant {
   };
 }
 
-class PackageVariantTag extends StatelessWidget {
-  final String tag;
-  final PackageVariant variant;
-
-  PackageVariantTag({super.key, required this.tag})
-    : variant = PackageVariant.fromTag(tag);
-
-  Color get _variantColor => switch (variant) {
+extension PackageVariantUI on PackageVariant {
+  Color get color => switch (this) {
     PackageVariant.app => AppColors.primary,
     PackageVariant.alpha => AppColors.error,
     PackageVariant.beta ||
@@ -49,11 +43,22 @@ class PackageVariantTag extends StatelessWidget {
     PackageVariant.unknown => AppColors.textTertiary,
   };
 
+  String displayText(String tag) =>
+      this == PackageVariant.version ? 'v$tag' : tag.toUpperCase();
+
+  bool get hasTracking => this != PackageVariant.version;
+}
+
+class PackageVariantTag extends StatelessWidget {
+  final String tag;
+  final PackageVariant variant;
+
+  PackageVariantTag({super.key, required this.tag})
+    : variant = PackageVariant.fromTag(tag);
+
   @override
   Widget build(BuildContext context) {
-    final color = _variantColor;
-    final isVersion = variant == PackageVariant.version;
-    final displayText = isVersion ? 'v$tag' : tag.toUpperCase();
+    final color = variant.color;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -71,12 +76,12 @@ class PackageVariantTag extends StatelessWidget {
           horizontal: spacingS,
         ),
         child: Text(
-          displayText,
+          variant.displayText(tag),
           style: context.labelM.copyWith(
             fontWeight: FontWeight.bold,
-            letterSpacing: isVersion
-                ? 0
-                : 0.5, // Add tracking to uppercase badges
+            letterSpacing: variant.hasTracking
+                ? 0.5
+                : 0, // Add tracking to uppercase badges
             color: color,
           ),
         ),
@@ -84,3 +89,4 @@ class PackageVariantTag extends StatelessWidget {
     );
   }
 }
+

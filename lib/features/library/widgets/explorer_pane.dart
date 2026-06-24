@@ -3,9 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/features/library/view_models/library_view_model.dart';
-import 'package:bartender/data/models/formula/formula_model.dart';
-import 'package:bartender/data/models/cask/cask_model.dart';
-import 'package:bartender/data/models/tap/tap_model.dart';
+
+import 'package:bartender/features/library/models/library_ui_models.dart';
 
 import 'explorer_pane_header.dart';
 import 'file_system_folder_header.dart';
@@ -20,79 +19,40 @@ class ExplorerPane extends StatelessWidget {
     final viewModel = context.watch<LibraryViewModel>();
     final state = viewModel.state;
 
-    final tapEntries = state.packagesByTap.entries.toList()
-      ..sort((a, b) => a.key.compareTo(b.key));
+    final tapSections = state.uiSections;
 
     final slivers = <Widget>[
       const SliverToBoxAdapter(child: SizedBox(height: spacingS)),
     ];
 
-    for (final entry in tapEntries) {
-      final tapName = entry.key;
-      final packages = entry.value;
-
-      final tapModel = state.installedTaps.firstWhere(
-        (t) => t.name == tapName,
-        orElse: () => TapModel(
-          name: tapName,
-          user: tapName.split('/').firstOrNull ?? '',
-          repo: tapName.split('/').skip(1).firstOrNull ?? '',
-          path: '${state.brewPrefix}/Library/Taps/$tapName',
-        ),
-      );
-
-      final isExpanded = state.expandedTaps.contains(tapName);
-      final isSelected =
-          state.selectedPackage is TapModel &&
-          (state.selectedPackage as TapModel).name == tapName;
-
+    for (final section in tapSections) {
       slivers.add(
         SliverToBoxAdapter(
           child: FileSystemFolderHeader(
-            title: tapName,
-            installPath: tapModel.path,
-            isExpanded: isExpanded,
-            isSelected: isSelected,
-            onToggleExpand: () => viewModel.toggleTapExpanded(tapName),
-            onSelect: () => viewModel.selectPackage(tapModel),
+            title: section.tapName,
+            installPath: section.installPath,
+            isExpanded: section.isExpanded,
+            isSelected: section.isSelected,
+            onToggleExpand: () => viewModel.toggleTapExpanded(section.tapName),
+            onSelect: () => viewModel.selectPackage(section.tapModel),
           ),
         ),
       );
 
       slivers.add(
-        CollapsibleSliverList<dynamic>(
-          items: packages,
-          isExpanded: isExpanded,
-          itemBuilder: (context, package, animation) {
-            String title = '';
-            String version = '';
-            bool isCask = false;
-            bool isHealthy = true;
-
-            if (package is FormulaModel) {
-              title = package.name;
-              version = package.versions.stable;
-              isCask = false;
-              isHealthy =
-                  (package.deprecated ||
-                  package.outdated ||
-                  package.missingDeps.isNotEmpty ||
-                  package.disabled);
-            } else if (package is CaskModel) {
-              title = package.token;
-              version = package.version;
-              isCask = true;
-            }
-
+        CollapsibleSliverList<PackageItemUiModel>(
+          items: section.packages,
+          isExpanded: section.isExpanded,
+          itemBuilder: (context, item, animation) {
             return SizeTransition(
               sizeFactor: animation,
               child: FileSystemItem(
-                isHealthy: isHealthy,
-                title: title,
-                version: version,
-                isSelected: state.selectedPackage == package,
-                isCask: isCask,
-                onTap: () => viewModel.selectPackage(package),
+                isHealthy: item.isHealthy,
+                title: item.title,
+                version: item.version,
+                isSelected: item.isSelected,
+                isCask: item.isCask,
+                onTap: () => viewModel.selectPackage(item.package),
               ),
             );
           },
