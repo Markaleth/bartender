@@ -4,8 +4,8 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
-class EmptyInspectorPaneWidget extends StatelessWidget {
-  const EmptyInspectorPaneWidget({super.key});
+class InspectorPaneEmptyWidget extends StatelessWidget {
+  const InspectorPaneEmptyWidget({super.key});
 
   @override
   Widget build(BuildContext context) => Container(

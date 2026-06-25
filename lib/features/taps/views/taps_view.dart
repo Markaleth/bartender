@@ -144,7 +144,7 @@ class _HeaderWidget extends StatelessWidget {
         child: SizedBox(
           width: spacing2Xl,
           child: ButtonWidget.icon(
-            assetName: systemUpdateIcon,
+            assetName: updateIcon,
             onPressed: isSyncing ? null : onSync,
             iconSize: iconSizeM,
             state: isSyncing ? ButtonState.loading : ButtonState.enabled,

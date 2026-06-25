@@ -4,10 +4,13 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
-class DependencyGraphWidget extends StatelessWidget {
+class InspectorPaneDependencyGraphWidget extends StatelessWidget {
   final List<String> dependencies;
 
-  const DependencyGraphWidget({super.key, required this.dependencies});
+  const InspectorPaneDependencyGraphWidget({
+    super.key,
+    required this.dependencies,
+  });
 
   @override
   Widget build(BuildContext context) {

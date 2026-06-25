@@ -3,11 +3,15 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
-class TapStatsWidget extends StatelessWidget {
+class InspectorPaneTapStatsWidget extends StatelessWidget {
   final String label;
   final int count;
 
-  const TapStatsWidget({super.key, required this.label, required this.count});
+  const InspectorPaneTapStatsWidget({
+    super.key,
+    required this.label,
+    required this.count,
+  });
 
   @override
   Widget build(BuildContext context) {

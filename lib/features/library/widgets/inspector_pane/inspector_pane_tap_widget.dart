@@ -5,18 +5,18 @@ import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/features/library/models/library_state.dart';
-import 'package:bartender/features/library/widgets/inspector_pane/config_paths_widget.dart';
-import 'package:bartender/features/library/widgets/inspector_pane/header_widget.dart';
-import 'package:bartender/features/library/widgets/inspector_pane/tap_stats_widget.dart';
+import 'package:bartender/features/library/widgets/inspector_pane/inspector_pane_config_paths_widget.dart';
+import 'package:bartender/features/library/widgets/inspector_pane/inspector_pane_header_widget.dart';
+import 'package:bartender/features/library/widgets/inspector_pane/inspector_pane_tap_stats_widget.dart';
 import 'package:bartender/features/library/widgets/installed_packages_list.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TapPaneWidget extends StatelessWidget {
+class InspectorPaneTapWidget extends StatelessWidget {
   final InspectorStateTap state;
   final Map<String, List<dynamic>> packagesByTap;
-  const TapPaneWidget({
+  const InspectorPaneTapWidget({
     super.key,
     required this.state,
     required this.packagesByTap,
@@ -35,7 +35,7 @@ class TapPaneWidget extends StatelessWidget {
           padding: const EdgeInsets.all(spacingM),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              HeaderWidget(
+              InspectorPaneHeaderWidget(
                 name: state.tap.name,
                 version: state.tap.official
                     ? headerWidgetOfficialCopy
@@ -44,19 +44,19 @@ class TapPaneWidget extends StatelessWidget {
               ),
               const HorizontalDivider(),
               const SizedBox(height: spacingM),
-              ConfigPathsWidget(installPath: state.tap.path),
+              InspectorPaneConfigPathsWidget(installPath: state.tap.path),
               const SizedBox(height: spacingL),
               Row(
                 children: [
                   Expanded(
-                    child: TapStatsWidget(
+                    child: InspectorPaneTapStatsWidget(
                       label: formulaeTitle,
                       count: state.tap.formulaNames.length,
                     ),
                   ),
                   const SizedBox(width: spacingM),
                   Expanded(
-                    child: TapStatsWidget(
+                    child: InspectorPaneTapStatsWidget(
                       label: casksTitle,
                       count: state.tap.caskTokens.length,
                     ),

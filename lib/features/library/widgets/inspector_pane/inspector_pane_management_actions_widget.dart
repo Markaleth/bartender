@@ -8,14 +8,14 @@ import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ManagementActionsWidget extends StatelessWidget {
+class InspectorPaneManagementActionsWidget extends StatelessWidget {
   final String packageName;
   final bool isCask;
   final bool isOutdated;
   final bool isMissingDependencies;
   final String installPath;
 
-  const ManagementActionsWidget({
+  const InspectorPaneManagementActionsWidget({
     super.key,
     required this.packageName,
     required this.isCask,
@@ -67,7 +67,7 @@ class ManagementActionsWidget extends StatelessWidget {
           width: defaultButtonWidth,
           child: ButtonWidget.secondary(
             label: reinstallButtonLabel,
-            assetName: systemUpdateIcon,
+            assetName: updateIcon,
             color: AppColors.secondary,
             onPressed: () {
               context.read<QueueViewModel>().queueOperation(

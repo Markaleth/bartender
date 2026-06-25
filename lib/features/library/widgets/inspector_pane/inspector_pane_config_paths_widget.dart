@@ -7,10 +7,10 @@ import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
-class ConfigPathsWidget extends StatelessWidget {
+class InspectorPaneConfigPathsWidget extends StatelessWidget {
   final String installPath;
 
-  const ConfigPathsWidget({super.key, required this.installPath});
+  const InspectorPaneConfigPathsWidget({super.key, required this.installPath});
 
   @override
   Widget build(BuildContext context) {

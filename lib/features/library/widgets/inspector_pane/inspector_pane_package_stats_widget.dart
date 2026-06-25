@@ -6,13 +6,13 @@ import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
-class PackageDetailsStatsWidget extends StatelessWidget {
+class InspectorPanePackageStatsWidget extends StatelessWidget {
   final String? tapName;
   final String formattedInstalledSize;
   final String formattedInstallDate;
   final String installPath;
 
-  const PackageDetailsStatsWidget({
+  const InspectorPanePackageStatsWidget({
     super.key,
     required this.tapName,
     required this.formattedInstalledSize,

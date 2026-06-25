@@ -65,7 +65,7 @@ class ExplorerPaneHeader extends StatelessWidget {
                       child: Tooltip(
                         message: explorerPaneHeaderSyncTooltip,
                         child: ButtonWidget.icon(
-                          assetName: systemUpdateIcon,
+                          assetName: updateIcon,
                           iconSize: iconSizeM,
                           color: AppColors.primary,
                           onPressed: () => viewModel.syncData(),

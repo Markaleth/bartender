@@ -3,12 +3,12 @@ import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
-class HeaderWidget extends StatelessWidget {
+class InspectorPaneHeaderWidget extends StatelessWidget {
   final String name;
   final String version;
   final String description;
 
-  const HeaderWidget({
+  const InspectorPaneHeaderWidget({
     super.key,
     required this.name,
     required this.version,
