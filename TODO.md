@@ -27,6 +27,7 @@
 - [x] Do another sweep and move strings to app_strings.dart
 - [x] Cleanup text styles -> We need to clean up Monospace and FiraCode.
 - [x] Some build methods are doing a bit of heavy lifting. We should consider moving that to a separate
+- [x] clean up how we use repos and shit around here. you're using homebrew_repository AND package_repository. What's the difference between the two if you're doing DB writes and running console commands?
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
@@ -37,7 +38,6 @@
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
       substate or something to clean them up
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
-- [ ] clean up how we use repos and shit around here. you're using homebrew_repository AND package_repository. What's the difference between the two if you're doing DB writes and running console commands?
 
 # Issues:
 
