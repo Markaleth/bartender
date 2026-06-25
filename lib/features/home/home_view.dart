@@ -8,7 +8,7 @@ import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/features/taps/views/taps_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:bartender/data/repository/homebrew_repository.dart';
+import 'package:bartender/domain/services/homebrew_service.dart';
 import 'package:bartender/core/base_view.dart';
 import 'models/home_state.dart';
 import 'view_models/home_view_model.dart';
@@ -22,7 +22,7 @@ class HomeView extends StatelessWidget {
       BaseView<HomeViewModel, HomeState, ScreenEffect>(
         viewModelBuilder: (context) => HomeViewModel(
           context.read<TapFilterNotifier>(),
-          context.read<HomebrewRepository>(),
+          context.read<HomebrewService>(),
           context.read<QueueViewModel>(),
           context.read<SystemStatusNotifier>()
         ),

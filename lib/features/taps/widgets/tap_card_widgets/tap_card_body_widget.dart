@@ -4,7 +4,7 @@ import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/core/utils/url_launcer_utils.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
-import 'package:bartender/data/repository/homebrew_repository.dart';
+import 'package:bartender/domain/services/homebrew_service.dart';
 import 'package:bartender/features/taps/widgets/tap_card_widgets/tap_card_stats_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,8 +44,7 @@ class TapCardBody extends StatelessWidget {
                     title: tapInstallSizeLabel,
                     // Closure ensures Future is only created once inside initState
                     fetcher: () => context
-                        .read<HomebrewRepository>()
-                        .taps
+                        .read<HomebrewService>()
                         .getTapInstalledSize(tap.name),
                     formatData: StringUtils.formatSize,
                   ),

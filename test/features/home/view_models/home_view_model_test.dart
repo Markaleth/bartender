@@ -3,11 +3,11 @@ import 'package:mocktail/mocktail.dart';
 import 'package:bartender/features/home/models/home_state.dart';
 import 'package:bartender/features/home/view_models/home_view_model.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
-import 'package:bartender/data/repository/homebrew_repository.dart';
+import 'package:bartender/domain/services/homebrew_service.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 
-class MockHomebrewRepository extends Mock implements HomebrewRepository {}
+class MockHomebrewService extends Mock implements HomebrewService {}
 
 class MockQueueViewModel extends Mock implements QueueViewModel {}
 
@@ -17,13 +17,13 @@ void main() {
   group('HomeViewModel Tests', () {
     late HomeViewModel viewModel;
     late TapFilterNotifier notifier;
-    late MockHomebrewRepository mockRepository;
+    late MockHomebrewService mockService;
     late MockQueueViewModel mockQueueViewModel;
     late MockSystemStatusNotifier mockSystemStatusNotifier;
 
     setUp(() {
       notifier = TapFilterNotifier();
-      mockRepository = MockHomebrewRepository();
+      mockService = MockHomebrewService();
       mockQueueViewModel = MockQueueViewModel();
       mockSystemStatusNotifier = MockSystemStatusNotifier();
 
@@ -31,7 +31,7 @@ void main() {
 
       viewModel = HomeViewModel(
         notifier,
-        mockRepository,
+        mockService,
         mockQueueViewModel,
         mockSystemStatusNotifier,
       );

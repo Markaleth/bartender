@@ -1,18 +1,18 @@
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
-import 'package:bartender/data/repository/homebrew_repository.dart';
+import 'package:bartender/domain/services/homebrew_service.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 import '../models/taps_state.dart';
 
 class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
-  final HomebrewRepository _repository;
+  final HomebrewService _homebrewService;
   final QueueViewModel _queueViewModel;
   final TapStatusNotifier _statusNotifier;
 
-  TapsViewModel(this._repository, this._queueViewModel, this._statusNotifier)
+  TapsViewModel(this._homebrewService, this._queueViewModel, this._statusNotifier)
     : super(const TapsState()) {
     _statusNotifier.addListener(_onStatusUpdated);
   }
@@ -43,7 +43,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     if (isInstalled) {
       syncTap(tapName); // Refetch to show newly added tap
     } else {
-      _repository.taps.deleteTap(tapName);
+      _homebrewService.deleteTap(tapName);
       // Remove tap from the current state if successful uninstall
       state.tapsState.maybeWhen(
         success: (taps) {
@@ -62,7 +62,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   Future<void> fetchTaps() async {
     emitState(state.copyWith(tapsState: const FetchState.loading()));
     try {
-      final taps = await _repository.taps.getTaps();
+      final taps = await _homebrewService.getTaps();
       if (taps.isEmpty) {
         await syncTaps();
       } else {
@@ -76,9 +76,9 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   Future<void> syncTaps() async {
     emitState(state.copyWith(syncingTap: 'all'));
     try {
-      await _repository.taps.syncTaps();
-      await _repository.taps.syncThirdPartyTapPackages();
-      final taps = await _repository.taps.getTaps();
+      await _homebrewService.syncTaps();
+      await _homebrewService.syncThirdPartyTapPackages();
+      final taps = await _homebrewService.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
@@ -91,8 +91,8 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   Future<void> syncTap(String tapName) async {
     emitState(state.copyWith(syncingTap: tapName));
     try {
-      await _repository.taps.syncTap(tapName);
-      final taps = await _repository.taps.getTaps();
+      await _homebrewService.syncTap(tapName);
+      final taps = await _homebrewService.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
@@ -122,8 +122,8 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   Future<void> trustTap(String name) async {
     emitState(state.copyWith(syncingTap: name));
     try {
-      await _repository.taps.toggleTapTrust(name, true);
-      final taps = await _repository.taps.getTaps();
+      await _homebrewService.toggleTapTrust(name, true);
+      final taps = await _homebrewService.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );

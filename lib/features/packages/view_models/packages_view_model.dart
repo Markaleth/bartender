@@ -7,7 +7,7 @@ import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
-import 'package:bartender/data/repository/homebrew_repository.dart';
+import 'package:bartender/domain/services/homebrew_service.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/models/package_states.dart';
 import 'package:bartender/features/packages/models/trending_package_state.dart';
@@ -15,7 +15,7 @@ import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 
 class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
-  final HomebrewRepository _homebrewRepository;
+  final HomebrewService _homebrewService;
   final PackageStatusNotifier _statusNotifier;
   final TapFilterNotifier _tapFilterNotifier;
   final TapStatusNotifier _tapStatusNotifier;
@@ -27,7 +27,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
   bool _isLoadingMore = false;
 
   PackagesViewModel(
-    this._homebrewRepository,
+    this._homebrewService,
     this._statusNotifier,
     this._tapFilterNotifier,
     this._tapStatusNotifier,
@@ -94,9 +94,9 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
     _currentPaginationOffset = 0;
 
     final chunkedTrending = await _getTrendingData();
-    final taps = await _homebrewRepository.taps.getTaps();
+    final taps = await _homebrewService.getTaps();
 
-    final initialChunk = await _homebrewRepository.catalog.getFilteredPackages(
+    final initialChunk = await _homebrewService.getFilteredPackages(
       query: state.searchQuery,
       type: state.packageType,
       limit: _paginationChunkSize,
@@ -131,7 +131,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
     _isLoadingMore = true;
 
     try {
-      final nextChunk = await _homebrewRepository.catalog.getFilteredPackages(
+      final nextChunk = await _homebrewService.getFilteredPackages(
         query: state.searchQuery,
         type: state.packageType,
         limit: _paginationChunkSize,
@@ -166,11 +166,11 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
   // --- Trending Data ---
 
   Future<List<List<TrendingPackageState>>> _getTrendingData() async {
-    final formulaTrending = await _homebrewRepository.analytics.getTrendingFormulae(
+    final formulaTrending = await _homebrewService.getTrendingFormulae(
       AnalyticsPeriod.days30,
       limit: 10,
     );
-    final caskTrending = await _homebrewRepository.analytics.getTrendingCasks(
+    final caskTrending = await _homebrewService.getTrendingCasks(
       _analyticsPeriod,
       limit: 20,
     );
@@ -241,7 +241,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       truncateForScrollToTop();
     }
 
-    final initialChunk = await _homebrewRepository.catalog.getFilteredPackages(
+    final initialChunk = await _homebrewService.getFilteredPackages(
       query: state.searchQuery,
       type: state.packageType,
       limit: _paginationChunkSize,
