@@ -1,4 +1,4 @@
-import 'package:bartender/domain/services/homebrew_service.dart';
+import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/features/library/models/library_state.dart';
@@ -6,12 +6,12 @@ import 'package:bartender/core/services/install_status_notifiers.dart';
 
 class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   final PackageStatusNotifier _statusNotifier;
-  final HomebrewService _homebrewService;
+  final HomebrewRepositoryInterface _homebrewService;
   final TapStatusNotifier _tapStatusNotifier;
 
   LibraryViewModel({
     required PackageStatusNotifier statusNotifier,
-    required HomebrewService homebrewService,
+    required HomebrewRepositoryInterface homebrewService,
     required TapStatusNotifier tapStatusNotifier,
   }) : _statusNotifier = statusNotifier,
        _homebrewService = homebrewService,

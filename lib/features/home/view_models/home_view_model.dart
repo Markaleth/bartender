@@ -3,13 +3,13 @@ import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
-import 'package:bartender/domain/services/homebrew_service.dart';
+import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import '../models/home_state.dart';
 
 class HomeViewModel extends BaseViewModel<HomeState, ScreenEffect> {
   final TapFilterNotifier _tapFilterNotifier;
-  final HomebrewService _homebrewService;
+  final HomebrewRepositoryInterface _homebrewService;
   final QueueViewModel _queueViewModel;
   final SystemStatusNotifier _systemNotifier;
 

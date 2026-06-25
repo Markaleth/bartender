@@ -5,7 +5,7 @@ import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
-import 'package:bartender/domain/services/homebrew_service.dart';
+import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
 import 'package:bartender/features/packages/widgets/package_filters.dart';
@@ -74,7 +74,7 @@ class _PackagesViewState extends State<PackagesView> {
     BuildContext context,
   ) => BaseView<PackagesViewModel, PackagesState, ScreenEffect>(
     viewModelBuilder: (context) => PackagesViewModel(
-      context.read<HomebrewService>(),
+      context.read<HomebrewRepositoryInterface>(),
       context.read<PackageStatusNotifier>(),
       context.read<TapFilterNotifier>(),
       context.read<TapStatusNotifier>(),

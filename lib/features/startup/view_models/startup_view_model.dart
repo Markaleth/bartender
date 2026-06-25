@@ -1,12 +1,12 @@
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/routing/app_router.dart';
-import 'package:bartender/domain/services/homebrew_service.dart';
+import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/startup/models/startup_state.dart';
 import 'package:flutter/foundation.dart';
 
 class StartupViewModel extends BaseViewModel<StartupState, ScreenEffect> {
-  final HomebrewService _homebrewService;
+  final HomebrewRepositoryInterface _homebrewService;
 
   StartupViewModel(this._homebrewService)
     : super(const StartupState());

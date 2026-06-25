@@ -5,7 +5,7 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
-import 'package:bartender/domain/services/homebrew_service.dart';
+import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ class TapsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<TapsViewModel, TapsState, ScreenEffect>(
       viewModelBuilder: (context) => TapsViewModel(
-        context.read<HomebrewService>(),
+        context.read<HomebrewRepositoryInterface>(),
         context.read<QueueViewModel>(),
         context.read<TapStatusNotifier>(),
       )..init(),

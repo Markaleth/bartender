@@ -7,7 +7,7 @@ import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/data/models/formula/formula_model.dart';
-import 'package:bartender/domain/services/homebrew_service.dart';
+import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/models/package_states.dart';
 import 'package:bartender/features/packages/models/trending_package_state.dart';
@@ -15,7 +15,7 @@ import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 
 class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
-  final HomebrewService _homebrewService;
+  final HomebrewRepositoryInterface _homebrewService;
   final PackageStatusNotifier _statusNotifier;
   final TapFilterNotifier _tapFilterNotifier;
   final TapStatusNotifier _tapStatusNotifier;

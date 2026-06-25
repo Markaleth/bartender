@@ -1,14 +1,14 @@
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
-import 'package:bartender/domain/services/homebrew_service.dart';
+import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 import '../models/taps_state.dart';
 
 class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
-  final HomebrewService _homebrewService;
+  final HomebrewRepositoryInterface _homebrewService;
   final QueueViewModel _queueViewModel;
   final TapStatusNotifier _statusNotifier;
 

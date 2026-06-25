@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../core/enums/analytics_period.dart';
 import '../data/api/api_client_interface.dart';
 import '../data/db/database_interface.dart';
-import '../data/repository/homebrew_repository.dart';
+import '../domain/repositories/homebrew_repository_interface.dart';
 import '../data/network_resource.dart';
 
 class ApiTesterWidget extends StatefulWidget {
@@ -16,7 +16,7 @@ class ApiTesterWidget extends StatefulWidget {
 class _ApiTesterWidgetState extends State<ApiTesterWidget> {
   late final ApiClientInterface _apiClient;
   late final DatabaseInterface _database;
-  late final HomebrewRepository _repository;
+  late final HomebrewRepositoryInterface _repository;
   String _result = 'No result yet.';
   bool _isDbEmpty = true;
 
@@ -30,7 +30,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
     super.didChangeDependencies();
     _apiClient = Provider.of<ApiClientInterface>(context, listen: false);
     _database = Provider.of<DatabaseInterface>(context, listen: false);
-    _repository = Provider.of<HomebrewRepository>(context, listen: false);
+    _repository = Provider.of<HomebrewRepositoryInterface>(context, listen: false);
     _checkDbState();
   }
 
@@ -393,7 +393,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               onPressed: () async {
                                 _updateResult('Repository: syncFormulae()...');
                                 try {
-                                  await _repository.catalog.syncFormulae();
+                                  await _repository.syncFormulae();
                                   _updateResult('Success: synced formulae.');
                                   await _checkDbState();
                                 } catch (e) {
@@ -406,7 +406,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               onPressed: () async {
                                 _updateResult('Repository: syncCasks()...');
                                 try {
-                                  await _repository.catalog.syncCasks();
+                                  await _repository.syncCasks();
                                   _updateResult('Success: synced casks.');
                                   await _checkDbState();
                                 } catch (e) {
@@ -421,7 +421,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: getFormula("wget")...',
                                 );
                                 try {
-                                  final formula = await _repository.catalog.getFormula(
+                                  final formula = await _repository.getFormula(
                                     'wget',
                                   );
                                   _updateResult(
@@ -440,7 +440,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: getCask("google-chrome")...',
                                 );
                                 try {
-                                  final cask = await _repository.catalog.getCask(
+                                  final cask = await _repository.getCask(
                                     'google-chrome',
                                   );
                                   _updateResult(
@@ -459,7 +459,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: syncFormulaeAnalytics()...',
                                 );
                                 try {
-                                  await _repository.analytics.syncFormulaeAnalytics(
+                                  await _repository.syncFormulaeAnalytics(
                                     'install',
                                     AnalyticsPeriod.days30,
                                   );
@@ -479,7 +479,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: syncCasksAnalytics()...',
                                 );
                                 try {
-                                  await _repository.analytics.syncCasksAnalytics(
+                                  await _repository.syncCasksAnalytics(
                                     AnalyticsPeriod.days30,
                                   );
                                   _updateResult(
@@ -498,8 +498,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'PackageRepo: syncInstalledPackages()...',
                                 );
                                 try {
-                                  await _repository.local
-                                      .syncInstalledPackages();
+                                  await _repository.syncInstalledPackages();
                                   _updateResult(
                                     'Success: synced installed packages.',
                                   );
@@ -516,7 +515,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'PackageRepo: install("wget")...',
                                 );
                                 try {
-                                  await _repository.local.install('wget');
+                                  await _repository.install('wget');
                                   _updateResult('Success: installed wget.');
                                   await _checkDbState();
                                 } catch (e) {
@@ -531,7 +530,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'PackageRepo: uninstall("wget")...',
                                 );
                                 try {
-                                  await _repository.local.uninstall('wget');
+                                  await _repository.uninstall('wget');
                                   _updateResult('Success: uninstalled wget.');
                                   await _checkDbState();
                                 } catch (e) {
