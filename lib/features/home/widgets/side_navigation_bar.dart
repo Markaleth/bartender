@@ -45,7 +45,7 @@ class SideNavigationBar extends StatelessWidget {
                   onTap: () => onTabSelected(HomeTab.browse),
                 ),
                 SideNavigationItem(
-                  icon: libraryIcon,
+                  icon: installedIcon,
                   label: navLibrary,
                   isSelected: selectedTab == HomeTab.library,
                   onTap: () => onTabSelected(HomeTab.library),

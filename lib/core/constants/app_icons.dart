@@ -35,3 +35,4 @@ const trustedIcon = 'assets/icons/trusted_icon.svg';
 const untrustedIcon = 'assets/icons/untrusted_icon.svg';
 const trustIcon = 'assets/icons/trust_icon.svg';
 const trustAlertIcon = 'assets/icons/trust_alert_icon.svg';
+const installedIcon = 'assets/icons/installed_icon.svg';

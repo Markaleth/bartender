@@ -28,15 +28,16 @@
 - [x] Cleanup text styles -> We need to clean up Monospace and FiraCode.
 - [x] Some build methods are doing a bit of heavy lifting. We should consider moving that to a separate
 - [x] clean up how we use repos and shit around here. you're using homebrew_repository AND package_repository. What's the difference between the two if you're doing DB writes and running console commands?
+- [x] Consider renaming "library" to "Installed".
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
 - [ ] Look into the use of color in your app. Are we using stuff consistently?
 - [ ] Do a pass over all components to see if there's any performance gains you're missing
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
-- [ ] Consider renaming "library" to "Installed".
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
       substate or something to clean them up
+- [ ] you probably wanna add analytics, crashlytics, performance and maybe even remote config
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
 
 # Issues:
