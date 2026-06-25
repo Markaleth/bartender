@@ -2,7 +2,6 @@ import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/startup/models/startup_state.dart';
 import 'package:bartender/features/startup/view_models/startup_view_model.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -32,7 +31,6 @@ class StartupView extends StatelessWidget {
     return BaseView<StartupViewModel, StartupState, ScreenEffect>(
       viewModelBuilder: (context) => StartupViewModel(
         context.read<HomebrewRepository>(),
-        context.read<PackageRepository>(),
       ),
       onModelReady: (viewModel) => viewModel.initialize(),
       onEffect: _onEffect,

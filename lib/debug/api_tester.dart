@@ -4,7 +4,6 @@ import '../core/enums/analytics_period.dart';
 import '../data/api/api_client_interface.dart';
 import '../data/db/database_interface.dart';
 import '../data/repository/homebrew_repository.dart';
-import '../data/repository/package_repository.dart';
 import '../data/network_resource.dart';
 
 class ApiTesterWidget extends StatefulWidget {
@@ -18,7 +17,6 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
   late final ApiClientInterface _apiClient;
   late final DatabaseInterface _database;
   late final HomebrewRepository _repository;
-  late final PackageRepository _packageRepository;
   String _result = 'No result yet.';
   bool _isDbEmpty = true;
 
@@ -32,7 +30,6 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
     super.didChangeDependencies();
     _apiClient = Provider.of<ApiClientInterface>(context, listen: false);
     _database = Provider.of<DatabaseInterface>(context, listen: false);
-    _packageRepository = Provider.of<PackageRepository>(context, listen: false);
     _repository = Provider.of<HomebrewRepository>(context, listen: false);
     _checkDbState();
   }
@@ -396,7 +393,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               onPressed: () async {
                                 _updateResult('Repository: syncFormulae()...');
                                 try {
-                                  await _repository.syncFormulae();
+                                  await _repository.catalog.syncFormulae();
                                   _updateResult('Success: synced formulae.');
                                   await _checkDbState();
                                 } catch (e) {
@@ -409,7 +406,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                               onPressed: () async {
                                 _updateResult('Repository: syncCasks()...');
                                 try {
-                                  await _repository.syncCasks();
+                                  await _repository.catalog.syncCasks();
                                   _updateResult('Success: synced casks.');
                                   await _checkDbState();
                                 } catch (e) {
@@ -424,7 +421,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: getFormula("wget")...',
                                 );
                                 try {
-                                  final formula = await _repository.getFormula(
+                                  final formula = await _repository.catalog.getFormula(
                                     'wget',
                                   );
                                   _updateResult(
@@ -443,7 +440,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: getCask("google-chrome")...',
                                 );
                                 try {
-                                  final cask = await _repository.getCask(
+                                  final cask = await _repository.catalog.getCask(
                                     'google-chrome',
                                   );
                                   _updateResult(
@@ -462,7 +459,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: syncFormulaeAnalytics()...',
                                 );
                                 try {
-                                  await _repository.syncFormulaeAnalytics(
+                                  await _repository.analytics.syncFormulaeAnalytics(
                                     'install',
                                     AnalyticsPeriod.days30,
                                   );
@@ -482,7 +479,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'Repository: syncCasksAnalytics()...',
                                 );
                                 try {
-                                  await _repository.syncCasksAnalytics(
+                                  await _repository.analytics.syncCasksAnalytics(
                                     AnalyticsPeriod.days30,
                                   );
                                   _updateResult(
@@ -501,7 +498,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'PackageRepo: syncInstalledPackages()...',
                                 );
                                 try {
-                                  await _packageRepository
+                                  await _repository.local
                                       .syncInstalledPackages();
                                   _updateResult(
                                     'Success: synced installed packages.',
@@ -519,7 +516,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'PackageRepo: install("wget")...',
                                 );
                                 try {
-                                  await _packageRepository.install('wget');
+                                  await _repository.local.install('wget');
                                   _updateResult('Success: installed wget.');
                                   await _checkDbState();
                                 } catch (e) {
@@ -534,7 +531,7 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
                                   'PackageRepo: uninstall("wget")...',
                                 );
                                 try {
-                                  await _packageRepository.uninstall('wget');
+                                  await _repository.local.uninstall('wget');
                                   _updateResult('Success: uninstalled wget.');
                                   await _checkDbState();
                                 } catch (e) {

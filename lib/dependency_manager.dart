@@ -4,7 +4,6 @@ import 'package:bartender/data/api/api_client_interface.dart';
 import 'package:bartender/data/db/database.dart';
 import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/services/icon_resolution/icon_resolution_service.dart';
 import 'package:bartender/data/shell/brew_service.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
@@ -82,17 +81,12 @@ List<SingleChildWidget> buildDependencyList(
     ),
 
     // Repositories
-    ProxyProvider3<
-      ApiClientInterface,
-      DatabaseInterface,
-      BrewService,
-      HomebrewRepository
-    >(
-      update: (_, apiClient, db, brewService, _) =>
-          HomebrewRepository(apiClient, db, brewService),
-    ),
-    ProxyProvider2<BrewService, DatabaseInterface, PackageRepository>(
-      update: (_, brewService, db, _) => PackageRepository(brewService, db),
+    Provider<HomebrewRepository>(
+      create: (context) => HomebrewRepository(
+        context.read<ApiClientInterface>(),
+        context.read<DatabaseInterface>(),
+        context.read<BrewService>(),
+      ),
     ),
   ];
 }

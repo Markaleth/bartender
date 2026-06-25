@@ -45,6 +45,7 @@ class TapCardBody extends StatelessWidget {
                     // Closure ensures Future is only created once inside initState
                     fetcher: () => context
                         .read<HomebrewRepository>()
+                        .taps
                         .getTapInstalledSize(tap.name),
                     formatData: StringUtils.formatSize,
                   ),

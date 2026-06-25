@@ -2,15 +2,13 @@ import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/routing/app_router.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/startup/models/startup_state.dart';
 import 'package:flutter/foundation.dart';
 
 class StartupViewModel extends BaseViewModel<StartupState, ScreenEffect> {
   final HomebrewRepository _homebrewRepository;
-  final PackageRepository _packageRepository;
 
-  StartupViewModel(this._homebrewRepository, this._packageRepository)
+  StartupViewModel(this._homebrewRepository)
     : super(const StartupState());
 
   Future<void> initialize() async {
@@ -18,7 +16,7 @@ class StartupViewModel extends BaseViewModel<StartupState, ScreenEffect> {
       emitState(state.copyWith(isLoading: true, statusText: 'Initializing...'));
 
       // Check if DB is empty to determine our scenario
-      final isDbEmpty = await _homebrewRepository.isDatabaseEmpty();
+      final isDbEmpty = await _homebrewRepository.catalog.isDatabaseEmpty();
 
       if (isDbEmpty) {
         // Scenario 1: DB is empty. Wait for both API and local sync.
@@ -27,14 +25,14 @@ class StartupViewModel extends BaseViewModel<StartupState, ScreenEffect> {
         );
         await Future.wait([
           _homebrewRepository.syncAllData(),
-          _packageRepository.syncInstalledPackages(),
+          _homebrewRepository.local.syncInstalledPackages(),
         ]);
       } else {
         // Scenario 2: DB is populated. Fast local sync, background network sync.
         emitState(state.copyWith(statusText: 'Syncing local packages...'));
 
         // Only await the local sync so the user gets into the app fast
-        await _packageRepository.syncInstalledPackages();
+        await _homebrewRepository.local.syncInstalledPackages();
 
         // Fire off network sync in the background
         _homebrewRepository.syncAllData().catchError((e) {

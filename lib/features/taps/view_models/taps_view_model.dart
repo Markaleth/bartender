@@ -43,7 +43,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     if (isInstalled) {
       syncTap(tapName); // Refetch to show newly added tap
     } else {
-      _repository.deleteTap(tapName);
+      _repository.taps.deleteTap(tapName);
       // Remove tap from the current state if successful uninstall
       state.tapsState.maybeWhen(
         success: (taps) {
@@ -62,7 +62,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   Future<void> fetchTaps() async {
     emitState(state.copyWith(tapsState: const FetchState.loading()));
     try {
-      final taps = await _repository.getTaps();
+      final taps = await _repository.taps.getTaps();
       if (taps.isEmpty) {
         await syncTaps();
       } else {
@@ -76,9 +76,9 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   Future<void> syncTaps() async {
     emitState(state.copyWith(syncingTap: 'all'));
     try {
-      await _repository.syncTaps();
-      await _repository.syncThirdPartyTapPackages();
-      final taps = await _repository.getTaps();
+      await _repository.taps.syncTaps();
+      await _repository.taps.syncThirdPartyTapPackages();
+      final taps = await _repository.taps.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
@@ -91,8 +91,8 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   Future<void> syncTap(String tapName) async {
     emitState(state.copyWith(syncingTap: tapName));
     try {
-      await _repository.syncTap(tapName);
-      final taps = await _repository.getTaps();
+      await _repository.taps.syncTap(tapName);
+      final taps = await _repository.taps.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
@@ -122,8 +122,8 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   Future<void> trustTap(String name) async {
     emitState(state.copyWith(syncingTap: name));
     try {
-      await _repository.toggleTapTrust(name, true);
-      final taps = await _repository.getTaps();
+      await _repository.taps.toggleTapTrust(name, true);
+      final taps = await _repository.taps.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );

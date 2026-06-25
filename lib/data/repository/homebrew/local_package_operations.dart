@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'package:bartender/core/utils/shell_utils.dart';
 
-import '../db/database_interface.dart';
-import '../models/cask/cask_model.dart';
-import '../models/formula/formula_model.dart';
-import '../shell/brew_service.dart';
+import '../../db/database_interface.dart';
+import '../../models/cask/cask_model.dart';
+import '../../models/formula/formula_model.dart';
+import '../../shell/brew_service.dart';
 
-class PackageRepository {
+class LocalPackageOperations {
   final BrewService _brewService;
   final DatabaseInterface _database;
 
-  PackageRepository(this._brewService, this._database);
+  LocalPackageOperations(this._brewService, this._database);
 
   Future<List<FormulaModel>> getInstalledFormulae() =>
       _database.getInstalledFormulae();

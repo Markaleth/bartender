@@ -1,4 +1,3 @@
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
@@ -7,17 +6,14 @@ import 'package:bartender/core/services/install_status_notifiers.dart';
 
 class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   final PackageStatusNotifier _statusNotifier;
-  final PackageRepository _packageRepository;
   final HomebrewRepository _homebrewRepository;
   final TapStatusNotifier _tapStatusNotifier;
 
   LibraryViewModel({
     required PackageStatusNotifier statusNotifier,
-    required PackageRepository packageRepository,
     required HomebrewRepository homebrewRepository,
     required TapStatusNotifier tapStatusNotifier,
   }) : _statusNotifier = statusNotifier,
-       _packageRepository = packageRepository,
        _homebrewRepository = homebrewRepository,
        _tapStatusNotifier = tapStatusNotifier,
        super(const LibraryState()) {
@@ -54,7 +50,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   Future<void> syncData() async {
     emitState(state.copyWith(isSyncing: true));
     try {
-      await _packageRepository.syncInstalledPackages();
+      await _homebrewRepository.local.syncInstalledPackages();
       await refreshData();
     } catch (e) {
       emitEffect(ShowToastEffect('Failed to sync data: $e', isError: true));
@@ -66,7 +62,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   Future<void> init() async {
     emitState(state.copyWith(isLoading: true));
     try {
-      final brewPrefix = await _packageRepository.getPrefix();
+      final brewPrefix = await _homebrewRepository.local.getPrefix();
       emitState(state.copyWith(brewPrefix: brewPrefix));
 
       await refreshData();
@@ -79,9 +75,9 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
 
   Future<void> refreshData() async {
     try {
-      final formulae = await _packageRepository.getInstalledFormulae();
-      final casks = await _packageRepository.getInstalledCasks();
-      final taps = await _homebrewRepository.getTaps();
+      final formulae = await _homebrewRepository.local.getInstalledFormulae();
+      final casks = await _homebrewRepository.local.getInstalledCasks();
+      final taps = await _homebrewRepository.taps.getTaps();
 
       emitState(
         state.copyWith(
@@ -123,7 +119,7 @@ class LibraryViewModel extends BaseViewModel<LibraryState, ScreenEffect> {
   }
 
   Future<void> untrustTap(String name) async {
-    await _homebrewRepository.toggleTapTrust(name, false);
+    await _homebrewRepository.taps.toggleTapTrust(name, false);
     await refreshData();
     _tapStatusNotifier.markUpdated(name, true, false);
   }

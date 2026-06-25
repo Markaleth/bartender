@@ -5,7 +5,6 @@ import 'package:bartender/features/library/view_models/library_view_model.dart';
 import 'package:bartender/features/library/widgets/system_health_view.dart';
 import 'package:bartender/features/library/widgets/explorer_pane.dart';
 import 'package:bartender/features/library/widgets/inspector_pane.dart';
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
 
 import 'package:bartender/core/services/install_status_notifiers.dart';
@@ -20,7 +19,6 @@ class LibraryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<LibraryViewModel, LibraryState, ScreenEffect>(
       viewModelBuilder: (context) => LibraryViewModel(
-        packageRepository: context.read<PackageRepository>(),
         homebrewRepository: context.read<HomebrewRepository>(),
         statusNotifier: context.read<PackageStatusNotifier>(),
         tapStatusNotifier: context.read<TapStatusNotifier>(),

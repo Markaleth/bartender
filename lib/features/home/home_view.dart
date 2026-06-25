@@ -1,7 +1,6 @@
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/debug/api_tester.dart';
 import 'package:bartender/features/packages/views/packages_view.dart';
 import 'package:bartender/features/library/views/library_view.dart';
@@ -25,8 +24,7 @@ class HomeView extends StatelessWidget {
           context.read<TapFilterNotifier>(),
           context.read<HomebrewRepository>(),
           context.read<QueueViewModel>(),
-          context.read<SystemStatusNotifier>(),
-          context.read<PackageRepository>()
+          context.read<SystemStatusNotifier>()
         ),
         onModelReady: (viewModel) => viewModel.init(),
         builder: (context, viewModel, state) => Scaffold(

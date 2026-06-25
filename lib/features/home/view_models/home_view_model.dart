@@ -4,7 +4,6 @@ import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 import 'package:bartender/core/services/tap_filter_notifier.dart';
 import 'package:bartender/data/repository/homebrew_repository.dart';
-import 'package:bartender/data/repository/package_repository.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import '../models/home_state.dart';
 
@@ -13,14 +12,12 @@ class HomeViewModel extends BaseViewModel<HomeState, ScreenEffect> {
   final HomebrewRepository _repository;
   final QueueViewModel _queueViewModel;
   final SystemStatusNotifier _systemNotifier;
-  final PackageRepository _packageRepository;
 
   HomeViewModel(
     this._tapFilterNotifier,
     this._repository,
     this._queueViewModel,
     this._systemNotifier,
-    this._packageRepository,
   ) : super(const HomeState());
 
   void init() {
@@ -31,7 +28,7 @@ class HomeViewModel extends BaseViewModel<HomeState, ScreenEffect> {
   Future<void> checkForUpdates() async {
     emitState(state.copyWith(isCheckingForUpdates: true));
     try {
-      final (localVersion, hasUpdate) = await _repository.checkUpdateStatus();
+      final (localVersion, hasUpdate) = await _repository.system.checkUpdateStatus();
       emitState(
         state.copyWith(
           localVersion: localVersion.isEmpty ? null : localVersion,
@@ -53,7 +50,7 @@ class HomeViewModel extends BaseViewModel<HomeState, ScreenEffect> {
       
       try {
         // 2. Perform the actual DB sync
-        await _packageRepository.syncInstalledPackages();
+        await _repository.local.syncInstalledPackages();
       } finally {
         // 3. Clear the syncing state and refresh the Brew version
         emitState(state.copyWith(isSyncingDatabase: false));
