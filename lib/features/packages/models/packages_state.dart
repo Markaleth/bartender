@@ -1,3 +1,4 @@
+import 'package:bartender/core/enums/analytics_period.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
@@ -12,6 +13,7 @@ abstract class PackagesState with _$PackagesState {
   const PackagesState._();
 
   const factory PackagesState({
+    @Default(AnalyticsPeriod.days30) AnalyticsPeriod analyticsPeriod,
     @Default('') String searchQuery,
     @Default(PackageTypeFilter.all) PackageTypeFilter packageType,
 

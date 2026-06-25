@@ -4,6 +4,7 @@ import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
+import 'package:bartender/core/enums/analytics_period.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
 import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/packages/models/packages_state.dart';
@@ -123,20 +124,45 @@ class _PackagesViewState extends State<PackagesView> {
                       padding: const EdgeInsets.symmetric(
                         horizontal: spacingXl,
                       ),
-                      child: Text(popularPackagesTitle, style: context.titleM),
-                    ),
-                    const SizedBox(height: spacingXs),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: spacingXl),
-                      child: Text(popularPackagesSubtitle),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  popularPackagesTitle,
+                                  style: context.titleM,
+                                ),
+                                const SizedBox(height: spacingXs),
+                                const Text(popularPackagesSubtitle),
+                              ],
+                            ),
+                          ),
+                          SegmentedButton<AnalyticsPeriod>(
+                            segments: AnalyticsPeriod.values
+                                .map(
+                                  (p) => ButtonSegment(
+                                    value: p,
+                                    label: Text(p.value),
+                                  ),
+                                )
+                                .toList(),
+                            selected: {state.analyticsPeriod},
+                            onSelectionChanged: (set) =>
+                                viewModel.changeAnalyticsPeriod(set.first),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: spacingM),
                     state.trendingData.maybeMap(
-                      success: (value) => TrendingPackagesCarousel(
-                        pages: value.data,
-                      ),
+                      success: (value) =>
+                          TrendingPackagesCarousel(pages: value.data),
                       orElse: () => const SizedBox(
-                        height: trendingPackageCarouselHeight,
+                        height:
+                            trendingPackageCarouselHeight + spacingM + spacingS,
                         child: Center(child: CircularProgressIndicator()),
                       ),
                     ),

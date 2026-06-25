@@ -20,8 +20,6 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
   final TapFilterNotifier _tapFilterNotifier;
   final TapStatusNotifier _tapStatusNotifier;
 
-  static const AnalyticsPeriod _analyticsPeriod = AnalyticsPeriod.days30;
-
   int _currentPaginationOffset = 0;
   static const int _paginationChunkSize = 50;
   bool _isLoadingMore = false;
@@ -165,13 +163,27 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
 
   // --- Trending Data ---
 
+  Future<void> changeAnalyticsPeriod(AnalyticsPeriod period) async {
+    if (state.analyticsPeriod == period) return;
+
+    emitState(state.copyWith(
+      analyticsPeriod: period,
+      trendingData: const FetchState.loading(),
+    ));
+
+    final chunkedTrending = await _getTrendingData();
+    emitState(state.copyWith(
+      trendingData: FetchState.success(chunkedTrending),
+    ));
+  }
+
   Future<List<List<TrendingPackageState>>> _getTrendingData() async {
     final formulaTrending = await _homebrewService.getTrendingFormulae(
-      AnalyticsPeriod.days30,
+      state.analyticsPeriod,
       limit: 10,
     );
     final caskTrending = await _homebrewService.getTrendingCasks(
-      _analyticsPeriod,
+      state.analyticsPeriod,
       limit: 20,
     );
 
@@ -218,14 +230,14 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
 
   int _getInstalls(dynamic item) {
     if (item is FormulaModel) {
-      return switch (_analyticsPeriod) {
+      return switch (state.analyticsPeriod) {
         AnalyticsPeriod.days30 => item.installs30d ?? 0,
         AnalyticsPeriod.days90 => item.installs90d ?? 0,
         AnalyticsPeriod.days365 => item.installs365d ?? 0,
       };
     }
     if (item is CaskModel) {
-      return switch (_analyticsPeriod) {
+      return switch (state.analyticsPeriod) {
         AnalyticsPeriod.days30 => item.installs30d ?? 0,
         AnalyticsPeriod.days90 => item.installs90d ?? 0,
         AnalyticsPeriod.days365 => item.installs365d ?? 0,

@@ -29,8 +29,9 @@
 - [x] Some build methods are doing a bit of heavy lifting. We should consider moving that to a separate
 - [x] clean up how we use repos and shit around here. you're using homebrew_repository AND package_repository. What's the difference between the two if you're doing DB writes and running console commands?
 - [x] Consider renaming "library" to "Installed".
+- [x] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
-- [ ] Allow for selection of "trending" period (and make sure you support the requests as well)
+- [ ] Re-style the trending period selectors cause they look kind of wack. Probably worth looking into the other filter buttons as well. Maybe make 10 pages of 4 packages each as well. Just a thought.
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
 - [ ] Look into the use of color in your app. Are we using stuff consistently?
 - [ ] Do a pass over all components to see if there's any performance gains you're missing
