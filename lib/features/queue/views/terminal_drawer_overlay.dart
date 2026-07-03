@@ -52,31 +52,33 @@ class TerminalDrawerOverlay extends StatelessWidget {
             padding: const EdgeInsets.only(right: spacingL, bottom: spacingL),
             child: Align(
               alignment: Alignment.bottomRight,
-              child: AnimatedContainer(
-                duration: defaultAnimationDuration,
-                curve: Curves.easeInOut,
-                width: terminalDrawerWidth,
-                height: state.isDrawerExpanded
-                    ? terminalDrawerExpandedHeight
-                    : terminalDrawerCollapsedHeight,
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(radiusL),
-                  border: Border.all(color: AppColors.borderNeutral),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.5),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: state.isDrawerExpanded
-                    ? ExpandedWidget(viewModel: viewModel, state: state)
-                    : CollapsedWidget(
-                        inProgressCount: inProgressCount,
-                        toggleDrawer: viewModel.toggleDrawer,
+              child: RepaintBoundary(
+                child: AnimatedContainer(
+                  duration: defaultAnimationDuration,
+                  curve: Curves.easeInOut,
+                  width: terminalDrawerWidth,
+                  height: state.isDrawerExpanded
+                      ? terminalDrawerExpandedHeight
+                      : terminalDrawerCollapsedHeight,
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(radiusL),
+                    border: Border.all(color: AppColors.borderNeutral),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.5),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
                       ),
+                    ],
+                  ),
+                  child: state.isDrawerExpanded
+                      ? ExpandedWidget(viewModel: viewModel, state: state)
+                      : CollapsedWidget(
+                          inProgressCount: inProgressCount,
+                          toggleDrawer: viewModel.toggleDrawer,
+                        ),
+                ),
               ),
             ),
           );

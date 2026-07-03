@@ -22,7 +22,6 @@ abstract class PackagesState with _$PackagesState {
     @Default(false) bool isSyncingBackground,
 
     @Default([]) List<PackageListItemState> paginatedPackages,
-    String? expandedPackageId,
 
     @Default([]) List<TapModel> taps,
   }) = _PackagesState;

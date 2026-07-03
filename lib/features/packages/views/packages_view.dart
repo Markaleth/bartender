@@ -193,7 +193,6 @@ class _PackagesViewState extends State<PackagesView> {
                 itemCount: state.paginatedPackages.length,
                 itemBuilder: (context, index) {
                   final item = state.paginatedPackages[index];
-                  final isExpanded = state.expandedPackageId == item.id;
 
                   return PackageListItem(
                     model: item,
@@ -201,8 +200,6 @@ class _PackagesViewState extends State<PackagesView> {
                     name: item.name,
                     homepage: item.homepage,
                     isCask: item.isCask,
-                    isExpanded: isExpanded,
-                    onExpand: () => viewModel.togglePackageExpansion(item.id),
                     description: item.description,
                     version: item.version,
                   );

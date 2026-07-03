@@ -11,17 +11,21 @@ class InspectorPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<LibraryViewModel>();
-    final state = viewModel.state;
+    final inspectorState = context.select<LibraryViewModel, InspectorState>(
+        (vm) => vm.state.inspectorState);
+    final packagesByTap = context.select<LibraryViewModel, Map<String, List<dynamic>>>(
+        (vm) => vm.state.packagesByTap);
 
-    return state.inspectorState.map(
-      empty: (_) => const InspectorPaneEmptyWidget(),
-      tap: (tapState) => InspectorPaneTapWidget(
-        state: tapState,
-        packagesByTap: state.packagesByTap,
+    return RepaintBoundary(
+      child: inspectorState.map(
+        empty: (_) => const InspectorPaneEmptyWidget(),
+        tap: (tapState) => InspectorPaneTapWidget(
+          state: tapState,
+          packagesByTap: packagesByTap,
+        ),
+        package: (packageState) =>
+            InspectorPanePackageWindget(state: packageState),
       ),
-      package: (packageState) =>
-          InspectorPanePackageWindget(state: packageState),
     );
   }
 }

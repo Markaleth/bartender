@@ -18,15 +18,13 @@ import 'package:bartender/core/models/operation_task/operation_task.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:provider/provider.dart';
 
-class PackageListItem extends StatelessWidget {
+class PackageListItem extends StatefulWidget {
   final PackageListItemState model;
   final String id;
   final String name;
   final String? homepage;
   final bool isCask;
 
-  final bool isExpanded;
-  final VoidCallback onExpand;
   final String? description;
   final String? version;
 
@@ -37,11 +35,22 @@ class PackageListItem extends StatelessWidget {
     required this.name,
     this.homepage,
     required this.isCask,
-    required this.isExpanded,
-    required this.onExpand,
     this.description,
     this.version,
   });
+
+  @override
+  State<PackageListItem> createState() => _PackageListItemState();
+}
+
+class _PackageListItemState extends State<PackageListItem> {
+  bool isExpanded = false;
+
+  void _onExpand() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,22 +80,22 @@ class PackageListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _PackageListItemHeader(
-                    id: id,
-                    name: name,
-                    homepage: homepage,
-                    isCask: isCask,
+                    id: widget.id,
+                    name: widget.name,
+                    homepage: widget.homepage,
+                    isCask: widget.isCask,
                     isExpanded: isExpanded,
-                    isDeprecated: model.isDeprecated,
-                    onExpand: onExpand,
-                    description: description,
-                    version: version,
+                    isDeprecated: widget.model.isDeprecated,
+                    onExpand: _onExpand,
+                    description: widget.description,
+                    version: widget.version,
                     constraints: constraints,
                   ),
                   if (isExpanded)
                     _PackageListItemDetails(
-                      model: model,
-                      id: id,
-                      isCask: isCask,
+                      model: widget.model,
+                      id: widget.id,
+                      isCask: widget.isCask,
                     ),
                 ],
               ),
@@ -285,12 +294,12 @@ class _PackageActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        final activeTask = context.select<QueueViewModel, OperationTask?>(
-          (vm) => vm.state.tasks.where((t) => t.packageId == id).lastOrNull,
+        final activeTaskStatus = context.select<QueueViewModel, OperationStatus?>(
+          (vm) => vm.state.tasks.where((t) => t.packageId == id).lastOrNull?.status,
         );
 
-        bool isQueued = activeTask?.status == OperationStatus.queued;
-        bool isInProgress = activeTask?.status == OperationStatus.inProgress;
+        bool isQueued = activeTaskStatus == OperationStatus.queued;
+        bool isInProgress = activeTaskStatus == OperationStatus.inProgress;
 
         return SizedBox(
           width: defaultButtonWidth,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:bartender/core/base_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
@@ -15,6 +16,12 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
   final TapStatusNotifier _tapNotifier;
   final SystemStatusNotifier _systemNotifier;
   bool _isProcessing = false;
+
+  final Map<String, ValueNotifier<List<String>>> _taskLogs = {};
+
+  ValueNotifier<List<String>> getLogsNotifierForTask(String taskId) {
+    return _taskLogs.putIfAbsent(taskId, () => ValueNotifier<List<String>>([]));
+  }
 
   QueueViewModel(
     this._brewService,
@@ -131,14 +138,8 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
   void _listenToCommandOutput(StreamingShellCommand command, String taskId) {
     command.mergedOutput.listen((chunk) {
       final lines = chunk.split('\n');
-
-      final currentTaskIndex = state.tasks.indexWhere((t) => t.id == taskId);
-      if (currentTaskIndex == -1) return;
-
-      final currentTask = state.tasks[currentTaskIndex];
-      final updatedLogs = List<String>.from(currentTask.logs)..addAll(lines);
-
-      _updateTask(currentTask.copyWith(logs: updatedLogs));
+      final notifier = getLogsNotifierForTask(taskId);
+      notifier.value = List.of(notifier.value)..addAll(lines);
     });
   }
 

@@ -15,15 +15,14 @@ import 'package:bartender/core/services/install_status_notifiers.dart';
 import '../../home/view_models/home_view_model.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/fetch_state/fetch_state.dart';
+import 'package:bartender/data/models/tap/tap_model.dart';
 import '../models/taps_state.dart';
 import '../view_models/taps_view_model.dart';
 import '../widgets/add_tap_dialog.dart';
 import '../widgets/tap_card.dart';
 
 class TapsView extends StatelessWidget {
-  final HomeViewModel homeViewModel;
-
-  const TapsView({super.key, required this.homeViewModel});
+  const TapsView({super.key});
 
   void _showAddTapDialog(BuildContext context, TapsViewModel viewModel) {
     showDialog(
@@ -65,53 +64,13 @@ class TapsView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(spacingM),
                 child: _HeaderWidget(
-                  isSyncing: state.syncingTap != null,
                   onSync: viewModel.syncTaps,
                   onAddTap: () => _showAddTapDialog(context, viewModel),
                 ),
               ),
               const HorizontalDivider(),
-              Expanded(
-                child: state.tapsState.when(
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  error: (msg) => Center(
-                    child: Text(
-                      'Error: $msg',
-                      style: context.bodyM.copyWith(color: AppColors.error),
-                    ),
-                  ),
-                  success: (taps) {
-                    if (taps.isEmpty) {
-                      return const Center(child: Text(noTapsFoundCopy));
-                    }
-                    return GridView.builder(
-                      padding: const EdgeInsets.all(spacingM),
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: tapCardWidth,
-                            crossAxisSpacing: spacingM,
-                            mainAxisSpacing: spacingM,
-                            childAspectRatio: 0.8,
-                          ),
-                      itemCount: taps.length,
-                      itemBuilder: (context, index) {
-                        final tap = taps[index];
-                        return TapCard(
-                          tap: tap,
-                          isGlobalSyncing: state.syncingTap == 'all',
-                          isItemSyncing: state.syncingTap == tap.name,
-                          isAnySyncing: state.syncingTap != null,
-                          onViewPackages: () {
-                            homeViewModel.navigateAndFilterByTap(tap.name);
-                          },
-                          onRemove: () => viewModel.removeTap(tap.name),
-                          onTrust: () => viewModel.trustTap(tap.name),
-                        );
-                      },
-                    );
-                  },
-                ),
+              const Expanded(
+                child: _TapsGrid(),
               ),
             ],
           ),
@@ -121,45 +80,127 @@ class TapsView extends StatelessWidget {
   }
 }
 
+class _TapsGrid extends StatelessWidget {
+  const _TapsGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    final tapsState = context.select<TapsViewModel, FetchState<List<TapModel>>>(
+      (vm) => vm.state.tapsState,
+    );
+    final viewModel = context.read<TapsViewModel>();
+    final homeViewModel = context.read<HomeViewModel>();
+
+    return tapsState.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (msg) => Center(
+        child: Text(
+          'Error: $msg',
+          style: context.bodyM.copyWith(color: AppColors.error),
+        ),
+      ),
+      success: (taps) {
+        if (taps.isEmpty) {
+          return const Center(child: Text(noTapsFoundCopy));
+        }
+        return GridView.builder(
+          padding: const EdgeInsets.all(spacingM),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: tapCardWidth,
+            crossAxisSpacing: spacingM,
+            mainAxisSpacing: spacingM,
+            childAspectRatio: 0.8,
+          ),
+          itemCount: taps.length,
+          itemBuilder: (context, index) {
+            final tap = taps[index];
+            return _ScopedTapCard(
+              tap: tap,
+              viewModel: viewModel,
+              homeViewModel: homeViewModel,
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _ScopedTapCard extends StatelessWidget {
+  final TapModel tap;
+  final TapsViewModel viewModel;
+  final HomeViewModel homeViewModel;
+
+  const _ScopedTapCard({
+    required this.tap,
+    required this.viewModel,
+    required this.homeViewModel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final syncingTap = context.select<TapsViewModel, String?>(
+      (vm) => vm.state.syncingTap,
+    );
+
+    return TapCard(
+      tap: tap,
+      isGlobalSyncing: syncingTap == 'all',
+      isItemSyncing: syncingTap == tap.name,
+      isAnySyncing: syncingTap != null,
+      onViewPackages: () {
+        homeViewModel.navigateAndFilterByTap(tap.name);
+      },
+      onRemove: () => viewModel.removeTap(tap.name),
+      onTrust: () => viewModel.trustTap(tap.name),
+    );
+  }
+}
+
 class _HeaderWidget extends StatelessWidget {
-  final bool isSyncing;
   final VoidCallback onSync;
   final VoidCallback onAddTap;
+  
   const _HeaderWidget({
-    required this.isSyncing,
     required this.onSync,
     required this.onAddTap,
   });
 
   @override
-  Widget build(BuildContext context) => Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    spacing: spacingM,
-    children: [
-      Text(tapsTitle, style: context.headM.copyWith(color: AppColors.primary)),
-      Spacer(),
-      Tooltip(
-        message: syncTapsTooltip,
-        child: SizedBox(
-          width: spacing2Xl,
-          child: ButtonWidget.icon(
-            assetName: updateIcon,
-            onPressed: isSyncing ? null : onSync,
-            iconSize: iconSizeM,
+  Widget build(BuildContext context) {
+    final isSyncing = context.select<TapsViewModel, bool>(
+      (vm) => vm.state.syncingTap != null,
+    );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: spacingM,
+      children: [
+        Text(tapsTitle, style: context.headM.copyWith(color: AppColors.primary)),
+        Spacer(),
+        Tooltip(
+          message: syncTapsTooltip,
+          child: SizedBox(
+            width: spacing2Xl,
+            child: ButtonWidget.icon(
+              assetName: updateIcon,
+              onPressed: isSyncing ? null : onSync,
+              iconSize: iconSizeM,
+              state: isSyncing ? ButtonState.loading : ButtonState.enabled,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: addTapButtonWidth,
+          child: ButtonWidget.primary(
+            onPressed: isSyncing ? null : onAddTap,
+            iconData: Icons.add,
+            label: addTapButtonLabel,
             state: isSyncing ? ButtonState.loading : ButtonState.enabled,
           ),
         ),
-      ),
-      SizedBox(
-        width: addTapButtonWidth,
-        child: ButtonWidget.primary(
-          onPressed: isSyncing ? null : onAddTap,
-          iconData: Icons.add,
-          label: addTapButtonLabel,
-          state: isSyncing ? ButtonState.loading : ButtonState.enabled,
-        ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }

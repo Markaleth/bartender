@@ -5,9 +5,9 @@ import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class LogListViewer extends StatefulWidget {
-  final List<String> logs;
+  final ValueNotifier<List<String>> logsNotifier;
 
-  const LogListViewer({super.key, required this.logs});
+  const LogListViewer({super.key, required this.logsNotifier});
 
   @override
   State<LogListViewer> createState() => _LogListViewerState();
@@ -17,23 +17,35 @@ class _LogListViewerState extends State<LogListViewer> {
   final ScrollController _scrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    widget.logsNotifier.addListener(_onLogsChanged);
+  }
+
+  @override
   void didUpdateWidget(covariant LogListViewer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.logs.length > oldWidget.logs.length) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_scrollController.hasClients) {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: logListViewerScrollAnimationDuration,
-            curve: Curves.easeOut,
-          );
-        }
-      });
+    if (widget.logsNotifier != oldWidget.logsNotifier) {
+      oldWidget.logsNotifier.removeListener(_onLogsChanged);
+      widget.logsNotifier.addListener(_onLogsChanged);
     }
+  }
+
+  void _onLogsChanged() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: logListViewerScrollAnimationDuration,
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
+    widget.logsNotifier.removeListener(_onLogsChanged);
     _scrollController.dispose();
     super.dispose();
   }
@@ -43,13 +55,18 @@ class _LogListViewerState extends State<LogListViewer> {
     return Container(
       color: AppColors.background,
       padding: const EdgeInsets.all(spacingM),
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: widget.logs.length,
-        itemBuilder: (context, index) {
-          return Text(
-            widget.logs[index],
-            style: context.monoS.copyWith(color: AppColors.textSecondary),
+      child: ValueListenableBuilder<List<String>>(
+        valueListenable: widget.logsNotifier,
+        builder: (context, logs, child) {
+          return ListView.builder(
+            controller: _scrollController,
+            itemCount: logs.length,
+            itemBuilder: (context, index) {
+              return Text(
+                logs[index],
+                style: context.monoS.copyWith(color: AppColors.textSecondary),
+              );
+            },
           );
         },
       ),

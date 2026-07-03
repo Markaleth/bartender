@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bartender/core/base_view_model.dart';
@@ -23,6 +24,8 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
   int _currentPaginationOffset = 0;
   static const int _paginationChunkSize = 50;
   bool _isLoadingMore = false;
+  
+  Timer? _searchDebounceTimer;
 
   PackagesViewModel(
     this._homebrewService,
@@ -43,6 +46,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
 
   @override
   void dispose() {
+    _searchDebounceTimer?.cancel();
     _statusNotifier.removeListener(_onStatusNotifierUpdated);
     _tapFilterNotifier.removeListener(_onTapFilterUpdated);
     _tapStatusNotifier.removeListener(_onTapStatusNotifierUpdated);
@@ -269,8 +273,12 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
 
   void setSearchQuery(String query) {
     if (state.searchQuery == query) return;
-    emitState(state.copyWith(searchQuery: query));
-    _refreshListings(clearExisting: true);
+    
+    _searchDebounceTimer?.cancel();
+    _searchDebounceTimer = Timer(const Duration(milliseconds: 300), () {
+      emitState(state.copyWith(searchQuery: query));
+      _refreshListings(clearExisting: true);
+    });
   }
 
   void setPackageType(PackageTypeFilter type) {
@@ -345,11 +353,4 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
     }).toList();
   }
 
-  void togglePackageExpansion(String id) {
-    if (state.expandedPackageId == id) {
-      emitState(state.copyWith(expandedPackageId: null));
-    } else {
-      emitState(state.copyWith(expandedPackageId: id));
-    }
-  }
 }

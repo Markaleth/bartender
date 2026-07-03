@@ -44,7 +44,7 @@ class HomeView extends StatelessWidget {
                       // Index 1: Library
                       const LibraryView(),
                       // Index 2: Taps
-                      TapsView(homeViewModel: viewModel),
+                      const TapsView(),
                       // Index 3: Debug
                       const Center(child: ApiTesterWidget()),
                       // Index 4: Settings (placeholder for now)

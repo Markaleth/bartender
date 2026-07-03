@@ -31,7 +31,7 @@ class ExpandedWidget extends StatelessWidget {
         VisualizerWidget(context: context, viewModel: viewModel, state: state),
         Expanded(
           child: activeTask != null
-              ? LogListViewer(logs: activeTask.logs)
+              ? LogListViewer(logsNotifier: viewModel.getLogsNotifierForTask(activeTask.id))
               : const SizedBox.shrink(),
         ),
       ],

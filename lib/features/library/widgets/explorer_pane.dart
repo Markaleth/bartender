@@ -16,10 +16,13 @@ class ExplorerPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<LibraryViewModel>();
-    final state = viewModel.state;
-
-    final tapSections = state.uiSections;
+    final tapSections = context.select<LibraryViewModel, List<TapSectionState>>(
+        (vm) => vm.state.uiSections);
+    final isLoading = context.select<LibraryViewModel, bool>(
+        (vm) => vm.state.isLoading);
+    final isEmpty = context.select<LibraryViewModel, bool>(
+        (vm) => vm.state.installedFormulae.isEmpty && vm.state.installedCasks.isEmpty);
+    final viewModel = context.read<LibraryViewModel>();
 
     final slivers = <Widget>[
       const SliverToBoxAdapter(child: SizedBox(height: spacingS)),
@@ -62,26 +65,26 @@ class ExplorerPane extends StatelessWidget {
 
     slivers.add(const SliverToBoxAdapter(child: SizedBox(height: spacingS)));
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(radiusM),
-        border: Border.all(color: AppColors.borderNeutral),
-      ),
-      child: Column(
-        children: [
-          const ExplorerPaneHeader(),
-
-          // Body Section
-          Expanded(
-            child:
-                state.isLoading &&
-                    state.installedFormulae.isEmpty &&
-                    state.installedCasks.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : CustomScrollView(slivers: slivers),
-          ),
-        ],
+    return RepaintBoundary(
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(radiusM),
+          border: Border.all(color: AppColors.borderNeutral),
+        ),
+        child: Column(
+          children: [
+            const ExplorerPaneHeader(),
+  
+            // Body Section
+            Expanded(
+              child:
+                  isLoading && isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  : CustomScrollView(slivers: slivers),
+            ),
+          ],
+        ),
       ),
     );
   }

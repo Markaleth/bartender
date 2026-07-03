@@ -27,7 +27,6 @@ abstract class OperationTask with _$OperationTask {
     required PackageType type,
     required OperationType operation,
     @Default(OperationStatus.queued) OperationStatus status,
-    @Default([]) List<String> logs,
     @Default(false) bool isArchived,
     String? errorMessage,
     String? customUrl,

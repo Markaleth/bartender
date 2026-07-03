@@ -123,16 +123,16 @@ class _CarouselPage extends StatelessWidget {
               padding: EdgeInsets.only(right: isLastItem ? 0 : spacingS),
               child: Builder(
                 builder: (context) {
-                  final activeTask = context
-                      .select<QueueViewModel, OperationTask?>(
+                  final activeTaskStatus = context
+                      .select<QueueViewModel, OperationStatus?>(
                         (vm) => vm.state.tasks
                             .where((task) => task.packageId == item.id)
-                            .lastOrNull,
+                            .lastOrNull?.status,
                       );
 
-                  bool isQueued = activeTask?.status == OperationStatus.queued;
+                  bool isQueued = activeTaskStatus == OperationStatus.queued;
                   bool isInProgress =
-                      activeTask?.status == OperationStatus.inProgress;
+                      activeTaskStatus == OperationStatus.inProgress;
 
                   return TrendingPackagesWidget(
                     title: item.id,
