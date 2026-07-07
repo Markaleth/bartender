@@ -40,6 +40,7 @@
       substate or something to clean them up
 - [ ] you probably wanna add analytics, crashlytics, performance and maybe even remote config
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
+- [ ] Cleanup the settings screen: widget cleanup, performance optimization audit, consistency of widgets used, colors, fonts and styles (which are not correctly called right now)
 
 # Issues:
 
