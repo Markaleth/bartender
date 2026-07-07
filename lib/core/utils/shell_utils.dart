@@ -1,9 +1,15 @@
 import 'dart:io';
 import 'package:bartender/core/constants/durations.dart';
+import 'package:bartender/core/services/settings_service.dart';
 import 'package:flutter/foundation.dart';
 
 class ShellUtils {
   static String? _resolvedBrewPath;
+  static SettingsService? _settingsService;
+
+  static void setSettingsService(SettingsService settingsService) {
+    _settingsService = settingsService;
+  }
 
   static Map<String, String>? _buildEnv(
     String executable,
@@ -11,10 +17,14 @@ class ShellUtils {
   ) {
     if (executable != 'brew') return environment;
 
+    final disableAnalytics = _settingsService?.disableAnalytics ?? false;
+    final suppressEnvHints = _settingsService?.suppressEnvHints ?? true;
+
     return {
       'HOMEBREW_NO_AUTO_UPDATE': '1',
       'HOMEBREW_NO_PAGER': '1',
-      'HOMEBREW_NO_ENV_HINTS': '1',
+      if (suppressEnvHints) 'HOMEBREW_NO_ENV_HINTS': '1',
+      if (disableAnalytics) 'HOMEBREW_NO_ANALYTICS': '1',
       if (environment != null) ...environment,
     };
   }
@@ -111,6 +121,10 @@ class ShellUtils {
       return 'distrobox-host-exec';
     }
     if (executable == 'brew') {
+      final customPath = _settingsService?.brewExecutablePath;
+      if (customPath != null && customPath.isNotEmpty) {
+        return customPath;
+      }
       return _resolvedBrewPath ?? executable;
     }
     return executable;
@@ -119,6 +133,10 @@ class ShellUtils {
   static List<String> _buildArgs(String executable, List<String> args) {
     if (kDebugMode && _isInContainer) {
       if (executable == 'brew') {
+        final customPath = _settingsService?.brewExecutablePath;
+        if (customPath != null && customPath.isNotEmpty) {
+          return [customPath, ...args];
+        }
         return [
           _resolvedBrewPath ?? '/home/linuxbrew/.linuxbrew/bin/brew',
           ...args,

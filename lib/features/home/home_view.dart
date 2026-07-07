@@ -5,6 +5,7 @@ import 'package:bartender/debug/api_tester.dart';
 import 'package:bartender/features/packages/views/packages_view.dart';
 import 'package:bartender/features/library/views/library_view.dart';
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
+import 'package:bartender/features/settings/views/settings_view.dart';
 import 'package:bartender/features/taps/views/taps_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,10 +48,8 @@ class HomeView extends StatelessWidget {
                       const TapsView(),
                       // Index 3: Debug
                       const Center(child: ApiTesterWidget()),
-                      // Index 4: Settings (placeholder for now)
-                      const Center(
-                        child: Text('Settings View Placeholder'),
-                      ), //TODO: you need to update this!
+                      // Index 4: Settings
+                      const SettingsView(),
                     ],
                   ),
                 ),

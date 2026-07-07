@@ -72,8 +72,17 @@ class TerminalDrawerOverlay extends StatelessWidget {
                       ),
                     ],
                   ),
+                  clipBehavior: Clip.antiAlias,
                   child: state.isDrawerExpanded
-                      ? ExpandedWidget(viewModel: viewModel, state: state)
+                      ? OverflowBox(
+                          minHeight: terminalDrawerExpandedHeight,
+                          maxHeight: terminalDrawerExpandedHeight,
+                          alignment: Alignment.topCenter,
+                          child: ExpandedWidget(
+                            viewModel: viewModel,
+                            state: state,
+                          ),
+                        )
                       : CollapsedWidget(
                           inProgressCount: inProgressCount,
                           toggleDrawer: viewModel.toggleDrawer,

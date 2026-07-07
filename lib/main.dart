@@ -1,4 +1,5 @@
 import 'package:bartender/core/services/hardware_service.dart';
+import 'package:bartender/core/services/settings_service.dart';
 import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/dependency_manager.dart';
 import 'package:bartender/theme/bartender_theme.dart';
@@ -15,9 +16,12 @@ void main() async {
   final hardwareEnvironment = LinuxHardwareEnvironment();
   await hardwareEnvironment.init();
 
+  final settingsService = await SettingsService.create();
+  ShellUtils.setSettingsService(settingsService);
+
   runApp(
     MultiProvider(
-      providers: buildDependencyList(hardwareEnvironment),
+      providers: buildDependencyList(hardwareEnvironment, settingsService),
       child: const MainApp(),
     ),
   );

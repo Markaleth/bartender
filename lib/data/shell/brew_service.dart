@@ -1,8 +1,13 @@
 import 'package:bartender/core/utils/shell_utils.dart';
+import 'package:bartender/core/services/settings_service.dart';
 import 'package:bartender/data/shell/shell_command_result.dart';
 import 'package:bartender/data/shell/streaming_shell_command.dart';
 
 class BrewService {
+  final SettingsService _settingsService;
+
+  BrewService(this._settingsService);
+
   /// Runs a command quickly without streaming output.
   Future<ShellCommandResult> runCommand(List<String> args) async {
     try {
@@ -77,11 +82,12 @@ class BrewService {
     return streamCommand(args);
   }
 
-  Future<ShellCommandResult> uninstall(String package, {bool isCask = false, bool zap = false}) {
+  Future<ShellCommandResult> uninstall(String package, {bool isCask = false, bool? zap}) {
+    final shouldZap = zap ?? _settingsService.zapUninstallDefault;
     final args = ['uninstall'];
     if (isCask) {
       args.add('--cask');
-      if (zap) args.add('--zap');
+      if (shouldZap) args.add('--zap');
     }
     args.add(package);
     return runCommand(args);
@@ -90,12 +96,13 @@ class BrewService {
   Future<StreamingShellCommand> uninstallWithStream(
     String package, {
     bool isCask = false,
-    bool zap = false,
+    bool? zap,
   }) {
+    final shouldZap = zap ?? _settingsService.zapUninstallDefault;
     final args = ['uninstall'];
     if (isCask) {
       args.add('--cask');
-      if (zap) args.add('--zap');
+      if (shouldZap) args.add('--zap');
     }
     args.add(package);
     return streamCommand(args);
@@ -140,6 +147,9 @@ class BrewService {
     if (package != null) {
       if (isCask) args.add('--cask');
       args.add(package);
+    }
+    if (_settingsService.greedyUpgrades) {
+      args.add('--greedy');
     }
     return streamCommand(args);
   }
@@ -194,6 +204,26 @@ class BrewService {
 
   Future<StreamingShellCommand> cleanup() {
     return streamCommand(['cleanup']);
+  }
+
+  // --- Bundle Commands ---
+
+  Future<ShellCommandResult> bundleDump({String? file}) {
+    final args = ['bundle', 'dump'];
+    if (file != null) {
+      args.addAll(['--file', file]);
+    } else {
+      args.add('--force'); // Overwrite if exists in current dir
+    }
+    return runCommand(args);
+  }
+
+  Future<StreamingShellCommand> bundleInstall({String? file}) {
+    final args = ['bundle', 'install'];
+    if (file != null) {
+      args.addAll(['--file', file]);
+    }
+    return streamCommand(args);
   }
 
   // --- Services Commands ---

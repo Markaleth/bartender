@@ -1,4 +1,5 @@
 import 'package:bartender/core/services/hardware_service.dart';
+import 'package:bartender/core/services/settings_service.dart';
 import 'package:bartender/data/api/api_client.dart';
 import 'package:bartender/data/api/api_client_interface.dart';
 import 'package:bartender/data/db/database.dart';
@@ -16,8 +17,12 @@ import 'package:provider/single_child_widget.dart';
 
 List<SingleChildWidget> buildDependencyList(
   DeviceEnvironment deviceEnvironment,
+  SettingsService settingsService,
 ) {
   return [
+    // Settings
+    ChangeNotifierProvider<SettingsService>.value(value: settingsService),
+
     // Hardware
     Provider<DeviceEnvironment>.value(value: deviceEnvironment),
 
@@ -30,7 +35,9 @@ List<SingleChildWidget> buildDependencyList(
       create: (_) => AppDatabase(),
       dispose: (_, db) => (db as AppDatabase).close(),
     ),
-    Provider<BrewService>(create: (_) => BrewService()),
+    ProxyProvider<SettingsService, BrewService>(
+      update: (context, settings, previous) => BrewService(settings),
+    ),
     ChangeNotifierProvider<PackageStatusNotifier>(
       create: (_) => PackageStatusNotifier(),
     ),
@@ -43,12 +50,13 @@ List<SingleChildWidget> buildDependencyList(
     ChangeNotifierProvider<SystemStatusNotifier>(
       create: (_) => SystemStatusNotifier(),
     ),
-    ChangeNotifierProxyProvider5<
+    ChangeNotifierProxyProvider6<
       BrewService,
       DatabaseInterface,
       PackageStatusNotifier,
       TapStatusNotifier,
       SystemStatusNotifier,
+      SettingsService,
       QueueViewModel
     >(
       create: (context) => QueueViewModel(
@@ -57,15 +65,17 @@ List<SingleChildWidget> buildDependencyList(
         context.read<PackageStatusNotifier>(),
         context.read<TapStatusNotifier>(),
         context.read<SystemStatusNotifier>(),
+        context.read<SettingsService>(),
       ),
       update:
           (
-            _,
+            context,
             brewService,
             db,
             packageStatusNotifier,
             tapStatusNotifier,
             systemStatusNotifier,
+            settingsService,
             previous,
           ) =>
               previous ??
@@ -75,6 +85,7 @@ List<SingleChildWidget> buildDependencyList(
                 packageStatusNotifier,
                 tapStatusNotifier,
                 systemStatusNotifier,
+                settingsService,
               ),
     ),
     ProxyProvider<DatabaseInterface, IconResolutionService>(

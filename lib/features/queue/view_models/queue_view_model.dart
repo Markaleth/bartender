@@ -9,12 +9,15 @@ import 'package:bartender/features/queue/models/queue_state.dart';
 import 'package:bartender/data/db/database_interface.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 
+import 'package:bartender/core/services/settings_service.dart';
+
 class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
   final BrewService _brewService;
   final DatabaseInterface _database;
   final PackageStatusNotifier _packageNotifier;
   final TapStatusNotifier _tapNotifier;
   final SystemStatusNotifier _systemNotifier;
+  final SettingsService _settingsService;
   bool _isProcessing = false;
 
   final Map<String, ValueNotifier<List<String>>> _taskLogs = {};
@@ -29,6 +32,7 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
     this._packageNotifier,
     this._tapNotifier,
     this._systemNotifier,
+    this._settingsService,
   ) : super(QueueState());
 
   void enqueue(OperationTask task) {
@@ -91,7 +95,32 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
     }
 
     _isProcessing = false;
-    _processQueue(); // process next
+    
+    // Check if there are more tasks
+    final nextPendingIndex = state.tasks.indexWhere(
+      (t) => t.status == OperationStatus.queued,
+    );
+
+    if (nextPendingIndex == -1) {
+      // End of batch. Auto-cleanup if enabled.
+      final allSuccess = state.tasks.every((t) => t.status == OperationStatus.success);
+      if (allSuccess && _settingsService.autoCleanup) {
+        // Enqueue a cleanup task but don't recursively call _processQueue immediately, 
+        // the enqueue method will trigger it.
+        // Wait, to avoid infinite loop, we should only cleanup if the last task wasn't a cleanup.
+        final lastTask = state.tasks.last;
+        if (lastTask.operation != OperationType.cleanup) {
+          queueOperation(
+            packageId: 'system', 
+            type: PackageType.system, 
+            operation: OperationType.cleanup,
+          );
+          return;
+        }
+      }
+    } else {
+      _processQueue(); // process next
+    }
   }
 
   Future<StreamingShellCommand> _startShellCommand(OperationTask task) async {

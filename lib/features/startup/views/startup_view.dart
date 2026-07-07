@@ -5,6 +5,8 @@ import 'package:bartender/domain/repositories/homebrew_repository_interface.dart
 import 'package:bartender/features/startup/models/startup_state.dart';
 import 'package:bartender/features/startup/view_models/startup_view_model.dart';
 import 'package:bartender/theme/bartender_context.dart';
+import 'package:bartender/core/services/settings_service.dart';
+import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +33,8 @@ class StartupView extends StatelessWidget {
     return BaseView<StartupViewModel, StartupState, ScreenEffect>(
       viewModelBuilder: (context) => StartupViewModel(
         context.read<HomebrewRepositoryInterface>(),
+        context.read<QueueViewModel>(),
+        context.read<SettingsService>(),
       ),
       onModelReady: (viewModel) => viewModel.initialize(),
       onEffect: _onEffect,
@@ -44,10 +48,7 @@ class StartupView extends StatelessWidget {
                   const CircularProgressIndicator(),
                   const SizedBox(height: spacingL),
                 ],
-                Text(
-                  state.statusText,
-                  style: context.titleM,
-                ),
+                Text(state.statusText, style: context.titleM),
               ],
             ),
           ),

@@ -3,13 +3,21 @@ import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/core/routing/app_router.dart';
 import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/startup/models/startup_state.dart';
+import 'package:bartender/core/models/operation_task/operation_task.dart';
+import 'package:bartender/core/services/settings_service.dart';
+import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:flutter/foundation.dart';
 
 class StartupViewModel extends BaseViewModel<StartupState, ScreenEffect> {
   final HomebrewRepositoryInterface _homebrewService;
+  final QueueViewModel _queueViewModel;
+  final SettingsService _settingsService;
 
-  StartupViewModel(this._homebrewService)
-    : super(const StartupState());
+  StartupViewModel(
+    this._homebrewService,
+    this._queueViewModel,
+    this._settingsService,
+  ) : super(const StartupState());
 
   Future<void> initialize() async {
     try {
@@ -38,6 +46,14 @@ class StartupViewModel extends BaseViewModel<StartupState, ScreenEffect> {
         _homebrewService.syncAllData().catchError((e) {
           debugPrint('Background network sync error: $e');
         });
+      }
+
+      if (_settingsService.backgroundFetching) {
+        _queueViewModel.queueOperation(
+          packageId: 'system',
+          type: PackageType.system,
+          operation: OperationType.update,
+        );
       }
     } catch (e) {
       // Log error but proceed gracefully

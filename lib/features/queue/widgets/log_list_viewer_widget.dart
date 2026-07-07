@@ -1,8 +1,10 @@
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/constants/durations.dart';
+import 'package:bartender/core/services/settings_service.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LogListViewer extends StatefulWidget {
   final ValueNotifier<List<String>> logsNotifier;
@@ -52,6 +54,7 @@ class _LogListViewerState extends State<LogListViewer> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsService>();
     return Container(
       color: AppColors.background,
       padding: const EdgeInsets.all(spacingM),
@@ -64,7 +67,10 @@ class _LogListViewerState extends State<LogListViewer> {
             itemBuilder: (context, index) {
               return Text(
                 logs[index],
-                style: context.monoS.copyWith(color: AppColors.textSecondary),
+                style: context.monoS.copyWith(
+                  color: AppColors.textSecondary,
+                  fontSize: settings.terminalFontSize,
+                ),
               );
             },
           );
