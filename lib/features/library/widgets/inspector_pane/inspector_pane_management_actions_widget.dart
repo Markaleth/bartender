@@ -48,19 +48,22 @@ class InspectorPaneManagementActionsWidget extends StatelessWidget {
             ),
           )
         else
-          SizedBox(
-            width: defaultButtonWidth,
-            child: ButtonWidget.secondary(
-              label: pinVersionButtonLabel,
-              iconData: Icons.push_pin,
-              color: AppColors.primary,
-              onPressed: () {
-                context.read<QueueViewModel>().queueOperation(
-                  packageId: packageName,
-                  type: isCask ? PackageType.cask : PackageType.formula,
-                  operation: OperationType.pin,
-                );
-              },
+          Tooltip(
+            message: pinVersionTooltip,
+            child: SizedBox(
+              width: defaultButtonWidth,
+              child: ButtonWidget.secondary(
+                label: pinVersionButtonLabel,
+                iconData: Icons.push_pin,
+                color: AppColors.primary,
+                onPressed: () {
+                  context.read<QueueViewModel>().queueOperation(
+                    packageId: packageName,
+                    type: isCask ? PackageType.cask : PackageType.formula,
+                    operation: OperationType.pin,
+                  );
+                },
+              ),
             ),
           ),
         SizedBox(
@@ -78,59 +81,65 @@ class InspectorPaneManagementActionsWidget extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(
-          width: defaultButtonWidth,
-          child: ButtonWidget.secondary(
-            label: uninstallButtonLabel,
-            iconData: Icons.delete,
-            color: AppColors.error,
-            onPressed: () {
-              context.read<QueueViewModel>().queueOperation(
-                packageId: packageName,
-                type: isCask ? PackageType.cask : PackageType.formula,
-                operation: OperationType.uninstall,
-              );
-            },
+        Tooltip(
+          message: uninstallTooltip,
+          child: SizedBox(
+            width: defaultButtonWidth,
+            child: ButtonWidget.secondary(
+              label: uninstallButtonLabel,
+              iconData: Icons.delete,
+              color: AppColors.error,
+              onPressed: () {
+                context.read<QueueViewModel>().queueOperation(
+                  packageId: packageName,
+                  type: isCask ? PackageType.cask : PackageType.formula,
+                  operation: OperationType.uninstall,
+                );
+              },
+            ),
           ),
         ),
         if (isCask)
-          SizedBox(
-            width: defaultButtonWidth,
-            child: ButtonWidget.secondary(
-              label: zapButtonLabel,
-              iconData: Icons.bolt,
-              color: AppColors.error,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text('Zap Package?'),
-                    content: Text(
-                      'Are you sure you want to completely remove $packageName and all its related files? This action cannot be undone.',
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(ctx).pop(),
-                        child: const Text('Cancel'),
+          Tooltip(
+            message: zapTooltip,
+            child: SizedBox(
+              width: defaultButtonWidth,
+              child: ButtonWidget.secondary(
+                label: zapButtonLabel,
+                iconData: Icons.bolt,
+                color: AppColors.error,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Zap Package?'),
+                      content: Text(
+                        'Are you sure you want to completely remove $packageName and all its related files? This action cannot be undone.',
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                          context.read<QueueViewModel>().queueOperation(
-                            packageId: packageName,
-                            type: PackageType.cask,
-                            operation: OperationType.zap,
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.error,
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(),
+                          child: const Text('Cancel'),
                         ),
-                        child: const Text('Zap'),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                            context.read<QueueViewModel>().queueOperation(
+                              packageId: packageName,
+                              type: PackageType.cask,
+                              operation: OperationType.zap,
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.error,
+                          ),
+                          child: const Text('Zap'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         if (isMissingDependencies)

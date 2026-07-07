@@ -127,3 +127,10 @@ const String typeAndTapCopy = 'Type & Tap';
 const String fullTagCopy = 'Full Tag';
 const String popularityCopy = 'Full Tag';
 const String queuedCopy = 'Queued...';
+
+const String zapTooltip =
+    'Remove all app data and associated files for this cask. This action cannot be undone.';
+const String uninstallTooltip =
+    'Uninstall this package. This will remove the package but may leave behind associated files.';
+const String pinVersionTooltip =
+    'Pin the specified package, preventing it from being upgraded';
