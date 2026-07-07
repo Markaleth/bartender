@@ -49,13 +49,19 @@ class ExplorerPane extends StatelessWidget {
           itemBuilder: (context, item, animation) {
             return SizeTransition(
               sizeFactor: animation,
-              child: FileSystemItem(
-                isHealthy: item.isHealthy,
-                title: item.title,
-                version: item.version,
-                isSelected: item.isSelected,
-                isCask: item.isCask,
-                onTap: () => viewModel.selectPackage(item.package),
+              child: FadeTransition(
+                opacity: CurvedAnimation(
+                  parent: animation,
+                  curve: const Interval(0.5, 1.0),
+                ),
+                child: FileSystemItem(
+                  isHealthy: item.isHealthy,
+                  title: item.title,
+                  version: item.version,
+                  isSelected: item.isSelected,
+                  isCask: item.isCask,
+                  onTap: () => viewModel.selectPackage(item.package),
+                ),
               ),
             );
           },
