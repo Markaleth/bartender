@@ -1,4 +1,6 @@
+import 'package:bartender/common_widgets/filter_option.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
+import 'package:bartender/common_widgets/segmented_filter_control.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
@@ -140,18 +142,15 @@ class _PackagesViewState extends State<PackagesView> {
                               ],
                             ),
                           ),
-                          SegmentedButton<AnalyticsPeriod>(
-                            segments: AnalyticsPeriod.values
+                          SegmentedFilterControl<AnalyticsPeriod>(
+                            options: AnalyticsPeriod.values
                                 .map(
-                                  (p) => ButtonSegment(
-                                    value: p,
-                                    label: Text(p.value),
-                                  ),
+                                  (p) => FilterOption(value: p, label: p.value),
                                 )
                                 .toList(),
-                            selected: {state.analyticsPeriod},
-                            onSelectionChanged: (set) =>
-                                viewModel.changeAnalyticsPeriod(set.first),
+                            selectedValue: state.analyticsPeriod,
+                            onChanged: (period) =>
+                                viewModel.changeAnalyticsPeriod(period),
                           ),
                         ],
                       ),

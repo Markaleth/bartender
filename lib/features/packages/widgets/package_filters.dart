@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:bartender/common_widgets/filter_option.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
+import 'package:bartender/common_widgets/segmented_filter_control.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
@@ -10,10 +12,7 @@ import 'package:bartender/features/packages/models/packages_state.dart';
 import 'package:bartender/features/packages/view_models/packages_view_model.dart';
 import 'package:bartender/features/packages/widgets/tap_filter_menu.dart';
 import 'package:bartender/theme/bartender_context.dart';
-import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:flutter/material.dart';
-
-import '../../../core/constants/durations.dart';
 
 class PackageFilters extends StatelessWidget {
   final PackagesViewModel viewModel;
@@ -83,20 +82,20 @@ class PackageFilters extends StatelessWidget {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     if (Platform.isMacOS)
-                      _SegmentedFilterControl<PackageTypeFilter>(
+                      SegmentedFilterControl<PackageTypeFilter>(
                         selectedValue: state.packageType,
                         onChanged: viewModel.setPackageType,
                         options: const [
-                          _FilterOption(
+                          FilterOption(
                             label: noFiltersCopy,
                             value: PackageTypeFilter.all,
                           ),
-                          _FilterOption(
+                          FilterOption(
                             label: formulaeTitle,
                             value: PackageTypeFilter.formulae,
                             assetName: flaskIcon,
                           ),
-                          _FilterOption(
+                          FilterOption(
                             label: casksTitle,
                             value: PackageTypeFilter.casks,
                             assetName: barrelIcon,
@@ -116,95 +115,3 @@ class PackageFilters extends StatelessWidget {
   }
 }
 
-class _FilterOption<T> {
-  final String label;
-  final T value;
-  final String? assetName;
-
-  const _FilterOption({
-    required this.label,
-    required this.value,
-    this.assetName,
-  });
-}
-
-class _SegmentedFilterControl<T> extends StatelessWidget {
-  final List<_FilterOption<T>> options;
-  final T selectedValue;
-  final ValueChanged<T> onChanged;
-
-  const _SegmentedFilterControl({
-    required this.options,
-    required this.selectedValue,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Wrap(
-          spacing: spacingS,
-          children: options.map((option) {
-            final isSelected = option.value == selectedValue;
-            return MouseRegion(
-              cursor: isSelected
-                  ? SystemMouseCursors.basic
-                  : SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  if (!isSelected) {
-                    onChanged(option.value);
-                  }
-                },
-                child: AnimatedContainer(
-                  duration: defaultAnimationDuration,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: spacingM,
-                    vertical: spacingS,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppColors.secondary.withValues(alpha: 0.1)
-                        : AppColors.background,
-                    borderRadius: BorderRadius.circular(radiusXl),
-                    border: Border.all(
-                      color: isSelected
-                          ? AppColors.secondary
-                          : AppColors.borderNeutral,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (option.assetName != null) ...[
-                        IconWidget(
-                          assetName: option.assetName!,
-                          size: spacingL,
-                          color: isSelected
-                              ? AppColors.secondary
-                              : AppColors.textSecondary,
-                        ),
-                        const SizedBox(width: spacingXs),
-                      ],
-                      Text(
-                        option.label,
-                        style: context.bodyM.copyWith(
-                          color: isSelected
-                              ? AppColors.secondary
-                              : AppColors.textPrimary,
-                          fontWeight: isSelected ? FontWeight.bold : null,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-}
