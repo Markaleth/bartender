@@ -134,3 +134,40 @@ const String uninstallTooltip =
     'Uninstall this package. This will remove the package but may leave behind associated files.';
 const String pinVersionTooltip =
     'Pin the specified package, preventing it from being upgraded';
+
+// Settings View
+const String settingsViewTitle = 'Settings & Preferences';
+const String behaviorSectionTitle = 'Homebrew Behavior';
+const String backgroundFetchingTitle = 'Background Fetching';
+const String backgroundFetchingSubtitle =
+    'Automatically check for updates on startup';
+const String greedyUpgradesTitle = 'Greedy Upgrades';
+const String greedyUpgradesSubtitle =
+    'Include auto-updating casks in upgrades (--greedy)';
+const String zapUninstallTitle = 'Zap Uninstall Default';
+const String zapUninstallSubtitle =
+    'Remove all files associated with a cask by default (--zap)';
+const String autoCleanupTitle = 'Auto Cleanup';
+const String autoCleanupSubtitle =
+    'Run brew cleanup automatically after batch operations';
+const String environmentSectionTitle = 'Environment';
+const String suppressEnvHintsTitle = 'Suppress Environment Hints';
+const String suppressEnvHintsSubtitle = 'Hide HOMEBREW_NO_ENV_HINTS messages';
+const String disableAnalyticsTitle = 'Disable Analytics';
+const String disableAnalyticsSubtitle =
+    'Opt out of Homebrew analytics (HOMEBREW_NO_ANALYTICS)';
+const String customBrewPathTitle = 'Executable Path';
+const String customBrewPathSubtitle =
+    'The absolute path to the core compiler binary.';
+const String customBrewPathAutoResolved = 'Auto-resolved';
+const String appearanceSectionTitle = 'Appearance';
+const String terminalFontSizeTitle = 'Terminal Font Size';
+const String terminalFontSizeSubtitle =
+    'Adjust the global base font size for the internal terminal output';
+const String fontPreviewText = 'brew install package';
+
+// Edit Path Dialog
+const String editBrewPathTitle = 'Edit Brew Path';
+const String editBrewPathHint = 'e.g. /opt/homebrew/bin/brew';
+const String editBrewPathHelper = 'Leave empty for auto-resolution';
+const String saveButtonLabel = 'Save';
