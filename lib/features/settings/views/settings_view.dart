@@ -128,7 +128,7 @@ class _EnvironmentCard extends StatelessWidget {
         children: [
           GlowyPathInput(
             path: settings.brewExecutablePath,
-            onBrowse: () => _showEditPathDialog(context, settings),
+            onChanged: viewModel.setBrewExecutablePath,
           ),
           const SizedBox(height: spacingS),
           IdeToggleSwitch(
@@ -145,38 +145,6 @@ class _EnvironmentCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showEditPathDialog(BuildContext context, SettingsService settings) {
-    final controller = TextEditingController(text: settings.brewExecutablePath);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text(editBrewPathTitle),
-          content: TextField(
-            controller: controller,
-            decoration: const InputDecoration(
-              hintText: editBrewPathHint,
-              helperText: editBrewPathHelper,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(cancelButtonLabel),
-            ),
-            TextButton(
-              onPressed: () {
-                viewModel.setBrewExecutablePath(controller.text.trim());
-                Navigator.pop(context);
-              },
-              child: const Text(saveButtonLabel),
-            ),
-          ],
-        );
-      },
     );
   }
 }
