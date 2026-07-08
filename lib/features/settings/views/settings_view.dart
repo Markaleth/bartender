@@ -22,7 +22,6 @@ class SettingsView extends StatelessWidget {
           SettingsViewModel(context.read<SettingsService>()),
       builder: (context, viewModel, state) {
         return Scaffold(
-          appBar: AppBar(title: const Text(settingsViewTitle)),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(spacingL),
             child: Column(
