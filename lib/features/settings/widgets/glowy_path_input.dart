@@ -1,6 +1,8 @@
+import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class GlowyPathInput extends StatefulWidget {
@@ -48,7 +50,7 @@ class _GlowyPathInputState extends State<GlowyPathInput> {
         children: [
           Text(
             customBrewPathTitle,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: context.titleM.copyWith(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w500,
             ),
@@ -56,9 +58,7 @@ class _GlowyPathInputState extends State<GlowyPathInput> {
           const SizedBox(height: spacing2Xs),
           Text(
             customBrewPathSubtitle,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+            style: context.labelM.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: spacingS),
           AnimatedContainer(
@@ -76,8 +76,8 @@ class _GlowyPathInputState extends State<GlowyPathInput> {
                   ? [
                       BoxShadow(
                         color: AppColors.secondary.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        spreadRadius: 2,
+                        blurRadius: radiusM,
+                        spreadRadius: thicknessS,
                       ),
                     ]
                   : null,
@@ -98,11 +98,10 @@ class _GlowyPathInputState extends State<GlowyPathInput> {
                       ),
                       child: Text(
                         displayPath,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: context.bodyM.copyWith(
                           color: widget.path.isEmpty
                               ? AppColors.textTertiary
                               : AppColors.textPrimary,
-                          fontFamily: 'monospace',
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -112,27 +111,16 @@ class _GlowyPathInputState extends State<GlowyPathInput> {
                 ),
                 Container(
                   width: thicknessXs,
-                  height: 24,
+                  height: spacingL,
                   color: AppColors.borderNeutral,
                 ),
-                TextButton.icon(
-                  onPressed: widget.onBrowse,
-                  icon: const Icon(
-                    Icons.folder_open,
-                    size: iconSizeM,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: spacingS),
+                  child: ButtonWidget.tertiary(
+                    onPressed: widget.onBrowse,
+                    iconData: Icons.folder_open,
+                    label: browseButtonLabel,
                     color: AppColors.secondary,
-                  ),
-                  label: Text(
-                    browseButtonLabel,
-                    style: const TextStyle(color: AppColors.secondary),
-                  ),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: spacingM),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.horizontal(
-                        right: Radius.circular(radiusM),
-                      ),
-                    ),
                   ),
                 ),
               ],

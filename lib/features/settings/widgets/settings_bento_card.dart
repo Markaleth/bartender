@@ -1,5 +1,6 @@
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class SettingsBentoCard extends StatelessWidget {
@@ -46,7 +47,7 @@ class SettingsBentoCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      style: context.titleM.copyWith(
                         color: accentColor,
                         fontWeight: FontWeight.bold,
                       ),
@@ -56,8 +57,8 @@ class SettingsBentoCard extends StatelessWidget {
               ),
             ),
             const Divider(
-              height: 1,
-              thickness: 1,
+              height: thicknessXs,
+              thickness: thicknessXs,
               color: AppColors.borderNeutral,
             ),
             Padding(

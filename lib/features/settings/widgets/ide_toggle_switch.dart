@@ -1,5 +1,6 @@
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class IdeToggleSwitch extends StatelessWidget {
@@ -33,15 +34,15 @@ class IdeToggleSwitch extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: context.titleM.copyWith(
                     color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: .bold,
                   ),
                 ),
                 const SizedBox(height: spacing2Xs),
                 Text(
                   subtitle,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: context.labelM.copyWith(
                     color: AppColors.textSecondary,
                   ),
                 ),

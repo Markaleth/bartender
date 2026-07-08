@@ -1,6 +1,7 @@
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
 class CyberFontSliderPreview extends StatelessWidget {
@@ -22,17 +23,15 @@ class CyberFontSliderPreview extends StatelessWidget {
         children: [
           Text(
             terminalFontSizeTitle,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: context.titleM.copyWith(
               color: AppColors.textPrimary,
-              fontWeight: FontWeight.w500,
+              fontWeight: .bold,
             ),
           ),
           const SizedBox(height: spacing2Xs),
           Text(
             terminalFontSizeSubtitle,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+            style: context.labelM.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: spacingM),
           Container(
@@ -49,8 +48,7 @@ class CyberFontSliderPreview extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               '> $fontPreviewText',
-              style: TextStyle(
-                fontFamily: 'monospace',
+              style: context.monoM.copyWith(
                 fontSize: fontSize,
                 color: AppColors.secondary,
               ),
@@ -61,7 +59,10 @@ class CyberFontSliderPreview extends StatelessWidget {
             children: [
               Text(
                 '10',
-                style: TextStyle(color: AppColors.textTertiary, fontSize: 10),
+                style: context.labelM.copyWith(
+                  color: AppColors.textTertiary,
+                  fontSize: 10,
+                ),
               ),
               Expanded(
                 child: SliderTheme(
@@ -84,7 +85,7 @@ class CyberFontSliderPreview extends StatelessWidget {
               ),
               Text(
                 '24',
-                style: TextStyle(color: AppColors.textTertiary, fontSize: 14),
+                style: context.labelM.copyWith(color: AppColors.textTertiary),
               ),
             ],
           ),

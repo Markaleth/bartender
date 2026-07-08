@@ -9,7 +9,7 @@ class SettingsService extends ChangeNotifier {
   static const bool _defaultDisableAnalytics = false;
   static const bool _defaultGreedyUpgrades = false;
   static const bool _defaultZapUninstallDefault = false;
-  static const bool _defaultSuppressEnvHints = true;
+  static const bool _defaultSuppressEnvHints = false;
   static const bool _defaultAutoCleanup = false;
   static const bool _defaultBackgroundFetching = false;
   static const String _defaultThemeMode = 'system';
