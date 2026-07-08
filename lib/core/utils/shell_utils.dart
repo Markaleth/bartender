@@ -7,6 +7,8 @@ class ShellUtils {
   static String? _resolvedBrewPath;
   static SettingsService? _settingsService;
 
+  static String? get resolvedBrewPath => _resolvedBrewPath;
+
   static void setSettingsService(SettingsService settingsService) {
     _settingsService = settingsService;
   }
@@ -175,24 +177,25 @@ class ShellUtils {
   }
 
   static Future<DateTime?> getModifiedDate(String path) async {
-  // Try fast Dart native stat
-  try {
-    final stat = FileStat.statSync(path);
-    if (stat.type != FileSystemEntityType.notFound) return stat.modified;
-  } catch (_) {}
+    // Try fast Dart native stat
+    try {
+      final stat = FileStat.statSync(path);
+      if (stat.type != FileSystemEntityType.notFound) return stat.modified;
+    } catch (_) {}
 
-  // Fallback to shell stat if Dart sandboxed
-  try {
-    final flag = Platform.isMacOS ? '-f%m' : '-c%Y';
-    final res = await ShellUtils.run('stat', [flag, path]);
-    if (res.exitCode == 0) {
-      final seconds = int.tryParse(res.stdout.toString().trim());
-      if (seconds != null) return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
-    }
-  } catch (_) {}
-  
-  return null;
-}
+    // Fallback to shell stat if Dart sandboxed
+    try {
+      final flag = Platform.isMacOS ? '-f%m' : '-c%Y';
+      final res = await ShellUtils.run('stat', [flag, path]);
+      if (res.exitCode == 0) {
+        final seconds = int.tryParse(res.stdout.toString().trim());
+        if (seconds != null)
+          return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
+      }
+    } catch (_) {}
+
+    return null;
+  }
 
   static Future<Process> start(
     String executable,

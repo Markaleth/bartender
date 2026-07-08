@@ -2,6 +2,7 @@ import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,7 @@ class _GlowyPathInputState extends State<GlowyPathInput> {
   Widget build(BuildContext context) {
     final isFocused = _focusNode.hasFocus;
     final displayPath = widget.path.isEmpty
-        ? customBrewPathAutoResolved
+        ? (ShellUtils.resolvedBrewPath ?? customBrewPathAutoResolved)
         : widget.path;
 
     return Padding(

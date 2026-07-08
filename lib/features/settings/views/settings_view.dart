@@ -74,23 +74,28 @@ class SettingsView extends StatelessWidget {
                         children: [
                           Expanded(
                             flex: 2,
-                            child: _buildEnvironmentCard(
-                              settings,
-                              viewModel,
-                              context,
+                            child: _EnvironmentCard(
+                              settings: settings,
+                              viewModel: viewModel,
                             ),
                           ),
                           const SizedBox(width: spacingL),
                           Expanded(
                             flex: 1,
-                            child: _buildAppearanceCard(settings, viewModel),
+                            child: _AppearanceCard(
+                              settings: settings,
+                              viewModel: viewModel,
+                            ),
                           ),
                         ],
                       )
                     else ...[
-                      _buildEnvironmentCard(settings, viewModel, context),
+                      _EnvironmentCard(
+                        settings: settings,
+                        viewModel: viewModel,
+                      ),
                       const SizedBox(height: spacingL),
-                      _buildAppearanceCard(settings, viewModel),
+                      _AppearanceCard(settings: settings, viewModel: viewModel),
                     ],
                   ],
                 );
@@ -101,12 +106,16 @@ class SettingsView extends StatelessWidget {
       },
     );
   }
+}
 
-  Widget _buildEnvironmentCard(
-    SettingsService settings,
-    SettingsViewModel viewModel,
-    BuildContext context,
-  ) {
+class _EnvironmentCard extends StatelessWidget {
+  final SettingsService settings;
+  final SettingsViewModel viewModel;
+
+  const _EnvironmentCard({required this.settings, required this.viewModel});
+
+  @override
+  Widget build(BuildContext context) {
     return SettingsBentoCard(
       title: environmentSectionTitle,
       leadingIcon: Icons.account_tree,
@@ -115,7 +124,7 @@ class SettingsView extends StatelessWidget {
         children: [
           GlowyPathInput(
             path: settings.brewExecutablePath,
-            onBrowse: () => _showEditPathDialog(context, settings, viewModel),
+            onBrowse: () => _showEditPathDialog(context),
           ),
           const SizedBox(height: spacingS),
           IdeToggleSwitch(
@@ -135,26 +144,7 @@ class SettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildAppearanceCard(
-    SettingsService settings,
-    SettingsViewModel viewModel,
-  ) {
-    return SettingsBentoCard(
-      title: appearanceSectionTitle,
-      leadingIcon: Icons.palette,
-      accentColor: AppColors.tertiary,
-      child: CyberFontSliderPreview(
-        fontSize: settings.terminalFontSize,
-        onChanged: viewModel.setTerminalFontSize,
-      ),
-    );
-  }
-
-  void _showEditPathDialog(
-    BuildContext context,
-    SettingsService settings,
-    SettingsViewModel viewModel,
-  ) {
+  void _showEditPathDialog(BuildContext context) {
     final controller = TextEditingController(text: settings.brewExecutablePath);
     showDialog(
       context: context,
@@ -183,6 +173,26 @@ class SettingsView extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _AppearanceCard extends StatelessWidget {
+  final SettingsService settings;
+  final SettingsViewModel viewModel;
+
+  const _AppearanceCard({required this.settings, required this.viewModel});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsBentoCard(
+      title: appearanceSectionTitle,
+      leadingIcon: Icons.palette,
+      accentColor: AppColors.tertiary,
+      child: CyberFontSliderPreview(
+        fontSize: settings.terminalFontSize,
+        onChanged: viewModel.setTerminalFontSize,
+      ),
     );
   }
 }
