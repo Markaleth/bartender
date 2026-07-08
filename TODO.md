@@ -32,6 +32,7 @@
 - [x] Allow for selection of "trending" period (and make sure you support the requests as well)
 - [x] Re-style the trending period selectors cause they look kind of wack. Probably worth looking into the other filter buttons as well. Maybe make 10 pages of 4 packages each as well. Just a thought.
 - [x] Do a pass over all components to see if there's any performance gains you're missing
+- [x] Cleanup the settings screen: widget cleanup, performance optimization audit, consistency of widgets used, colors, fonts and styles (which are not correctly called right now)
 - [ ] Add a more expressive loading indicator for fetching the data initially for various views.
 - [ ] Think about if we need to change the background of filters and search (restyle it maybe)
 - [ ] Look into the use of color in your app. Are we using stuff consistently?
@@ -40,7 +41,7 @@
       substate or something to clean them up
 - [ ] you probably wanna add analytics, crashlytics, performance and maybe even remote config
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
-- [ ] Cleanup the settings screen: widget cleanup, performance optimization audit, consistency of widgets used, colors, fonts and styles (which are not correctly called right now)
+- [ ] Reexamine the "browse" and autoresolved path flow. We should not need a "browse" button, but we CAN refine the flow with an autoresolve button and some error state or warning or whatever to polish the UI/UX
 
 # Issues:
 
