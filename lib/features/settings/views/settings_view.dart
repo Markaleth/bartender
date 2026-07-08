@@ -21,85 +21,45 @@ class SettingsView extends StatelessWidget {
       viewModelBuilder: (context) =>
           SettingsViewModel(context.read<SettingsService>()),
       builder: (context, viewModel, state) {
-        final settings = context.watch<SettingsService>();
-
         return Scaffold(
           appBar: AppBar(title: const Text(settingsViewTitle)),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(spacingL),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final isWide = constraints.maxWidth >= widthBreakpoint;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SettingsBentoCard(
-                      title: behaviorSectionTitle,
-                      leadingIcon: Icons.memory,
-                      accentColor: AppColors.primary,
-                      child: Column(
-                        children: [
-                          IdeToggleSwitch(
-                            title: backgroundFetchingTitle,
-                            subtitle: backgroundFetchingSubtitle,
-                            value: settings.backgroundFetching,
-                            onChanged: viewModel.setBackgroundFetching,
-                          ),
-                          IdeToggleSwitch(
-                            title: greedyUpgradesTitle,
-                            subtitle: greedyUpgradesSubtitle,
-                            value: settings.greedyUpgrades,
-                            onChanged: viewModel.setGreedyUpgrades,
-                          ),
-                          IdeToggleSwitch(
-                            title: zapUninstallTitle,
-                            subtitle: zapUninstallSubtitle,
-                            value: settings.zapUninstallDefault,
-                            onChanged: viewModel.setZapUninstallDefault,
-                          ),
-                          IdeToggleSwitch(
-                            title: autoCleanupTitle,
-                            subtitle: autoCleanupSubtitle,
-                            value: settings.autoCleanup,
-                            onChanged: viewModel.setAutoCleanup,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: spacingL),
-                    if (isWide)
-                      Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _BehaviorCard(viewModel: viewModel),
+                const SizedBox(height: spacingL),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isWide = constraints.maxWidth >= widthBreakpoint;
+                    if (isWide) {
+                      return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             flex: 2,
-                            child: _EnvironmentCard(
-                              settings: settings,
-                              viewModel: viewModel,
-                            ),
+                            child: _EnvironmentCard(viewModel: viewModel),
                           ),
                           const SizedBox(width: spacingL),
                           Expanded(
                             flex: 1,
-                            child: _AppearanceCard(
-                              settings: settings,
-                              viewModel: viewModel,
-                            ),
+                            child: _AppearanceCard(viewModel: viewModel),
                           ),
                         ],
-                      )
-                    else ...[
-                      _EnvironmentCard(
-                        settings: settings,
-                        viewModel: viewModel,
-                      ),
-                      const SizedBox(height: spacingL),
-                      _AppearanceCard(settings: settings, viewModel: viewModel),
-                    ],
-                  ],
-                );
-              },
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          _EnvironmentCard(viewModel: viewModel),
+                          const SizedBox(height: spacingL),
+                          _AppearanceCard(viewModel: viewModel),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
           ),
         );
@@ -108,14 +68,58 @@ class SettingsView extends StatelessWidget {
   }
 }
 
-class _EnvironmentCard extends StatelessWidget {
-  final SettingsService settings;
+class _BehaviorCard extends StatelessWidget {
   final SettingsViewModel viewModel;
 
-  const _EnvironmentCard({required this.settings, required this.viewModel});
+  const _BehaviorCard({required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsService>();
+    return SettingsBentoCard(
+      title: behaviorSectionTitle,
+      leadingIcon: Icons.memory,
+      accentColor: AppColors.primary,
+      child: Column(
+        children: [
+          IdeToggleSwitch(
+            title: backgroundFetchingTitle,
+            subtitle: backgroundFetchingSubtitle,
+            value: settings.backgroundFetching,
+            onChanged: viewModel.setBackgroundFetching,
+          ),
+          IdeToggleSwitch(
+            title: greedyUpgradesTitle,
+            subtitle: greedyUpgradesSubtitle,
+            value: settings.greedyUpgrades,
+            onChanged: viewModel.setGreedyUpgrades,
+          ),
+          IdeToggleSwitch(
+            title: zapUninstallTitle,
+            subtitle: zapUninstallSubtitle,
+            value: settings.zapUninstallDefault,
+            onChanged: viewModel.setZapUninstallDefault,
+          ),
+          IdeToggleSwitch(
+            title: autoCleanupTitle,
+            subtitle: autoCleanupSubtitle,
+            value: settings.autoCleanup,
+            onChanged: viewModel.setAutoCleanup,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EnvironmentCard extends StatelessWidget {
+  final SettingsViewModel viewModel;
+
+  const _EnvironmentCard({required this.viewModel});
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsService>();
     return SettingsBentoCard(
       title: environmentSectionTitle,
       leadingIcon: Icons.account_tree,
@@ -124,7 +128,7 @@ class _EnvironmentCard extends StatelessWidget {
         children: [
           GlowyPathInput(
             path: settings.brewExecutablePath,
-            onBrowse: () => _showEditPathDialog(context),
+            onBrowse: () => _showEditPathDialog(context, settings),
           ),
           const SizedBox(height: spacingS),
           IdeToggleSwitch(
@@ -144,7 +148,7 @@ class _EnvironmentCard extends StatelessWidget {
     );
   }
 
-  void _showEditPathDialog(BuildContext context) {
+  void _showEditPathDialog(BuildContext context, SettingsService settings) {
     final controller = TextEditingController(text: settings.brewExecutablePath);
     showDialog(
       context: context,
@@ -178,13 +182,13 @@ class _EnvironmentCard extends StatelessWidget {
 }
 
 class _AppearanceCard extends StatelessWidget {
-  final SettingsService settings;
   final SettingsViewModel viewModel;
 
-  const _AppearanceCard({required this.settings, required this.viewModel});
+  const _AppearanceCard({required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsService>();
     return SettingsBentoCard(
       title: appearanceSectionTitle,
       leadingIcon: Icons.palette,
