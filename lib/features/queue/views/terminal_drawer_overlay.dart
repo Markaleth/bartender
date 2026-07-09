@@ -73,20 +73,23 @@ class TerminalDrawerOverlay extends StatelessWidget {
                     ],
                   ),
                   clipBehavior: Clip.antiAlias,
-                  child: state.isDrawerExpanded
-                      ? OverflowBox(
-                          minHeight: terminalDrawerExpandedHeight,
-                          maxHeight: terminalDrawerExpandedHeight,
-                          alignment: Alignment.topCenter,
-                          child: ExpandedWidget(
-                            viewModel: viewModel,
-                            state: state,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(radiusL),
+                    child: state.isDrawerExpanded
+                        ? OverflowBox(
+                            minHeight: terminalDrawerExpandedHeight,
+                            maxHeight: terminalDrawerExpandedHeight,
+                            alignment: Alignment.topCenter,
+                            child: ExpandedWidget(
+                              viewModel: viewModel,
+                              state: state,
+                            ),
+                          )
+                        : CollapsedWidget(
+                            inProgressCount: inProgressCount,
+                            toggleDrawer: viewModel.toggleDrawer,
                           ),
-                        )
-                      : CollapsedWidget(
-                          inProgressCount: inProgressCount,
-                          toggleDrawer: viewModel.toggleDrawer,
-                        ),
+                  ),
                 ),
               ),
             ),

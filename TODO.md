@@ -41,13 +41,14 @@
 - [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
 - [ ] You should also probably add some new filters for precompiled or deprecated packages
       substate or something to clean them up
-- [ ] you probably wanna add analytics, crashlytics, performance and maybe even remote config
+- [ ] Investigate and add Sentry for crashlytics and error tracking (macOS/Linux compatible)
+- [ ] Investigate and add PostHog for product analytics and metrics (macOS/Linux compatible)
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
 
 # Issues:
 
-- [ ] Terminal window clips the edges, so we need to address that
-- [ ] when minimising the termial, we're getting some overflow errors
+- [x] Terminal window clips the edges, so we need to address that
+- [x] when minimising the termial, we're getting some overflow errors
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
 - [ ] filter by casks isn't working correctly. Selecring a custom tap AND core will not show the contents of both taps. it will only show the contents of the first selected tap
 - [ ] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines.
