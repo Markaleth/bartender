@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 
 class SettingsBentoCard extends StatelessWidget {
   final String title;
-  final IconData? leadingIcon;
   final Color accentColor;
   final Widget child;
 
   const SettingsBentoCard({
     super.key,
     required this.title,
-    this.leadingIcon,
     required this.accentColor,
     required this.child,
   });
@@ -38,22 +36,12 @@ class SettingsBentoCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(spacingM),
-              child: Row(
-                children: [
-                  if (leadingIcon != null) ...[
-                    Icon(leadingIcon, color: accentColor, size: iconSizeM),
-                    const SizedBox(width: spacingS),
-                  ],
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: context.titleM.copyWith(
-                        color: accentColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
+              child: Text(
+                title,
+                style: context.titleM.copyWith(
+                  color: accentColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const Divider(

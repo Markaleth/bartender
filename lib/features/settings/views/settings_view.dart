@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
@@ -9,6 +10,7 @@ import 'package:bartender/features/settings/widgets/cyber_font_slider_preview.da
 import 'package:bartender/features/settings/widgets/glowy_path_input.dart';
 import 'package:bartender/features/settings/widgets/ide_toggle_switch.dart';
 import 'package:bartender/features/settings/widgets/settings_bento_card.dart';
+import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,10 +25,19 @@ class SettingsView extends StatelessWidget {
       builder: (context, viewModel, state) {
         return Scaffold(
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(spacingL),
+            padding: const EdgeInsets.symmetric(horizontal: spacingL),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(spacingM),
+                  child: Text(
+                    settingsViewTitle,
+                    style: context.headM.copyWith(color: AppColors.primary),
+                  ),
+                ),
+                const HorizontalDivider(),
+                const SizedBox(height: spacingL),
                 _BehaviorCard(viewModel: viewModel),
                 const SizedBox(height: spacingL),
                 LayoutBuilder(
@@ -58,6 +69,7 @@ class SettingsView extends StatelessWidget {
                     }
                   },
                 ),
+                SizedBox(height: spacingL),
               ],
             ),
           ),
@@ -77,7 +89,6 @@ class _BehaviorCard extends StatelessWidget {
     final settings = context.watch<SettingsService>();
     return SettingsBentoCard(
       title: behaviorSectionTitle,
-      leadingIcon: Icons.memory,
       accentColor: AppColors.primary,
       child: Column(
         children: [
@@ -121,7 +132,6 @@ class _EnvironmentCard extends StatelessWidget {
     final settings = context.watch<SettingsService>();
     return SettingsBentoCard(
       title: environmentSectionTitle,
-      leadingIcon: Icons.account_tree,
       accentColor: AppColors.secondary,
       child: Column(
         children: [
@@ -158,7 +168,6 @@ class _AppearanceCard extends StatelessWidget {
     final settings = context.watch<SettingsService>();
     return SettingsBentoCard(
       title: appearanceSectionTitle,
-      leadingIcon: Icons.palette,
       accentColor: AppColors.tertiary,
       child: CyberFontSliderPreview(
         fontSize: settings.terminalFontSize,
