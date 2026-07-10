@@ -16,7 +16,7 @@ abstract class DatabaseInterface {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
-    String? tapFilter,
+    List<String>? tapFilters,
   });
 
   Future<void> cacheFormulae(List<FormulaModel> formulae);

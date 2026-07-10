@@ -23,7 +23,7 @@ abstract class HomebrewRepositoryInterface {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
-    String? tapFilter,
+    List<String>? tapFilters
   });
 
   // Local Package Operations

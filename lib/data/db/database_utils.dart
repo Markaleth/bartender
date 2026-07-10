@@ -16,7 +16,7 @@ PackageQueryData buildPackageQuery({
   required PackageTypeFilter type,
   required int limit,
   required int offset,
-  String? tapFilter,
+  List<String>? tapFilters,
 }) {
   final actualType = (Platform.isLinux && type == PackageTypeFilter.all)
       ? PackageTypeFilter.formulae
@@ -25,12 +25,12 @@ PackageQueryData buildPackageQuery({
   final formula = _buildFormulaWhere(
     query: query,
     installedOnly: installedOnly,
-    tapFilter: tapFilter,
+    tapFilters: tapFilters,
   );
   final cask = _buildCaskWhere(
     query: query,
     installedOnly: installedOnly,
-    tapFilter: tapFilter,
+    tapFilters: tapFilters,
   );
 
   final String sql;
@@ -58,14 +58,20 @@ typedef _WhereClause = ({String where, List<Variable<Object>> args});
 _WhereClause _buildFormulaWhere({
   required String query,
   required bool installedOnly,
-  String? tapFilter,
+  List<String>? tapFilters,
 }) {
   String where = '1=1';
   final args = <Variable<Object>>[];
 
-  if (tapFilter != null && tapFilter.isNotEmpty) {
-    where += ' AND tap = ?';
-    args.add(Variable.withString(tapFilter));
+  if (tapFilters != null && tapFilters.isNotEmpty) {
+    if (tapFilters.length == 1) {
+      where += ' AND tap = ?';
+      args.add(Variable.withString(tapFilters.first));
+    } else {
+      final placeholders = List.filled(tapFilters.length, '?').join(', ');
+      where += ' AND tap IN ($placeholders)';
+      args.addAll(tapFilters.map((t) => Variable.withString(t)));
+    }
   }
 
   if (query.isNotEmpty) {
@@ -95,14 +101,20 @@ _WhereClause _buildFormulaWhere({
 _WhereClause _buildCaskWhere({
   required String query,
   required bool installedOnly,
-  String? tapFilter,
+  List<String>? tapFilters,
 }) {
   String where = '1=1';
   final args = <Variable<Object>>[];
 
-  if (tapFilter != null && tapFilter.isNotEmpty) {
-    where += ' AND tap = ?';
-    args.add(Variable.withString(tapFilter));
+  if (tapFilters != null && tapFilters.isNotEmpty) {
+    if (tapFilters.length == 1) {
+      where += ' AND tap = ?';
+      args.add(Variable.withString(tapFilters.first));
+    } else {
+      final placeholders = List.filled(tapFilters.length, '?').join(', ');
+      where += ' AND tap IN ($placeholders)';
+      args.addAll(tapFilters.map((t) => Variable.withString(t)));
+    }
   }
 
   if (query.isNotEmpty) {

@@ -90,7 +90,7 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
-    String? tapFilter,
+    List<String>? tapFilters,
   }) =>
       _catalog.getFilteredPackages(
         query: query,
@@ -98,7 +98,7 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
         type: type,
         limit: limit,
         offset: offset,
-        tapFilter: tapFilter,
+        tapFilters: tapFilters,
       );
 
   // Local Package Operations

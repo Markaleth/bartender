@@ -9,7 +9,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
-    String? tapFilter,
+    List<String>? tapFilters,
   }) async {
     final queryData = buildPackageQuery(
       query: query,
@@ -17,7 +17,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
       type: type,
       limit: limit,
       offset: offset,
-      tapFilter: tapFilter,
+      tapFilters: tapFilters,
     );
 
     final result = await customSelect(

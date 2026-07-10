@@ -24,7 +24,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
   int _currentPaginationOffset = 0;
   static const int _paginationChunkSize = 50;
   bool _isLoadingMore = false;
-  
+
   Timer? _searchDebounceTimer;
 
   PackagesViewModel(
@@ -103,7 +103,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       type: state.packageType,
       limit: _paginationChunkSize,
       offset: _currentPaginationOffset,
-      tapFilter: _tapFilterNotifier.selectedTaps.firstOrNull,
+      tapFilters: _tapFilterNotifier.selectedTaps.toList(),
     );
 
     _currentPaginationOffset += initialChunk.length;
@@ -111,7 +111,9 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
     emitState(
       state.copyWith(
         trendingData: FetchState.success(chunkedTrending),
-        paginatedPackages: initialChunk.map(_mapToPackageListItemState).toList(),
+        paginatedPackages: initialChunk
+            .map(_mapToPackageListItemState)
+            .toList(),
         taps: taps,
       ),
     );
@@ -138,14 +140,17 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
         type: state.packageType,
         limit: _paginationChunkSize,
         offset: _currentPaginationOffset,
-        tapFilter: _tapFilterNotifier.selectedTaps.firstOrNull,
+        tapFilters: _tapFilterNotifier.selectedTaps.toList(),
       );
 
       if (nextChunk.isNotEmpty) {
         _currentPaginationOffset += nextChunk.length;
         emitState(
           state.copyWith(
-            paginatedPackages: [...state.paginatedPackages, ...nextChunk.map(_mapToPackageListItemState)],
+            paginatedPackages: [
+              ...state.paginatedPackages,
+              ...nextChunk.map(_mapToPackageListItemState),
+            ],
           ),
         );
       }
@@ -170,15 +175,17 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
   Future<void> changeAnalyticsPeriod(AnalyticsPeriod period) async {
     if (state.analyticsPeriod == period) return;
 
-    emitState(state.copyWith(
-      analyticsPeriod: period,
-      trendingData: const FetchState.loading(),
-    ));
+    emitState(
+      state.copyWith(
+        analyticsPeriod: period,
+        trendingData: const FetchState.loading(),
+      ),
+    );
 
     final chunkedTrending = await _getTrendingData();
-    emitState(state.copyWith(
-      trendingData: FetchState.success(chunkedTrending),
-    ));
+    emitState(
+      state.copyWith(trendingData: FetchState.success(chunkedTrending)),
+    );
   }
 
   Future<List<List<TrendingPackageState>>> _getTrendingData() async {
@@ -262,18 +269,24 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       type: state.packageType,
       limit: _paginationChunkSize,
       offset: _currentPaginationOffset,
-      tapFilter: _tapFilterNotifier.selectedTaps.firstOrNull,
+      tapFilters: _tapFilterNotifier.selectedTaps.toList(),
     );
     _currentPaginationOffset += initialChunk.length;
 
-    emitState(state.copyWith(paginatedPackages: initialChunk.map(_mapToPackageListItemState).toList()));
+    emitState(
+      state.copyWith(
+        paginatedPackages: initialChunk
+            .map(_mapToPackageListItemState)
+            .toList(),
+      ),
+    );
   }
 
   // --- Filtering & Searching ---
 
   void setSearchQuery(String query) {
     if (state.searchQuery == query) return;
-    
+
     _searchDebounceTimer?.cancel();
     _searchDebounceTimer = Timer(const Duration(milliseconds: 300), () {
       emitState(state.copyWith(searchQuery: query));
@@ -307,11 +320,7 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
     final updatedTrendingData = state.trendingData.maybeMap(
       success: (value) {
         return FetchState.success(
-          _updateTrendingDataWithStatus(
-            value.data,
-            packageId,
-            isInstalled,
-          ),
+          _updateTrendingDataWithStatus(value.data, packageId, isInstalled),
         );
       },
       orElse: () => state.trendingData,
@@ -352,5 +361,4 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       return pkg;
     }).toList();
   }
-
 }

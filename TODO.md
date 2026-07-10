@@ -50,6 +50,8 @@
 - [x] Terminal window clips the edges, so we need to address that
 - [x] when minimising the termial, we're getting some overflow errors
 - [ ] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
-- [ ] filter by casks isn't working correctly. Selecring a custom tap AND core will not show the contents of both taps. it will only show the contents of the first selected tap
+- [x] filter by taps isn't working correctly. Selecring a custom tap AND core will not show the contents of both taps. it will only show the contents of the first selected tap
+- [ ] packages from taps are not aggregated into the "packages_view" page
+- [ ] trusted packages sometimes do not show up because of platform constrants and we need to address that
 - [ ] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines.
 - [ ] Information on tap packages does not show up in the inspector pane.

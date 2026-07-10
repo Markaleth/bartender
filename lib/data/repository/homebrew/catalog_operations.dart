@@ -60,7 +60,7 @@ class CatalogOperations {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
-    String? tapFilter,
+    List<String>? tapFilters
   }) async {
     return _database.getFilteredPackages(
       query: query,
@@ -68,7 +68,7 @@ class CatalogOperations {
       type: type,
       limit: limit,
       offset: offset,
-      tapFilter: tapFilter,
+      tapFilters: tapFilters,
     );
   }
 
