@@ -19,14 +19,17 @@ class TapOperations {
       final List<dynamic> jsonList = jsonDecode(result.stdout);
 
       final oldTaps = await _database.getTaps();
-      final trustedTapNames = oldTaps
-          .where((t) => t.trusted)
-          .map((t) => t.name)
-          .toSet();
+      final oldTapsMap = {for (var tap in oldTaps) tap.name: tap};
 
       final taps = jsonList.map((json) {
         final tapName = json['name'] as String;
-        final isTrusted = trustedTapNames.contains(tapName);
+        final bool isTrusted;
+        if (oldTapsMap.containsKey(tapName)) {
+          isTrusted = oldTapsMap[tapName]!.trusted;
+        } else {
+          isTrusted =
+              tapName.startsWith('homebrew/') || json['official'] == true;
+        }
         return TapModel.fromJson(json).copyWith(trusted: isTrusted);
       }).toList();
       await _database.insertTaps(taps);
@@ -63,7 +66,16 @@ class TapOperations {
     if (result.exitCode != 0) return;
 
     try {
-      final packagesToFetch = _extractThirdPartyPackages(result.stdout);
+      final oldTaps = await _database.getTaps();
+      final trustedTapNames = oldTaps
+          .where((t) => t.trusted)
+          .map((t) => t.name)
+          .toSet();
+
+      final packagesToFetch = _extractThirdPartyPackages(
+        result.stdout,
+        trustedTapNames,
+      );
       if (packagesToFetch.isEmpty) return;
 
       await _fetchAndCachePackageChunks(packagesToFetch);
@@ -92,7 +104,14 @@ class TapOperations {
 
       // Preserve existing trusted state from database
       final oldTaps = await _database.getTaps();
-      final isTrusted = oldTaps.any((t) => t.name == tapName && t.trusted);
+      final oldTapIndex = oldTaps.indexWhere((t) => t.name == tapName);
+      final bool isTrusted;
+      if (oldTapIndex != -1) {
+        isTrusted = oldTaps[oldTapIndex].trusted;
+      } else {
+        isTrusted =
+            tapName.startsWith('homebrew/') || tapJson['official'] == true;
+      }
 
       final tap = TapModel.fromJson(tapJson).copyWith(trusted: isTrusted);
       await _database.insertTaps([tap]);
@@ -117,18 +136,20 @@ class TapOperations {
     }
   }
 
-  List<String> _extractThirdPartyPackages(String tapsJson) {
+  List<String> _extractThirdPartyPackages(
+    String tapsJson,
+    Set<String> trustedTapNames,
+  ) {
     final List<dynamic> jsonList = jsonDecode(tapsJson);
     final packagesToFetch = <String>[];
 
     for (final tapJson in jsonList) {
       final name = tapJson['name'] as String?;
-      final trusted = tapJson['trusted'] as bool? ?? false;
 
       if (name == null ||
           name == 'homebrew/core' ||
           name == 'homebrew/cask' ||
-          !trusted) {
+          !trustedTapNames.contains(name)) {
         continue;
       }
 
