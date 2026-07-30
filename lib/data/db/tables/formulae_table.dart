@@ -31,5 +31,5 @@ class FormulaeTable extends Table {
   BoolColumn get builtAsBottle => boolean().nullable()();
 
   @override
-  Set<Column> get primaryKey => {name};
+  Set<Column> get primaryKey => {fullName};
 }

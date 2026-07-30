@@ -45,14 +45,16 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     final formulae = formulaIds.isNotEmpty
         ? await (select(
             formulaeTable,
-          )..where((t) => t.name.isIn(formulaIds))).get()
+          )..where((t) => t.fullName.isIn(formulaIds))).get()
         : <FormulaModel>[];
     final casks = caskIds.isNotEmpty
-        ? await (select(casksTable)..where((t) => t.token.isIn(caskIds))).get()
+        ? await (select(
+            casksTable,
+          )..where((t) => t.fullToken.isIn(caskIds))).get()
         : <CaskModel>[];
 
-    final formulaMap = {for (var f in formulae) f.name: f};
-    final caskMap = {for (var c in casks) c.token: c};
+    final formulaMap = {for (var f in formulae) f.fullName: f};
+    final caskMap = {for (var c in casks) c.fullToken: c};
 
     final orderedResults = <dynamic>[];
     for (final row in result) {
@@ -173,7 +175,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     String name,
     bool isInstalled,
   ) async {
-    await (update(formulaeTable)..where((t) => t.name.equals(name))).write(
+    await (update(formulaeTable)..where((t) => t.fullName.equals(name))).write(
       FormulaeTableCompanion(isInstalled: Value(isInstalled)),
     );
   }
@@ -183,7 +185,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     String token,
     bool isInstalled,
   ) async {
-    await (update(casksTable)..where((t) => t.token.equals(token))).write(
+    await (update(casksTable)..where((t) => t.fullToken.equals(token))).write(
       CasksTableCompanion(isInstalled: Value(isInstalled)),
     );
   }
@@ -226,14 +228,14 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
   Future<FormulaModel?> getFormula(String name) {
     return (select(
       formulaeTable,
-    )..where((table) => table.name.equals(name))).getSingleOrNull();
+    )..where((table) => table.fullName.equals(name))).getSingleOrNull();
   }
 
   @override
   Future<CaskModel?> getCask(String token) {
     return (select(
       casksTable,
-    )..where((table) => table.token.equals(token))).getSingleOrNull();
+    )..where((table) => table.fullToken.equals(token))).getSingleOrNull();
   }
 
   @override
@@ -298,7 +300,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     int installs,
     AnalyticsPeriod period,
   ) async {
-    await (update(formulaeTable)..where((t) => t.name.equals(name))).write(
+    await (update(formulaeTable)..where((t) => t.fullName.equals(name))).write(
       createFormulaAnalyticsCompanion(period, installs),
     );
   }
@@ -309,7 +311,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
     int installs,
     AnalyticsPeriod period,
   ) async {
-    await (update(casksTable)..where((t) => t.token.equals(token))).write(
+    await (update(casksTable)..where((t) => t.fullToken.equals(token))).write(
       createCaskAnalyticsCompanion(period, installs),
     );
   }
@@ -325,7 +327,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
         batch.update(
           formulaeTable,
           createFormulaAnalyticsCompanion(period, installs),
-          where: (t) => t.name.equals(item.formula),
+          where: (t) => t.fullName.equals(item.formula),
         );
       }
     });
@@ -342,7 +344,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
         batch.update(
           casksTable,
           createCaskAnalyticsCompanion(period, installs),
-          where: (t) => t.token.equals(item.cask),
+          where: (t) => t.fullToken.equals(item.cask),
         );
       }
     });
@@ -535,7 +537,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
       'SELECT SUM(installed_size) AS size FROM formulae_table WHERE tap = ? AND is_installed = 1',
       variables: [Variable.withString(tapName)],
     ).getSingle();
-    
+
     final caskSize = await customSelect(
       'SELECT SUM(CAST(installed_size AS INTEGER)) AS size FROM casks_table WHERE tap = ? AND is_installed = 1',
       variables: [Variable.withString(tapName)],
@@ -543,7 +545,7 @@ mixin DatabaseQueries on _$AppDatabase implements DatabaseInterface {
 
     final fSize = formulaSize.read<int?>('size') ?? 0;
     final cSize = caskSize.read<int?>('size') ?? 0;
-    
+
     return fSize + cSize;
   }
 }

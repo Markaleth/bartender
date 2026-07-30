@@ -61,7 +61,9 @@ class _PackageListItemState extends State<PackageListItem> {
             vertical: spacingXs,
             horizontal: spacingS,
           ),
-          child: AnimatedContainer(
+          child: Opacity(
+            opacity: widget.model.isSupported ? 1.0 : 0.5,
+            child: AnimatedContainer(
             duration: defaultAnimationDuration,
             curve: Curves.easeInOut,
             margin: EdgeInsets.symmetric(vertical: isExpanded ? spacingS : 0),
@@ -100,6 +102,7 @@ class _PackageListItemState extends State<PackageListItem> {
                 ],
               ),
             ),
+          ),
           ),
         );
       },
@@ -285,6 +288,7 @@ class _PackageActionButton extends StatelessWidget {
   });
 
   String _getButtonLabel(bool isQueued, bool isInProgress) {
+    if (!model.isSupported) return 'Unsupported';
     if (isQueued) return queuedCopy;
     final baseAction = model.isInstalled ? uninstallButtonLabel : installButtonLabel;
     return isInProgress ? '${baseAction}ing...' : baseAction;
@@ -305,10 +309,12 @@ class _PackageActionButton extends StatelessWidget {
           width: defaultButtonWidth,
           child: ButtonWidget.primary(
             label: _getButtonLabel(isQueued, isInProgress),
-            state: (isQueued || isInProgress)
-                ? ButtonState.loading
-                : ButtonState.enabled,
-            onPressed: (isQueued || isInProgress)
+            state: !model.isSupported
+                ? ButtonState.disabled
+                : (isQueued || isInProgress)
+                    ? ButtonState.loading
+                    : ButtonState.enabled,
+            onPressed: (!model.isSupported || isQueued || isInProgress)
                 ? null
                 : () {
                     context.read<QueueViewModel>().queueOperation(

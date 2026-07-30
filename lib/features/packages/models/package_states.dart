@@ -20,12 +20,13 @@ abstract class PackageListItemState with _$PackageListItemState {
     required bool isInstalled,
     required bool isCask,
     required bool isDeprecated,
+    required bool isSupported,
     required PackageGridMatrixState gridModel,
   }) = _PackageListItemState;
 
   factory PackageListItemState.fromFormula(FormulaModel item) {
     return PackageListItemState(
-      id: item.name,
+      id: item.fullName,
       name: item.fullName,
       description: item.desc,
       version: item.versions.stable,
@@ -33,13 +34,14 @@ abstract class PackageListItemState with _$PackageListItemState {
       isInstalled: item.isInstalled,
       isCask: false,
       isDeprecated: item.deprecated,
+      isSupported: item.isSupportedOnCurrentOs,
       gridModel: PackageGridMatrixState.fromFormula(item),
     );
   }
 
   factory PackageListItemState.fromCask(CaskModel cask) {
     return PackageListItemState(
-      id: cask.token,
+      id: cask.fullToken,
       name: cask.name.first,
       description: cask.desc,
       version: cask.version,
@@ -47,6 +49,7 @@ abstract class PackageListItemState with _$PackageListItemState {
       isInstalled: cask.isInstalled,
       isCask: true,
       isDeprecated: cask.deprecated,
+      isSupported: cask.isSupportedOnCurrentOs,
       gridModel: PackageGridMatrixState.fromCask(cask),
     );
   }

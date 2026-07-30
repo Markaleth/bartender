@@ -5,7 +5,7 @@ import '../type_converters.dart';
 @UseRowClass(CaskModel, generateInsertable: true)
 class CasksTable extends Table {
   TextColumn get token => text()();
-  TextColumn get fullToken => text().nullable()();
+  TextColumn get fullToken => text()();
   TextColumn get tap => text().nullable()();
   TextColumn get name => text().map(const StringListConverter())();
   TextColumn get desc => text().nullable()();
@@ -29,5 +29,5 @@ class CasksTable extends Table {
   IntColumn get installedOnTimestamp => integer().nullable()();
 
   @override
-  Set<Column> get primaryKey => {token};
+  Set<Column> get primaryKey => {fullToken};
 }

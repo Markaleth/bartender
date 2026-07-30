@@ -143,7 +143,8 @@ class _CarouselPage extends StatelessWidget {
                     isQueued: isQueued,
                     isInProgress: isInProgress,
                     isInstalled: item.isInstalled,
-                    onInstall: (isQueued || isInProgress)
+                    isSupported: item.isSupported,
+                    onInstall: (!item.isSupported || isQueued || isInProgress)
                         ? null
                         : () {
                             context.read<QueueViewModel>().queueOperation(

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:convert';
 
 import '../../db/database_interface.dart';
@@ -123,9 +122,7 @@ class TapOperations {
         final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
 
         final packagesToFetch = [...formulaNames];
-        if (!Platform.isLinux) {
-          packagesToFetch.addAll(caskTokens);
-        }
+        packagesToFetch.addAll(caskTokens);
 
         if (packagesToFetch.isNotEmpty) {
           await _fetchAndCachePackageChunks(packagesToFetch);
@@ -156,10 +153,8 @@ class TapOperations {
       final formulaNames = List<String>.from(tapJson['formula_names'] ?? []);
       packagesToFetch.addAll(formulaNames);
 
-      if (!Platform.isLinux) {
-        final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
-        packagesToFetch.addAll(caskTokens);
-      }
+      final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
+      packagesToFetch.addAll(caskTokens);
     }
 
     return packagesToFetch;

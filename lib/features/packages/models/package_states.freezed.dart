@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PackageListItemState {
 
- String get id; String get name; String? get description; String get version; String? get homepage; bool get isInstalled; bool get isCask; bool get isDeprecated; PackageGridMatrixState get gridModel;
+ String get id; String get name; String? get description; String get version; String? get homepage; bool get isInstalled; bool get isCask; bool get isDeprecated; bool get isSupported; PackageGridMatrixState get gridModel;
 /// Create a copy of PackageListItemState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PackageListItemStateCopyWith<PackageListItemState> get copyWith => _$PackageLis
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackageListItemState&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.version, version) || other.version == version)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&(identical(other.isCask, isCask) || other.isCask == isCask)&&(identical(other.isDeprecated, isDeprecated) || other.isDeprecated == isDeprecated)&&(identical(other.gridModel, gridModel) || other.gridModel == gridModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PackageListItemState&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.version, version) || other.version == version)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&(identical(other.isCask, isCask) || other.isCask == isCask)&&(identical(other.isDeprecated, isDeprecated) || other.isDeprecated == isDeprecated)&&(identical(other.isSupported, isSupported) || other.isSupported == isSupported)&&(identical(other.gridModel, gridModel) || other.gridModel == gridModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,version,homepage,isInstalled,isCask,isDeprecated,gridModel);
+int get hashCode => Object.hash(runtimeType,id,name,description,version,homepage,isInstalled,isCask,isDeprecated,isSupported,gridModel);
 
 @override
 String toString() {
-  return 'PackageListItemState(id: $id, name: $name, description: $description, version: $version, homepage: $homepage, isInstalled: $isInstalled, isCask: $isCask, isDeprecated: $isDeprecated, gridModel: $gridModel)';
+  return 'PackageListItemState(id: $id, name: $name, description: $description, version: $version, homepage: $homepage, isInstalled: $isInstalled, isCask: $isCask, isDeprecated: $isDeprecated, isSupported: $isSupported, gridModel: $gridModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PackageListItemStateCopyWith<$Res>  {
   factory $PackageListItemStateCopyWith(PackageListItemState value, $Res Function(PackageListItemState) _then) = _$PackageListItemStateCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String? description, String version, String? homepage, bool isInstalled, bool isCask, bool isDeprecated, PackageGridMatrixState gridModel
+ String id, String name, String? description, String version, String? homepage, bool isInstalled, bool isCask, bool isDeprecated, bool isSupported, PackageGridMatrixState gridModel
 });
 
 
@@ -62,7 +62,7 @@ class _$PackageListItemStateCopyWithImpl<$Res>
 
 /// Create a copy of PackageListItemState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? version = null,Object? homepage = freezed,Object? isInstalled = null,Object? isCask = null,Object? isDeprecated = null,Object? gridModel = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? version = null,Object? homepage = freezed,Object? isInstalled = null,Object? isCask = null,Object? isDeprecated = null,Object? isSupported = null,Object? gridModel = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -72,6 +72,7 @@ as String,homepage: freezed == homepage ? _self.homepage : homepage // ignore: c
 as String?,isInstalled: null == isInstalled ? _self.isInstalled : isInstalled // ignore: cast_nullable_to_non_nullable
 as bool,isCask: null == isCask ? _self.isCask : isCask // ignore: cast_nullable_to_non_nullable
 as bool,isDeprecated: null == isDeprecated ? _self.isDeprecated : isDeprecated // ignore: cast_nullable_to_non_nullable
+as bool,isSupported: null == isSupported ? _self.isSupported : isSupported // ignore: cast_nullable_to_non_nullable
 as bool,gridModel: null == gridModel ? _self.gridModel : gridModel // ignore: cast_nullable_to_non_nullable
 as PackageGridMatrixState,
   ));
@@ -167,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? description,  String version,  String? homepage,  bool isInstalled,  bool isCask,  bool isDeprecated,  PackageGridMatrixState gridModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? description,  String version,  String? homepage,  bool isInstalled,  bool isCask,  bool isDeprecated,  bool isSupported,  PackageGridMatrixState gridModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PackageListItemState() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.version,_that.homepage,_that.isInstalled,_that.isCask,_that.isDeprecated,_that.gridModel);case _:
+return $default(_that.id,_that.name,_that.description,_that.version,_that.homepage,_that.isInstalled,_that.isCask,_that.isDeprecated,_that.isSupported,_that.gridModel);case _:
   return orElse();
 
 }
@@ -188,10 +189,10 @@ return $default(_that.id,_that.name,_that.description,_that.version,_that.homepa
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? description,  String version,  String? homepage,  bool isInstalled,  bool isCask,  bool isDeprecated,  PackageGridMatrixState gridModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? description,  String version,  String? homepage,  bool isInstalled,  bool isCask,  bool isDeprecated,  bool isSupported,  PackageGridMatrixState gridModel)  $default,) {final _that = this;
 switch (_that) {
 case _PackageListItemState():
-return $default(_that.id,_that.name,_that.description,_that.version,_that.homepage,_that.isInstalled,_that.isCask,_that.isDeprecated,_that.gridModel);case _:
+return $default(_that.id,_that.name,_that.description,_that.version,_that.homepage,_that.isInstalled,_that.isCask,_that.isDeprecated,_that.isSupported,_that.gridModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +209,10 @@ return $default(_that.id,_that.name,_that.description,_that.version,_that.homepa
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? description,  String version,  String? homepage,  bool isInstalled,  bool isCask,  bool isDeprecated,  PackageGridMatrixState gridModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? description,  String version,  String? homepage,  bool isInstalled,  bool isCask,  bool isDeprecated,  bool isSupported,  PackageGridMatrixState gridModel)?  $default,) {final _that = this;
 switch (_that) {
 case _PackageListItemState() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.version,_that.homepage,_that.isInstalled,_that.isCask,_that.isDeprecated,_that.gridModel);case _:
+return $default(_that.id,_that.name,_that.description,_that.version,_that.homepage,_that.isInstalled,_that.isCask,_that.isDeprecated,_that.isSupported,_that.gridModel);case _:
   return null;
 
 }
@@ -223,7 +224,7 @@ return $default(_that.id,_that.name,_that.description,_that.version,_that.homepa
 
 
 class _PackageListItemState extends PackageListItemState {
-  const _PackageListItemState({required this.id, required this.name, required this.description, required this.version, required this.homepage, required this.isInstalled, required this.isCask, required this.isDeprecated, required this.gridModel}): super._();
+  const _PackageListItemState({required this.id, required this.name, required this.description, required this.version, required this.homepage, required this.isInstalled, required this.isCask, required this.isDeprecated, required this.isSupported, required this.gridModel}): super._();
   
 
 @override final  String id;
@@ -234,6 +235,7 @@ class _PackageListItemState extends PackageListItemState {
 @override final  bool isInstalled;
 @override final  bool isCask;
 @override final  bool isDeprecated;
+@override final  bool isSupported;
 @override final  PackageGridMatrixState gridModel;
 
 /// Create a copy of PackageListItemState
@@ -246,16 +248,16 @@ _$PackageListItemStateCopyWith<_PackageListItemState> get copyWith => __$Package
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackageListItemState&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.version, version) || other.version == version)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&(identical(other.isCask, isCask) || other.isCask == isCask)&&(identical(other.isDeprecated, isDeprecated) || other.isDeprecated == isDeprecated)&&(identical(other.gridModel, gridModel) || other.gridModel == gridModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PackageListItemState&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.version, version) || other.version == version)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&(identical(other.isCask, isCask) || other.isCask == isCask)&&(identical(other.isDeprecated, isDeprecated) || other.isDeprecated == isDeprecated)&&(identical(other.isSupported, isSupported) || other.isSupported == isSupported)&&(identical(other.gridModel, gridModel) || other.gridModel == gridModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,version,homepage,isInstalled,isCask,isDeprecated,gridModel);
+int get hashCode => Object.hash(runtimeType,id,name,description,version,homepage,isInstalled,isCask,isDeprecated,isSupported,gridModel);
 
 @override
 String toString() {
-  return 'PackageListItemState(id: $id, name: $name, description: $description, version: $version, homepage: $homepage, isInstalled: $isInstalled, isCask: $isCask, isDeprecated: $isDeprecated, gridModel: $gridModel)';
+  return 'PackageListItemState(id: $id, name: $name, description: $description, version: $version, homepage: $homepage, isInstalled: $isInstalled, isCask: $isCask, isDeprecated: $isDeprecated, isSupported: $isSupported, gridModel: $gridModel)';
 }
 
 
@@ -266,7 +268,7 @@ abstract mixin class _$PackageListItemStateCopyWith<$Res> implements $PackageLis
   factory _$PackageListItemStateCopyWith(_PackageListItemState value, $Res Function(_PackageListItemState) _then) = __$PackageListItemStateCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String? description, String version, String? homepage, bool isInstalled, bool isCask, bool isDeprecated, PackageGridMatrixState gridModel
+ String id, String name, String? description, String version, String? homepage, bool isInstalled, bool isCask, bool isDeprecated, bool isSupported, PackageGridMatrixState gridModel
 });
 
 
@@ -283,7 +285,7 @@ class __$PackageListItemStateCopyWithImpl<$Res>
 
 /// Create a copy of PackageListItemState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? version = null,Object? homepage = freezed,Object? isInstalled = null,Object? isCask = null,Object? isDeprecated = null,Object? gridModel = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = freezed,Object? version = null,Object? homepage = freezed,Object? isInstalled = null,Object? isCask = null,Object? isDeprecated = null,Object? isSupported = null,Object? gridModel = null,}) {
   return _then(_PackageListItemState(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -293,6 +295,7 @@ as String,homepage: freezed == homepage ? _self.homepage : homepage // ignore: c
 as String?,isInstalled: null == isInstalled ? _self.isInstalled : isInstalled // ignore: cast_nullable_to_non_nullable
 as bool,isCask: null == isCask ? _self.isCask : isCask // ignore: cast_nullable_to_non_nullable
 as bool,isDeprecated: null == isDeprecated ? _self.isDeprecated : isDeprecated // ignore: cast_nullable_to_non_nullable
+as bool,isSupported: null == isSupported ? _self.isSupported : isSupported // ignore: cast_nullable_to_non_nullable
 as bool,gridModel: null == gridModel ? _self.gridModel : gridModel // ignore: cast_nullable_to_non_nullable
 as PackageGridMatrixState,
   ));

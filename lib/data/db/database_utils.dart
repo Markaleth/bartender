@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:drift/drift.dart';
 
 import '../../core/enums/analytics_period.dart';
@@ -18,9 +16,7 @@ PackageQueryData buildPackageQuery({
   required int offset,
   List<String>? tapFilters,
 }) {
-  final actualType = (Platform.isLinux && type == PackageTypeFilter.all)
-      ? PackageTypeFilter.formulae
-      : type;
+  final actualType = type;
 
   final formula = _buildFormulaWhere(
     query: query,
@@ -75,9 +71,10 @@ _WhereClause _buildFormulaWhere({
   }
 
   if (query.isNotEmpty) {
-    where += ' AND (name LIKE ? OR desc LIKE ?)';
+    where += ' AND (name LIKE ? OR full_name LIKE ? OR desc LIKE ?)';
     final likeQuery = '%$query%';
     args.addAll([
+      Variable.withString(likeQuery),
       Variable.withString(likeQuery),
       Variable.withString(likeQuery),
     ]);
@@ -85,14 +82,6 @@ _WhereClause _buildFormulaWhere({
 
   if (installedOnly) {
     where += ' AND is_installed = 1';
-  }
-
-  if (Platform.isLinux) {
-    where +=
-        " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"macos\"%')";
-  } else if (Platform.isMacOS) {
-    where +=
-        " AND (requirements IS NULL OR requirements NOT LIKE '%\"name\":\"linux\"%')";
   }
 
   return (where: where, args: args);
@@ -118,9 +107,11 @@ _WhereClause _buildCaskWhere({
   }
 
   if (query.isNotEmpty) {
-    where += ' AND (token LIKE ? OR name LIKE ? OR desc LIKE ?)';
+    where +=
+        ' AND (token LIKE ? OR full_token LIKE ? OR name LIKE ? OR desc LIKE ?)';
     final likeQuery = '%$query%';
     args.addAll([
+      Variable.withString(likeQuery),
       Variable.withString(likeQuery),
       Variable.withString(likeQuery),
       Variable.withString(likeQuery),
@@ -131,33 +122,29 @@ _WhereClause _buildCaskWhere({
     where += ' AND is_installed = 1';
   }
 
-  if (Platform.isLinux) {
-    where += " AND 1=0";
-  }
-
   return (where: where, args: args);
 }
 
 class _PackageQueries {
   static String all(String formulaWhere, String caskWhere) =>
       '''
-        SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $formulaWhere
+        SELECT full_name AS id, 'formula' AS type FROM formulae_table WHERE $formulaWhere
         UNION ALL
-        SELECT token AS id, 'cask' AS type FROM casks_table WHERE $caskWhere
+        SELECT full_token AS id, 'cask' AS type FROM casks_table WHERE $caskWhere
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
 
   static String formulae(String where) =>
       '''
-        SELECT name AS id, 'formula' AS type FROM formulae_table WHERE $where
+        SELECT full_name AS id, 'formula' AS type FROM formulae_table WHERE $where
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';
 
   static String casks(String where) =>
       '''
-        SELECT token AS id, 'cask' AS type FROM casks_table WHERE $where
+        SELECT full_token AS id, 'cask' AS type FROM casks_table WHERE $where
         ORDER BY id ASC
         LIMIT ? OFFSET ?
       ''';

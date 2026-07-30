@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bartender/data/models/formula/formula_model.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
 import 'package:bartender/core/utils/artifact_parser.dart';
@@ -13,6 +14,16 @@ enum CompatibilityInfo {
 }
 
 extension FormulaCompatibilityExt on FormulaModel {
+  bool get isSupportedOnCurrentOs {
+    if (requirements == null || requirements!.isEmpty) return true;
+    if (Platform.isLinux) {
+      return !requirements!.any((r) => r['name'] == 'macos');
+    } else if (Platform.isMacOS) {
+      return !requirements!.any((r) => r['name'] == 'linux');
+    }
+    return true;
+  }
+
   List<CompatibilityInfo> get compatibility {
     final Set<CompatibilityInfo> info = {};
 
@@ -47,6 +58,8 @@ extension FormulaCompatibilityExt on FormulaModel {
 }
 
 extension CaskCompatibilityExt on CaskModel {
+  bool get isSupportedOnCurrentOs => Platform.isMacOS;
+
   List<CompatibilityInfo> get compatibility {
     final Set<CompatibilityInfo> info = {CompatibilityInfo.precompiled};
 

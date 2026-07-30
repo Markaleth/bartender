@@ -7,7 +7,7 @@ part 'cask_model.g.dart';
 abstract class CaskModel with _$CaskModel {
   const factory CaskModel({
     required String token,
-    @JsonKey(name: 'full_token') String? fullToken,
+    @JsonKey(name: 'full_token') required String fullToken,
     String? tap,
     required List<String> name,
     String? desc,

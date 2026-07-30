@@ -18,6 +18,7 @@ class TrendingPackagesWidget extends StatelessWidget {
   final bool isQueued;
   final bool isInProgress;
   final bool isInstalled;
+  final bool isSupported;
 
   final VoidCallback? onInstall;
 
@@ -32,69 +33,74 @@ class TrendingPackagesWidget extends StatelessWidget {
     this.isQueued = false,
     this.isInProgress = false,
     this.isInstalled = false,
+    required this.isSupported,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: spacingXs),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(radiusM),
-          border: Border.all(
-            color: AppColors.borderNeutral,
-            width: thicknessXs,
+      child: Opacity(
+        opacity: isSupported ? 1.0 : 0.5,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(radiusM),
+            border: Border.all(
+              color: AppColors.borderNeutral,
+              width: thicknessXs,
+            ),
           ),
-        ),
-        margin: const EdgeInsets.only(bottom: spacingS),
-        child: Padding(
-          padding: const EdgeInsets.all(spacingM),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PackageIcon(
-                    name: title,
-                    homepage: homepage,
-                    size: spacing2Xl,
-                  ),
-                  const SizedBox(width: spacingS),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: context.titleM,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+          margin: const EdgeInsets.only(bottom: spacingS),
+          child: Padding(
+            padding: const EdgeInsets.all(spacingM),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PackageIcon(
+                      name: title,
+                      homepage: homepage,
+                      size: spacing2Xl,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: spacingM),
-              Text(
-                description ?? '',
-                style: context.labelL,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (downloads != null)
-                    _DownloadsWidget(downloads: downloads!),
-                  _DownloadButtonWidget(
-                    isQueued: isQueued,
-                    isInProgress: isInProgress,
-                    isInstalled: isInstalled,
-                    onInstall: onInstall,
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(width: spacingS),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: context.titleM,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: spacingM),
+                Text(
+                  description ?? '',
+                  style: context.labelL,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (downloads != null)
+                      _DownloadsWidget(downloads: downloads!),
+                    _DownloadButtonWidget(
+                      isQueued: isQueued,
+                      isInProgress: isInProgress,
+                      isInstalled: isInstalled,
+                      isSupported: isSupported,
+                      onInstall: onInstall,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -122,16 +128,19 @@ class _DownloadButtonWidget extends StatelessWidget {
   final bool isInProgress;
   final bool isQueued;
   final bool isInstalled;
+  final bool isSupported;
   final VoidCallback? onInstall;
 
   const _DownloadButtonWidget({
     required this.isInProgress,
     required this.isQueued,
     required this.isInstalled,
+    required this.isSupported,
     required this.onInstall,
   });
 
   String _getButtonLabel() {
+    if (!isSupported) return 'Unsupported';
     if (isQueued) return queuedCopy;
     final baseAction = isInstalled ? uninstallButtonLabel : installButtonLabel;
     return isInProgress ? '${baseAction}ing...' : baseAction;
@@ -140,12 +149,14 @@ class _DownloadButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ButtonWidget.tertiary(
     label: _getButtonLabel(),
-    state: isInProgress
+    state: !isSupported
+        ? ButtonState.disabled
+        : isInProgress
         ? ButtonState.loading
         : isQueued
         ? ButtonState.disabled
         : ButtonState.enabled,
-    onPressed: onInstall,
+    onPressed: !isSupported ? null : onInstall,
     iconData: Icons.chevron_right_rounded,
     withTrailingIcon: true,
     isCompact: true,

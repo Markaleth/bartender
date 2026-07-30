@@ -55,8 +55,9 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
 
   void _onTapStatusNotifierUpdated() {
     final update = _tapStatusNotifier.value;
-    if (update != null && !update.isInstalled) {
-      if (_tapFilterNotifier.selectedTaps.contains(update.tapName)) {
+    if (update != null) {
+      if (!update.isInstalled &&
+          _tapFilterNotifier.selectedTaps.contains(update.tapName)) {
         _tapFilterNotifier.toggleFilter(update.tapName);
       }
       _fetchInitialData();

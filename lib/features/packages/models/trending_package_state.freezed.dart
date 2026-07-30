@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TrendingPackageState {
 
- String get id; String? get description; String get version; String? get homepage; String? get formattedDownloads; bool get isInstalled; bool get isFormula;
+ String get id; String? get description; String get version; String? get homepage; String? get formattedDownloads; bool get isInstalled; bool get isFormula; bool get isSupported;
 /// Create a copy of TrendingPackageState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TrendingPackageStateCopyWith<TrendingPackageState> get copyWith => _$TrendingPa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TrendingPackageState&&(identical(other.id, id) || other.id == id)&&(identical(other.description, description) || other.description == description)&&(identical(other.version, version) || other.version == version)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.formattedDownloads, formattedDownloads) || other.formattedDownloads == formattedDownloads)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&(identical(other.isFormula, isFormula) || other.isFormula == isFormula));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TrendingPackageState&&(identical(other.id, id) || other.id == id)&&(identical(other.description, description) || other.description == description)&&(identical(other.version, version) || other.version == version)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.formattedDownloads, formattedDownloads) || other.formattedDownloads == formattedDownloads)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&(identical(other.isFormula, isFormula) || other.isFormula == isFormula)&&(identical(other.isSupported, isSupported) || other.isSupported == isSupported));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,description,version,homepage,formattedDownloads,isInstalled,isFormula);
+int get hashCode => Object.hash(runtimeType,id,description,version,homepage,formattedDownloads,isInstalled,isFormula,isSupported);
 
 @override
 String toString() {
-  return 'TrendingPackageState(id: $id, description: $description, version: $version, homepage: $homepage, formattedDownloads: $formattedDownloads, isInstalled: $isInstalled, isFormula: $isFormula)';
+  return 'TrendingPackageState(id: $id, description: $description, version: $version, homepage: $homepage, formattedDownloads: $formattedDownloads, isInstalled: $isInstalled, isFormula: $isFormula, isSupported: $isSupported)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TrendingPackageStateCopyWith<$Res>  {
   factory $TrendingPackageStateCopyWith(TrendingPackageState value, $Res Function(TrendingPackageState) _then) = _$TrendingPackageStateCopyWithImpl;
 @useResult
 $Res call({
- String id, String? description, String version, String? homepage, String? formattedDownloads, bool isInstalled, bool isFormula
+ String id, String? description, String version, String? homepage, String? formattedDownloads, bool isInstalled, bool isFormula, bool isSupported
 });
 
 
@@ -62,7 +62,7 @@ class _$TrendingPackageStateCopyWithImpl<$Res>
 
 /// Create a copy of TrendingPackageState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? description = freezed,Object? version = null,Object? homepage = freezed,Object? formattedDownloads = freezed,Object? isInstalled = null,Object? isFormula = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? description = freezed,Object? version = null,Object? homepage = freezed,Object? formattedDownloads = freezed,Object? isInstalled = null,Object? isFormula = null,Object? isSupported = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
@@ -71,6 +71,7 @@ as String,homepage: freezed == homepage ? _self.homepage : homepage // ignore: c
 as String?,formattedDownloads: freezed == formattedDownloads ? _self.formattedDownloads : formattedDownloads // ignore: cast_nullable_to_non_nullable
 as String?,isInstalled: null == isInstalled ? _self.isInstalled : isInstalled // ignore: cast_nullable_to_non_nullable
 as bool,isFormula: null == isFormula ? _self.isFormula : isFormula // ignore: cast_nullable_to_non_nullable
+as bool,isSupported: null == isSupported ? _self.isSupported : isSupported // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? description,  String version,  String? homepage,  String? formattedDownloads,  bool isInstalled,  bool isFormula)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? description,  String version,  String? homepage,  String? formattedDownloads,  bool isInstalled,  bool isFormula,  bool isSupported)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TrendingPackageState() when $default != null:
-return $default(_that.id,_that.description,_that.version,_that.homepage,_that.formattedDownloads,_that.isInstalled,_that.isFormula);case _:
+return $default(_that.id,_that.description,_that.version,_that.homepage,_that.formattedDownloads,_that.isInstalled,_that.isFormula,_that.isSupported);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.id,_that.description,_that.version,_that.homepage,_that.fo
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? description,  String version,  String? homepage,  String? formattedDownloads,  bool isInstalled,  bool isFormula)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? description,  String version,  String? homepage,  String? formattedDownloads,  bool isInstalled,  bool isFormula,  bool isSupported)  $default,) {final _that = this;
 switch (_that) {
 case _TrendingPackageState():
-return $default(_that.id,_that.description,_that.version,_that.homepage,_that.formattedDownloads,_that.isInstalled,_that.isFormula);case _:
+return $default(_that.id,_that.description,_that.version,_that.homepage,_that.formattedDownloads,_that.isInstalled,_that.isFormula,_that.isSupported);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.id,_that.description,_that.version,_that.homepage,_that.fo
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? description,  String version,  String? homepage,  String? formattedDownloads,  bool isInstalled,  bool isFormula)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? description,  String version,  String? homepage,  String? formattedDownloads,  bool isInstalled,  bool isFormula,  bool isSupported)?  $default,) {final _that = this;
 switch (_that) {
 case _TrendingPackageState() when $default != null:
-return $default(_that.id,_that.description,_that.version,_that.homepage,_that.formattedDownloads,_that.isInstalled,_that.isFormula);case _:
+return $default(_that.id,_that.description,_that.version,_that.homepage,_that.formattedDownloads,_that.isInstalled,_that.isFormula,_that.isSupported);case _:
   return null;
 
 }
@@ -212,7 +213,7 @@ return $default(_that.id,_that.description,_that.version,_that.homepage,_that.fo
 
 
 class _TrendingPackageState extends TrendingPackageState {
-  const _TrendingPackageState({required this.id, required this.description, required this.version, required this.homepage, required this.formattedDownloads, required this.isInstalled, required this.isFormula}): super._();
+  const _TrendingPackageState({required this.id, required this.description, required this.version, required this.homepage, required this.formattedDownloads, required this.isInstalled, required this.isFormula, required this.isSupported}): super._();
   
 
 @override final  String id;
@@ -222,6 +223,7 @@ class _TrendingPackageState extends TrendingPackageState {
 @override final  String? formattedDownloads;
 @override final  bool isInstalled;
 @override final  bool isFormula;
+@override final  bool isSupported;
 
 /// Create a copy of TrendingPackageState
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +235,16 @@ _$TrendingPackageStateCopyWith<_TrendingPackageState> get copyWith => __$Trendin
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TrendingPackageState&&(identical(other.id, id) || other.id == id)&&(identical(other.description, description) || other.description == description)&&(identical(other.version, version) || other.version == version)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.formattedDownloads, formattedDownloads) || other.formattedDownloads == formattedDownloads)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&(identical(other.isFormula, isFormula) || other.isFormula == isFormula));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TrendingPackageState&&(identical(other.id, id) || other.id == id)&&(identical(other.description, description) || other.description == description)&&(identical(other.version, version) || other.version == version)&&(identical(other.homepage, homepage) || other.homepage == homepage)&&(identical(other.formattedDownloads, formattedDownloads) || other.formattedDownloads == formattedDownloads)&&(identical(other.isInstalled, isInstalled) || other.isInstalled == isInstalled)&&(identical(other.isFormula, isFormula) || other.isFormula == isFormula)&&(identical(other.isSupported, isSupported) || other.isSupported == isSupported));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,description,version,homepage,formattedDownloads,isInstalled,isFormula);
+int get hashCode => Object.hash(runtimeType,id,description,version,homepage,formattedDownloads,isInstalled,isFormula,isSupported);
 
 @override
 String toString() {
-  return 'TrendingPackageState(id: $id, description: $description, version: $version, homepage: $homepage, formattedDownloads: $formattedDownloads, isInstalled: $isInstalled, isFormula: $isFormula)';
+  return 'TrendingPackageState(id: $id, description: $description, version: $version, homepage: $homepage, formattedDownloads: $formattedDownloads, isInstalled: $isInstalled, isFormula: $isFormula, isSupported: $isSupported)';
 }
 
 
@@ -253,7 +255,7 @@ abstract mixin class _$TrendingPackageStateCopyWith<$Res> implements $TrendingPa
   factory _$TrendingPackageStateCopyWith(_TrendingPackageState value, $Res Function(_TrendingPackageState) _then) = __$TrendingPackageStateCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? description, String version, String? homepage, String? formattedDownloads, bool isInstalled, bool isFormula
+ String id, String? description, String version, String? homepage, String? formattedDownloads, bool isInstalled, bool isFormula, bool isSupported
 });
 
 
@@ -270,7 +272,7 @@ class __$TrendingPackageStateCopyWithImpl<$Res>
 
 /// Create a copy of TrendingPackageState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? description = freezed,Object? version = null,Object? homepage = freezed,Object? formattedDownloads = freezed,Object? isInstalled = null,Object? isFormula = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? description = freezed,Object? version = null,Object? homepage = freezed,Object? formattedDownloads = freezed,Object? isInstalled = null,Object? isFormula = null,Object? isSupported = null,}) {
   return _then(_TrendingPackageState(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
@@ -279,6 +281,7 @@ as String,homepage: freezed == homepage ? _self.homepage : homepage // ignore: c
 as String?,formattedDownloads: freezed == formattedDownloads ? _self.formattedDownloads : formattedDownloads // ignore: cast_nullable_to_non_nullable
 as String?,isInstalled: null == isInstalled ? _self.isInstalled : isInstalled // ignore: cast_nullable_to_non_nullable
 as bool,isFormula: null == isFormula ? _self.isFormula : isFormula // ignore: cast_nullable_to_non_nullable
+as bool,isSupported: null == isSupported ? _self.isSupported : isSupported // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

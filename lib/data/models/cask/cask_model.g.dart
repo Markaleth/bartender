@@ -8,7 +8,7 @@ part of 'cask_model.dart';
 
 _CaskModel _$CaskModelFromJson(Map<String, dynamic> json) => _CaskModel(
   token: json['token'] as String,
-  fullToken: json['full_token'] as String?,
+  fullToken: json['full_token'] as String,
   tap: json['tap'] as String?,
   name: (json['name'] as List<dynamic>).map((e) => e as String).toList(),
   desc: json['desc'] as String?,

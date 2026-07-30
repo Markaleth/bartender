@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CaskModel {
 
- String get token;@JsonKey(name: 'full_token') String? get fullToken; String? get tap; List<String> get name; String? get desc; String? get homepage; String? get url; String get version; List<Map<String, dynamic>>? get artifacts;@JsonKey(name: 'auto_updates') bool? get autoUpdates;@JsonKey(name: 'depends_on') Map<String, dynamic>? get dependsOn; bool get outdated; bool get deprecated; bool get disabled;@JsonKey(name: 'is_installed') bool get isInstalled; List<String> get missingDeps; Map<String, dynamic>? get variations; Map<String, dynamic>? get analytics; int? get installs30d; int? get installs90d; int? get installs365d;@JsonKey(name: 'generated_date') String? get generatedDate; String? get installedSize; int? get installedOnTimestamp;
+ String get token;@JsonKey(name: 'full_token') String get fullToken; String? get tap; List<String> get name; String? get desc; String? get homepage; String? get url; String get version; List<Map<String, dynamic>>? get artifacts;@JsonKey(name: 'auto_updates') bool? get autoUpdates;@JsonKey(name: 'depends_on') Map<String, dynamic>? get dependsOn; bool get outdated; bool get deprecated; bool get disabled;@JsonKey(name: 'is_installed') bool get isInstalled; List<String> get missingDeps; Map<String, dynamic>? get variations; Map<String, dynamic>? get analytics; int? get installs30d; int? get installs90d; int? get installs365d;@JsonKey(name: 'generated_date') String? get generatedDate; String? get installedSize; int? get installedOnTimestamp;
 /// Create a copy of CaskModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $CaskModelCopyWith<$Res>  {
   factory $CaskModelCopyWith(CaskModel value, $Res Function(CaskModel) _then) = _$CaskModelCopyWithImpl;
 @useResult
 $Res call({
- String token,@JsonKey(name: 'full_token') String? fullToken, String? tap, List<String> name, String? desc, String? homepage, String? url, String version, List<Map<String, dynamic>>? artifacts,@JsonKey(name: 'auto_updates') bool? autoUpdates,@JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, List<String> missingDeps, Map<String, dynamic>? variations, Map<String, dynamic>? analytics, int? installs30d, int? installs90d, int? installs365d,@JsonKey(name: 'generated_date') String? generatedDate, String? installedSize, int? installedOnTimestamp
+ String token,@JsonKey(name: 'full_token') String fullToken, String? tap, List<String> name, String? desc, String? homepage, String? url, String version, List<Map<String, dynamic>>? artifacts,@JsonKey(name: 'auto_updates') bool? autoUpdates,@JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, List<String> missingDeps, Map<String, dynamic>? variations, Map<String, dynamic>? analytics, int? installs30d, int? installs90d, int? installs365d,@JsonKey(name: 'generated_date') String? generatedDate, String? installedSize, int? installedOnTimestamp
 });
 
 
@@ -65,11 +65,11 @@ class _$CaskModelCopyWithImpl<$Res>
 
 /// Create a copy of CaskModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? token = null,Object? fullToken = freezed,Object? tap = freezed,Object? name = null,Object? desc = freezed,Object? homepage = freezed,Object? url = freezed,Object? version = null,Object? artifacts = freezed,Object? autoUpdates = freezed,Object? dependsOn = freezed,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? missingDeps = null,Object? variations = freezed,Object? analytics = freezed,Object? installs30d = freezed,Object? installs90d = freezed,Object? installs365d = freezed,Object? generatedDate = freezed,Object? installedSize = freezed,Object? installedOnTimestamp = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? token = null,Object? fullToken = null,Object? tap = freezed,Object? name = null,Object? desc = freezed,Object? homepage = freezed,Object? url = freezed,Object? version = null,Object? artifacts = freezed,Object? autoUpdates = freezed,Object? dependsOn = freezed,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? missingDeps = null,Object? variations = freezed,Object? analytics = freezed,Object? installs30d = freezed,Object? installs90d = freezed,Object? installs365d = freezed,Object? generatedDate = freezed,Object? installedSize = freezed,Object? installedOnTimestamp = freezed,}) {
   return _then(_self.copyWith(
 token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
-as String,fullToken: freezed == fullToken ? _self.fullToken : fullToken // ignore: cast_nullable_to_non_nullable
-as String?,tap: freezed == tap ? _self.tap : tap // ignore: cast_nullable_to_non_nullable
+as String,fullToken: null == fullToken ? _self.fullToken : fullToken // ignore: cast_nullable_to_non_nullable
+as String,tap: freezed == tap ? _self.tap : tap // ignore: cast_nullable_to_non_nullable
 as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as List<String>,desc: freezed == desc ? _self.desc : desc // ignore: cast_nullable_to_non_nullable
 as String?,homepage: freezed == homepage ? _self.homepage : homepage // ignore: cast_nullable_to_non_nullable
@@ -176,7 +176,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  String? tap,  List<String> name,  String? desc,  String? homepage,  String? url,  String version,  List<Map<String, dynamic>>? artifacts, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  List<String> missingDeps,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate,  String? installedSize,  int? installedOnTimestamp)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String token, @JsonKey(name: 'full_token')  String fullToken,  String? tap,  List<String> name,  String? desc,  String? homepage,  String? url,  String version,  List<Map<String, dynamic>>? artifacts, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  List<String> missingDeps,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate,  String? installedSize,  int? installedOnTimestamp)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CaskModel() when $default != null:
 return $default(_that.token,_that.fullToken,_that.tap,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.artifacts,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.missingDeps,_that.variations,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate,_that.installedSize,_that.installedOnTimestamp);case _:
@@ -197,7 +197,7 @@ return $default(_that.token,_that.fullToken,_that.tap,_that.name,_that.desc,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  String? tap,  List<String> name,  String? desc,  String? homepage,  String? url,  String version,  List<Map<String, dynamic>>? artifacts, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  List<String> missingDeps,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate,  String? installedSize,  int? installedOnTimestamp)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String token, @JsonKey(name: 'full_token')  String fullToken,  String? tap,  List<String> name,  String? desc,  String? homepage,  String? url,  String version,  List<Map<String, dynamic>>? artifacts, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  List<String> missingDeps,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate,  String? installedSize,  int? installedOnTimestamp)  $default,) {final _that = this;
 switch (_that) {
 case _CaskModel():
 return $default(_that.token,_that.fullToken,_that.tap,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.artifacts,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.missingDeps,_that.variations,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate,_that.installedSize,_that.installedOnTimestamp);case _:
@@ -217,7 +217,7 @@ return $default(_that.token,_that.fullToken,_that.tap,_that.name,_that.desc,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String token, @JsonKey(name: 'full_token')  String? fullToken,  String? tap,  List<String> name,  String? desc,  String? homepage,  String? url,  String version,  List<Map<String, dynamic>>? artifacts, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  List<String> missingDeps,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate,  String? installedSize,  int? installedOnTimestamp)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String token, @JsonKey(name: 'full_token')  String fullToken,  String? tap,  List<String> name,  String? desc,  String? homepage,  String? url,  String version,  List<Map<String, dynamic>>? artifacts, @JsonKey(name: 'auto_updates')  bool? autoUpdates, @JsonKey(name: 'depends_on')  Map<String, dynamic>? dependsOn,  bool outdated,  bool deprecated,  bool disabled, @JsonKey(name: 'is_installed')  bool isInstalled,  List<String> missingDeps,  Map<String, dynamic>? variations,  Map<String, dynamic>? analytics,  int? installs30d,  int? installs90d,  int? installs365d, @JsonKey(name: 'generated_date')  String? generatedDate,  String? installedSize,  int? installedOnTimestamp)?  $default,) {final _that = this;
 switch (_that) {
 case _CaskModel() when $default != null:
 return $default(_that.token,_that.fullToken,_that.tap,_that.name,_that.desc,_that.homepage,_that.url,_that.version,_that.artifacts,_that.autoUpdates,_that.dependsOn,_that.outdated,_that.deprecated,_that.disabled,_that.isInstalled,_that.missingDeps,_that.variations,_that.analytics,_that.installs30d,_that.installs90d,_that.installs365d,_that.generatedDate,_that.installedSize,_that.installedOnTimestamp);case _:
@@ -232,11 +232,11 @@ return $default(_that.token,_that.fullToken,_that.tap,_that.name,_that.desc,_tha
 @JsonSerializable()
 
 class _CaskModel implements CaskModel {
-  const _CaskModel({required this.token, @JsonKey(name: 'full_token') this.fullToken, this.tap, required final  List<String> name, this.desc, this.homepage, this.url, required this.version, final  List<Map<String, dynamic>>? artifacts, @JsonKey(name: 'auto_updates') this.autoUpdates, @JsonKey(name: 'depends_on') final  Map<String, dynamic>? dependsOn, this.outdated = false, this.deprecated = false, this.disabled = false, @JsonKey(name: 'is_installed') this.isInstalled = false, final  List<String> missingDeps = const [], final  Map<String, dynamic>? variations, final  Map<String, dynamic>? analytics, this.installs30d, this.installs90d, this.installs365d, @JsonKey(name: 'generated_date') this.generatedDate, this.installedSize, this.installedOnTimestamp}): _name = name,_artifacts = artifacts,_dependsOn = dependsOn,_missingDeps = missingDeps,_variations = variations,_analytics = analytics;
+  const _CaskModel({required this.token, @JsonKey(name: 'full_token') required this.fullToken, this.tap, required final  List<String> name, this.desc, this.homepage, this.url, required this.version, final  List<Map<String, dynamic>>? artifacts, @JsonKey(name: 'auto_updates') this.autoUpdates, @JsonKey(name: 'depends_on') final  Map<String, dynamic>? dependsOn, this.outdated = false, this.deprecated = false, this.disabled = false, @JsonKey(name: 'is_installed') this.isInstalled = false, final  List<String> missingDeps = const [], final  Map<String, dynamic>? variations, final  Map<String, dynamic>? analytics, this.installs30d, this.installs90d, this.installs365d, @JsonKey(name: 'generated_date') this.generatedDate, this.installedSize, this.installedOnTimestamp}): _name = name,_artifacts = artifacts,_dependsOn = dependsOn,_missingDeps = missingDeps,_variations = variations,_analytics = analytics;
   factory _CaskModel.fromJson(Map<String, dynamic> json) => _$CaskModelFromJson(json);
 
 @override final  String token;
-@override@JsonKey(name: 'full_token') final  String? fullToken;
+@override@JsonKey(name: 'full_token') final  String fullToken;
 @override final  String? tap;
  final  List<String> _name;
 @override List<String> get name {
@@ -337,7 +337,7 @@ abstract mixin class _$CaskModelCopyWith<$Res> implements $CaskModelCopyWith<$Re
   factory _$CaskModelCopyWith(_CaskModel value, $Res Function(_CaskModel) _then) = __$CaskModelCopyWithImpl;
 @override @useResult
 $Res call({
- String token,@JsonKey(name: 'full_token') String? fullToken, String? tap, List<String> name, String? desc, String? homepage, String? url, String version, List<Map<String, dynamic>>? artifacts,@JsonKey(name: 'auto_updates') bool? autoUpdates,@JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, List<String> missingDeps, Map<String, dynamic>? variations, Map<String, dynamic>? analytics, int? installs30d, int? installs90d, int? installs365d,@JsonKey(name: 'generated_date') String? generatedDate, String? installedSize, int? installedOnTimestamp
+ String token,@JsonKey(name: 'full_token') String fullToken, String? tap, List<String> name, String? desc, String? homepage, String? url, String version, List<Map<String, dynamic>>? artifacts,@JsonKey(name: 'auto_updates') bool? autoUpdates,@JsonKey(name: 'depends_on') Map<String, dynamic>? dependsOn, bool outdated, bool deprecated, bool disabled,@JsonKey(name: 'is_installed') bool isInstalled, List<String> missingDeps, Map<String, dynamic>? variations, Map<String, dynamic>? analytics, int? installs30d, int? installs90d, int? installs365d,@JsonKey(name: 'generated_date') String? generatedDate, String? installedSize, int? installedOnTimestamp
 });
 
 
@@ -354,11 +354,11 @@ class __$CaskModelCopyWithImpl<$Res>
 
 /// Create a copy of CaskModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? token = null,Object? fullToken = freezed,Object? tap = freezed,Object? name = null,Object? desc = freezed,Object? homepage = freezed,Object? url = freezed,Object? version = null,Object? artifacts = freezed,Object? autoUpdates = freezed,Object? dependsOn = freezed,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? missingDeps = null,Object? variations = freezed,Object? analytics = freezed,Object? installs30d = freezed,Object? installs90d = freezed,Object? installs365d = freezed,Object? generatedDate = freezed,Object? installedSize = freezed,Object? installedOnTimestamp = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? token = null,Object? fullToken = null,Object? tap = freezed,Object? name = null,Object? desc = freezed,Object? homepage = freezed,Object? url = freezed,Object? version = null,Object? artifacts = freezed,Object? autoUpdates = freezed,Object? dependsOn = freezed,Object? outdated = null,Object? deprecated = null,Object? disabled = null,Object? isInstalled = null,Object? missingDeps = null,Object? variations = freezed,Object? analytics = freezed,Object? installs30d = freezed,Object? installs90d = freezed,Object? installs365d = freezed,Object? generatedDate = freezed,Object? installedSize = freezed,Object? installedOnTimestamp = freezed,}) {
   return _then(_CaskModel(
 token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
-as String,fullToken: freezed == fullToken ? _self.fullToken : fullToken // ignore: cast_nullable_to_non_nullable
-as String?,tap: freezed == tap ? _self.tap : tap // ignore: cast_nullable_to_non_nullable
+as String,fullToken: null == fullToken ? _self.fullToken : fullToken // ignore: cast_nullable_to_non_nullable
+as String,tap: freezed == tap ? _self.tap : tap // ignore: cast_nullable_to_non_nullable
 as String?,name: null == name ? _self._name : name // ignore: cast_nullable_to_non_nullable
 as List<String>,desc: freezed == desc ? _self.desc : desc // ignore: cast_nullable_to_non_nullable
 as String?,homepage: freezed == homepage ? _self.homepage : homepage // ignore: cast_nullable_to_non_nullable

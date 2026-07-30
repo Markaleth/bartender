@@ -25,9 +25,9 @@ class $CasksTableTable extends CasksTable
   late final GeneratedColumn<String> fullToken = GeneratedColumn<String>(
     'full_token',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.string,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _tapMeta = const VerificationMeta('tap');
   @override
@@ -322,6 +322,8 @@ class $CasksTableTable extends CasksTable
         _fullTokenMeta,
         fullToken.isAcceptableOrUnknown(data['full_token']!, _fullTokenMeta),
       );
+    } else if (isInserting) {
+      context.missing(_fullTokenMeta);
     }
     if (data.containsKey('tap')) {
       context.handle(
@@ -449,7 +451,7 @@ class $CasksTableTable extends CasksTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {token};
+  Set<GeneratedColumn> get $primaryKey => {fullToken};
   @override
   CaskModel map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -461,7 +463,7 @@ class $CasksTableTable extends CasksTable
       fullToken: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}full_token'],
-      ),
+      )!,
       tap: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}tap'],
@@ -586,7 +588,7 @@ class $CasksTableTable extends CasksTable
 
 class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   final Value<String> token;
-  final Value<String?> fullToken;
+  final Value<String> fullToken;
   final Value<String?> tap;
   final Value<List<String>> name;
   final Value<String?> desc;
@@ -637,7 +639,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
   });
   CasksTableCompanion.insert({
     required String token,
-    this.fullToken = const Value.absent(),
+    required String fullToken,
     this.tap = const Value.absent(),
     required List<String> name,
     this.desc = const Value.absent(),
@@ -661,6 +663,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
     this.installedOnTimestamp = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : token = Value(token),
+       fullToken = Value(fullToken),
        name = Value(name),
        version = Value(version);
   static Insertable<CaskModel> custom({
@@ -720,7 +723,7 @@ class CasksTableCompanion extends UpdateCompanion<CaskModel> {
 
   CasksTableCompanion copyWith({
     Value<String>? token,
-    Value<String?>? fullToken,
+    Value<String>? fullToken,
     Value<String?>? tap,
     Value<List<String>>? name,
     Value<String?>? desc,
@@ -1391,7 +1394,7 @@ class $FormulaeTableTable extends FormulaeTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {name};
+  Set<GeneratedColumn> get $primaryKey => {fullName};
   @override
   FormulaModel map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -3436,7 +3439,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 typedef $$CasksTableTableCreateCompanionBuilder =
     CasksTableCompanion Function({
       required String token,
-      Value<String?> fullToken,
+      required String fullToken,
       Value<String?> tap,
       required List<String> name,
       Value<String?> desc,
@@ -3463,7 +3466,7 @@ typedef $$CasksTableTableCreateCompanionBuilder =
 typedef $$CasksTableTableUpdateCompanionBuilder =
     CasksTableCompanion Function({
       Value<String> token,
-      Value<String?> fullToken,
+      Value<String> fullToken,
       Value<String?> tap,
       Value<List<String>> name,
       Value<String?> desc,
@@ -3894,7 +3897,7 @@ class $$CasksTableTableTableManager
           updateCompanionCallback:
               ({
                 Value<String> token = const Value.absent(),
-                Value<String?> fullToken = const Value.absent(),
+                Value<String> fullToken = const Value.absent(),
                 Value<String?> tap = const Value.absent(),
                 Value<List<String>> name = const Value.absent(),
                 Value<String?> desc = const Value.absent(),
@@ -3947,7 +3950,7 @@ class $$CasksTableTableTableManager
           createCompanionCallback:
               ({
                 required String token,
-                Value<String?> fullToken = const Value.absent(),
+                required String fullToken,
                 Value<String?> tap = const Value.absent(),
                 required List<String> name,
                 Value<String?> desc = const Value.absent(),
