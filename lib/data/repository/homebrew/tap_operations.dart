@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 
 import '../../db/database_interface.dart';
 import '../../models/tap/tap_model.dart';
 import '../../models/formula/formula_model.dart';
 import '../../models/cask/cask_model.dart';
 import '../../shell/brew_service.dart';
+import '../../shell/shell_command_result.dart';
 
 class TapOperations {
   final BrewService _brewService;
@@ -168,19 +172,118 @@ class TapOperations {
           : packagesToFetch.length;
       final chunk = packagesToFetch.sublist(i, end);
 
-      final infoResult = await _brewService.runCommand([
-        'info',
-        '--json=v2',
-        ...chunk,
-      ]);
+      await _processChunk(chunk);
+    }
+  }
 
-      if (infoResult.stdout.isNotEmpty) {
-        try {
-          await _parseAndCacheInfo(infoResult.stdout);
-        } catch (e) {
-          // Ignore parse errors for specific chunks to allow other chunks to proceed
-        }
+  Future<void> _processChunk(List<String> chunk) async {
+    if (chunk.isEmpty) return;
+
+    final infoResult = await _brewService.runCommand([
+      'info',
+      '--json=v2',
+      ...chunk,
+    ]);
+
+    if (_isChunkSuccess(infoResult)) {
+      try {
+        await _parseAndCacheInfo(infoResult.stdout);
+        return;
+      } catch (_) {
+        // Silently treat as failure to trigger the smart fallback
       }
+    }
+
+    await _handleChunkFailure(chunk, infoResult);
+  }
+
+  bool _isChunkSuccess(ShellCommandResult infoResult) {
+    return infoResult.exitCode == 0 && infoResult.stdout.isNotEmpty;
+  }
+
+  Future<void> _handleChunkFailure(
+    List<String> chunk,
+    ShellCommandResult infoResult,
+  ) async {
+    // Base case: if chunk is 1, we isolated the broken package.
+    if (chunk.length == 1) {
+      _logIsolatedFailure(chunk.first, infoResult);
+      return;
+    }
+
+    // Fast Path: Try to instantly identify the broken package(s) from stderr
+    if (infoResult.stderr.isNotEmpty) {
+      final failedPackages = _identifyFailedPackagesFromStderr(
+        chunk,
+        infoResult.stderr,
+      );
+
+      if (failedPackages.isNotEmpty && failedPackages.length < chunk.length) {
+        await _processGoodPackages(chunk, failedPackages);
+        return;
+      }
+    }
+
+    // If the fast path fails to identify the culprit, the tap chunk is fundamentally unparseable.
+    _logChunkCorrupted(chunk.length);
+  }
+
+  List<String> _identifyFailedPackagesFromStderr(
+    List<String> chunk,
+    String stderr,
+  ) {
+    return chunk.where((pkg) {
+      return stderr.contains('$pkg:') ||
+          stderr.contains("'$pkg'") ||
+          stderr.contains('"$pkg"');
+    }).toList();
+  }
+
+  Future<void> _processGoodPackages(
+    List<String> chunk,
+    List<String> failedPackages,
+  ) async {
+    _logFastIsolatedPackages(failedPackages);
+
+    final goodPackages = chunk
+        .where((pkg) => !failedPackages.contains(pkg))
+        .toList();
+
+    if (goodPackages.isNotEmpty) {
+      await _processChunk(goodPackages);
+    }
+  }
+
+  void _logIsolatedFailure(String pkg, ShellCommandResult infoResult) {
+    if (kDebugMode) {
+      final errorMsg = infoResult.stderr.isNotEmpty
+          ? infoResult.stderr
+          : (infoResult.stdout.isNotEmpty
+                ? infoResult.stdout
+                : 'Unknown error');
+      log(
+        '❌ Skipping broken package "$pkg". Reason: ${errorMsg.split('\n').first}',
+      );
+    }
+  }
+
+  void _logFastIsolatedPackages(List<String> failedPackages) {
+    if (kDebugMode) {
+      log(
+        '🔍 Fast-isolated ${failedPackages.length} broken package(s) from stderr: ${failedPackages.join(', ')}',
+      );
+      for (final bad in failedPackages) {
+        log('❌ Skipping broken package "$bad".');
+      }
+    }
+  }
+
+  void _logChunkCorrupted(int chunkLength) {
+    if (kDebugMode) {
+      log(
+        '⚠️ Homebrew failed to parse a chunk of $chunkLength packages and stderr provided no clear culprits.',
+      );
+      log('Skipping this chunk as its contents appear corrupted.');
     }
   }
 
