@@ -5,7 +5,12 @@ sealed class ScreenEffect {
 class ShowToastEffect extends ScreenEffect {
   final String message;
   final bool isError;
-  const ShowToastEffect(this.message, {this.isError = false});
+  final bool isWarning;
+  const ShowToastEffect(
+    this.message, {
+    this.isError = false,
+    this.isWarning = false,
+  });
 }
 
 class NavigateToScreenEffect extends ScreenEffect {

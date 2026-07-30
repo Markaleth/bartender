@@ -14,6 +14,34 @@ class TapCardBody extends StatelessWidget {
 
   const TapCardBody({super.key, required this.tap});
 
+  void _showBrokenPackagesDialog(
+    BuildContext context,
+    List<String> brokenPackages,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Unresolvable Packages'),
+        content: SizedBox(
+          width: 400,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: brokenPackages.length,
+            itemBuilder: (context, index) {
+              return Text(brokenPackages[index]);
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final pkgCount = [
@@ -72,6 +100,18 @@ class TapCardBody extends StatelessWidget {
                       title: tapSourceLabel,
                       value: tap.remote!,
                       onTap: () => UrlLauncherUtils.launch(tap.remote!),
+                    ),
+                  ),
+                if (tap.brokenPackages.isNotEmpty)
+                  SizedBox(
+                    width: itemWidth,
+                    child: TapStatClickable(
+                      title: 'Unresolvable Packages',
+                      value: '${tap.brokenPackages.length} skipped',
+                      onTap: () => _showBrokenPackagesDialog(
+                        context,
+                        tap.brokenPackages,
+                      ),
                     ),
                   ),
               ],

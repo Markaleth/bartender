@@ -12,9 +12,12 @@ class InspectorPane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final inspectorState = context.select<LibraryViewModel, InspectorState>(
-        (vm) => vm.state.inspectorState);
-    final packagesByTap = context.select<LibraryViewModel, Map<String, List<dynamic>>>(
-        (vm) => vm.state.packagesByTap);
+      (vm) => vm.state.inspectorState,
+    );
+    final packagesByTap = context
+        .select<LibraryViewModel, Map<String, List<dynamic>>>(
+          (vm) => vm.state.packagesByTap,
+        );
 
     return RepaintBoundary(
       child: inspectorState.map(

@@ -189,8 +189,9 @@ class ShellUtils {
       final res = await ShellUtils.run('stat', [flag, path]);
       if (res.exitCode == 0) {
         final seconds = int.tryParse(res.stdout.toString().trim());
-        if (seconds != null)
+        if (seconds != null) {
           return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
+        }
       }
     } catch (_) {}
 

@@ -108,7 +108,7 @@ sealed class PackageGridMatrixState with _$PackageGridMatrixState {
           .join(', '),
       version: cask.version,
       typeAndTap: 'Cask • ${cask.tap ?? 'homebrew/cask'}',
-      fullTag: cask.fullToken ?? cask.token,
+      fullTag: cask.fullToken,
       formattedInstalls: cask.installs30d != null
           ? '${StringUtils.formatWithCommas(cask.installs30d!)} installs'
           : 'N/A',

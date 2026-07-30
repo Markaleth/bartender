@@ -56,9 +56,7 @@ class TaskVisualizerItem extends StatelessWidget {
             color: task.status.bgColor,
             borderRadius: BorderRadius.circular(radiusS),
             border: Border.all(
-              color: isSelected
-                  ? AppColors.primary
-                  : task.status.borderColor,
+              color: isSelected ? AppColors.primary : task.status.borderColor,
               width: isSelected ? thicknessS : thicknessXs,
             ),
             boxShadow: task.status == OperationStatus.inProgress

@@ -49,6 +49,7 @@ void main() {
     test('should detect precompiled and architecture based on url', () {
       final cask = CaskModel(
         token: 'test-cask',
+        fullToken: 'test-cask',
         name: ['Test Cask'],
         version: '1.0.0',
         url: 'https://example.com/test-cask-universal.dmg',
@@ -64,6 +65,7 @@ void main() {
     test('should detect apple silicon only from variations', () {
       final cask = CaskModel(
         token: 'test-cask',
+        fullToken: 'test-cask',
         name: ['Test Cask'],
         version: '1.0.0',
         url: 'https://example.com/test-cask.dmg',
@@ -85,6 +87,7 @@ void main() {
     test('should flatten complex depends_on object', () {
       final cask = CaskModel(
         token: 'test-cask',
+        fullToken: 'test-cask',
         name: ['Test Cask'],
         version: '1.0.0',
         dependsOn: {
@@ -108,6 +111,7 @@ void main() {
     test('should handle empty dependsOn gracefully', () {
       final cask = CaskModel(
         token: 'test-cask',
+        fullToken: 'test-cask',
         name: ['Test Cask'],
         version: '1.0.0',
       );

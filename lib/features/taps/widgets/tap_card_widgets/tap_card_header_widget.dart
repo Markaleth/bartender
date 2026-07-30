@@ -46,7 +46,9 @@ class TapCardHeader extends StatelessWidget {
                     ),
                     TapBadge(
                       assetPath: tap.trusted ? trustedIcon : untrustedIcon,
-                      text: tap.trusted ? trustedBadgeLabel : untrustedBadgeLabel,
+                      text: tap.trusted
+                          ? trustedBadgeLabel
+                          : untrustedBadgeLabel,
                       color: tap.trusted ? AppColors.success : AppColors.error,
                     ),
                   ],

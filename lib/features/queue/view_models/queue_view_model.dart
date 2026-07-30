@@ -95,7 +95,7 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
     }
 
     _isProcessing = false;
-    
+
     // Check if there are more tasks
     final nextPendingIndex = state.tasks.indexWhere(
       (t) => t.status == OperationStatus.queued,
@@ -103,16 +103,18 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
 
     if (nextPendingIndex == -1) {
       // End of batch. Auto-cleanup if enabled.
-      final allSuccess = state.tasks.every((t) => t.status == OperationStatus.success);
+      final allSuccess = state.tasks.every(
+        (t) => t.status == OperationStatus.success,
+      );
       if (allSuccess && _settingsService.autoCleanup) {
-        // Enqueue a cleanup task but don't recursively call _processQueue immediately, 
+        // Enqueue a cleanup task but don't recursively call _processQueue immediately,
         // the enqueue method will trigger it.
         // Wait, to avoid infinite loop, we should only cleanup if the last task wasn't a cleanup.
         final lastTask = state.tasks.last;
         if (lastTask.operation != OperationType.cleanup) {
           queueOperation(
-            packageId: 'system', 
-            type: PackageType.system, 
+            packageId: 'system',
+            type: PackageType.system,
             operation: OperationType.cleanup,
           );
           return;
@@ -131,7 +133,7 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
         return _brewService.update();
       }
     }
-    
+
     if (task.type == PackageType.tap) {
       if (task.operation == OperationType.install) {
         final args = ['tap', task.packageId];
@@ -148,7 +150,11 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
       case OperationType.uninstall:
         return _brewService.uninstallWithStream(task.packageId, isCask: isCask);
       case OperationType.zap:
-        return _brewService.runCustomStream(['uninstall', '--zap', task.packageId]);
+        return _brewService.runCustomStream([
+          'uninstall',
+          '--zap',
+          task.packageId,
+        ]);
       case OperationType.reinstall:
         return _brewService.runCustomStream(['reinstall', task.packageId]);
       case OperationType.update:
@@ -207,7 +213,8 @@ class QueueViewModel extends BaseViewModel<QueueState, ScreenEffect> {
         task.operation == OperationType.install ||
         task.operation == OperationType.update ||
         task.operation == OperationType.reinstall;
-    final isUninstall = task.operation == OperationType.uninstall ||
+    final isUninstall =
+        task.operation == OperationType.uninstall ||
         task.operation == OperationType.zap;
 
     if (!isInstall && !isUninstall) return;

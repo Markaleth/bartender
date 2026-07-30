@@ -17,11 +17,15 @@ class ExplorerPane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tapSections = context.select<LibraryViewModel, List<TapSectionState>>(
-        (vm) => vm.state.uiSections);
+      (vm) => vm.state.uiSections,
+    );
     final isLoading = context.select<LibraryViewModel, bool>(
-        (vm) => vm.state.isLoading);
+      (vm) => vm.state.isLoading,
+    );
     final isEmpty = context.select<LibraryViewModel, bool>(
-        (vm) => vm.state.installedFormulae.isEmpty && vm.state.installedCasks.isEmpty);
+      (vm) =>
+          vm.state.installedFormulae.isEmpty && vm.state.installedCasks.isEmpty,
+    );
     final viewModel = context.read<LibraryViewModel>();
 
     final slivers = <Widget>[
@@ -81,11 +85,10 @@ class ExplorerPane extends StatelessWidget {
         child: Column(
           children: [
             const ExplorerPaneHeader(),
-  
+
             // Body Section
             Expanded(
-              child:
-                  isLoading && isEmpty
+              child: isLoading && isEmpty
                   ? const Center(child: CircularProgressIndicator())
                   : CustomScrollView(slivers: slivers),
             ),

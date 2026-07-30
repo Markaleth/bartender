@@ -39,7 +39,9 @@ class TapsView extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(effect.message),
-          backgroundColor: effect.isError ? AppColors.error : null,
+          backgroundColor: effect.isError
+              ? AppColors.error
+              : (effect.isWarning ? AppColors.warning : null),
         ),
       );
     }
@@ -69,9 +71,7 @@ class TapsView extends StatelessWidget {
                 ),
               ),
               const HorizontalDivider(),
-              const Expanded(
-                child: _TapsGrid(),
-              ),
+              const Expanded(child: _TapsGrid()),
             ],
           ),
         );
@@ -160,11 +160,8 @@ class _ScopedTapCard extends StatelessWidget {
 class _HeaderWidget extends StatelessWidget {
   final VoidCallback onSync;
   final VoidCallback onAddTap;
-  
-  const _HeaderWidget({
-    required this.onSync,
-    required this.onAddTap,
-  });
+
+  const _HeaderWidget({required this.onSync, required this.onAddTap});
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +174,10 @@ class _HeaderWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       spacing: spacingM,
       children: [
-        Text(tapsTitle, style: context.headM.copyWith(color: AppColors.primary)),
+        Text(
+          tapsTitle,
+          style: context.headM.copyWith(color: AppColors.primary),
+        ),
         Spacer(),
         Tooltip(
           message: syncTapsTooltip,

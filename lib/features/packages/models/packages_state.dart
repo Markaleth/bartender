@@ -17,7 +17,8 @@ abstract class PackagesState with _$PackagesState {
     @Default('') String searchQuery,
     @Default(PackageTypeFilter.all) PackageTypeFilter packageType,
 
-    @Default(FetchState.loading()) FetchState<List<List<TrendingPackageState>>> trendingData,
+    @Default(FetchState.loading())
+    FetchState<List<List<TrendingPackageState>>> trendingData,
 
     @Default(false) bool isSyncingBackground,
 

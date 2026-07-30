@@ -23,7 +23,7 @@ abstract class HomebrewRepositoryInterface {
     PackageTypeFilter type = PackageTypeFilter.all,
     int limit = 50,
     int offset = 0,
-    List<String>? tapFilters
+    List<String>? tapFilters,
   });
 
   // Local Package Operations
@@ -35,10 +35,7 @@ abstract class HomebrewRepositoryInterface {
   Future<void> uninstall(String package, {bool isCask = false});
 
   // Analytics Operations
-  Future<void> syncFormulaeAnalytics(
-    String category,
-    AnalyticsPeriod days,
-  );
+  Future<void> syncFormulaeAnalytics(String category, AnalyticsPeriod days);
   Future<void> syncCasksAnalytics(AnalyticsPeriod days);
   Future<List<FormulaModel>> getTrendingFormulae(
     AnalyticsPeriod period, {

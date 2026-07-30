@@ -3053,6 +3053,16 @@ class $TapsTableTable extends TapsTable
         defaultValue: const Constant('[]'),
       ).withConverter<List<String>>($TapsTableTable.$convertercaskTokens);
   @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  brokenPackages = GeneratedColumn<String>(
+    'broken_packages',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  ).withConverter<List<String>>($TapsTableTable.$converterbrokenPackages);
+  @override
   List<GeneratedColumn> get $columns => [
     name,
     user,
@@ -3065,6 +3075,7 @@ class $TapsTableTable extends TapsTable
     trusted,
     formulaNames,
     caskTokens,
+    brokenPackages,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3196,6 +3207,12 @@ class $TapsTableTable extends TapsTable
           data['${effectivePrefix}cask_tokens'],
         )!,
       ),
+      brokenPackages: $TapsTableTable.$converterbrokenPackages.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}broken_packages'],
+        )!,
+      ),
       trusted: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}trusted'],
@@ -3212,6 +3229,8 @@ class $TapsTableTable extends TapsTable
       const StringListConverter();
   static TypeConverter<List<String>, String> $convertercaskTokens =
       const StringListConverter();
+  static TypeConverter<List<String>, String> $converterbrokenPackages =
+      const StringListConverter();
 }
 
 class TapsTableCompanion extends UpdateCompanion<TapModel> {
@@ -3226,6 +3245,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
   final Value<bool> trusted;
   final Value<List<String>> formulaNames;
   final Value<List<String>> caskTokens;
+  final Value<List<String>> brokenPackages;
   final Value<int> rowid;
   const TapsTableCompanion({
     this.name = const Value.absent(),
@@ -3239,6 +3259,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     this.trusted = const Value.absent(),
     this.formulaNames = const Value.absent(),
     this.caskTokens = const Value.absent(),
+    this.brokenPackages = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TapsTableCompanion.insert({
@@ -3253,6 +3274,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     this.trusted = const Value.absent(),
     this.formulaNames = const Value.absent(),
     this.caskTokens = const Value.absent(),
+    this.brokenPackages = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : name = Value(name),
        user = Value(user),
@@ -3270,6 +3292,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     Expression<bool>? trusted,
     Expression<String>? formulaNames,
     Expression<String>? caskTokens,
+    Expression<String>? brokenPackages,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3284,6 +3307,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
       if (trusted != null) 'trusted': trusted,
       if (formulaNames != null) 'formula_names': formulaNames,
       if (caskTokens != null) 'cask_tokens': caskTokens,
+      if (brokenPackages != null) 'broken_packages': brokenPackages,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3300,6 +3324,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
     Value<bool>? trusted,
     Value<List<String>>? formulaNames,
     Value<List<String>>? caskTokens,
+    Value<List<String>>? brokenPackages,
     Value<int>? rowid,
   }) {
     return TapsTableCompanion(
@@ -3314,6 +3339,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
       trusted: trusted ?? this.trusted,
       formulaNames: formulaNames ?? this.formulaNames,
       caskTokens: caskTokens ?? this.caskTokens,
+      brokenPackages: brokenPackages ?? this.brokenPackages,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3358,6 +3384,11 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
         $TapsTableTable.$convertercaskTokens.toSql(caskTokens.value),
       );
     }
+    if (brokenPackages.present) {
+      map['broken_packages'] = Variable<String>(
+        $TapsTableTable.$converterbrokenPackages.toSql(brokenPackages.value),
+      );
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3378,6 +3409,7 @@ class TapsTableCompanion extends UpdateCompanion<TapModel> {
           ..write('trusted: $trusted, ')
           ..write('formulaNames: $formulaNames, ')
           ..write('caskTokens: $caskTokens, ')
+          ..write('brokenPackages: $brokenPackages, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3401,6 +3433,7 @@ class _$TapModelInsertable implements Insertable<TapModel> {
       trusted: Value(_object.trusted),
       formulaNames: Value(_object.formulaNames),
       caskTokens: Value(_object.caskTokens),
+      brokenPackages: Value(_object.brokenPackages),
     ).toColumns(false);
   }
 }
@@ -5286,6 +5319,7 @@ typedef $$TapsTableTableCreateCompanionBuilder =
       Value<bool> trusted,
       Value<List<String>> formulaNames,
       Value<List<String>> caskTokens,
+      Value<List<String>> brokenPackages,
       Value<int> rowid,
     });
 typedef $$TapsTableTableUpdateCompanionBuilder =
@@ -5301,6 +5335,7 @@ typedef $$TapsTableTableUpdateCompanionBuilder =
       Value<bool> trusted,
       Value<List<String>> formulaNames,
       Value<List<String>> caskTokens,
+      Value<List<String>> brokenPackages,
       Value<int> rowid,
     });
 
@@ -5369,6 +5404,12 @@ class $$TapsTableTableFilterComposer
     column: $table.caskTokens,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+  get brokenPackages => $composableBuilder(
+    column: $table.brokenPackages,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
 }
 
 class $$TapsTableTableOrderingComposer
@@ -5434,6 +5475,11 @@ class $$TapsTableTableOrderingComposer
     column: $table.caskTokens,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get brokenPackages => $composableBuilder(
+    column: $table.brokenPackages,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TapsTableTableAnnotationComposer
@@ -5485,6 +5531,12 @@ class $$TapsTableTableAnnotationComposer
         column: $table.caskTokens,
         builder: (column) => column,
       );
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get brokenPackages =>
+      $composableBuilder(
+        column: $table.brokenPackages,
+        builder: (column) => column,
+      );
 }
 
 class $$TapsTableTableTableManager
@@ -5526,6 +5578,7 @@ class $$TapsTableTableTableManager
                 Value<bool> trusted = const Value.absent(),
                 Value<List<String>> formulaNames = const Value.absent(),
                 Value<List<String>> caskTokens = const Value.absent(),
+                Value<List<String>> brokenPackages = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TapsTableCompanion(
                 name: name,
@@ -5539,6 +5592,7 @@ class $$TapsTableTableTableManager
                 trusted: trusted,
                 formulaNames: formulaNames,
                 caskTokens: caskTokens,
+                brokenPackages: brokenPackages,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -5554,6 +5608,7 @@ class $$TapsTableTableTableManager
                 Value<bool> trusted = const Value.absent(),
                 Value<List<String>> formulaNames = const Value.absent(),
                 Value<List<String>> caskTokens = const Value.absent(),
+                Value<List<String>> brokenPackages = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TapsTableCompanion.insert(
                 name: name,
@@ -5567,6 +5622,7 @@ class $$TapsTableTableTableManager
                 trusted: trusted,
                 formulaNames: formulaNames,
                 caskTokens: caskTokens,
+                brokenPackages: brokenPackages,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

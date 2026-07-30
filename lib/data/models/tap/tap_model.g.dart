@@ -25,6 +25,11 @@ _TapModel _$TapModelFromJson(Map<String, dynamic> json) => _TapModel(
           ?.map((e) => e as String)
           .toList() ??
       const [],
+  brokenPackages:
+      (json['broken_packages'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
   trusted: json['trusted'] as bool? ?? false,
 );
 
@@ -39,5 +44,6 @@ Map<String, dynamic> _$TapModelToJson(_TapModel instance) => <String, dynamic>{
   'remote': instance.remote,
   'formula_names': instance.formulaNames,
   'cask_tokens': instance.caskTokens,
+  'broken_packages': instance.brokenPackages,
   'trusted': instance.trusted,
 };

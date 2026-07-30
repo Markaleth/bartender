@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
-
 import '../../db/database_interface.dart';
 import '../../models/tap/tap_model.dart';
 import '../../models/formula/formula_model.dart';
@@ -81,7 +79,27 @@ class TapOperations {
       );
       if (packagesToFetch.isEmpty) return;
 
-      await _fetchAndCachePackageChunks(packagesToFetch);
+      final brokenPackages = await _fetchAndCachePackageChunks(packagesToFetch);
+
+      final brokenByTap = <String, List<String>>{};
+      for (final pkg in brokenPackages) {
+        final parts = pkg.split('/');
+        if (parts.length >= 3) {
+          final tapName = '${parts[0]}/${parts[1]}';
+          brokenByTap.putIfAbsent(tapName, () => []).add(pkg);
+        }
+      }
+
+      final tapsToUpdate = oldTaps
+          .where((t) => trustedTapNames.contains(t.name))
+          .map((t) {
+            return t.copyWith(brokenPackages: brokenByTap[t.name] ?? []);
+          })
+          .toList();
+
+      if (tapsToUpdate.isNotEmpty) {
+        await _database.insertTaps(tapsToUpdate);
+      }
     } catch (e) {
       // Ignore errors if taps cannot be parsed
     }
@@ -117,10 +135,12 @@ class TapOperations {
       }
 
       final tap = TapModel.fromJson(tapJson).copyWith(trusted: isTrusted);
-      await _database.insertTaps([tap]);
 
       if (tapName != 'homebrew/core' && tapName != 'homebrew/cask') {
-        if (!isTrusted) return;
+        if (!isTrusted) {
+          await _database.insertTaps([tap]);
+          return;
+        }
 
         final formulaNames = List<String>.from(tapJson['formula_names'] ?? []);
         final caskTokens = List<String>.from(tapJson['cask_tokens'] ?? []);
@@ -128,9 +148,15 @@ class TapOperations {
         final packagesToFetch = [...formulaNames];
         packagesToFetch.addAll(caskTokens);
 
+        List<String> brokenPackages = [];
         if (packagesToFetch.isNotEmpty) {
-          await _fetchAndCachePackageChunks(packagesToFetch);
+          brokenPackages = await _fetchAndCachePackageChunks(packagesToFetch);
         }
+
+        final updatedTap = tap.copyWith(brokenPackages: brokenPackages);
+        await _database.insertTaps([updatedTap]);
+      } else {
+        await _database.insertTaps([tap]);
       }
     } catch (e) {
       throw Exception('Failed to sync tap $tapName: $e');
@@ -164,20 +190,25 @@ class TapOperations {
     return packagesToFetch;
   }
 
-  Future<void> _fetchAndCachePackageChunks(List<String> packagesToFetch) async {
+  Future<List<String>> _fetchAndCachePackageChunks(
+    List<String> packagesToFetch,
+  ) async {
     const chunkSize = 50;
+    final brokenPackages = <String>[];
     for (var i = 0; i < packagesToFetch.length; i += chunkSize) {
       final end = (i + chunkSize < packagesToFetch.length)
           ? i + chunkSize
           : packagesToFetch.length;
       final chunk = packagesToFetch.sublist(i, end);
 
-      await _processChunk(chunk);
+      final broken = await _processChunk(chunk);
+      brokenPackages.addAll(broken);
     }
+    return brokenPackages;
   }
 
-  Future<void> _processChunk(List<String> chunk) async {
-    if (chunk.isEmpty) return;
+  Future<List<String>> _processChunk(List<String> chunk) async {
+    if (chunk.isEmpty) return [];
 
     final infoResult = await _brewService.runCommand([
       'info',
@@ -188,27 +219,27 @@ class TapOperations {
     if (_isChunkSuccess(infoResult)) {
       try {
         await _parseAndCacheInfo(infoResult.stdout);
-        return;
+        return [];
       } catch (_) {
         // Silently treat as failure to trigger the smart fallback
       }
     }
 
-    await _handleChunkFailure(chunk, infoResult);
+    return await _handleChunkFailure(chunk, infoResult);
   }
 
   bool _isChunkSuccess(ShellCommandResult infoResult) {
     return infoResult.exitCode == 0 && infoResult.stdout.isNotEmpty;
   }
 
-  Future<void> _handleChunkFailure(
+  Future<List<String>> _handleChunkFailure(
     List<String> chunk,
     ShellCommandResult infoResult,
   ) async {
     // Base case: if chunk is 1, we isolated the broken package.
     if (chunk.length == 1) {
       _logIsolatedFailure(chunk.first, infoResult);
-      return;
+      return [chunk.first];
     }
 
     // Fast Path: Try to instantly identify the broken package(s) from stderr
@@ -219,13 +250,13 @@ class TapOperations {
       );
 
       if (failedPackages.isNotEmpty && failedPackages.length < chunk.length) {
-        await _processGoodPackages(chunk, failedPackages);
-        return;
+        return await _processGoodPackages(chunk, failedPackages);
       }
     }
 
     // If the fast path fails to identify the culprit, the tap chunk is fundamentally unparseable.
     _logChunkCorrupted(chunk.length);
+    return chunk;
   }
 
   List<String> _identifyFailedPackagesFromStderr(
@@ -239,7 +270,7 @@ class TapOperations {
     }).toList();
   }
 
-  Future<void> _processGoodPackages(
+  Future<List<String>> _processGoodPackages(
     List<String> chunk,
     List<String> failedPackages,
   ) async {
@@ -250,41 +281,36 @@ class TapOperations {
         .toList();
 
     if (goodPackages.isNotEmpty) {
-      await _processChunk(goodPackages);
+      final additionalBroken = await _processChunk(goodPackages);
+      return [...failedPackages, ...additionalBroken];
     }
+
+    return failedPackages;
   }
 
   void _logIsolatedFailure(String pkg, ShellCommandResult infoResult) {
-    if (kDebugMode) {
-      final errorMsg = infoResult.stderr.isNotEmpty
-          ? infoResult.stderr
-          : (infoResult.stdout.isNotEmpty
-                ? infoResult.stdout
-                : 'Unknown error');
-      log(
-        '❌ Skipping broken package "$pkg". Reason: ${errorMsg.split('\n').first}',
-      );
-    }
+    final errorMsg = infoResult.stderr.isNotEmpty
+        ? infoResult.stderr
+        : (infoResult.stdout.isNotEmpty ? infoResult.stdout : 'Unknown error');
+    log(
+      '❌ Skipping broken package "$pkg". Reason: ${errorMsg.split('\n').first}',
+    );
   }
 
   void _logFastIsolatedPackages(List<String> failedPackages) {
-    if (kDebugMode) {
-      log(
-        '🔍 Fast-isolated ${failedPackages.length} broken package(s) from stderr: ${failedPackages.join(', ')}',
-      );
-      for (final bad in failedPackages) {
-        log('❌ Skipping broken package "$bad".');
-      }
+    log(
+      '🔍 Fast-isolated ${failedPackages.length} broken package(s) from stderr: ${failedPackages.join(', ')}',
+    );
+    for (final bad in failedPackages) {
+      log('❌ Skipping broken package "$bad".');
     }
   }
 
   void _logChunkCorrupted(int chunkLength) {
-    if (kDebugMode) {
-      log(
-        '⚠️ Homebrew failed to parse a chunk of $chunkLength packages and stderr provided no clear culprits.',
-      );
-      log('Skipping this chunk as its contents appear corrupted.');
-    }
+    log(
+      '⚠️ Homebrew failed to parse a chunk of $chunkLength packages and stderr provided no clear culprits.',
+    );
+    log('Skipping this chunk as its contents appear corrupted.');
   }
 
   Future<void> _parseAndCacheInfo(String infoJsonString) async {

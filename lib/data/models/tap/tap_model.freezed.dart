@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TapModel {
 
- String get name; String get user; String get repo; String get path; bool get installed; bool get official;@JsonKey(name: 'custom_remote') bool? get customRemote; String? get remote;@JsonKey(name: 'formula_names') List<String> get formulaNames;@JsonKey(name: 'cask_tokens') List<String> get caskTokens; bool get trusted;
+ String get name; String get user; String get repo; String get path; bool get installed; bool get official;@JsonKey(name: 'custom_remote') bool? get customRemote; String? get remote;@JsonKey(name: 'formula_names') List<String> get formulaNames;@JsonKey(name: 'cask_tokens') List<String> get caskTokens;@JsonKey(name: 'broken_packages') List<String> get brokenPackages; bool get trusted;
 /// Create a copy of TapModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TapModelCopyWith<TapModel> get copyWith => _$TapModelCopyWithImpl<TapModel>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TapModel&&(identical(other.name, name) || other.name == name)&&(identical(other.user, user) || other.user == user)&&(identical(other.repo, repo) || other.repo == repo)&&(identical(other.path, path) || other.path == path)&&(identical(other.installed, installed) || other.installed == installed)&&(identical(other.official, official) || other.official == official)&&(identical(other.customRemote, customRemote) || other.customRemote == customRemote)&&(identical(other.remote, remote) || other.remote == remote)&&const DeepCollectionEquality().equals(other.formulaNames, formulaNames)&&const DeepCollectionEquality().equals(other.caskTokens, caskTokens)&&(identical(other.trusted, trusted) || other.trusted == trusted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TapModel&&(identical(other.name, name) || other.name == name)&&(identical(other.user, user) || other.user == user)&&(identical(other.repo, repo) || other.repo == repo)&&(identical(other.path, path) || other.path == path)&&(identical(other.installed, installed) || other.installed == installed)&&(identical(other.official, official) || other.official == official)&&(identical(other.customRemote, customRemote) || other.customRemote == customRemote)&&(identical(other.remote, remote) || other.remote == remote)&&const DeepCollectionEquality().equals(other.formulaNames, formulaNames)&&const DeepCollectionEquality().equals(other.caskTokens, caskTokens)&&const DeepCollectionEquality().equals(other.brokenPackages, brokenPackages)&&(identical(other.trusted, trusted) || other.trusted == trusted));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,user,repo,path,installed,official,customRemote,remote,const DeepCollectionEquality().hash(formulaNames),const DeepCollectionEquality().hash(caskTokens),trusted);
+int get hashCode => Object.hash(runtimeType,name,user,repo,path,installed,official,customRemote,remote,const DeepCollectionEquality().hash(formulaNames),const DeepCollectionEquality().hash(caskTokens),const DeepCollectionEquality().hash(brokenPackages),trusted);
 
 @override
 String toString() {
-  return 'TapModel(name: $name, user: $user, repo: $repo, path: $path, installed: $installed, official: $official, customRemote: $customRemote, remote: $remote, formulaNames: $formulaNames, caskTokens: $caskTokens, trusted: $trusted)';
+  return 'TapModel(name: $name, user: $user, repo: $repo, path: $path, installed: $installed, official: $official, customRemote: $customRemote, remote: $remote, formulaNames: $formulaNames, caskTokens: $caskTokens, brokenPackages: $brokenPackages, trusted: $trusted)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TapModelCopyWith<$Res>  {
   factory $TapModelCopyWith(TapModel value, $Res Function(TapModel) _then) = _$TapModelCopyWithImpl;
 @useResult
 $Res call({
- String name, String user, String repo, String path, bool installed, bool official,@JsonKey(name: 'custom_remote') bool? customRemote, String? remote,@JsonKey(name: 'formula_names') List<String> formulaNames,@JsonKey(name: 'cask_tokens') List<String> caskTokens, bool trusted
+ String name, String user, String repo, String path, bool installed, bool official,@JsonKey(name: 'custom_remote') bool? customRemote, String? remote,@JsonKey(name: 'formula_names') List<String> formulaNames,@JsonKey(name: 'cask_tokens') List<String> caskTokens,@JsonKey(name: 'broken_packages') List<String> brokenPackages, bool trusted
 });
 
 
@@ -65,7 +65,7 @@ class _$TapModelCopyWithImpl<$Res>
 
 /// Create a copy of TapModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? user = null,Object? repo = null,Object? path = null,Object? installed = null,Object? official = null,Object? customRemote = freezed,Object? remote = freezed,Object? formulaNames = null,Object? caskTokens = null,Object? trusted = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? user = null,Object? repo = null,Object? path = null,Object? installed = null,Object? official = null,Object? customRemote = freezed,Object? remote = freezed,Object? formulaNames = null,Object? caskTokens = null,Object? brokenPackages = null,Object? trusted = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
@@ -77,6 +77,7 @@ as bool,customRemote: freezed == customRemote ? _self.customRemote : customRemot
 as bool?,remote: freezed == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
 as String?,formulaNames: null == formulaNames ? _self.formulaNames : formulaNames // ignore: cast_nullable_to_non_nullable
 as List<String>,caskTokens: null == caskTokens ? _self.caskTokens : caskTokens // ignore: cast_nullable_to_non_nullable
+as List<String>,brokenPackages: null == brokenPackages ? _self.brokenPackages : brokenPackages // ignore: cast_nullable_to_non_nullable
 as List<String>,trusted: null == trusted ? _self.trusted : trusted // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -163,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens,  bool trusted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens, @JsonKey(name: 'broken_packages')  List<String> brokenPackages,  bool trusted)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TapModel() when $default != null:
-return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.trusted);case _:
+return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.brokenPackages,_that.trusted);case _:
   return orElse();
 
 }
@@ -184,10 +185,10 @@ return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens,  bool trusted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens, @JsonKey(name: 'broken_packages')  List<String> brokenPackages,  bool trusted)  $default,) {final _that = this;
 switch (_that) {
 case _TapModel():
-return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.trusted);case _:
+return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.brokenPackages,_that.trusted);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +205,10 @@ return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens,  bool trusted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String user,  String repo,  String path,  bool installed,  bool official, @JsonKey(name: 'custom_remote')  bool? customRemote,  String? remote, @JsonKey(name: 'formula_names')  List<String> formulaNames, @JsonKey(name: 'cask_tokens')  List<String> caskTokens, @JsonKey(name: 'broken_packages')  List<String> brokenPackages,  bool trusted)?  $default,) {final _that = this;
 switch (_that) {
 case _TapModel() when $default != null:
-return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.trusted);case _:
+return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_that.official,_that.customRemote,_that.remote,_that.formulaNames,_that.caskTokens,_that.brokenPackages,_that.trusted);case _:
   return null;
 
 }
@@ -219,7 +220,7 @@ return $default(_that.name,_that.user,_that.repo,_that.path,_that.installed,_tha
 @JsonSerializable()
 
 class _TapModel implements TapModel {
-  const _TapModel({required this.name, required this.user, required this.repo, required this.path, this.installed = false, this.official = false, @JsonKey(name: 'custom_remote') this.customRemote, this.remote, @JsonKey(name: 'formula_names') final  List<String> formulaNames = const [], @JsonKey(name: 'cask_tokens') final  List<String> caskTokens = const [], this.trusted = false}): _formulaNames = formulaNames,_caskTokens = caskTokens;
+  const _TapModel({required this.name, required this.user, required this.repo, required this.path, this.installed = false, this.official = false, @JsonKey(name: 'custom_remote') this.customRemote, this.remote, @JsonKey(name: 'formula_names') final  List<String> formulaNames = const [], @JsonKey(name: 'cask_tokens') final  List<String> caskTokens = const [], @JsonKey(name: 'broken_packages') final  List<String> brokenPackages = const [], this.trusted = false}): _formulaNames = formulaNames,_caskTokens = caskTokens,_brokenPackages = brokenPackages;
   factory _TapModel.fromJson(Map<String, dynamic> json) => _$TapModelFromJson(json);
 
 @override final  String name;
@@ -244,6 +245,13 @@ class _TapModel implements TapModel {
   return EqualUnmodifiableListView(_caskTokens);
 }
 
+ final  List<String> _brokenPackages;
+@override@JsonKey(name: 'broken_packages') List<String> get brokenPackages {
+  if (_brokenPackages is EqualUnmodifiableListView) return _brokenPackages;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_brokenPackages);
+}
+
 @override@JsonKey() final  bool trusted;
 
 /// Create a copy of TapModel
@@ -259,16 +267,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TapModel&&(identical(other.name, name) || other.name == name)&&(identical(other.user, user) || other.user == user)&&(identical(other.repo, repo) || other.repo == repo)&&(identical(other.path, path) || other.path == path)&&(identical(other.installed, installed) || other.installed == installed)&&(identical(other.official, official) || other.official == official)&&(identical(other.customRemote, customRemote) || other.customRemote == customRemote)&&(identical(other.remote, remote) || other.remote == remote)&&const DeepCollectionEquality().equals(other._formulaNames, _formulaNames)&&const DeepCollectionEquality().equals(other._caskTokens, _caskTokens)&&(identical(other.trusted, trusted) || other.trusted == trusted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TapModel&&(identical(other.name, name) || other.name == name)&&(identical(other.user, user) || other.user == user)&&(identical(other.repo, repo) || other.repo == repo)&&(identical(other.path, path) || other.path == path)&&(identical(other.installed, installed) || other.installed == installed)&&(identical(other.official, official) || other.official == official)&&(identical(other.customRemote, customRemote) || other.customRemote == customRemote)&&(identical(other.remote, remote) || other.remote == remote)&&const DeepCollectionEquality().equals(other._formulaNames, _formulaNames)&&const DeepCollectionEquality().equals(other._caskTokens, _caskTokens)&&const DeepCollectionEquality().equals(other._brokenPackages, _brokenPackages)&&(identical(other.trusted, trusted) || other.trusted == trusted));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,user,repo,path,installed,official,customRemote,remote,const DeepCollectionEquality().hash(_formulaNames),const DeepCollectionEquality().hash(_caskTokens),trusted);
+int get hashCode => Object.hash(runtimeType,name,user,repo,path,installed,official,customRemote,remote,const DeepCollectionEquality().hash(_formulaNames),const DeepCollectionEquality().hash(_caskTokens),const DeepCollectionEquality().hash(_brokenPackages),trusted);
 
 @override
 String toString() {
-  return 'TapModel(name: $name, user: $user, repo: $repo, path: $path, installed: $installed, official: $official, customRemote: $customRemote, remote: $remote, formulaNames: $formulaNames, caskTokens: $caskTokens, trusted: $trusted)';
+  return 'TapModel(name: $name, user: $user, repo: $repo, path: $path, installed: $installed, official: $official, customRemote: $customRemote, remote: $remote, formulaNames: $formulaNames, caskTokens: $caskTokens, brokenPackages: $brokenPackages, trusted: $trusted)';
 }
 
 
@@ -279,7 +287,7 @@ abstract mixin class _$TapModelCopyWith<$Res> implements $TapModelCopyWith<$Res>
   factory _$TapModelCopyWith(_TapModel value, $Res Function(_TapModel) _then) = __$TapModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String user, String repo, String path, bool installed, bool official,@JsonKey(name: 'custom_remote') bool? customRemote, String? remote,@JsonKey(name: 'formula_names') List<String> formulaNames,@JsonKey(name: 'cask_tokens') List<String> caskTokens, bool trusted
+ String name, String user, String repo, String path, bool installed, bool official,@JsonKey(name: 'custom_remote') bool? customRemote, String? remote,@JsonKey(name: 'formula_names') List<String> formulaNames,@JsonKey(name: 'cask_tokens') List<String> caskTokens,@JsonKey(name: 'broken_packages') List<String> brokenPackages, bool trusted
 });
 
 
@@ -296,7 +304,7 @@ class __$TapModelCopyWithImpl<$Res>
 
 /// Create a copy of TapModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? user = null,Object? repo = null,Object? path = null,Object? installed = null,Object? official = null,Object? customRemote = freezed,Object? remote = freezed,Object? formulaNames = null,Object? caskTokens = null,Object? trusted = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? user = null,Object? repo = null,Object? path = null,Object? installed = null,Object? official = null,Object? customRemote = freezed,Object? remote = freezed,Object? formulaNames = null,Object? caskTokens = null,Object? brokenPackages = null,Object? trusted = null,}) {
   return _then(_TapModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
@@ -308,6 +316,7 @@ as bool,customRemote: freezed == customRemote ? _self.customRemote : customRemot
 as bool?,remote: freezed == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
 as String?,formulaNames: null == formulaNames ? _self._formulaNames : formulaNames // ignore: cast_nullable_to_non_nullable
 as List<String>,caskTokens: null == caskTokens ? _self._caskTokens : caskTokens // ignore: cast_nullable_to_non_nullable
+as List<String>,brokenPackages: null == brokenPackages ? _self._brokenPackages : brokenPackages // ignore: cast_nullable_to_non_nullable
 as List<String>,trusted: null == trusted ? _self.trusted : trusted // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

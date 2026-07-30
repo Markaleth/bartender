@@ -93,7 +93,9 @@ class TapCardFooter extends StatelessWidget {
               : ButtonWidget.tertiary(
                   assetName: trustIcon,
                   label: trustCtaLabel,
-                  state: isItemSyncing ? ButtonState.loading : getDisabledState(),
+                  state: isItemSyncing
+                      ? ButtonState.loading
+                      : getDisabledState(),
                   onPressed: isAnySyncing
                       ? null
                       : () {

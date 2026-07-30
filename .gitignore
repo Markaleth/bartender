@@ -50,4 +50,4 @@ app.*.map.json
 # stitch_brew_desktop_manager/
 AGENTS.md
 
-.cursor/
+# .cursor/

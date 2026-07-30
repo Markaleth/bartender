@@ -67,8 +67,10 @@ class StringUtils {
       0 => '0 B',
       < 1024 => '$bytes B',
       < 1024 * 1024 => '${(bytes / 1024).toStringAsFixed(1)} KB',
-      < 1024 * 1024 * 1024 => '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB',
-      < 1024 * 1024 * 1024 * 1024 => '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(2)} GB',
+      < 1024 * 1024 * 1024 =>
+        '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB',
+      < 1024 * 1024 * 1024 * 1024 =>
+        '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(2)} GB',
       _ => '${(bytes / (1024 * 1024 * 1024 * 1024)).toStringAsFixed(2)} TB',
     };
   }

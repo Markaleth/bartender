@@ -89,4 +89,3 @@ class PackageVariantTag extends StatelessWidget {
     );
   }
 }
-

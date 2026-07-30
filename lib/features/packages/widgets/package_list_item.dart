@@ -64,45 +64,45 @@ class _PackageListItemState extends State<PackageListItem> {
           child: Opacity(
             opacity: widget.model.isSupported ? 1.0 : 0.5,
             child: AnimatedContainer(
-            duration: defaultAnimationDuration,
-            curve: Curves.easeInOut,
-            margin: EdgeInsets.symmetric(vertical: isExpanded ? spacingS : 0),
-            decoration: BoxDecoration(
-              color: isExpanded ? AppColors.surface : Colors.transparent,
-              borderRadius: BorderRadius.circular(isExpanded ? radiusL : 0),
-              border: isExpanded
-                  ? Border.all(color: AppColors.borderNeutral)
-                  : Border.all(color: Colors.transparent),
-            ),
-            child: AnimatedSize(
               duration: defaultAnimationDuration,
               curve: Curves.easeInOut,
-              alignment: Alignment.topCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _PackageListItemHeader(
-                    id: widget.id,
-                    name: widget.name,
-                    homepage: widget.homepage,
-                    isCask: widget.isCask,
-                    isExpanded: isExpanded,
-                    isDeprecated: widget.model.isDeprecated,
-                    onExpand: _onExpand,
-                    description: widget.description,
-                    version: widget.version,
-                    constraints: constraints,
-                  ),
-                  if (isExpanded)
-                    _PackageListItemDetails(
-                      model: widget.model,
+              margin: EdgeInsets.symmetric(vertical: isExpanded ? spacingS : 0),
+              decoration: BoxDecoration(
+                color: isExpanded ? AppColors.surface : Colors.transparent,
+                borderRadius: BorderRadius.circular(isExpanded ? radiusL : 0),
+                border: isExpanded
+                    ? Border.all(color: AppColors.borderNeutral)
+                    : Border.all(color: Colors.transparent),
+              ),
+              child: AnimatedSize(
+                duration: defaultAnimationDuration,
+                curve: Curves.easeInOut,
+                alignment: Alignment.topCenter,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _PackageListItemHeader(
                       id: widget.id,
+                      name: widget.name,
+                      homepage: widget.homepage,
                       isCask: widget.isCask,
+                      isExpanded: isExpanded,
+                      isDeprecated: widget.model.isDeprecated,
+                      onExpand: _onExpand,
+                      description: widget.description,
+                      version: widget.version,
+                      constraints: constraints,
                     ),
-                ],
+                    if (isExpanded)
+                      _PackageListItemDetails(
+                        model: widget.model,
+                        id: widget.id,
+                        isCask: widget.isCask,
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
           ),
         );
       },
@@ -290,7 +290,9 @@ class _PackageActionButton extends StatelessWidget {
   String _getButtonLabel(bool isQueued, bool isInProgress) {
     if (!model.isSupported) return 'Unsupported';
     if (isQueued) return queuedCopy;
-    final baseAction = model.isInstalled ? uninstallButtonLabel : installButtonLabel;
+    final baseAction = model.isInstalled
+        ? uninstallButtonLabel
+        : installButtonLabel;
     return isInProgress ? '${baseAction}ing...' : baseAction;
   }
 
@@ -298,9 +300,13 @@ class _PackageActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        final activeTaskStatus = context.select<QueueViewModel, OperationStatus?>(
-          (vm) => vm.state.tasks.where((t) => t.packageId == id).lastOrNull?.status,
-        );
+        final activeTaskStatus = context
+            .select<QueueViewModel, OperationStatus?>(
+              (vm) => vm.state.tasks
+                  .where((t) => t.packageId == id)
+                  .lastOrNull
+                  ?.status,
+            );
 
         bool isQueued = activeTaskStatus == OperationStatus.queued;
         bool isInProgress = activeTaskStatus == OperationStatus.inProgress;
@@ -312,8 +318,8 @@ class _PackageActionButton extends StatelessWidget {
             state: !model.isSupported
                 ? ButtonState.disabled
                 : (isQueued || isInProgress)
-                    ? ButtonState.loading
-                    : ButtonState.enabled,
+                ? ButtonState.loading
+                : ButtonState.enabled,
             onPressed: (!model.isSupported || isQueued || isInProgress)
                 ? null
                 : () {

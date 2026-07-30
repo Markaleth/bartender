@@ -28,7 +28,8 @@ class HomeViewModel extends BaseViewModel<HomeState, ScreenEffect> {
   Future<void> checkForUpdates() async {
     emitState(state.copyWith(isCheckingForUpdates: true));
     try {
-      final (localVersion, hasUpdate) = await _homebrewService.checkUpdateStatus();
+      final (localVersion, hasUpdate) = await _homebrewService
+          .checkUpdateStatus();
       emitState(
         state.copyWith(
           localVersion: localVersion.isEmpty ? null : localVersion,
@@ -41,13 +42,12 @@ class HomeViewModel extends BaseViewModel<HomeState, ScreenEffect> {
     }
   }
 
-    Future<void> _onSystemStatusChanged() async {
+  Future<void> _onSystemStatusChanged() async {
     final update = _systemNotifier.value;
     if (update != null && update.operation == OperationType.update) {
-      
       // 1. Show the syncing state in the UI
       emitState(state.copyWith(isSyncingDatabase: true));
-      
+
       try {
         // 2. Perform the actual DB sync
         await _homebrewService.syncInstalledPackages();

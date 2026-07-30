@@ -35,35 +35,36 @@ class SystemHealthView extends StatelessWidget {
           onOpenDashboard: () {
             showDialog(
               context: context,
-              builder: (dialogContext) => ChangeNotifierProvider<HealthViewModel>.value(
-                value: viewModel,
-                child: Consumer<HealthViewModel>(
-                  builder: (context, vm, _) => HealthDashboardModal(
-                    healthState: vm.state,
-                    onUpdateAll: () {
-                      context.read<QueueViewModel>().queueOperation(
-                        packageId: 'all',
-                        type: PackageType.system,
-                        operation: OperationType.upgrade,
-                      );
-                    },
-                    onCleanup: () {
-                      context.read<QueueViewModel>().queueOperation(
-                        packageId: 'system',
-                        type: PackageType.system,
-                        operation: OperationType.cleanup,
-                      );
-                    },
-                    onRemoveOrphans: () {
-                      context.read<QueueViewModel>().queueOperation(
-                        packageId: 'system',
-                        type: PackageType.system,
-                        operation: OperationType.autoremove,
-                      );
-                    },
+              builder: (dialogContext) =>
+                  ChangeNotifierProvider<HealthViewModel>.value(
+                    value: viewModel,
+                    child: Consumer<HealthViewModel>(
+                      builder: (context, vm, _) => HealthDashboardModal(
+                        healthState: vm.state,
+                        onUpdateAll: () {
+                          context.read<QueueViewModel>().queueOperation(
+                            packageId: 'all',
+                            type: PackageType.system,
+                            operation: OperationType.upgrade,
+                          );
+                        },
+                        onCleanup: () {
+                          context.read<QueueViewModel>().queueOperation(
+                            packageId: 'system',
+                            type: PackageType.system,
+                            operation: OperationType.cleanup,
+                          );
+                        },
+                        onRemoveOrphans: () {
+                          context.read<QueueViewModel>().queueOperation(
+                            packageId: 'system',
+                            type: PackageType.system,
+                            operation: OperationType.autoremove,
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              ),
             );
           },
         );

@@ -7,7 +7,8 @@ import 'package:bartender/domain/repositories/homebrew_repository_interface.dart
 import 'package:bartender/features/queue/view_models/queue_view_model.dart';
 import 'package:bartender/core/services/install_status_notifiers.dart';
 
-class MockHomebrewRepositoryInterface extends Mock implements HomebrewRepositoryInterface {}
+class MockHomebrewRepositoryInterface extends Mock
+    implements HomebrewRepositoryInterface {}
 
 class MockQueueViewModel extends Mock implements QueueViewModel {}
 

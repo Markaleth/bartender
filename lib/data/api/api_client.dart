@@ -199,7 +199,7 @@ class ApiClient implements ApiClientInterface {
               status != null && (status >= 200 && status < 300),
         ),
       );
-      
+
       final String tagName = response.data['tag_name'] as String;
       return NetworkResource.success(tagName, response.statusCode);
     } on DioException catch (error) {

@@ -165,4 +165,5 @@ const String terminalFontSizeTitle = 'Terminal Font Size';
 const String terminalFontSizeSubtitle =
     'Adjust the global base font size for the internal terminal output';
 const String fontPreviewText = 'brew install package';
-const String brewPathErrorText = 'Must be an absolute path ending in \'brew\' (e.g. /opt/homebrew/bin/brew)';
+const String brewPathErrorText =
+    'Must be an absolute path ending in \'brew\' (e.g. /opt/homebrew/bin/brew)';

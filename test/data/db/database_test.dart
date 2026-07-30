@@ -62,6 +62,7 @@ void main() {
   group('Casks tests', () {
     final cask = CaskModel(
       token: 'google-chrome',
+      fullToken: 'google-chrome',
       name: ['Google Chrome'],
       version: '120.0.6099.109',
       desc: 'Web browser',
@@ -112,6 +113,7 @@ void main() {
 
     final cask = CaskModel(
       token: 'firefox',
+      fullToken: 'firefox',
       name: ['Firefox'],
       version: '121.0',
       desc: 'Web browser',
@@ -189,6 +191,7 @@ void main() {
 
       final cask = CaskModel(
         token: 'firefox',
+        fullToken: 'firefox',
         name: ['Firefox'],
         version: '121.0',
         desc: 'Web browser',

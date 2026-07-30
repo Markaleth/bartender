@@ -3,6 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('parseTapName', () {
-    expect(StringUtils.parseTapName("https://github.com/mongodb/homebrew-brew#"), "mongodb/brew");
+    expect(
+      StringUtils.parseTapName("https://github.com/mongodb/homebrew-brew#"),
+      "mongodb/brew",
+    );
   });
 }

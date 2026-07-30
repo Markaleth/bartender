@@ -25,7 +25,7 @@ class HomeView extends StatelessWidget {
           context.read<TapFilterNotifier>(),
           context.read<HomebrewRepositoryInterface>(),
           context.read<QueueViewModel>(),
-          context.read<SystemStatusNotifier>()
+          context.read<SystemStatusNotifier>(),
         ),
         onModelReady: (viewModel) => viewModel.init(),
         builder: (context, viewModel, state) => Scaffold(

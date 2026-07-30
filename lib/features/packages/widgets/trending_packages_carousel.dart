@@ -127,7 +127,8 @@ class _CarouselPage extends StatelessWidget {
                       .select<QueueViewModel, OperationStatus?>(
                         (vm) => vm.state.tasks
                             .where((task) => task.packageId == item.id)
-                            .lastOrNull?.status,
+                            .lastOrNull
+                            ?.status,
                       );
 
                   bool isQueued = activeTaskStatus == OperationStatus.queued;

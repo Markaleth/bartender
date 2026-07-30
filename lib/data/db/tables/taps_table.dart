@@ -20,6 +20,9 @@ class TapsTable extends Table {
   TextColumn get caskTokens => text()
       .map(const StringListConverter())
       .withDefault(const Constant('[]'))();
+  TextColumn get brokenPackages => text()
+      .map(const StringListConverter())
+      .withDefault(const Constant('[]'))();
 
   @override
   Set<Column> get primaryKey => {name};

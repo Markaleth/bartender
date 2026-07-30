@@ -82,7 +82,11 @@ class BrewService {
     return streamCommand(args);
   }
 
-  Future<ShellCommandResult> uninstall(String package, {bool isCask = false, bool? zap}) {
+  Future<ShellCommandResult> uninstall(
+    String package, {
+    bool isCask = false,
+    bool? zap,
+  }) {
     final shouldZap = zap ?? _settingsService.zapUninstallDefault;
     final args = ['uninstall'];
     if (isCask) {

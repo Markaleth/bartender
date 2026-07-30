@@ -12,8 +12,11 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
   final QueueViewModel _queueViewModel;
   final TapStatusNotifier _statusNotifier;
 
-  TapsViewModel(this._homebrewService, this._queueViewModel, this._statusNotifier)
-    : super(const TapsState()) {
+  TapsViewModel(
+    this._homebrewService,
+    this._queueViewModel,
+    this._statusNotifier,
+  ) : super(const TapsState()) {
     _statusNotifier.addListener(_onStatusUpdated);
   }
 
@@ -96,6 +99,16 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
+
+      final updatedTap = taps.firstWhere((t) => t.name == tapName);
+      if (updatedTap.brokenPackages.isNotEmpty) {
+        emitEffect(
+          ShowToastEffect(
+            '⚠️ ${updatedTap.brokenPackages.length} packages were skipped due to corruption in the tap.',
+            isWarning: true,
+          ),
+        );
+      }
     } catch (e) {
       emitState(state.copyWith(syncingTap: null));
       emitEffect(ShowToastEffect(e.toString(), isError: true));
@@ -127,6 +140,16 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
+
+      final updatedTap = taps.firstWhere((t) => t.name == name);
+      if (updatedTap.brokenPackages.isNotEmpty) {
+        emitEffect(
+          ShowToastEffect(
+            '⚠️ ${updatedTap.brokenPackages.length} packages were skipped due to corruption in the tap.',
+            isWarning: true,
+          ),
+        );
+      }
       _statusNotifier.markUpdated(name, true, true);
     } catch (e) {
       emitState(state.copyWith(syncingTap: null));

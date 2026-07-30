@@ -129,10 +129,10 @@ abstract class SystemHealthState with _$SystemHealthState {
 
   List<({String raw, String formatted})> get parsedDoctorIssues {
     return doctorIssues
-        .map((issue) => (
-              raw: issue,
-              formatted: issue.replaceAll('Warning:', '').trim(),
-            ))
+        .map(
+          (issue) =>
+              (raw: issue, formatted: issue.replaceAll('Warning:', '').trim()),
+        )
         .toList();
   }
 }

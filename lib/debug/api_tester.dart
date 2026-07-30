@@ -30,7 +30,10 @@ class _ApiTesterWidgetState extends State<ApiTesterWidget> {
     super.didChangeDependencies();
     _apiClient = Provider.of<ApiClientInterface>(context, listen: false);
     _database = Provider.of<DatabaseInterface>(context, listen: false);
-    _repository = Provider.of<HomebrewRepositoryInterface>(context, listen: false);
+    _repository = Provider.of<HomebrewRepositoryInterface>(
+      context,
+      listen: false,
+    );
     _checkDbState();
   }
 

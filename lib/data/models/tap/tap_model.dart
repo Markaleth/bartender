@@ -16,6 +16,7 @@ abstract class TapModel with _$TapModel {
     String? remote,
     @JsonKey(name: 'formula_names') @Default([]) List<String> formulaNames,
     @JsonKey(name: 'cask_tokens') @Default([]) List<String> caskTokens,
+    @JsonKey(name: 'broken_packages') @Default([]) List<String> brokenPackages,
     @Default(false) bool trusted,
   }) = _TapModel;
 

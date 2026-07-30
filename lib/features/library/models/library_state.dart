@@ -10,12 +10,12 @@ part 'library_state.freezed.dart';
 @freezed
 sealed class InspectorState with _$InspectorState {
   const factory InspectorState.empty() = InspectorStateEmpty;
-  
+
   const factory InspectorState.tap({
     required TapModel tap,
     required List<PackageItemState> packages,
   }) = InspectorStateTap;
-  
+
   const factory InspectorState.package({
     required dynamic packageModel,
     required String name,

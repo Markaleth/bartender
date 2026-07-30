@@ -25,9 +25,10 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
   late final SystemOperations _system;
 
   HomebrewRepository(
-      ApiClientInterface apiClient,
-      DatabaseInterface database,
-      BrewService brewService) {
+    ApiClientInterface apiClient,
+    DatabaseInterface database,
+    BrewService brewService,
+  ) {
     _local = LocalPackageOperations(brewService, database);
     _taps = TapOperations(brewService, database);
     _catalog = CatalogOperations(apiClient, database);
@@ -50,9 +51,18 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
 
     // Then sync analytics
     await Future.wait([
-      _analytics.syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days30),
-      _analytics.syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days90),
-      _analytics.syncFormulaeAnalytics('install-on-request', AnalyticsPeriod.days365),
+      _analytics.syncFormulaeAnalytics(
+        'install-on-request',
+        AnalyticsPeriod.days30,
+      ),
+      _analytics.syncFormulaeAnalytics(
+        'install-on-request',
+        AnalyticsPeriod.days90,
+      ),
+      _analytics.syncFormulaeAnalytics(
+        'install-on-request',
+        AnalyticsPeriod.days365,
+      ),
       if (!Platform.isLinux) ...[
         _analytics.syncCasksAnalytics(AnalyticsPeriod.days30),
         _analytics.syncCasksAnalytics(AnalyticsPeriod.days90),
@@ -91,15 +101,14 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
     int limit = 50,
     int offset = 0,
     List<String>? tapFilters,
-  }) =>
-      _catalog.getFilteredPackages(
-        query: query,
-        installedOnly: installedOnly,
-        type: type,
-        limit: limit,
-        offset: offset,
-        tapFilters: tapFilters,
-      );
+  }) => _catalog.getFilteredPackages(
+    query: query,
+    installedOnly: installedOnly,
+    type: type,
+    limit: limit,
+    offset: offset,
+    tapFilters: tapFilters,
+  );
 
   // Local Package Operations
 
@@ -138,15 +147,13 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
   Future<List<FormulaModel>> getTrendingFormulae(
     AnalyticsPeriod period, {
     int limit = 10,
-  }) =>
-      _analytics.getTrendingFormulae(period, limit: limit);
+  }) => _analytics.getTrendingFormulae(period, limit: limit);
 
   @override
   Future<List<CaskModel>> getTrendingCasks(
     AnalyticsPeriod period, {
     int limit = 10,
-  }) =>
-      _analytics.getTrendingCasks(period, limit: limit);
+  }) => _analytics.getTrendingCasks(period, limit: limit);
 
   // Tap Operations
 
