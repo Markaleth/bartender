@@ -134,6 +134,13 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     );
   }
 
+  String _buildTapCorruptionWarning(int count) {
+    if (count == 1) {
+      return '⚠️ 1 package was skipped due to corruption in the tap.';
+    }
+    return '⚠️ $count packages were skipped due to corruption in the tap.';
+  }
+
   Future<void> trustTap(String name) async {
     emitState(state.copyWith(syncingTap: name));
     try {
@@ -149,7 +156,7 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
       if (updatedTap.brokenPackages.isNotEmpty) {
         emitEffect(
           ShowToastEffect(
-            '⚠️ ${updatedTap.brokenPackages.length} packages were skipped due to corruption in the tap.',
+            _buildTapCorruptionWarning(updatedTap.brokenPackages.length),
             isWarning: true,
           ),
         );

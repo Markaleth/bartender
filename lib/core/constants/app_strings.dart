@@ -99,6 +99,11 @@ const String tapInstallSizeLabel = 'Install Size: ';
 const String tapLastModifiedLabel = 'Last Modified: ';
 const String tapInstallPathLabel = 'Install Path: ';
 const String tapSourceLabel = 'Source: ';
+const String tapCorruptedPackagesDialogTitle = 'Corrupted Packages';
+const String tapCorruptedPackagesStatLabel = 'corrupted package';
+const String tapCorruptedPackagesStatTitle = 'Issues';
+const String tapCorruptedPackagesSkippedLabel = 'skipped';
+const String closeButtonLabel = 'Close';
 
 const String trustedBadgeLabel = 'Trusted';
 const String untrustedBadgeLabel = 'Untrusted';

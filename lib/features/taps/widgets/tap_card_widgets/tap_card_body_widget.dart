@@ -21,7 +21,7 @@ class TapCardBody extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Unresolvable Packages'),
+        title: const Text(tapCorruptedPackagesDialogTitle),
         content: SizedBox(
           width: 400,
           child: ListView.builder(
@@ -106,8 +106,9 @@ class TapCardBody extends StatelessWidget {
                   SizedBox(
                     width: itemWidth,
                     child: TapStatClickable(
-                      title: 'Unresolvable Packages',
-                      value: '${tap.brokenPackages.length} skipped',
+                      title: tapCorruptedPackagesStatTitle,
+                      value:
+                          '${tap.brokenPackages.length}  ${tap.brokenPackages.length == 1 ? tapCorruptedPackagesStatLabel : '${tapCorruptedPackagesStatLabel}s'}',
                       onTap: () => _showBrokenPackagesDialog(
                         context,
                         tap.brokenPackages,
