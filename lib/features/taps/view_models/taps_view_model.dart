@@ -99,16 +99,6 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
       );
-
-      final updatedTap = taps.firstWhere((t) => t.name == tapName);
-      if (updatedTap.brokenPackages.isNotEmpty) {
-        emitEffect(
-          ShowToastEffect(
-            '⚠️ ${updatedTap.brokenPackages.length} packages were skipped due to corruption in the tap.',
-            isWarning: true,
-          ),
-        );
-      }
     } catch (e) {
       emitState(state.copyWith(syncingTap: null));
       emitEffect(ShowToastEffect(e.toString(), isError: true));
@@ -132,10 +122,24 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     );
   }
 
+  void _updateNotifierWithoutSync(String name) {
+    final newTimestamp = DateTime.now();
+    _lastUpdateTimestamp =
+        newTimestamp; // Prevent _onTapStatusChanged from syncing again
+    _statusNotifier.value = TapStatusUpdate(
+      tapName: name,
+      isInstalled: true,
+      isTrusted: true,
+      timestamp: newTimestamp,
+    );
+  }
+
   Future<void> trustTap(String name) async {
     emitState(state.copyWith(syncingTap: name));
     try {
       await _homebrewService.toggleTapTrust(name, true);
+      await _homebrewService.syncTap(name);
+
       final taps = await _homebrewService.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
@@ -150,7 +154,8 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
           ),
         );
       }
-      _statusNotifier.markUpdated(name, true, true);
+
+      _updateNotifierWithoutSync(name);
     } catch (e) {
       emitState(state.copyWith(syncingTap: null));
       emitEffect(ShowToastEffect(e.toString(), isError: true));

@@ -59,7 +59,6 @@ class TapOperations {
     final taps = await _database.getTaps();
     final tap = taps.firstWhere((t) => t.name == tapName);
     await _database.insertTaps([tap.copyWith(trusted: isTrusted)]);
-    await syncTap(tapName);
   }
 
   Future<void> syncThirdPartyTapPackages() async {
@@ -204,6 +203,7 @@ class TapOperations {
       final broken = await _processChunk(chunk);
       brokenPackages.addAll(broken);
     }
+
     return brokenPackages;
   }
 
@@ -274,7 +274,9 @@ class TapOperations {
     List<String> chunk,
     List<String> failedPackages,
   ) async {
-    _logFastIsolatedPackages(failedPackages);
+    for (final bad in failedPackages) {
+      log('❌ Skipping broken package "$bad" (fast-isolated from stderr).');
+    }
 
     final goodPackages = chunk
         .where((pkg) => !failedPackages.contains(pkg))
@@ -295,15 +297,6 @@ class TapOperations {
     log(
       '❌ Skipping broken package "$pkg". Reason: ${errorMsg.split('\n').first}',
     );
-  }
-
-  void _logFastIsolatedPackages(List<String> failedPackages) {
-    log(
-      '🔍 Fast-isolated ${failedPackages.length} broken package(s) from stderr: ${failedPackages.join(', ')}',
-    );
-    for (final bad in failedPackages) {
-      log('❌ Skipping broken package "$bad".');
-    }
   }
 
   void _logChunkCorrupted(int chunkLength) {
