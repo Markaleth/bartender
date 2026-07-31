@@ -44,7 +44,8 @@
 - [ ] Investigate and add Sentry for crashlytics and error tracking (macOS/Linux compatible)
 - [ ] Investigate and add PostHog for product analytics and metrics (macOS/Linux compatible)
 - [ ] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
-- [ ] play around with agentic mcp shit from what we had on android 
+- [ ] play around with agentic mcp shit from what we had on android
+- [ ] check opaity for packages that are not supported on the current user's OS (like casks for linux )
 
 # Issues:
 
