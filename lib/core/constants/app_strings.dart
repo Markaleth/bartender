@@ -100,6 +100,8 @@ const String tapLastModifiedLabel = 'Last Modified: ';
 const String tapInstallPathLabel = 'Install Path: ';
 const String tapSourceLabel = 'Source: ';
 const String tapCorruptedPackagesDialogTitle = 'Corrupted Packages';
+const String tapCorruptedPackagesDialogContent =
+    'The following packages could not be resolved and may be corrupted and have been excluded from package listing:';
 const String tapCorruptedPackagesStatLabel = 'corrupted package';
 const String tapCorruptedPackagesStatTitle = 'Issues';
 const String tapCorruptedPackagesSkippedLabel = 'skipped';

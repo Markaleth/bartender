@@ -5,6 +5,7 @@ import 'package:bartender/core/utils/string_utils.dart';
 import 'package:bartender/core/utils/url_launcer_utils.dart';
 import 'package:bartender/data/models/tap/tap_model.dart';
 import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
+import 'package:bartender/features/taps/widgets/corrupted_tap_dialog.dart';
 import 'package:bartender/features/taps/widgets/tap_card_widgets/tap_card_stats_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,25 +21,7 @@ class TapCardBody extends StatelessWidget {
   ) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(tapCorruptedPackagesDialogTitle),
-        content: SizedBox(
-          width: 400,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: brokenPackages.length,
-            itemBuilder: (context, index) {
-              return Text(brokenPackages[index]);
-            },
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
+      builder: (context) => CorruptedTapDialog(brokenPackages: brokenPackages),
     );
   }
 
