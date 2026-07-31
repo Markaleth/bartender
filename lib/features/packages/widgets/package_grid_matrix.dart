@@ -162,7 +162,7 @@ class PackageDetailGridItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(spacingM),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: AppColors.surface,
         border: Border.all(color: AppColors.borderNeutral),
         borderRadius: BorderRadius.circular(8),
       ),

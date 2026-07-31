@@ -174,3 +174,8 @@ const String terminalFontSizeSubtitle =
 const String fontPreviewText = 'brew install package';
 const String brewPathErrorText =
     'Must be an absolute path ending in \'brew\' (e.g. /opt/homebrew/bin/brew)';
+const String zapPackageDialogTitle = 'Zap Package?';
+const String zapPackageDialogContentPrefix =
+    'Are you sure you want to completely remove ';
+const String zapPackageDialogContentSuffix =
+    ' and all its related files? This action cannot be undone.';

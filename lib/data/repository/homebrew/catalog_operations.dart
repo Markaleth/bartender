@@ -1,16 +1,18 @@
+import 'dart:convert';
 import '../../../core/enums/package_type_filter.dart';
 import '../../api/api_client_interface.dart';
 import '../../db/database_interface.dart';
 import '../../models/formula/formula_model.dart';
 import '../../models/cask/cask_model.dart';
-import '../../network_resource.dart';
+import '../../shell/brew_service.dart';
 import 'network_helper.dart';
 
 class CatalogOperations {
   final ApiClientInterface _apiClient;
   final DatabaseInterface _database;
+  final BrewService _brewService;
 
-  CatalogOperations(this._apiClient, this._database);
+  CatalogOperations(this._apiClient, this._database, this._brewService);
 
   Future<void> syncFormulae() async {
     const endpoint = '/formula.json';
@@ -35,21 +37,41 @@ class CatalogOperations {
   }
 
   Future<FormulaModel?> getFormula(String name) async {
-    final response = await _apiClient.getFormulaDetails(name);
-    if (response.status == NetworkStatus.success && response.data != null) {
-      final formula = response.data!;
-      await _database.cacheNetworkFormula(formula);
-      return formula;
+    final result = await _brewService.info(name);
+    if (result.exitCode == 0) {
+      try {
+        final Map<String, dynamic> json = jsonDecode(result.stdout);
+        final formulaeList = json['formulae'] as List<dynamic>?;
+        if (formulaeList != null && formulaeList.isNotEmpty) {
+          final formula = FormulaModel.fromJson(
+            formulaeList.first as Map<String, dynamic>,
+          );
+          await _database.cacheNetworkFormula(formula);
+          return formula;
+        }
+      } catch (e) {
+        // Fall back to database on parsing error
+      }
     }
     return _database.getFormula(name);
   }
 
   Future<CaskModel?> getCask(String token) async {
-    final response = await _apiClient.getCaskDetails(token);
-    if (response.status == NetworkStatus.success && response.data != null) {
-      final cask = response.data!;
-      await _database.cacheNetworkCask(cask);
-      return cask;
+    final result = await _brewService.info(token);
+    if (result.exitCode == 0) {
+      try {
+        final Map<String, dynamic> json = jsonDecode(result.stdout);
+        final casksList = json['casks'] as List<dynamic>?;
+        if (casksList != null && casksList.isNotEmpty) {
+          final cask = CaskModel.fromJson(
+            casksList.first as Map<String, dynamic>,
+          );
+          await _database.cacheNetworkCask(cask);
+          return cask;
+        }
+      } catch (e) {
+        // Fall back to database on parsing error
+      }
     }
     return _database.getCask(token);
   }

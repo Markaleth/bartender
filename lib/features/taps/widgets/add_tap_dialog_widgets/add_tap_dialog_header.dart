@@ -1,3 +1,5 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
@@ -47,8 +49,8 @@ class AddTapDialogHeader extends StatelessWidget {
               hoverColor: AppColors.surface,
               child: const Padding(
                 padding: EdgeInsets.all(spacingXs),
-                child: Icon(
-                  Icons.close,
+                child: IconWidget(
+                  assetName: clearIcon,
                   color: AppColors.textSecondary,
                   size: iconSizeM, // 20
                 ),

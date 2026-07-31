@@ -36,7 +36,7 @@ class InspectorPaneManagementActionsWidget extends StatelessWidget {
             width: defaultButtonWidth,
             child: ButtonWidget.secondary(
               label: updateButtonLabel,
-              iconData: Icons.system_update,
+              assetName: systemUpdateIcon,
               color: AppColors.secondary,
               onPressed: () {
                 context.read<QueueViewModel>().queueOperation(
@@ -54,7 +54,7 @@ class InspectorPaneManagementActionsWidget extends StatelessWidget {
               width: defaultButtonWidth,
               child: ButtonWidget.secondary(
                 label: pinVersionButtonLabel,
-                iconData: Icons.push_pin,
+                assetName: pinIcon,
                 color: AppColors.primary,
                 onPressed: () {
                   context.read<QueueViewModel>().queueOperation(
@@ -112,14 +112,14 @@ class InspectorPaneManagementActionsWidget extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: const Text('Zap Package?'),
+                      title: const Text(zapPackageDialogTitle),
                       content: Text(
-                        'Are you sure you want to completely remove $packageName and all its related files? This action cannot be undone.',
+                        '$zapPackageDialogContentPrefix$packageName$zapPackageDialogContentSuffix',
                       ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(ctx).pop(),
-                          child: const Text('Cancel'),
+                          child: const Text(cancelButtonLabel),
                         ),
                         TextButton(
                           onPressed: () {
@@ -133,7 +133,7 @@ class InspectorPaneManagementActionsWidget extends StatelessWidget {
                           style: TextButton.styleFrom(
                             foregroundColor: AppColors.error,
                           ),
-                          child: const Text('Zap'),
+                          child: const Text(zapButtonLabel),
                         ),
                       ],
                     ),

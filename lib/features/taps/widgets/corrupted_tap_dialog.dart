@@ -37,7 +37,7 @@ class CorruptedTapDialog extends StatelessWidget {
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text('Close'),
+        child: const Text(closeButtonLabel),
       ),
     ],
   );

@@ -1,3 +1,5 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/dimensions.dart';
@@ -51,7 +53,7 @@ class HeaderWidget extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.cleaning_services, size: spacingM),
+                icon: const IconWidget(assetName: cleanupIcon, size: spacingM),
                 onPressed: clearCompleted,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -67,7 +69,7 @@ class HeaderWidget extends StatelessWidget {
               ),
               const SizedBox(width: spacingM),
               IconButton(
-                icon: const Icon(Icons.close, size: spacingM),
+                icon: const IconWidget(assetName: clearIcon, size: spacingM),
                 onPressed: closeDrawer,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),

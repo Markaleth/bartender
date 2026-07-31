@@ -46,11 +46,11 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                       : AppColors.secondary,
                   action: healthState.orphanedDependenciesCount > 0
                       ? IconButton(
-                          icon: const Icon(
-                            Icons.autorenew,
-                            color: AppColors.textPrimary,
-                            size: iconSizeM,
-                          ),
+                        icon: const IconWidget(
+                          assetName: updateIcon,
+                          color: AppColors.textPrimary,
+                          size: iconSizeM,
+                        ),
                           onPressed: onAutoremove,
                         )
                       : null,
@@ -64,8 +64,8 @@ class GlobalHealthStatusWidget extends StatelessWidget {
                   icon: healthIcon,
                   color: healthState.healthScoreColor,
                   action: IconButton(
-                    icon: const Icon(
-                      Icons.open_in_new,
+                    icon: const IconWidget(
+                      assetName: openNewIcon,
                       color: AppColors.textPrimary,
                       size: iconSizeM,
                     ),

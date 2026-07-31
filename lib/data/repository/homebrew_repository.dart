@@ -31,7 +31,7 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
   ) {
     _local = LocalPackageOperations(brewService, database);
     _taps = TapOperations(brewService, database);
-    _catalog = CatalogOperations(apiClient, database);
+    _catalog = CatalogOperations(apiClient, database, brewService);
     _analytics = AnalyticsOperations(apiClient, database);
     _system = SystemOperations(apiClient, brewService);
   }

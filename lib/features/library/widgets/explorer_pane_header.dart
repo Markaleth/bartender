@@ -1,4 +1,5 @@
 import 'package:bartender/common_widgets/button_widget.dart';
+import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -33,8 +34,8 @@ class ExplorerPaneHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.folder_open,
+              const IconWidget(
+                assetName: openFolderIcon,
                 color: AppColors.primary,
                 size: iconSizeM,
               ),

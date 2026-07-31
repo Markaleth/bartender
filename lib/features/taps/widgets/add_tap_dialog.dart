@@ -52,7 +52,7 @@ class _AddTapDialogState extends State<AddTapDialog> {
           border: Border.all(color: AppColors.borderNeutral),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.5),
+              color: AppColors.background.withValues(alpha: 0.5),
               blurRadius: spacingL,
               offset: const Offset(0, radiusL),
             ),

@@ -47,7 +47,11 @@ class HealthDashboardModal extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close, color: AppColors.textSecondary),
+                  color: AppColors.textPrimary,
+                  icon: const IconWidget(
+                    assetName: clearIcon,
+                    color: AppColors.secondary,
+                  ),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ],

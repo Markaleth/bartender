@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/core/models/operation_task/operation_task.dart';
+import 'package:bartender/common_widgets/icon_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 
 extension OperationStatusAppearance on OperationStatus {
   Color get borderColor {
@@ -22,12 +24,12 @@ extension OperationStatusAppearance on OperationStatus {
     };
   }
 
-  IconData get icon {
+  String get iconAssetName {
     return switch (this) {
-      OperationStatus.inProgress => Icons.download,
-      OperationStatus.success => Icons.check_circle_outline,
-      OperationStatus.error => Icons.error_outline,
-      _ => Icons.inventory_2,
+      OperationStatus.inProgress => downloadIcon,
+      OperationStatus.success => checkIcon,
+      OperationStatus.error => warningIcon,
+      _ => barrelIcon,
     };
   }
 }
@@ -68,8 +70,8 @@ class TaskVisualizerItem extends StatelessWidget {
                   ]
                 : null,
           ),
-          child: Icon(
-            task.status.icon,
+          child: IconWidget(
+            assetName: task.status.iconAssetName,
             size: spacingM,
             color: task.status.borderColor == AppColors.borderNeutral
                 ? AppColors.textSecondary

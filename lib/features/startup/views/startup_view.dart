@@ -1,5 +1,6 @@
 import 'package:bartender/core/base_view.dart';
 import 'package:bartender/core/constants/dimensions.dart';
+import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/effects/screen_effect.dart';
 import 'package:bartender/domain/repositories/homebrew_repository_interface.dart';
 import 'package:bartender/features/startup/models/startup_state.dart';
@@ -22,7 +23,7 @@ class StartupView extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(effect.message),
-          backgroundColor: effect.isError ? Colors.red : null,
+          backgroundColor: effect.isError ? AppColors.error : null,
         ),
       );
     }
