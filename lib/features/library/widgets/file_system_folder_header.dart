@@ -1,3 +1,5 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
+import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/theme/bartender_context.dart';
 import 'package:flutter/material.dart';
 import 'package:bartender/core/constants/app_colors.dart';
@@ -45,8 +47,7 @@ class FileSystemFolderHeader extends StatelessWidget {
               ),
             ),
 
-            Icon(
-              Icons.folder,
+            IconWidget(assetName: openFolderIcon,
               color: isExpanded ? AppColors.primary : AppColors.iconDefault,
               size: spacingM,
             ),

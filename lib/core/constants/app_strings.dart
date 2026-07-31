@@ -179,3 +179,13 @@ const String zapPackageDialogContentPrefix =
     'Are you sure you want to completely remove ';
 const String zapPackageDialogContentSuffix =
     ' and all its related files? This action cannot be undone.';
+const String updatesAvailableSuffix = ' updates available';
+const String orphansSuffix = ' orphans';
+const String removeTapDialogContentSuffix = '?';
+const String inProgressSuffix = ' In Progress';
+const String errorPrefix = 'Error: ';
+const String trustDialogTitlePrefix = 'Trust ';
+const String trustDialogTitleSuffix = '?';
+const String brewVersionPrefix = 'Brew ';
+const String versionPrefix = 'v';
+const String fontPreviewPrefix = '> ';

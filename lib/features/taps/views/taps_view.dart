@@ -95,7 +95,7 @@ class _TapsGrid extends StatelessWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (msg) => Center(
         child: Text(
-          'Error: $msg',
+          '$errorPrefix$msg',
           style: context.bodyM.copyWith(color: AppColors.error),
         ),
       ),

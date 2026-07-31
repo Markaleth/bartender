@@ -1,3 +1,4 @@
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -34,7 +35,7 @@ class InspectorPaneHeaderWidget extends StatelessWidget {
           ],
         ),
         Text(
-          'v$version',
+          '$versionPrefix$version',
           style: context.bodyL.copyWith(color: AppColors.secondary),
         ),
         const SizedBox(height: spacingM),

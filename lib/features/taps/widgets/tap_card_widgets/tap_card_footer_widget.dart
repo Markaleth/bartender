@@ -61,7 +61,7 @@ class TapCardFooter extends StatelessWidget {
                       context: context,
                       builder: (ctx) => AlertDialog(
                         title: const Text(removeTapDialogTitle),
-                        content: Text('$removeTapDialogContent $tapName?'),
+                        content: Text('$removeTapDialogContent$tapName$removeTapDialogContentSuffix'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(ctx).pop(),
@@ -109,7 +109,7 @@ class TapCardFooter extends StatelessWidget {
                                 size: iconSize2Xl,
                               ),
                               title: Text(
-                                'Trust $tapName?',
+                                '$trustDialogTitlePrefix$tapName$trustDialogTitleSuffix',
                                 style: context.headM,
                               ),
                               content: Text(trustAlertDialogBodyCopy),

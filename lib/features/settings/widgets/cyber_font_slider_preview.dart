@@ -47,7 +47,7 @@ class CyberFontSliderPreview extends StatelessWidget {
             width: double.infinity,
             alignment: Alignment.centerLeft,
             child: Text(
-              '> $fontPreviewText',
+              '$fontPreviewPrefix$fontPreviewText',
               style: context.monoM.copyWith(
                 fontSize: fontSize,
                 color: AppColors.secondary,

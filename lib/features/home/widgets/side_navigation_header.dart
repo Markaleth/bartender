@@ -1,3 +1,4 @@
+import 'package:bartender/common_widgets/icon_widget.dart';
 import 'package:bartender/common_widgets/button_widget.dart';
 import 'package:bartender/core/constants/app_icons.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -29,7 +30,7 @@ class SideNavigationHeader extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   backgroundColor: AppColors.primary,
-                  child: Icon(Icons.liquor, color: AppColors.onPrimary),
+                  child: IconWidget(assetName: bottleIcon, color: AppColors.onPrimary),
                 ),
                 const SizedBox(width: spacingM),
                 Expanded(
@@ -44,7 +45,7 @@ class SideNavigationHeader extends StatelessWidget {
                       ),
                       if (state.localVersion != null)
                         Text(
-                          'Brew ${state.localVersion}',
+                          '$brewVersionPrefix${state.localVersion}',
                           style: context.labelL.copyWith(
                             color: AppColors.textSecondary,
                           ),

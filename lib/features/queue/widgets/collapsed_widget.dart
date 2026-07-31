@@ -1,3 +1,4 @@
+import 'package:bartender/core/constants/app_strings.dart';
 import 'package:bartender/core/constants/app_colors.dart';
 import 'package:bartender/core/constants/dimensions.dart';
 import 'package:bartender/theme/bartender_context.dart';
@@ -42,7 +43,7 @@ class CollapsedWidget extends StatelessWidget {
                       ),
                     ),
                   Text(
-                    '$inProgressCount In Progress',
+                    '$inProgressCount$inProgressSuffix',
                     style: context.labelM.copyWith(color: AppColors.primary),
                   ),
                 ],

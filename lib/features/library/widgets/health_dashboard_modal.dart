@@ -62,7 +62,7 @@ class HealthDashboardModal extends StatelessWidget {
                 children: [
                   HealthDashboardSection(
                     title: outdatedPackagesTitle,
-                    value: '${healthState.outdatedCount} updates available',
+                    value: '${healthState.outdatedCount}$updatesAvailableSuffix',
                     actionLabel: updateAllActionLabel,
                     onAction: healthState.outdatedCount > 0
                         ? onUpdateAll
@@ -84,7 +84,7 @@ class HealthDashboardModal extends StatelessWidget {
                   const SizedBox(height: spacingM),
                   HealthDashboardSection(
                     title: orphanedDependenciesTitle,
-                    value: '${healthState.orphanedDependenciesCount} orphans',
+                    value: '${healthState.orphanedDependenciesCount}$orphansSuffix',
                     actionLabel: removeOrphansActionLabel,
                     onAction: healthState.orphanedDependenciesCount > 0
                         ? onRemoveOrphans
