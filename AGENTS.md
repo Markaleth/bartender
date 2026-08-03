@@ -2,11 +2,17 @@
 
 Welcome to the Bartender project. This is a Flutter macOS/linux desktop application that acts as a graphical frontend for the Homebrew package manager.
 
+## Environment:
+
+When running the local environment is linux, you are running in a container.
+The path to Flutter within the container is: `/run/media/system/The_Vault/flutter/bin/flutter`
+Account for this when executing Flutter commands. Check the environment at the beginning of each session and **REMEMBER** this information so it only needs to be done once.
+
 ## Core Rules & Architecture
 
 When working in this project, you must adhere to the following core principles:
 
-1. **Desktop First**: This is a macOS application. Prioritize high information density, hover states, and keyboard/mouse interactions over touch-friendly mobile layouts.
+1. **Desktop First**: This is a macOS/linux application. Prioritize high information density, hover states, and keyboard/mouse interactions over touch-friendly mobile layouts.
 2. **Architecture**: Feature-first architecture using `provider` for state management and `ChangeNotifier`. Repositories execute commands via `ShellUtils` / `BrewService`.
 3. **Code Generation (`freezed`)**: We heavily rely on code generation for state models. You MUST run `dart run build_runner build --delete-conflicting-outputs` before running tests or claiming a task is done.
 4. **Styling & Icons**:
