@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bartender/common_widgets/filter_option.dart';
 import 'package:bartender/common_widgets/horizontal_divider.dart';
 import 'package:bartender/common_widgets/segmented_filter_control.dart';
@@ -81,27 +79,26 @@ class PackageFilters extends StatelessWidget {
                   runSpacing: spacingM,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    if (Platform.isMacOS)
-                      SegmentedFilterControl<PackageTypeFilter>(
-                        selectedValue: state.packageType,
-                        onChanged: viewModel.setPackageType,
-                        options: const [
-                          FilterOption(
-                            label: noFiltersCopy,
-                            value: PackageTypeFilter.all,
-                          ),
-                          FilterOption(
-                            label: formulaeTitle,
-                            value: PackageTypeFilter.formulae,
-                            assetName: flaskIcon,
-                          ),
-                          FilterOption(
-                            label: casksTitle,
-                            value: PackageTypeFilter.casks,
-                            assetName: barrelIcon,
-                          ),
-                        ],
-                      ),
+                    SegmentedFilterControl<PackageTypeFilter>(
+                      selectedValue: state.packageType,
+                      onChanged: viewModel.setPackageType,
+                      options: const [
+                        FilterOption(
+                          label: noFiltersCopy,
+                          value: PackageTypeFilter.all,
+                        ),
+                        FilterOption(
+                          label: formulaeTitle,
+                          value: PackageTypeFilter.formulae,
+                          assetName: flaskIcon,
+                        ),
+                        FilterOption(
+                          label: casksTitle,
+                          value: PackageTypeFilter.casks,
+                          assetName: barrelIcon,
+                        ),
+                      ],
+                    ),
                     if (state.uniqueTapNames.isNotEmpty)
                       TapFilterMenu(uniqueTapNames: state.uniqueTapNames),
                   ],

@@ -145,6 +145,7 @@ class _CarouselPage extends StatelessWidget {
                     isInProgress: isInProgress,
                     isInstalled: item.isInstalled,
                     isSupported: item.isSupported,
+                    isCask: !item.isFormula,
                     onInstall: (!item.isSupported || isQueued || isInProgress)
                         ? null
                         : () {

@@ -288,7 +288,12 @@ class _PackageActionButton extends StatelessWidget {
   });
 
   String _getButtonLabel(bool isQueued, bool isInProgress) {
-    if (!model.isSupported) return 'Unsupported';
+    if (!model.isSupported) {
+      if (isCask) {
+        return 'macOS Only';
+      }
+      return 'Unsupported';
+    }
     if (isQueued) return queuedCopy;
     final baseAction = model.isInstalled
         ? uninstallButtonLabel

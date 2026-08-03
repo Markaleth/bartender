@@ -19,6 +19,7 @@ class TrendingPackagesWidget extends StatelessWidget {
   final bool isInProgress;
   final bool isInstalled;
   final bool isSupported;
+  final bool isCask;
 
   final VoidCallback? onInstall;
 
@@ -34,6 +35,7 @@ class TrendingPackagesWidget extends StatelessWidget {
     this.isInProgress = false,
     this.isInstalled = false,
     required this.isSupported,
+    this.isCask = false,
   });
 
   @override
@@ -95,6 +97,7 @@ class TrendingPackagesWidget extends StatelessWidget {
                       isInProgress: isInProgress,
                       isInstalled: isInstalled,
                       isSupported: isSupported,
+                      isCask: isCask,
                       onInstall: onInstall,
                     ),
                   ],
@@ -129,6 +132,7 @@ class _DownloadButtonWidget extends StatelessWidget {
   final bool isQueued;
   final bool isInstalled;
   final bool isSupported;
+  final bool isCask;
   final VoidCallback? onInstall;
 
   const _DownloadButtonWidget({
@@ -136,11 +140,17 @@ class _DownloadButtonWidget extends StatelessWidget {
     required this.isQueued,
     required this.isInstalled,
     required this.isSupported,
+    required this.isCask,
     required this.onInstall,
   });
 
   String _getButtonLabel() {
-    if (!isSupported) return 'Unsupported';
+    if (!isSupported) {
+      if (isCask) {
+        return 'macOS Only';
+      }
+      return 'Unsupported';
+    }
     if (isQueued) return queuedCopy;
     final baseAction = isInstalled ? uninstallButtonLabel : installButtonLabel;
     return isInProgress ? '${baseAction}ing...' : baseAction;

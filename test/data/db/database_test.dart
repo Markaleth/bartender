@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
 import 'package:bartender/data/db/database.dart';
@@ -127,11 +126,7 @@ void main() {
 
     test('getFilteredPackages returns all packages by default', () async {
       final results = await db.getFilteredPackages();
-      if (Platform.isLinux) {
-        expect(results.length, 1);
-      } else {
-        expect(results.length, 2);
-      }
+      expect(results.length, 2);
     });
 
     test('getFilteredPackages filters by query', () async {
@@ -155,13 +150,9 @@ void main() {
       final caskResults = await db.getFilteredPackages(
         type: PackageTypeFilter.casks,
       );
-      if (Platform.isLinux) {
-        expect(caskResults.length, 0);
-      } else {
-        expect(caskResults.length, 1);
-        expect(caskResults.first, isA<CaskModel>());
-        expect((caskResults.first as CaskModel).token, 'firefox');
-      }
+      expect(caskResults.length, 1);
+      expect(caskResults.first, isA<CaskModel>());
+      expect((caskResults.first as CaskModel).token, 'firefox');
 
       final formulaResults = await db.getFilteredPackages(
         type: PackageTypeFilter.formulae,
