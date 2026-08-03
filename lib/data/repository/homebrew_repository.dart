@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bartender/core/enums/analytics_period.dart';
 import 'package:bartender/core/enums/package_type_filter.dart';
 import 'package:bartender/data/models/cask/cask_model.dart';
@@ -61,9 +63,11 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
         'install-on-request',
         AnalyticsPeriod.days365,
       ),
-      _analytics.syncCasksAnalytics(AnalyticsPeriod.days30),
-      _analytics.syncCasksAnalytics(AnalyticsPeriod.days90),
-      _analytics.syncCasksAnalytics(AnalyticsPeriod.days365),
+      if (!Platform.isLinux) ...[
+        _analytics.syncCasksAnalytics(AnalyticsPeriod.days30),
+        _analytics.syncCasksAnalytics(AnalyticsPeriod.days90),
+        _analytics.syncCasksAnalytics(AnalyticsPeriod.days365),
+      ],
     ]);
   }
 

@@ -111,7 +111,9 @@ void main() {
       await viewModel.init();
 
       verify(() => mockRepo.getTrendingFormulae(any(), limit: 10)).called(1);
-      verify(() => mockRepo.getTrendingCasks(any(), limit: 20)).called(1);
+      if (!Platform.isLinux) {
+        verify(() => mockRepo.getTrendingCasks(any(), limit: 20)).called(1);
+      }
       verify(() => mockRepo.getTaps()).called(1);
       verify(
         () => mockRepo.getFilteredPackages(

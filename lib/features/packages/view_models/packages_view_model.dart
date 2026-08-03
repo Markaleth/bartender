@@ -194,10 +194,12 @@ class PackagesViewModel extends BaseViewModel<PackagesState, ScreenEffect> {
       state.analyticsPeriod,
       limit: 10,
     );
-    final caskTrending = await _homebrewService.getTrendingCasks(
-      state.analyticsPeriod,
-      limit: 20,
-    );
+    final caskTrending = Platform.isLinux
+        ? []
+        : await _homebrewService.getTrendingCasks(
+            state.analyticsPeriod,
+            limit: 20,
+          );
 
     final allTrending = _mergeAndSortTrending(formulaTrending, caskTrending);
 
