@@ -41,10 +41,7 @@ class HomebrewRepository implements HomebrewRepositoryInterface {
   @override
   Future<void> syncAllData() async {
     // Sync base packages first
-    await Future.wait([
-      _catalog.syncFormulae(),
-      _catalog.syncCasks(),
-    ]);
+    await Future.wait([_catalog.syncFormulae(), _catalog.syncCasks()]);
 
     await _taps.syncTaps();
     await _taps.syncThirdPartyTapPackages();

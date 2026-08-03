@@ -35,17 +35,16 @@
 - [x] Cleanup the settings screen: widget cleanup, performance optimization audit, consistency of widgets used, colors, fonts and styles (which are not correctly called right now)
 - [x] Reexamine the "browse" and autoresolved path flow. We should not need a "browse" button, but we CAN refine the flow with an autoresolve button and some error state or warning or whatever to polish the UI/UX
 - [x] Look at the leading icons for the title in the bento cards for settings view. Do they make sense? Is it worth looking for better alternatives?
-- [ ] Add a more expressive loading indicator for fetching the data initially for various views.
-- [ ] Think about if we need to change the background of filters and search (restyle it maybe)
-- [ ] Look into the use of color in your app. Are we using stuff consistently?
-- [ ] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
-- [ ] You should also probably add some new filters for precompiled or deprecated packages
-      substate or something to clean them up
+- [x] play around with agentic mcp shit from what we had on android
+- [x] check opaity for packages that are not supported on the current user's OS (like casks for linux )
+- [x] Look into the use of color in your app. Are we using stuff consistently?
+- [x] Add a more expressive loading indicator for fetching the data initially for various views.
+- [x] Think about if we need to change the background of filters and search (restyle it maybe)
+- [x] Look into the padding of the Packages view. Maybe it's worth switching to 2Xl from Xl for the horizontal padding across the screen to bring eveything in line with the trending carousel.
+- [x] You should also probably add some new filters for precompiled or deprecated packages
+      substate or something to clean them up - [x] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
 - [ ] Investigate and add Sentry for crashlytics and error tracking (macOS/Linux compatible)
 - [ ] Investigate and add PostHog for product analytics and metrics (macOS/Linux compatible)
-- [ ] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
-- [ ] play around with agentic mcp shit from what we had on android
-- [ ] check opaity for packages that are not supported on the current user's OS (like casks for linux )
 
 # Issues:
 
@@ -54,7 +53,7 @@
 - [x] spacer between item queue doesn't look particularly good. we can do better there. Also, we need to consider very large queues, as an edge case
 - [x] filter by taps isn't working correctly. Selecring a custom tap AND core will not show the contents of both taps. it will only show the contents of the first selected tap
 - [x] packages from taps are not aggregated into the "packages_view" page
-- [ ] snackbar that warns about missing packages is displayed 3 times (because we're triggering the function that returns that 3 times). we need to look into why that is
+- [x] snackbar that warns about missing packages is displayed 3 times (because we're triggering the function that returns that 3 times). we need to look into why that is
 - [ ] tap card "unresolved packages" stat should be redesigned to something a bit cleaner
 - [ ] unresolved packages modal should be redesigned.
 - [ ] trusted packages sometimes do not show up because of platform constrants and we need to address that
