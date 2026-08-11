@@ -45,6 +45,7 @@
       substate or something to clean them up - [x] Reexamine supported "Library" operations (see if you can maybe add more or somethings)
 - [ ] Investigate and add Sentry for crashlytics and error tracking (macOS/Linux compatible)
 - [ ] Investigate and add PostHog for product analytics and metrics (macOS/Linux compatible)
+- [ ] look into treating mangled homebrew shell command responses because i don't think we're treating that now.
 
 # Issues:
 
