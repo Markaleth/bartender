@@ -17,7 +17,13 @@ class TapOperations {
   Future<void> syncTaps() async {
     final result = await _brewService.listTaps();
     if (result.exitCode == 0) {
-      final List<dynamic> jsonList = jsonDecode(result.stdout);
+      final List<dynamic> jsonList;
+      try {
+        final sanitized = _sanitizeJsonOutput(result.stdout);
+        jsonList = jsonDecode(sanitized);
+      } on FormatException {
+        throw Exception('Homebrew output was mangled and could not be parsed.');
+      }
 
       final oldTaps = await _database.getTaps();
       final oldTapsMap = {for (var tap in oldTaps) tap.name: tap};
@@ -63,7 +69,9 @@ class TapOperations {
 
   Future<void> syncThirdPartyTapPackages() async {
     final result = await _brewService.listTaps();
-    if (result.exitCode != 0) return;
+    if (result.exitCode != 0) {
+      throw Exception('Failed to list taps for third-party sync: ${result.stderr}');
+    }
 
     try {
       final oldTaps = await _database.getTaps();
@@ -99,8 +107,10 @@ class TapOperations {
       if (tapsToUpdate.isNotEmpty) {
         await _database.insertTaps(tapsToUpdate);
       }
+    } on FormatException {
+      throw Exception('Failed to sync third-party taps due to corrupted output.');
     } catch (e) {
-      // Ignore errors if taps cannot be parsed
+      throw Exception('Failed to sync third-party taps: $e');
     }
   }
 
@@ -111,7 +121,13 @@ class TapOperations {
     }
 
     try {
-      final List<dynamic> jsonList = jsonDecode(result.stdout);
+      final List<dynamic> jsonList;
+      try {
+        final sanitized = _sanitizeJsonOutput(result.stdout);
+        jsonList = jsonDecode(sanitized);
+      } on FormatException {
+        throw Exception('Homebrew output was mangled and could not be parsed.');
+      }
 
       final tapJson = jsonList.firstWhere(
         (t) => t['name'] == tapName,
@@ -166,7 +182,8 @@ class TapOperations {
     String tapsJson,
     Set<String> trustedTapNames,
   ) {
-    final List<dynamic> jsonList = jsonDecode(tapsJson);
+    final sanitized = _sanitizeJsonOutput(tapsJson);
+    final List<dynamic> jsonList = jsonDecode(sanitized);
     final packagesToFetch = <String>[];
 
     for (final tapJson in jsonList) {
@@ -307,7 +324,8 @@ class TapOperations {
   }
 
   Future<void> _parseAndCacheInfo(String infoJsonString) async {
-    final infoJson = jsonDecode(infoJsonString);
+    final sanitized = _sanitizeJsonOutput(infoJsonString);
+    final infoJson = jsonDecode(sanitized);
 
     if (infoJson['formulae'] != null) {
       final List<dynamic> formulaeJson = infoJson['formulae'];
@@ -332,4 +350,24 @@ class TapOperations {
   Future<void> deleteTap(String name) => _database.deleteTap(name);
   Future<int> getTapInstalledSize(String tapName) =>
       _database.getTapInstalledSize(tapName);
+
+  String _sanitizeJsonOutput(String output) {
+    final trimmed = output.trim();
+    final startMatch = RegExp(r'(?:^|\n)\s*([\[{])').firstMatch(trimmed);
+    if (startMatch == null) return trimmed;
+
+    final startIndex = trimmed.indexOf(startMatch.group(1)!, startMatch.start);
+
+    final lastCloseSquare = trimmed.lastIndexOf(']');
+    final lastCloseCurly = trimmed.lastIndexOf('}');
+    final endIndex = lastCloseSquare > lastCloseCurly
+        ? lastCloseSquare
+        : lastCloseCurly;
+
+    if (startIndex != -1 && endIndex != -1 && endIndex >= startIndex) {
+      return trimmed.substring(startIndex, endIndex + 1);
+    }
+    return trimmed;
+  }
 }
+

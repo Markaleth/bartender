@@ -80,7 +80,13 @@ class TapsViewModel extends BaseViewModel<TapsState, ScreenEffect> {
     emitState(state.copyWith(syncingTap: 'all'));
     try {
       await _homebrewService.syncTaps();
-      await _homebrewService.syncThirdPartyTapPackages();
+      
+      try {
+        await _homebrewService.syncThirdPartyTapPackages();
+      } catch (e) {
+        emitEffect(ShowToastEffect(e.toString(), isWarning: true));
+      }
+
       final taps = await _homebrewService.getTaps();
       emitState(
         state.copyWith(tapsState: FetchState.success(taps), syncingTap: null),
