@@ -55,8 +55,8 @@
 - [x] filter by taps isn't working correctly. Selecring a custom tap AND core will not show the contents of both taps. it will only show the contents of the first selected tap
 - [x] packages from taps are not aggregated into the "packages_view" page
 - [x] snackbar that warns about missing packages is displayed 3 times (because we're triggering the function that returns that 3 times). we need to look into why that is
-- [ ] tap card "unresolved packages" stat should be redesigned to something a bit cleaner
-- [ ] unresolved packages modal should be redesigned.
-- [ ] trusted packages sometimes do not show up because of platform constrants and we need to address that
-- [ ] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines.
-- [ ] Information on tap packages does not show up in the inspector pane.
+- [x] tap card "unresolved packages" stat should be redesigned to something a bit cleaner
+- [x] unresolved packages modal should be redesigned.
+- [x] trusted packages sometimes do not show up because of platform constrants and we need to address that
+- [x] Reexamine the Last Synced item in the library pane because i don't really think it brings any actual value. I think we're good with just using the Installation date. Maybe replace it with a "last updated" or something along those lines.
+- [x] Information on tap packages does not show up in the inspector pane.
