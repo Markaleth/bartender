@@ -152,6 +152,12 @@ class _EnvironmentCard extends StatelessWidget {
             value: settings.disableAnalytics,
             onChanged: viewModel.setDisableAnalytics,
           ),
+          IdeToggleSwitch(
+            title: enableCrashReportingTitle,
+            subtitle: enableCrashReportingSubtitle,
+            value: settings.enableCrashReporting,
+            onChanged: viewModel.setEnableCrashReporting,
+          ),
         ],
       ),
     );

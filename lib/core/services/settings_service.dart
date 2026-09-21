@@ -25,12 +25,22 @@ class SettingsService extends ChangeNotifier {
   static const String _keyBackgroundFetching = 'backgroundFetching';
   static const String _keyThemeMode = 'themeMode';
   static const String _keyTerminalFontSize = 'terminalFontSize';
+  static const String _keyEnableCrashReporting = 'enableCrashReporting';
 
   SettingsService(SharedPreferences prefs) : _prefs = prefs;
 
   static Future<SettingsService> create() async {
     final prefs = await SharedPreferences.getInstance();
     return SettingsService(prefs);
+  }
+
+  static const bool _defaultEnableCrashReporting = true;
+
+  bool get enableCrashReporting =>
+      _prefs.getBool(_keyEnableCrashReporting) ?? _defaultEnableCrashReporting;
+  set enableCrashReporting(bool value) {
+    _prefs.setBool(_keyEnableCrashReporting, value);
+    notifyListeners();
   }
 
   bool get isInitialized => true;

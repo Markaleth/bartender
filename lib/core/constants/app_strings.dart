@@ -189,3 +189,6 @@ const String trustDialogTitleSuffix = '?';
 const String brewVersionPrefix = 'Brew ';
 const String versionPrefix = 'v';
 const String fontPreviewPrefix = '> ';
+const String enableCrashReportingTitle = 'Error & Crash Reporting';
+const String enableCrashReportingSubtitle =
+    'Send anonymous crash reports to help improve Bartender';

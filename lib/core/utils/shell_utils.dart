@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:bartender/core/constants/durations.dart';
 import 'package:bartender/core/services/settings_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ShellUtils {
   static String? _resolvedBrewPath;
@@ -156,15 +157,55 @@ class ShellUtils {
     Map<String, String>? environment,
     bool includeParentEnvironment = true,
     bool runInShell = false,
-  }) {
-    return Process.run(
-      _getExecutable(executable),
-      _buildArgs(executable, arguments),
-      workingDirectory: workingDirectory,
-      environment: _buildEnv(executable, environment),
-      includeParentEnvironment: includeParentEnvironment,
-      runInShell: runInShell,
+  }) async {
+    Sentry.addBreadcrumb(
+      Breadcrumb(
+        category: 'shell.exec',
+        message: '$executable ${arguments.join(' ')}',
+        level: SentryLevel.info,
+      ),
     );
+
+    try {
+      final result = await Process.run(
+        _getExecutable(executable),
+        _buildArgs(executable, arguments),
+        workingDirectory: workingDirectory,
+        environment: _buildEnv(executable, environment),
+        includeParentEnvironment: includeParentEnvironment,
+        runInShell: runInShell,
+      );
+
+      if (result.exitCode != 0) {
+        final stderrSnippet = result.stderr.toString().trim();
+        Sentry.addBreadcrumb(
+          Breadcrumb(
+            category: 'shell.failure',
+            message: '$executable exited with code ${result.exitCode}',
+            level: SentryLevel.warning,
+            data: {
+              'exitCode': result.exitCode,
+              if (stderrSnippet.isNotEmpty)
+                'stderr': stderrSnippet.length > 300
+                    ? stderrSnippet.substring(0, 300)
+                    : stderrSnippet,
+            },
+          ),
+        );
+      }
+
+      return result;
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+        withScope: (scope) {
+          scope.setTag('shell_operation', 'run');
+          scope.setTag('executable', executable);
+        },
+      );
+      rethrow;
+    }
   }
 
   static Future<void> openDirectory(String path) async {
@@ -206,15 +247,40 @@ class ShellUtils {
     bool includeParentEnvironment = true,
     bool runInShell = false,
     ProcessStartMode mode = ProcessStartMode.normal,
-  }) {
-    return Process.start(
-      _getExecutable(executable),
-      _buildArgs(executable, arguments),
-      workingDirectory: workingDirectory,
-      environment: _buildEnv(executable, environment),
-      includeParentEnvironment: includeParentEnvironment,
-      runInShell: runInShell,
-      mode: mode,
+  }) async {
+    final sanitizedArgs = arguments.join(' ');
+    Sentry.addBreadcrumb(
+      Breadcrumb(
+        category: 'shell.stream_start',
+        message: '$executable $sanitizedArgs',
+        level: SentryLevel.info,
+        data: {
+          'executable': executable,
+          'workingDirectory': workingDirectory ?? 'default',
+        },
+      ),
     );
+
+    try {
+      return await Process.start(
+        _getExecutable(executable),
+        _buildArgs(executable, arguments),
+        workingDirectory: workingDirectory,
+        environment: _buildEnv(executable, environment),
+        includeParentEnvironment: includeParentEnvironment,
+        runInShell: runInShell,
+        mode: mode,
+      );
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+        withScope: (scope) {
+          scope.setTag('shell_operation', 'start');
+          scope.setTag('executable', executable);
+        },
+      );
+      rethrow;
+    }
   }
 }

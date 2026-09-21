@@ -29,6 +29,10 @@ class SettingsViewModel extends BaseViewModel<SettingsState, ScreenEffect> {
     _settingsService.zapUninstallDefault = value;
   }
 
+  void setEnableCrashReporting(bool value) {
+    _settingsService.enableCrashReporting = value;
+  }
+
   void setSuppressEnvHints(bool value) {
     _settingsService.suppressEnvHints = value;
   }

@@ -34,6 +34,11 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Environment & Secrets
+.env
+.env.*
+.env.g.dart
+
 # Symbolication related
 app.*.symbols
 

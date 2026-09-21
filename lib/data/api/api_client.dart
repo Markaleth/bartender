@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:bartender/core/constants/durations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
+import 'package:sentry_dio/sentry_dio.dart';
 import 'api_client_interface.dart';
 import '../models/formula/formula_model.dart';
 import '../../core/enums/analytics_period.dart';
@@ -49,6 +50,7 @@ class ApiClient implements ApiClientInterface {
   static ApiClient initialize() {
     ApiClient client = ApiClient();
     client._dio = Dio(_defaultOptions);
+    client._dio.addSentry();
     if (kDebugMode) {
       client._dio.interceptors.add(
         LogInterceptor(
