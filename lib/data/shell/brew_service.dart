@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:bartender/core/utils/shell_utils.dart';
 import 'package:bartender/core/services/settings_service.dart';
 import 'package:bartender/data/shell/shell_command_result.dart';
@@ -7,6 +9,86 @@ class BrewService {
   final SettingsService _settingsService;
 
   BrewService(this._settingsService);
+
+  // --- Simulation & Installation ---
+
+  static bool? simulateNoBrewOverride;
+  static bool simulatedInstalled = false;
+
+  /// Whether missing Homebrew simulation is active.
+  static bool get isSimulateNoBrewActive {
+    if (simulateNoBrewOverride != null) {
+      return simulateNoBrewOverride!;
+    }
+    return Platform.environment['SIMULATE_NO_BREW'] == 'true' ||
+        Platform.environment['SIMULATE_NO_BREW'] == '1' ||
+        Platform.environment['BARTENDER_SIMULATE_NO_BREW'] == 'true' ||
+        Platform.environment['BARTENDER_SIMULATE_NO_BREW'] == '1' ||
+        const bool.fromEnvironment('SIMULATE_NO_BREW');
+  }
+
+  /// Reset simulation state (primarily for test teardown).
+  static void resetSimulation() {
+    simulateNoBrewOverride = null;
+    simulatedInstalled = false;
+  }
+
+  /// Checks if Homebrew is installed on the system.
+  Future<bool> isInstalled() async {
+    if (isSimulateNoBrewActive) {
+      return simulatedInstalled;
+    }
+    return ShellUtils.isBrewExecutableAvailable();
+  }
+
+  /// Launches the official Homebrew installer in a native terminal.
+  Future<bool> launchHomebrewInstaller() async {
+    if (isSimulateNoBrewActive) {
+      await Future.delayed(const Duration(seconds: 2));
+      simulatedInstalled = true;
+      return true;
+    }
+
+    const installCommand =
+        '/bin/bash -c "\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"';
+
+    try {
+      if (Platform.isMacOS) {
+        final result = await Process.run('osascript', [
+          '-e',
+          'tell application "Terminal" to do script "$installCommand"',
+          '-e',
+          'tell application "Terminal" to activate',
+        ]);
+        return result.exitCode == 0;
+      } else if (Platform.isLinux) {
+        final isContainer = ShellUtils.isInContainer;
+        final terminals = [
+          ['x-terminal-emulator', '-e', 'bash -c \'$installCommand\''],
+          ['gnome-terminal', '--', 'bash', '-c', installCommand],
+          ['konsole', '-e', 'bash', '-c', installCommand],
+          ['kitty', 'bash', '-c', installCommand],
+          ['alacritty', '-e', 'bash', '-c', installCommand],
+          ['xterm', '-e', 'bash -c \'$installCommand\''],
+        ];
+
+        for (final terminalCmd in terminals) {
+          try {
+            final exec =
+                isContainer ? 'distrobox-host-exec' : terminalCmd.first;
+            final args = isContainer ? terminalCmd : terminalCmd.sublist(1);
+            await Process.start(exec, args);
+            return true;
+          } catch (_) {
+            continue;
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Failed to launch Homebrew installer: $e');
+    }
+    return false;
+  }
 
   /// Runs a command quickly without streaming output.
   Future<ShellCommandResult> runCommand(List<String> args) async {

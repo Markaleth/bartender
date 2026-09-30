@@ -44,6 +44,7 @@ const double terminalDrawerQueueVisualizerHeight = 60.0;
 const double tapCardWidth = 350.0;
 const double tapCardAspectRatio = 1.2;
 const double addTapDialogWidth = 500.0;
+const double homebrewInstallDialogWidth = 480.0;
 
 // Icon Sizes
 const double iconSizeXs = 8.0;

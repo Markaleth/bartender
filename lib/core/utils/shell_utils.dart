@@ -35,6 +35,8 @@ class ShellUtils {
   static bool get _isInContainer =>
       Platform.isLinux && File('/run/.containerenv').existsSync();
 
+  static bool get isInContainer => _isInContainer;
+
   static Future<void> init() async {
     if (kDebugMode && _isInContainer) {
       await _initForContainer();
@@ -56,9 +58,9 @@ class ShellUtils {
       return;
     }
 
-    _resolvedBrewPath = '/home/linuxbrew/.linuxbrew/bin/brew';
+    _resolvedBrewPath = null;
     debugPrint(
-      'Failed to resolve brew path dynamically. Defaulting to: $_resolvedBrewPath',
+      'Failed to resolve brew path dynamically in container.',
     );
   }
 
@@ -70,10 +72,61 @@ class ShellUtils {
     } else if (File('/home/linuxbrew/.linuxbrew/bin/brew').existsSync()) {
       _resolvedBrewPath = '/home/linuxbrew/.linuxbrew/bin/brew';
     } else {
+      try {
+        final whichResult = Process.runSync('which', ['brew']);
+        if (whichResult.exitCode == 0 &&
+            whichResult.stdout.toString().trim().isNotEmpty) {
+          _resolvedBrewPath = whichResult.stdout.toString().trim();
+          return;
+        }
+      } catch (_) {}
+      _resolvedBrewPath = null;
       debugPrint(
         'Failed to resolve brew path natively. Relying on system PATH.',
       );
     }
+  }
+
+  static Future<bool> isBrewExecutableAvailable() async {
+    final customPath = _settingsService?.brewExecutablePath;
+    if (customPath != null && customPath.isNotEmpty) {
+      if (kDebugMode && _isInContainer) {
+        try {
+          final res = await Process.run('distrobox-host-exec', [
+            'test',
+            '-x',
+            customPath,
+          ]).timeout(defaultTimeoutDuration);
+          if (res.exitCode == 0) return true;
+        } catch (_) {}
+      } else if (File(customPath).existsSync()) {
+        return true;
+      }
+    }
+
+    if (_resolvedBrewPath != null) {
+      if (kDebugMode && _isInContainer) {
+        try {
+          final res = await Process.run('distrobox-host-exec', [
+            'test',
+            '-x',
+            _resolvedBrewPath!,
+          ]).timeout(defaultTimeoutDuration);
+          if (res.exitCode == 0) return true;
+        } catch (_) {}
+      } else if (File(_resolvedBrewPath!).existsSync()) {
+        return true;
+      }
+    }
+
+    try {
+      final res = await run('brew', ['--version']);
+      if (res.exitCode == 0) {
+        return true;
+      }
+    } catch (_) {}
+
+    return false;
   }
 
   static Future<String?> _resolveViaHostShell() async {

@@ -192,3 +192,16 @@ const String fontPreviewPrefix = '> ';
 const String enableCrashReportingTitle = 'Error & Crash Reporting';
 const String enableCrashReportingSubtitle =
     'Send anonymous crash reports to help improve Bartender';
+const String brewMissingDialogTitle = 'Homebrew Not Installed';
+const String brewMissingDialogContent =
+    'Bartender requires Homebrew to manage formulas, casks, and services on your system. Would you like to install Homebrew now?';
+const String brewInstallButtonLabel = 'Install Homebrew';
+const String exitAppButtonLabel = 'Quit Bartender';
+const String brewInstallingDialogTitle = 'Installing Homebrew...';
+const String brewInstallingDialogContent =
+    'Homebrew installation has started in Terminal. Please enter your administrator password if prompted and wait for the installer to finish.\n\nBartender will automatically detect when installation completes.';
+const String checkAgainButtonLabel = 'Check Again';
+const String brewInstallFailedMessage =
+    'Homebrew was not detected. Please ensure the installation completes and try again.';
+const String brewInstalledSuccessMessage =
+    'Homebrew detected! Initializing Bartender...';
