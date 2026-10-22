@@ -1,1 +1,8 @@
 include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    # Flatpak build output (contains a full Flutter SDK and pub cache).
+    - linux/flatpak/.flatpak-builder/**
+    - linux/flatpak/build/**
+    - linux/flatpak/repo/**

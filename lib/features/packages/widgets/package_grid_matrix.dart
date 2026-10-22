@@ -52,9 +52,8 @@ class PackageGridMatrix extends StatelessWidget {
           ),
           PackageDetailGridItem(
             icon: bottleIcon,
-            title: formula.isBottle
-                ? 'Precompiled (Bottle)'
-                : 'Build from Source',
+            title: 'Install Method',
+            subtitle: formula.isBottle ? 'Bottle (precompiled)' : 'From source',
           ),
         ],
       ),

@@ -7,7 +7,7 @@ project(runner LANGUAGES CXX)
 set(BINARY_NAME "Bartender")
 # The unique GTK application identifier for this application. See:
 # https://wiki.gnome.org/HowDoI/ChooseApplicationID
-set(APPLICATION_ID "com.markaleth.bartender")
+set(APPLICATION_ID "io.github.markaleth.Bartender")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.
@@ -68,6 +68,13 @@ set_target_properties(${BINARY_NAME}
   PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/intermediates_do_not_run"
 )
+
+# Offline (Flatpak) builds can't let sentry_flutter fetch sentry-native, so the
+# manifest provides a checkout and points this variable at it.
+if(DEFINED ENV{SENTRY_NATIVE_SOURCE_DIR})
+  set(FETCHCONTENT_SOURCE_DIR_SENTRY-NATIVE "$ENV{SENTRY_NATIVE_SOURCE_DIR}"
+    CACHE PATH "Local sentry-native source" FORCE)
+endif()
 
 
 # Generated plugin build rules, which manage building the plugins and adding

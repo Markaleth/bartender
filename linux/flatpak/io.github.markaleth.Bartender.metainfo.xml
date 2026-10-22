@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.markaleth.Bartender</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <name>Bartender</name>
+  <summary>Browse, install and manage Homebrew packages</summary>
+  <developer id="io.github.markaleth">
+    <name>Vlad Georgescu</name>
+  </developer>
+
+  <description>
+    <p>
+      Bartender is a desktop frontend for Homebrew on Linux. It drives your
+      existing Homebrew installation, so everything you do in Bartender is the
+      same as running brew yourself.
+    </p>
+    <ul>
+      <li>Search and browse formulae and casks, including trending packages</li>
+      <li>Install, upgrade, pin and uninstall packages with live output</li>
+      <li>Manage taps</li>
+      <li>Check installation health and reclaim disk space</li>
+    </ul>
+    <p>
+      Bartender requires Homebrew installed on the host system. It runs brew
+      outside the Flatpak sandbox, with your user's permissions.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">io.github.markaleth.Bartender.desktop</launchable>
+
+  <url type="homepage">https://github.com/Markaleth/bartender</url>
+  <url type="bugtracker">https://github.com/Markaleth/bartender/issues</url>
+  <url type="vcs-browser">https://github.com/Markaleth/bartender</url>
+
+  <!-- Screenshots are served from the release tag, so the store page matches
+       the released app. Add the PNG at linux/flatpak/screenshots/ before tagging. -->
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/main.png</image>
+      <caption>Browse popular Homebrew packages</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/details.png</image>
+      <caption>Check package details before installing</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/queue.png</image>
+      <caption>Follow installs and upgrades as they run</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/installed.png</image>
+      <caption>See installed packages, updates and system health</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/taps.png</image>
+      <caption>Add, trust and remove Homebrew taps</caption>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.1" />
+
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+
+  <categories>
+    <category>System</category>
+    <category>PackageManager</category>
+  </categories>
+
+  <releases>
+    <release version="1.0.0" date="2026-10-22">
+      <description>
+        <p>First Flathub release.</p>
+      </description>
+    </release>
+  </releases>
+</component>

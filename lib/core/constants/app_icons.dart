@@ -1,4 +1,7 @@
-const downloadIcon = 'assets/icons/download_icon.svg';
+/// Full-colour app logo without background. Render with `IconWidget(tinted: false)`.
+/// The app icon (with background) lives in `assets/branding/app_icon.svg`.
+const appIcon = 'assets/icons/app_icon.svg';
+const downloadIcon ='assets/icons/download_icon.svg';
 const barrelIcon = 'assets/icons/barrel_icon.svg';
 const brewIcon = 'assets/icons/brew_icon.svg';
 const libraryIcon = 'assets/icons/library_icon.svg';

@@ -7,21 +7,26 @@ class IconWidget extends StatelessWidget {
   final String assetName;
   final Color? color;
   final double size;
-  
+
+  /// When false, the SVG keeps its own colours (e.g. the app logo).
+  final bool tinted;
+
   const IconWidget({
     super.key,
     required this.assetName,
     this.color,
     this.size = iconSizeXl,
+    this.tinted = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final resolvedColor = color ?? IconTheme.of(context).color ?? AppColors.iconDefault;
-    
+
     return SvgPicture.asset(
       assetName,
-      colorFilter: ColorFilter.mode(resolvedColor, BlendMode.srcIn),
+      colorFilter:
+          tinted ? ColorFilter.mode(resolvedColor, BlendMode.srcIn) : null,
       height: size,
       width: size,
     );

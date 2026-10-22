@@ -4,6 +4,9 @@ import 'package:bartender/core/services/settings_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+/// Sandbox bridge used to run commands on the host.
+enum HostBridge { none, distrobox, flatpak }
+
 class ShellUtils {
   static String? _resolvedBrewPath;
   static SettingsService? _settingsService;
@@ -28,24 +31,63 @@ class ShellUtils {
       'HOMEBREW_NO_PAGER': '1',
       if (suppressEnvHints) 'HOMEBREW_NO_ENV_HINTS': '1',
       if (disableAnalytics) 'HOMEBREW_NO_ANALYTICS': '1',
-      if (environment != null) ...environment,
+      ...?environment,
     };
   }
 
   static bool get _isInContainer =>
       Platform.isLinux && File('/run/.containerenv').existsSync();
 
-  static bool get isInContainer => _isInContainer;
+  static bool get _isInFlatpak =>
+      Platform.isLinux && File('/.flatpak-info').existsSync();
+
+  /// How commands reach the host: directly, or through a sandbox bridge.
+  static HostBridge get hostBridge {
+    if (_isInFlatpak) return HostBridge.flatpak;
+    if (kDebugMode && _isInContainer) return HostBridge.distrobox;
+    return HostBridge.none;
+  }
+
+  static bool get _usesHostBridge => hostBridge != HostBridge.none;
+
+  /// Wraps [command] so it runs on the host under [bridge].
+  ///
+  /// `flatpak-spawn --host` does not forward the caller's environment, so
+  /// [environment] is passed through as `--env=` flags.
+  @visibleForTesting
+  static List<String> bridgeCommand(
+    HostBridge bridge,
+    List<String> command, {
+    Map<String, String>? environment,
+  }) {
+    switch (bridge) {
+      case HostBridge.none:
+        return command;
+      case HostBridge.distrobox:
+        return ['distrobox-host-exec', ...command];
+      case HostBridge.flatpak:
+        return [
+          'flatpak-spawn',
+          '--host',
+          ...?environment?.entries.map((e) => '--env=${e.key}=${e.value}'),
+          ...command,
+        ];
+    }
+  }
+
+  /// [command] wrapped for the current [hostBridge].
+  static List<String> hostCommand(List<String> command) =>
+      bridgeCommand(hostBridge, command);
 
   static Future<void> init() async {
-    if (kDebugMode && _isInContainer) {
-      await _initForContainer();
+    if (_usesHostBridge) {
+      await _initViaHostBridge();
     } else {
       _initForHost();
     }
   }
 
-  static Future<void> _initForContainer() async {
+  static Future<void> _initViaHostBridge() async {
     final hostShellPath = await _resolveViaHostShell();
     if (hostShellPath != null) {
       _resolvedBrewPath = hostShellPath;
@@ -60,7 +102,7 @@ class ShellUtils {
 
     _resolvedBrewPath = null;
     debugPrint(
-      'Failed to resolve brew path dynamically in container.',
+      'Failed to resolve brew path dynamically through ${hostBridge.name}.',
     );
   }
 
@@ -90,33 +132,11 @@ class ShellUtils {
   static Future<bool> isBrewExecutableAvailable() async {
     final customPath = _settingsService?.brewExecutablePath;
     if (customPath != null && customPath.isNotEmpty) {
-      if (kDebugMode && _isInContainer) {
-        try {
-          final res = await Process.run('distrobox-host-exec', [
-            'test',
-            '-x',
-            customPath,
-          ]).timeout(defaultTimeoutDuration);
-          if (res.exitCode == 0) return true;
-        } catch (_) {}
-      } else if (File(customPath).existsSync()) {
-        return true;
-      }
+      if (await _isExecutable(customPath)) return true;
     }
 
     if (_resolvedBrewPath != null) {
-      if (kDebugMode && _isInContainer) {
-        try {
-          final res = await Process.run('distrobox-host-exec', [
-            'test',
-            '-x',
-            _resolvedBrewPath!,
-          ]).timeout(defaultTimeoutDuration);
-          if (res.exitCode == 0) return true;
-        } catch (_) {}
-      } else if (File(_resolvedBrewPath!).existsSync()) {
-        return true;
-      }
+      if (await _isExecutable(_resolvedBrewPath!)) return true;
     }
 
     try {
@@ -129,13 +149,43 @@ class ShellUtils {
     return false;
   }
 
-  static Future<String?> _resolveViaHostShell() async {
+  static Future<bool> _isExecutable(String path) async {
+    if (!_usesHostBridge) return File(path).existsSync();
     try {
-      final result = await Process.run('distrobox-host-exec', [
+      final res = await _runOnHost(['test', '-x', path]);
+      return res.exitCode == 0;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Whether [name] resolves on the host's PATH.
+  static Future<bool> isHostCommandAvailable(String name) async {
+    try {
+      final res = await _runOnHost([
         'sh',
         '-c',
-        'command -v brew',
-      ]).timeout(defaultTimeoutDuration);
+        'command -v "\$1"',
+        'sh',
+        name,
+      ]);
+      return res.exitCode == 0;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<ProcessResult> _runOnHost(List<String> command) {
+    final bridged = hostCommand(command);
+    return Process.run(
+      bridged.first,
+      bridged.sublist(1),
+    ).timeout(defaultTimeoutDuration);
+  }
+
+  static Future<String?> _resolveViaHostShell() async {
+    try {
+      final result = await _runOnHost(['sh', '-c', 'command -v brew']);
       if (result.exitCode == 0 && result.stdout.toString().trim().isNotEmpty) {
         final path = result.stdout.toString().trim();
         debugPrint('Resolved brew path via host shell: $path');
@@ -155,52 +205,33 @@ class ShellUtils {
     ];
 
     for (final path in fallbackPaths) {
-      try {
-        final res = await Process.run('distrobox-host-exec', [
-          'test',
-          '-x',
-          path,
-        ]).timeout(defaultTimeoutDuration);
-        if (res.exitCode == 0) {
-          debugPrint('Resolved brew path via fallback test: $path');
-          return path;
-        }
-      } catch (e) {
-        debugPrint('Error testing fallback path $path: $e');
+      if (await _isExecutable(path)) {
+        debugPrint('Resolved brew path via fallback test: $path');
+        return path;
       }
     }
     return null;
   }
 
-  static String _getExecutable(String executable) {
-    if (kDebugMode && _isInContainer) {
-      return 'distrobox-host-exec';
+  static String _resolveExecutable(String executable) {
+    if (executable != 'brew') return executable;
+    final customPath = _settingsService?.brewExecutablePath;
+    if (customPath != null && customPath.isNotEmpty) {
+      return customPath;
     }
-    if (executable == 'brew') {
-      final customPath = _settingsService?.brewExecutablePath;
-      if (customPath != null && customPath.isNotEmpty) {
-        return customPath;
-      }
-      return _resolvedBrewPath ?? executable;
-    }
-    return executable;
+    if (_resolvedBrewPath != null) return _resolvedBrewPath!;
+    return _usesHostBridge ? '/home/linuxbrew/.linuxbrew/bin/brew' : executable;
   }
 
-  static List<String> _buildArgs(String executable, List<String> args) {
-    if (kDebugMode && _isInContainer) {
-      if (executable == 'brew') {
-        final customPath = _settingsService?.brewExecutablePath;
-        if (customPath != null && customPath.isNotEmpty) {
-          return [customPath, ...args];
-        }
-        return [
-          _resolvedBrewPath ?? '/home/linuxbrew/.linuxbrew/bin/brew',
-          ...args,
-        ];
-      }
-      return [executable, ...args];
-    }
-    return args;
+  static List<String> _buildCommand(
+    String executable,
+    List<String> args,
+    Map<String, String>? environment,
+  ) {
+    return bridgeCommand(hostBridge, [
+      _resolveExecutable(executable),
+      ...args,
+    ], environment: environment);
   }
 
   static Future<ProcessResult> run(
@@ -220,11 +251,13 @@ class ShellUtils {
     );
 
     try {
+      final env = _buildEnv(executable, environment);
+      final command = _buildCommand(executable, arguments, env);
       final result = await Process.run(
-        _getExecutable(executable),
-        _buildArgs(executable, arguments),
+        command.first,
+        command.sublist(1),
         workingDirectory: workingDirectory,
-        environment: _buildEnv(executable, environment),
+        environment: env,
         includeParentEnvironment: includeParentEnvironment,
         runInShell: runInShell,
       );
@@ -315,11 +348,13 @@ class ShellUtils {
     );
 
     try {
+      final env = _buildEnv(executable, environment);
+      final command = _buildCommand(executable, arguments, env);
       return await Process.start(
-        _getExecutable(executable),
-        _buildArgs(executable, arguments),
+        command.first,
+        command.sublist(1),
         workingDirectory: workingDirectory,
-        environment: _buildEnv(executable, environment),
+        environment: env,
         includeParentEnvironment: includeParentEnvironment,
         runInShell: runInShell,
         mode: mode,

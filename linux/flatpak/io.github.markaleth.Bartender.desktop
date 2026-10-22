@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Bartender
+GenericName=Homebrew Manager
+Comment=Browse, install and manage Homebrew packages
+Exec=bartender
+Icon=io.github.markaleth.Bartender
+Terminal=false
+Categories=System;PackageManager;Utility;
+Keywords=homebrew;brew;formula;cask;tap;package;
+StartupWMClass=io.github.markaleth.Bartender
