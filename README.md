@@ -29,7 +29,7 @@ Bartender is a graphical frontend for [Homebrew](https://brew.sh). It has no pac
 
 ## Build from source
 
-Requires Flutter 3.41 (Dart 3.10+).
+Requires Flutter 3.44 (Dart 3.10+).
 
 ```sh
 flutter pub get

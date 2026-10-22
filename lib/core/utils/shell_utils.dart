@@ -31,7 +31,7 @@ class ShellUtils {
       'HOMEBREW_NO_PAGER': '1',
       if (suppressEnvHints) 'HOMEBREW_NO_ENV_HINTS': '1',
       if (disableAnalytics) 'HOMEBREW_NO_ANALYTICS': '1',
-      if (environment != null) ...environment,
+      ...?environment,
     };
   }
 
