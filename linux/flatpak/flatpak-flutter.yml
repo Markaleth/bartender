@@ -5,6 +5,9 @@ id: io.github.markaleth.Bartender
 runtime: org.freedesktop.Platform
 runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
+# Flutter's Linux build expects clang.
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm22
 command: bartender
 
 finish-args:
@@ -21,6 +24,13 @@ finish-args:
 modules:
   - name: bartender
     buildsystem: simple
+    build-options:
+      # flatpak-flutter rewrites the flutter/bin entry to /var/lib/flutter/bin.
+      append-path: /usr/lib/sdk/llvm22/bin:/run/build/bartender/flutter/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
+      env:
+        # See linux/CMakeLists.txt.
+        SENTRY_NATIVE_SOURCE_DIR: /run/build/bartender/sentry-native
     build-commands:
       - flutter build linux --release --no-pub
       - install -d /app/bartender /app/bin
@@ -34,12 +44,23 @@ modules:
         /app/share/icons/hicolor/${size}x${size}/apps/io.github.markaleth.Bartender.png;
         done
     sources:
-      # Tracks the work branch for local builds. The Flathub submission copy pins the
-      # release `tag` and `commit` instead (see README.md, "Submitting").
+      # flatpak-flutter ignores `branch` and reads pubspec.lock from `commit`,
+      # so local builds pin a pushed commit; bump it before regenerating.
+      # The Flathub submission copy pins the release `tag` and `commit`
+      # instead (see README.md, "Submitting").
       - type: git
         url: https://github.com/Markaleth/bartender.git
         branch: flathub-packaging
+        commit: ca8c902f21cb96b6a7c7980aa20231ac4283f347
       - type: git
         url: https://github.com/flutter/flutter.git
         tag: 3.44.0
         dest: flutter
+      # sentry_flutter fetches this at configure time; keep the tag in sync with
+      # sentry-native/CMakeCache.txt in the sentry_flutter package.
+      - type: git
+        url: https://github.com/getsentry/sentry-native.git
+        tag: 0.7.20
+        commit: 69569b5eca87b5c2afd1ce5a0df7b01ded85023b
+        disable-submodules: true
+        dest: sentry-native

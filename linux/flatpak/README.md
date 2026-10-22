@@ -20,7 +20,9 @@ alias flatpak-flutter='docker run --rm -v "$PWD":/usr/src/flatpak -u `id -u`:`id
 flatpak-flutter --app-module bartender flatpak-flutter.yml
 ```
 
-This writes `io.github.markaleth.Bartender.yml` plus `pubspec-sources.json` and the Flutter SDK module. Rerun it whenever `pubspec.lock` or the Flutter version changes.
+This writes `io.github.markaleth.Bartender.yml` plus a `generated/` folder (pub sources, patches and the Flutter SDK module). Rerun it whenever `pubspec.lock` or the Flutter version changes.
+
+flatpak-flutter ignores `branch:` and clones the app source at its `commit:`, reading `pubspec.lock` from there. To build local changes, push them, set `commit:` in `flatpak-flutter.yml` to the pushed SHA, and rerun it.
 
 ```sh
 flatpak-builder --repo=repo --force-clean --sandbox --user --install \
@@ -53,7 +55,22 @@ Before submitting, check the installed Flatpak against the host's Homebrew:
 
 ### Screenshots
 
-Take screenshots from the installed Flatpak, so the store page shows what users get. On KDE, use Spectacle's "Active Window" mode with the window shadow turned off. Keep the default theme and window decorations, with no desktop background. Save them under `screenshots/`; the metainfo points at `screenshots/main.png`.
+Flathub reviews screenshots against its [quality guidelines](https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines):
+
+- Take them from the installed Flatpak, on Linux, in English.
+- Capture only the window, with its native title bar, shadow and rounded corners. Don't maximize, crop or edit.
+- Keep the window at 1000x700 or smaller.
+- Use the platform's default settings (on KDE, the Breeze window decoration and default accent color and fonts).
+- Show real content, not empty states. Put the best shot first; 3-6 in total.
+- Give each one a one-sentence caption in the metainfo, with no full stop.
+
+`screenshot.sh` does the capture on KDE Plasma: it resizes the running Bartender window to 1000x700, focuses it, and saves it with Spectacle (decorations and shadow included). Open the screen you want, then run:
+
+```sh
+linux/flatpak/screenshot.sh main   # -> linux/flatpak/screenshots/main.png
+```
+
+Every file needs a matching `<screenshot>` in the metainfo, served from the release tag. Retake them whenever the interface visibly changes.
 
 ### Validate
 
@@ -76,7 +93,7 @@ The version in `pubspec.yaml` drives the release: tag `v<version>`, a matching `
 1. Build and test the Flatpak, and take the screenshot (see above).
 2. Add a `<release>` entry to the metainfo for the new version, then commit and merge to `main`.
 3. Tag and push: `git tag v<version> && git push origin v<version>`.
-4. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace the `branch:` line on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
+4. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace the `branch:` and `commit:` lines on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
 5. Check the pins:
    ```sh
    python3 linux/flatpak/check_release.py <flathub-fork>/io.github.markaleth.Bartender.yml
