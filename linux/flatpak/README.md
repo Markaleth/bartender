@@ -28,7 +28,36 @@ flatpak-builder --repo=repo --force-clean --sandbox --user --install \
 flatpak run io.github.markaleth.Bartender
 ```
 
-`--sandbox` matches Flathub's offline build. Validate metadata with:
+`--sandbox` matches Flathub's offline build.
+
+### On Bazzite (or another Fedora Atomic image)
+
+Bazzite already has Flatpak with Flathub, Podman, and Homebrew at `/home/linuxbrew/.linuxbrew`, so it can build the Flatpak and test it against a real host `brew` without layering packages.
+
+```sh
+flatpak install --user flathub org.flatpak.Builder
+alias flatpak-builder='flatpak run org.flatpak.Builder'
+alias flatpak-flutter='podman run --rm --userns=keep-id -v "$PWD":/usr/src/flatpak:Z theappgineer/flatpak-flutter:latest'
+```
+
+With these aliases, the commands above work unchanged.
+
+Before submitting, check the installed Flatpak against the host's Homebrew:
+
+- Settings shows the resolved brew path (`/home/linuxbrew/.linuxbrew/bin/brew`).
+- Search, install, upgrade and uninstall a small formula; the live output streams.
+- Add and remove a tap.
+- The health view loads disk usage.
+- "Reveal in file manager" opens the package folder.
+- External links open in the browser.
+
+### Screenshots
+
+Take screenshots from the installed Flatpak, so the store page shows what users get. On KDE, use Spectacle's "Active Window" mode with the window shadow turned off. Keep the default theme and window decorations, with no desktop background. Save them under `screenshots/`; the metainfo points at `screenshots/main.png`.
+
+### Validate
+
+Validate metadata with:
 
 ```sh
 flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream io.github.markaleth.Bartender.metainfo.xml
@@ -44,18 +73,17 @@ flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest io.githu
 
 The version in `pubspec.yaml` drives the release: tag `v<version>`, a matching `<release>` in the metainfo, and screenshots served from that tag.
 
-1. Make the repository public.
-2. Take a screenshot of the app running on Linux and save it as `screenshots/main.png` here. Flathub shows it on the store page, from the URL in the metainfo. Use the default window decorations and no desktop background.
-3. Add a `<release>` entry to the metainfo for the new version, then commit and merge to `main`.
-4. Tag and push: `git tag v<version> && git push origin v<version>`.
-5. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace `branch: main` on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
-6. Check the pins:
+1. Build and test the Flatpak, and take the screenshot (see above).
+2. Add a `<release>` entry to the metainfo for the new version, then commit and merge to `main`.
+3. Tag and push: `git tag v<version> && git push origin v<version>`.
+4. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace `branch: main` on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
+5. Check the pins:
    ```sh
    python3 linux/flatpak/check_release.py <flathub-fork>/io.github.markaleth.Bartender.yml
    ```
    Every line must pass.
-7. Open the PR with the generated manifest and its JSON sources. Paste `FLATHUB_JUSTIFICATION.md` into the PR description.
-8. To get the verified badge for `io.github.markaleth`, log in to Flathub with the `Markaleth` GitHub account after the app is published.
+6. Open the PR with the generated manifest and its JSON sources. Paste `FLATHUB_JUSTIFICATION.md` into the PR description.
+7. To get the verified badge for `io.github.markaleth`, log in to Flathub with the `Markaleth` GitHub account after the app is published.
 
 The pinned manifest lives only in the Flathub repo: a commit can't contain its own hash, so the copy here tracks `main`.
 
