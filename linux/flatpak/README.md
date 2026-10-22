@@ -76,7 +76,7 @@ The version in `pubspec.yaml` drives the release: tag `v<version>`, a matching `
 1. Build and test the Flatpak, and take the screenshot (see above).
 2. Add a `<release>` entry to the metainfo for the new version, then commit and merge to `main`.
 3. Tag and push: `git tag v<version> && git push origin v<version>`.
-4. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace `branch: main` on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
+4. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace the `branch:` line on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
 5. Check the pins:
    ```sh
    python3 linux/flatpak/check_release.py <flathub-fork>/io.github.markaleth.Bartender.yml

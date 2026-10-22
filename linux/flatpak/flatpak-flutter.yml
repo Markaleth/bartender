@@ -34,11 +34,11 @@ modules:
         /app/share/icons/hicolor/${size}x${size}/apps/io.github.markaleth.Bartender.png;
         done
     sources:
-      # Tracks main for local builds. The Flathub submission copy pins the
+      # Tracks the work branch for local builds. The Flathub submission copy pins the
       # release `tag` and `commit` instead (see README.md, "Submitting").
       - type: git
         url: https://github.com/Markaleth/bartender.git
-        branch: main
+        branch: flathub-packaging
       - type: git
         url: https://github.com/flutter/flutter.git
         tag: 3.44.0
