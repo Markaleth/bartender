@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="212 206 600 600">
+  <defs>
+    <linearGradient id="liquid" x1="0" y1="370" x2="0" y2="548" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#03DAC6"/>
+      <stop offset="1" stop-color="#BB86FC"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Liquid -->
+  <path d="M336 370 H688 L512 548 Z" fill="url(#liquid)"/>
+  <ellipse cx="512" cy="370" rx="176" ry="14" fill="#FFFFFF" fill-opacity="0.35"/>
+
+  <!-- Bubbles -->
+  <circle cx="470" cy="430" r="11" fill="#FFFFFF" fill-opacity="0.75"/>
+  <circle cx="548" cy="470" r="8" fill="#FFFFFF" fill-opacity="0.65"/>
+  <circle cx="506" cy="505" r="6" fill="#FFFFFF" fill-opacity="0.55"/>
+
+  <!-- Cocktail pick + olive -->
+  <line x1="640" y1="228" x2="540" y2="420" stroke="#E1E1E1" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="566" cy="370" r="36" fill="#ABA200"/>
+  <circle cx="554" cy="358" r="10" fill="#FFFFFF" fill-opacity="0.45"/>
+
+  <!-- Glass -->
+  <path d="M272 300 H752 L512 560 Z" fill="none" stroke="#E1E1E1" stroke-width="24" stroke-linejoin="round"/>
+  <line x1="512" y1="560" x2="512" y2="756" stroke="#E1E1E1" stroke-width="24" stroke-linecap="round"/>
+  <ellipse cx="512" cy="768" rx="148" ry="24" fill="#E1E1E1"/>
+</svg>

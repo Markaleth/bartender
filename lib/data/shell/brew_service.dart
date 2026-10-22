@@ -62,7 +62,6 @@ class BrewService {
         ]);
         return result.exitCode == 0;
       } else if (Platform.isLinux) {
-        final isContainer = ShellUtils.isInContainer;
         final terminals = [
           ['x-terminal-emulator', '-e', 'bash -c \'$installCommand\''],
           ['gnome-terminal', '--', 'bash', '-c', installCommand],
@@ -74,10 +73,13 @@ class BrewService {
 
         for (final terminalCmd in terminals) {
           try {
-            final exec =
-                isContainer ? 'distrobox-host-exec' : terminalCmd.first;
-            final args = isContainer ? terminalCmd : terminalCmd.sublist(1);
-            await Process.start(exec, args);
+            // A bridge process starts even when the terminal is missing on
+            // the host, so check availability before launching.
+            if (!await ShellUtils.isHostCommandAvailable(terminalCmd.first)) {
+              continue;
+            }
+            final command = ShellUtils.hostCommand(terminalCmd);
+            await Process.start(command.first, command.sublist(1));
             return true;
           } catch (_) {
             continue;

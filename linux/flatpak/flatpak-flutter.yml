@@ -1,0 +1,45 @@
+# Input manifest for flatpak-flutter (https://github.com/TheAppgineer/flatpak-flutter).
+# Do not submit this file directly: run flatpak-flutter on it to produce the
+# offline manifest io.github.markaleth.Bartender.yml (see README.md).
+id: io.github.markaleth.Bartender
+runtime: org.freedesktop.Platform
+runtime-version: '26.08'
+sdk: org.freedesktop.Sdk
+command: bartender
+
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  # Package metadata, analytics counts and crash reporting.
+  - --share=network
+  # Bartender is a Homebrew frontend: every brew command runs on the host via
+  # `flatpak-spawn --host`. See FLATHUB_JUSTIFICATION.md.
+  - --talk-name=org.freedesktop.Flatpak
+
+modules:
+  - name: bartender
+    buildsystem: simple
+    build-commands:
+      - flutter build linux --release --no-pub
+      - install -d /app/bartender /app/bin
+      - cp -r build/linux/*/release/bundle/* /app/bartender/
+      - ln -s /app/bartender/Bartender /app/bin/bartender
+      - install -Dm644 linux/flatpak/io.github.markaleth.Bartender.desktop
+        /app/share/applications/io.github.markaleth.Bartender.desktop
+      - install -Dm644 linux/flatpak/io.github.markaleth.Bartender.metainfo.xml
+        /app/share/metainfo/io.github.markaleth.Bartender.metainfo.xml
+      - for size in 128 256 512; do install -Dm644 linux/flatpak/icons/${size}.png
+        /app/share/icons/hicolor/${size}x${size}/apps/io.github.markaleth.Bartender.png;
+        done
+    sources:
+      # For the Flathub submission, replace `branch` with the release `tag`
+      # and its `commit`.
+      - type: git
+        url: https://github.com/Markaleth/bartender.git
+        branch: main
+      - type: git
+        url: https://github.com/flutter/flutter.git
+        tag: 3.41.9
+        dest: flutter

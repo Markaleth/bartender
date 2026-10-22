@@ -1,5 +1,5 @@
 /// Centralized application strings
-const String appName = 'Brewmaster';
+const String appName = 'Bartender';
 
 // Navigation
 const String navBrowse = 'Packages';

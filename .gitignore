@@ -55,3 +55,7 @@ app.*.map.json
 # stitch_brew_desktop_manager/
 
 # .cursor/
+# Flatpak build output
+linux/flatpak/build/
+linux/flatpak/repo/
+linux/flatpak/.flatpak-builder/

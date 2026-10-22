@@ -30,7 +30,10 @@ class SideNavigationHeader extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   backgroundColor: AppColors.primary,
-                  child: IconWidget(assetName: bottleIcon, color: AppColors.onPrimary),
+                  child: IconWidget(
+                    assetName: appIcon,
+                    color: AppColors.onPrimary,
+                  ),
                 ),
                 const SizedBox(width: spacingM),
                 Expanded(
