@@ -2,8 +2,7 @@
 <component type="desktop-application">
   <id>io.github.markaleth.Bartender</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <!-- TODO: set to the license added to the repository (SPDX id, e.g. MIT, GPL-3.0-or-later). -->
-  <project_license>LicenseRef-TODO</project_license>
+  <project_license>MIT</project_license>
 
   <name>Bartender</name>
   <summary>Browse, install and manage Homebrew packages</summary>
@@ -35,11 +34,11 @@
   <url type="bugtracker">https://github.com/Markaleth/bartender/issues</url>
   <url type="vcs-browser">https://github.com/Markaleth/bartender</url>
 
-  <!-- TODO: Flathub requires at least one screenshot, hosted at a stable URL
-       (e.g. raw.githubusercontent.com on a tagged release). -->
+  <!-- Screenshots are served from the release tag, so the store page matches
+       the released app. Add the PNG at linux/flatpak/screenshots/ before tagging. -->
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/Markaleth/bartender/main/linux/flatpak/screenshots/main.png</image>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/main.png</image>
       <caption>Browsing installed packages</caption>
     </screenshot>
   </screenshots>
@@ -60,7 +59,7 @@
   </categories>
 
   <releases>
-    <release version="0.1.0" date="2026-10-22">
+    <release version="1.0.0" date="2026-10-22">
       <description>
         <p>First Flathub release.</p>
       </description>

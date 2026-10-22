@@ -42,11 +42,22 @@ flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest io.githu
 
 ## Submitting
 
-1. Make the repository public and add a license; set `project_license` in the metainfo to match.
-2. Add a screenshot at the URL in the metainfo.
-3. Tag a release; in `flatpak-flutter.yml`, replace `branch: main` with that `tag` and its `commit`, then regenerate.
-4. Follow https://docs.flathub.org/docs/for-app-authors/submission: open a PR against `flathub/flathub` (branch `new-pr`) containing the generated manifest and its JSON sources. Paste `FLATHUB_JUSTIFICATION.md` into the PR description.
-5. To get the verified badge for `io.github.markaleth`, log in to Flathub with the `Markaleth` GitHub account after the app is published.
+The version in `pubspec.yaml` drives the release: tag `v<version>`, a matching `<release>` in the metainfo, and screenshots served from that tag.
+
+1. Make the repository public.
+2. Take a screenshot of the app running on Linux and save it as `screenshots/main.png` here. Flathub shows it on the store page, from the URL in the metainfo. Use the default window decorations and no desktop background.
+3. Add a `<release>` entry to the metainfo for the new version, then commit and merge to `main`.
+4. Tag and push: `git tag v<version> && git push origin v<version>`.
+5. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace `branch: main` on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
+6. Check the pins:
+   ```sh
+   python3 linux/flatpak/check_release.py <flathub-fork>/io.github.markaleth.Bartender.yml
+   ```
+   Every line must pass.
+7. Open the PR with the generated manifest and its JSON sources. Paste `FLATHUB_JUSTIFICATION.md` into the PR description.
+8. To get the verified badge for `io.github.markaleth`, log in to Flathub with the `Markaleth` GitHub account after the app is published.
+
+The pinned manifest lives only in the Flathub repo: a commit can't contain its own hash, so the copy here tracks `main`.
 
 ## Icon
 

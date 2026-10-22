@@ -34,8 +34,8 @@ modules:
         /app/share/icons/hicolor/${size}x${size}/apps/io.github.markaleth.Bartender.png;
         done
     sources:
-      # For the Flathub submission, replace `branch` with the release `tag`
-      # and its `commit`.
+      # Tracks main for local builds. The Flathub submission copy pins the
+      # release `tag` and `commit` instead (see README.md, "Submitting").
       - type: git
         url: https://github.com/Markaleth/bartender.git
         branch: main

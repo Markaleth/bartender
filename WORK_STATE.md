@@ -55,6 +55,7 @@ Make Bartender submittable to Flathub. Inside the Flatpak sandbox, host commands
 ### Open questions / blockers
 
 - Repo `Markaleth/bartender` is private (GitHub 404). Flathub builds from public source.
-- No LICENSE; metainfo has `project_license` = `LicenseRef-TODO`.
-- Screenshot missing at `linux/flatpak/screenshots/main.png`.
+- License: MIT added (`LICENSE`, `THIRD_PARTY_NOTICES.md`, metainfo). `linux_icon.svg` is MIT; its copyright holder still needs adding to THIRD_PARTY_NOTICES.md.
+- Screenshot missing at `linux/flatpak/screenshots/main.png` (URL pinned to tag `v1.0.0`).
+- Release `v1.0.0` not tagged yet. `linux/flatpak/check_release.py` verifies tag, commit pin, metainfo release and screenshot.
 - `sqlite3` build hook downloads SQLite; offline build likely needs `source: system`. Unverified.
