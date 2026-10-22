@@ -2,6 +2,10 @@
 
 For the "Permissions" section of the Flathub submission PR.
 
+## Linter exception requested
+
+`flatpak-builder-lint` reports one error, `finish-args-flatpak-spawn-access`, for the `--talk-name=org.freedesktop.Flatpak` permission below. Please add an exception for `io.github.markaleth.Bartender`. It is the app's only lint error.
+
 ## `--talk-name=org.freedesktop.Flatpak`
 
 Bartender is a graphical frontend for [Homebrew](https://brew.sh). It has no package management logic of its own: every action (search, install, upgrade, uninstall, tap, cleanup, `brew doctor`) is a `brew` command run against the user's existing Homebrew installation.
