@@ -53,4 +53,4 @@ SOFTWARE.
 ## Brand logos
 
 - `assets/icons/apple_icon.svg`: from [Simple Icons](https://simpleicons.org) (CC0-1.0). The Apple logo is a trademark of Apple Inc.
-- `assets/icons/linux_icon.svg`: from [SVG Repo](https://www.svgrepo.com), MIT License. TODO: add the copyright holder (the author/collection on its SVG Repo page) — MIT requires keeping their notice.
+- `assets/icons/linux_icon.svg`: from the [Teenyicons](https://github.com/teenyicons/teenyicons) Filled collection by teenyicons, via [SVG Repo](https://www.svgrepo.com). MIT License, Copyright (c) teenyicons; the license text is the same as the Feather notice above.
