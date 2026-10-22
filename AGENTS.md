@@ -21,24 +21,31 @@ When working in this project, you must adhere to the following core principles:
    - Prefer SVG icons from `lib/core/constants/app_icons.dart` rendered via `IconWidget`.
 5. **Shell Execution**: Do not use raw `Process.run`. Always use `ShellUtils` and `BrewService`.
 
-## Detailed Guidelines (.cursor/rules)
+## Detailed Guidelines (.claude/rules)
 
-For detailed workflows, always refer to the specific rule files in `.cursor/rules/`:
+For detailed workflows, always refer to the specific rule files in `.claude/rules/`:
 
-- `00-project-overview.mdc`: Project structure and anti-patterns.
-- `01-architecture.mdc`: Provider and layer locations.
-- `02-state-management.mdc`: Dependency injection and consuming state.
-- `03-shell-execution.mdc`: Homebrew shell interfacing.
-- `04-ui-patterns.mdc`: Desktop UI, components, and styling strictness.
-- `08-workflow-memory.mdc`: Tracking work in `WORK_STATE.md` and `CHANGELOG.md`.
-- `09-definition-of-ready-done.mdc`: Task lifecycle (DoR / DoD).
-- `10-test-planning.mdc`: Unit test conventions (`flutter_test`, `mockito`).
+- `00-project-overview.md`: Project structure and anti-patterns.
+- `01-architecture.md`: Provider and layer locations.
+- `02-state-management.md`: Dependency injection and consuming state.
+- `03-shell-execution.md`: Homebrew shell interfacing.
+- `04-ui-patterns.md`: Desktop UI, components, and styling strictness.
+- `08-workflow-memory.md`: Tracking work in `WORK_STATE.md` and `CHANGELOG.md`.
+- `09-definition-of-ready-done.md`: Task lifecycle (DoR / DoD).
+- `10-test-planning.md`: Unit test conventions (`flutter_test`, `mockito`).
+- `14-codegraph-context.md`: When to use CodeGraph over grep.
 
-## Specialized Skills (.kilo/skills)
+## Specialized Skills (.claude/skills, .kilo/skills)
 
-This workspace is equipped with several Kilo skills tailored for Flutter. **ALWAYS use the `skill` tool** to load a skill when your task matches its description.
+This workspace is equipped with several skills tailored for Flutter. They live in `.claude/skills/` (Claude Code) and are mirrored in `.kilo/skills/` (Kilo) and `.opencode/skills/` (opencode). **ALWAYS use the `skill` tool** to load a skill when your task matches its description.
 
-Available skills include:
+Workflow skills (in `.claude/skills/`):
+
+- `start-work`: Start any unit of work — branch, confirm goal, DoR/DoD, implement, PR.
+- `resume-work`: Resume from `WORK_STATE.md`.
+- `refine-work`: Batch refinement assessment of backlog items.
+
+Flutter skills include:
 
 - `flutter-add-widget-preview`: Creating UI components with interactive previews.
 - `flutter-add-widget-test`: Writing component-level tests.
