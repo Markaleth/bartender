@@ -39,7 +39,23 @@
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/main.png</image>
-      <caption>Browsing installed packages</caption>
+      <caption>Browse popular Homebrew packages</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/details.png</image>
+      <caption>Check package details before installing</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/queue.png</image>
+      <caption>Follow installs and upgrades as they run</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/installed.png</image>
+      <caption>See installed packages, updates and system health</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Markaleth/bartender/v1.0.0/linux/flatpak/screenshots/taps.png</image>
+      <caption>Add, trust and remove Homebrew taps</caption>
     </screenshot>
   </screenshots>
 

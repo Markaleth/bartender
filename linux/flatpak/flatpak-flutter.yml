@@ -44,13 +44,13 @@ modules:
         /app/share/icons/hicolor/${size}x${size}/apps/io.github.markaleth.Bartender.png;
         done
     sources:
-      # flatpak-flutter ignores `branch` and reads pubspec.lock from `commit`,
-      # so local builds pin a pushed commit; bump it before regenerating.
+      # Local builds pin a pushed commit (flatpak-flutter reads pubspec.lock
+      # from it); bump it before regenerating. No `branch`: flatpak-builder
+      # would then require the branch tip to be this exact commit.
       # The Flathub submission copy pins the release `tag` and `commit`
       # instead (see README.md, "Submitting").
       - type: git
         url: https://github.com/Markaleth/bartender.git
-        branch: flathub-packaging
         commit: ca8c902f21cb96b6a7c7980aa20231ac4283f347
       - type: git
         url: https://github.com/flutter/flutter.git

@@ -22,7 +22,7 @@ flatpak-flutter --app-module bartender flatpak-flutter.yml
 
 This writes `io.github.markaleth.Bartender.yml` plus a `generated/` folder (pub sources, patches and the Flutter SDK module). Rerun it whenever `pubspec.lock` or the Flutter version changes.
 
-flatpak-flutter ignores `branch:` and clones the app source at its `commit:`, reading `pubspec.lock` from there. To build local changes, push them, set `commit:` in `flatpak-flutter.yml` to the pushed SHA, and rerun it.
+flatpak-flutter clones the app source at its `commit:`, reading `pubspec.lock` from there. To build local changes, push them, set `commit:` in `flatpak-flutter.yml` to the pushed SHA, and rerun it.
 
 ```sh
 flatpak-builder --repo=repo --force-clean --sandbox --user --install \
@@ -93,7 +93,7 @@ The version in `pubspec.yaml` drives the release: tag `v<version>`, a matching `
 1. Build and test the Flatpak, and take the screenshot (see above).
 2. Add a `<release>` entry to the metainfo for the new version, then commit and merge to `main`.
 3. Tag and push: `git tag v<version> && git push origin v<version>`.
-4. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace the `branch:` and `commit:` lines on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
+4. In your fork of [flathub/flathub](https://github.com/flathub/flathub) (branch `new-pr`), copy `flatpak-flutter.yml`. Replace the `commit:` line on the app source with `tag: v<version>` and `commit: <sha>` (`git rev-list -n 1 v<version>`), then run `flatpak-flutter` there.
 5. Check the pins:
    ```sh
    python3 linux/flatpak/check_release.py <flathub-fork>/io.github.markaleth.Bartender.yml
