@@ -69,6 +69,13 @@ set_target_properties(${BINARY_NAME}
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/intermediates_do_not_run"
 )
 
+# Offline (Flatpak) builds can't let sentry_flutter fetch sentry-native, so the
+# manifest provides a checkout and points this variable at it.
+if(DEFINED ENV{SENTRY_NATIVE_SOURCE_DIR})
+  set(FETCHCONTENT_SOURCE_DIR_SENTRY-NATIVE "$ENV{SENTRY_NATIVE_SOURCE_DIR}"
+    CACHE PATH "Local sentry-native source" FORCE)
+endif()
+
 
 # Generated plugin build rules, which manage building the plugins and adding
 # them to the application.
