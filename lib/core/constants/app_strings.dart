@@ -132,7 +132,7 @@ const String architectureCopy = 'Architecture';
 const String versionCopy = 'Version';
 const String typeAndTapCopy = 'Type & Tap';
 const String fullTagCopy = 'Full Tag';
-const String popularityCopy = 'Full Tag';
+const String popularityCopy = 'Popularity';
 const String queuedCopy = 'Queued...';
 
 const String zapTooltip =
